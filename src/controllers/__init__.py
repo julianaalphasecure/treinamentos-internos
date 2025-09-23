@@ -7,8 +7,8 @@ from src.controllers.colaborador.perfil_controller import *
 from src.controllers.colaborador.progresso_controller import *
 
 from src.controllers.gestor.equipe_controller import *
-from src.controllers.gestor.feedback_controller import *
-from src.controllers.gestor.perfil_controller import *
+from src.controllers.gestor.gestor_feedback_controller import *
+from src.controllers.gestor.gestor_perfil_controller import *
 from src.controllers.gestor.relatorio_controller import *
 
 __all__ = [

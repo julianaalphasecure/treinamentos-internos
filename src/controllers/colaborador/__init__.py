@@ -1,14 +1,27 @@
-from flask import Blueprint
-from .configuracoes_controller import configuracoes_bp
-from .feedback_controller import colab_feedback_bp
-from .modulo_controller import modulo_bp
-from .perfil_controller import perfil_bp
-from .progresso_controller import progresso_bp
+from src.controllers.auth_controller import *
 
-colaborador_bp = Blueprint("colaborador_bp", __name__, url_prefix="/colaborador")
+from src.controllers.colaborador.configuracoes_controller import *
+from src.controllers.colaborador.feedback_controller import *
+from src.controllers.colaborador.modulo_controller import *
+from src.controllers.colaborador.perfil_controller import *
+from src.controllers.colaborador.progresso_controller import *
 
-colaborador_bp.register_blueprint(configuracoes_bp, url_prefix="/configuracoes")
-colaborador_bp.register_blueprint(colab_feedback_bp, url_prefix="/feedback")
-colaborador_bp.register_blueprint(modulo_bp, url_prefix="/modulos")
-colaborador_bp.register_blueprint(perfil_bp, url_prefix="/perfil")
-colaborador_bp.register_blueprint(progresso_bp, url_prefix="/progresso")
+from src.controllers.gestor.equipe_controller import *
+from src.controllers.gestor.gestor_feedback_controller import * # type: ignore
+from src.controllers.gestor.gestor_perfil_controller import * # type: ignore
+from src.controllers.gestor.relatorio_controller import *
+
+__all__ = [
+    "auth_controller",
+
+    "configuracoes_controller",
+    "feedback_controller",
+    "modulo_controller",
+    "perfil_controller",
+    "progresso_controller",
+
+    "equipe_controller",
+    "gestor_feedback_controller",
+    "gestor_perfil_controller",
+    "relatorio_controller",
+]

@@ -1,5 +1,11 @@
-from flask import Blueprint
+from .equipe_controller import equipe_bp
+from .gestor_feedback_controller import gestor_feedback_bp # type: ignore
+from .gestor_perfil_controller import gestor_perfil_bp # type: ignore
+from .relatorio_controller import relatorio_bp
 
-gestor_bp = Blueprint("gestor_bp", __name__, url_prefix="/gestor")
-
-from . import equipe_controller, feedback_controller, perfil_controller, relatorio_controller
+__all__ = [
+    "equipe_bp",
+    "gestor_feedback_bp",
+    "gestor_perfil_bp",
+    "relatorio_bp",
+]
