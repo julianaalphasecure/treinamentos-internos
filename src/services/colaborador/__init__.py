@@ -4,10 +4,10 @@ from .modulo_service import ModuloService
 from .perfil_service import PerfilService
 from .progresso_service import ProgressoService
 
-__all__ = {
+__all__ = [
     "ConfiguracoesService",
     "FeedbackService",
     "ModuloService",
     "PerfilService",
     "ProgressoService",
-}
+]

@@ -3,7 +3,7 @@ from src.models.relatorio import Relatorio
 
 class RelatorioService:
     @staticmethod
-    def get_all_relatorio():
+    def get_all_relatorios():
         return Relatorio.query.all()
     
     @staticmethod
@@ -15,7 +15,7 @@ class RelatorioService:
         relatorio = Relatorio(**data)
         db.session.add(relatorio)
         db.session.commit()
-        return Relatorio
+        return relatorio
     
     @staticmethod
     def update_relatorio(relatorio_id, data):
@@ -28,8 +28,8 @@ class RelatorioService:
             if key in allowed_fields:
                 setattr(relatorio, key, value)
 
-                db.session.commit()
-                return relatorio
+        db.session.commit()
+        return relatorio
             
     @staticmethod
     def delete_relatorio(relatorio_id):

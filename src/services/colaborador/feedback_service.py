@@ -6,7 +6,6 @@ class FeedbackService:
     def get_all_feedbacks():
         return Feedback.query.all()
     
-
     @staticmethod
     def get_feedback_by_id(feedback_id):
         return Feedback.query.get(feedback_id)
@@ -29,8 +28,8 @@ class FeedbackService:
             if key in allowed_fields:
                 setattr(feedback, key, value)
 
-            db.session.commit()
-            return feedback
+        db.session.commit()
+        return feedback
         
     @staticmethod
     def delete_feedback(feedback_id):

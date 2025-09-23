@@ -18,7 +18,7 @@ class FeedbackService:
         return feedback
     
     @staticmethod
-    def delete_feedback(feedback_id, data):
+    def update_feedback(feedback_id, data):
         feedback = Feedback.query.get(feedback_id)
         if not feedback:
             return None
@@ -28,8 +28,8 @@ class FeedbackService:
             if key in allowed_fields:
                 setattr(feedback, key, value)
 
-            db.session.commit()
-            return feedback
+        db.session.commit()
+        return feedback
         
     @staticmethod
     def delete_feedback(feedback_id):

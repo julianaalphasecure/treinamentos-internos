@@ -1,13 +1,13 @@
 from src.config.database import db
 from src.models.progresso import Progresso
 
-class progressoService():
+class ProgressoService:
     @staticmethod
     def get_all_progresso():
         return Progresso.query.all()
     
     @staticmethod
-    def get_progresso_by(progresso_id):
+    def get_progresso_by_id(progresso_id):
         return Progresso.query.get(progresso_id)
     
     @staticmethod
@@ -28,7 +28,5 @@ class progressoService():
             if key in allowed_fields:
                 setattr(progresso, key, value)
 
-            db.session.commit()
-            return progresso
-                          
-
+        db.session.commit()
+        return progresso

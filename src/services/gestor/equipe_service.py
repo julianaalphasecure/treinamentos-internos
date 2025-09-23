@@ -28,8 +28,8 @@ class EquipeService:
             if key in allowed_fields:
                 setattr(equipe, key, value)
 
-                db.session.commit()
-                return equipe
+        db.session.commit()
+        return equipe
             
     @staticmethod
     def delete_equipe(equipe_id):

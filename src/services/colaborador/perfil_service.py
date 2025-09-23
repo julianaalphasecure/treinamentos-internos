@@ -8,7 +8,7 @@ class PerfilService:
     
     @staticmethod
     def update_perfil(usuario_id, data):
-        usuario = Usuario.query(usuario_id)
+        usuario = Usuario.query.get(usuario_id)
         if not usuario:
             return None
         
@@ -17,5 +17,5 @@ class PerfilService:
             if key in allowed_fields:
                 setattr(usuario, key, value)
 
-            db.session.commit()
-            return usuario
+        db.session.commit()
+        return usuario

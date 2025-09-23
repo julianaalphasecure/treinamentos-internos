@@ -4,7 +4,7 @@ from src.models.configuracoes import Configuracoes
 class ConfiguracoesService:
     @staticmethod
     def atualizar_configuracoes(usuario_id, data):
-        configuracoes = ConfiguracoesService.filter_by(colaborador_id=usuario_id).first()
+        configuracoes = Configuracoes.query.filter_by(colaborador_id=usuario_id).first()
         if not configuracoes:
             return None
         
@@ -13,5 +13,5 @@ class ConfiguracoesService:
             if key in allowed_fields:
                 setattr(configuracoes, key, value)
 
-                db.session.commit()
-                return Configuracoes
+        db.session.commit()
+        return configuracoes
