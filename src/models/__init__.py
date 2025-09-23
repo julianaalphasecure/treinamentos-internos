@@ -10,13 +10,14 @@ from src.models.progresso import Progresso
 from src.models.relatorio import Relatorio
 
 __all__ = (
-    "Usuário",
+    "Usuario",
+    "Configuracoes",
     "Equipe",
-    "Exercício",
+    "Exercicio",
     "Feedback",
-    "Módulo",
+    "Modulos",
     "Notification",
     "PasswordReset",
     "Progresso",
-    "Relatório",
+    "Relatorio",
 )
