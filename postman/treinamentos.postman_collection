@@ -1,0 +1,102 @@
+{
+  "info": {
+    "name": "Treinamentos Internos API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "e8c27c47-5ad9-4a7f-bf51-8f9b2f9e9999"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Registrar",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"re\": \"12345\",\n  \"nome\": \"João Silva\",\n  \"email\": \"joao@example.com\",\n  \"senha\": \"123456\",\n  \"tipo_acesso\": \"colaborador\"\n}"
+            },
+            "url": { "raw": "http://127.0.0.1:5000/auth/registrar", "protocol": "http", "host": ["127.0.0.1"], "port": "5000", "path": ["auth", "registrar"] }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"joao@example.com\",\n  \"senha\": \"123456\"\n}"
+            },
+            "url": { "raw": "http://127.0.0.1:5000/auth/login", "protocol": "http", "host": ["127.0.0.1"], "port": "5000", "path": ["auth", "login"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Colaborador",
+      "item": [
+        {
+          "name": "Perfil - Obter",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://127.0.0.1:5000/colaborador/perfil/1", "protocol": "http", "host": ["127.0.0.1"], "port": "5000", "path": ["colaborador", "perfil", "1"] }
+          }
+        },
+        {
+          "name": "Perfil - Atualizar",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"nome\": \"João Atualizado\",\n  \"email\": \"joao.new@example.com\"\n}" },
+            "url": { "raw": "http://127.0.0.1:5000/colaborador/perfil/1", "protocol": "http", "host": ["127.0.0.1"], "port": "5000", "path": ["colaborador", "perfil", "1"] }
+          }
+        },
+        {
+          "name": "Feedback - Criar",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"colaborador_id\": 1,\n  \"gestor_id\": 1,\n  \"comentario\": \"Bom desempenho!\"\n}" },
+            "url": { "raw": "http://127.0.0.1:5000/colaborador/feedback", "protocol": "http", "host": ["127.0.0.1"], "port": "5000", "path": ["colaborador", "feedback"] }
+          }
+        },
+        {
+          "name": "Progresso - Atualizar",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"usuario_id\": 1,\n  \"modulo_id\": 1,\n  \"status\": \"concluido\"\n}" },
+            "url": { "raw": "http://127.0.0.1:5000/colaborador/progresso/1", "protocol": "http", "host": ["127.0.0.1"], "port": "5000", "path": ["colaborador", "progresso", "1"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Gestor",
+      "item": [
+        {
+          "name": "Perfil - Obter",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://127.0.0.1:5000/gestor/perfil/1", "protocol": "http", "host": ["127.0.0.1"], "port": "5000", "path": ["gestor", "perfil", "1"] }
+          }
+        },
+        {
+          "name": "Perfil - Atualizar",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"nome\": \"Gestor Atualizado\",\n  \"email\": \"gestor.new@example.com\"\n}" },
+            "url": { "raw": "http://127.0.0.1:5000/gestor/perfil/1", "protocol": "http", "host": ["127.0.0.1"], "port": "5000", "path": ["gestor", "perfil", "1"] }
+          }
+        }
+      ]
+    }
+  ]
+}
