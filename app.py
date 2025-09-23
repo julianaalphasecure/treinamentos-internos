@@ -1,9 +1,8 @@
 from flask import Flask
 from flask_migrate import Migrate
 from src.config.database import db, bcrypt
-from src.config.config import SECRET_KEY, db_config, APP_PORT
+from src.config.config import SECRET_KEY, DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT, APP_PORT
 
-# Controllers
 from src.controllers.auth_controller import auth_bp
 from src.controllers.colaborador.perfil_controller import perfil_bp
 from src.controllers.colaborador.feedback_controller import colab_feedback_bp
@@ -20,20 +19,18 @@ from src.controllers.gestor.perfil_controller import perfil_bp as gestor_perfil_
 def create_app():
     app = Flask(__name__)
 
-    # Configurações do Flask
+  
     app.config["SECRET_KEY"] = SECRET_KEY
     app.config["SQLALCHEMY_DATABASE_URI"] = (
-        f"mysql+pymysql://{db_config['user']}:{db_config['password']}"
-        f"@{db_config['host']}:{db_config['port']}/{db_config['database']}"
+        f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
     )
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-    # Extensões
     db.init_app(app)
     bcrypt.init_app(app)
-    Migrate(app, db)  # 🔥 integração com Flask-Migrate
+    Migrate(app, db)
 
-    # Blueprints - Colaborador
+ 
     app.register_blueprint(auth_bp, url_prefix="/auth")
     app.register_blueprint(perfil_bp, url_prefix="/colaborador/perfil")
     app.register_blueprint(colab_feedback_bp, url_prefix="/colaborador/feedback")
@@ -41,7 +38,6 @@ def create_app():
     app.register_blueprint(modulo_bp, url_prefix="/colaborador/modulo")
     app.register_blueprint(configuracoes_bp, url_prefix="/colaborador/configuracoes")
 
-    # Blueprints - Gestor
     app.register_blueprint(equipe_bp, url_prefix="/gestor/equipe")
     app.register_blueprint(gestor_feedback_bp, url_prefix="/gestor/feedback")
     app.register_blueprint(relatorio_bp, url_prefix="/gestor/relatorio")
