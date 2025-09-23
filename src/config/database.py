@@ -2,4 +2,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 
 db = SQLAlchemy()
-bycrypt = Bcrypt()
+bcrypt = Bcrypt()
+
+def init_db(app):
+    db.init_app(app)
+    bcrypt.init_app(app)

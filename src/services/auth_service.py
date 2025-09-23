@@ -1,4 +1,4 @@
-from src.config.database import db, bycrypt
+from src.config.database import db, bcrypt
 from src.models.usuario import Usuario
 
 class AuthService:

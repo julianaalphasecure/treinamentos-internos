@@ -1,4 +1,3 @@
-# src/models/equipe.py
 from src.config.database import db
 
 class Equipe(db.Model):
