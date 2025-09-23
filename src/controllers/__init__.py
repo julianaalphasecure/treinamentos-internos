@@ -1,7 +1,7 @@
 from src.controllers.auth_controller import *
 
 from src.controllers.colaborador.configuracoes_controller import *
-from src.controllers.colaborador.feddback_controller import *
+from controllers.colaborador.feedback_controller import *
 from src.controllers.colaborador.modulo_controller import *
 from src.controllers.colaborador.perfil_controller import *
 from src.controllers.colaborador.progresso_controller import *
@@ -11,7 +11,7 @@ from src.controllers.gestor.feedback_controller import *
 from src.controllers.gestor.perfil_controller import *
 from src.controllers.gestor.relatorio_controller import *
 
-__all__ = {
+__all__ = [
     "auth_controller",
 
     "configuracoes_controller",
@@ -24,4 +24,4 @@ __all__ = {
     "feedback_controller",
     "perfil_controller",
     "relatorio_controller",
-}
+]

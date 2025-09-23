@@ -1,14 +1,14 @@
 from flask import Blueprint, request, jsonify
 from src.services.gestor.equipe_service import EquipeService
 
-equipe_bp = Blueprint("equipe_bp", __name__, url_prefix="/gestor/equipe")
+equipe_bp = Blueprint("equipe_bp", __name__)
 
 @equipe_bp.route("/", methods=["GET"])
-def listar_equies():
-    equipes = EquipeService.get_equipe_all_equipes()
-    return jsonify([e.to_dict() for e in equipes()]), 200
+def listar_equipes():
+    equipes = EquipeService.get_all_equipes()
+    return jsonify([e.to_dict() for e in equipes]), 200
 
-@equipe_bp.route("<int:equipe_id>", methods=["GET"])
+@equipe_bp.route("/<int:equipe_id>", methods=["GET"])
 def obter_equipe(equipe_id):
     equipe = EquipeService.get_equipe_by_id(equipe_id)
     if equipe:

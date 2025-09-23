@@ -1,5 +1,5 @@
 from flask import Blueprint
 
-gestor_bp = Blueprint("gestor", __name__, url_prefix="/gestor")
+gestor_bp = Blueprint("gestor_bp", __name__, url_prefix="/gestor")
 
-from .import equipe_controller, feedback_controller, perfil_controller, relatorio_controller
+from . import equipe_controller, feedback_controller, perfil_controller, relatorio_controller

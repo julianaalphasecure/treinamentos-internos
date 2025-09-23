@@ -1,11 +1,11 @@
 from flask import Blueprint, request, jsonify
 from src.services.gestor.relatorio_service import RelatorioService
 
-relatorio_bp = Blueprint("relatorio_bp", __name__, url_prefix="/gestor/relatorio")
+relatorio_bp = Blueprint("relatorio_bp", __name__)
 
 @relatorio_bp.route("/", methods=["GET"])
-def listar_relatorio():
-    relatorios = RelatorioService.get_all_relatorios()
+def listar_relatorios():
+    relatorios = RelatorioService.get_all_relatorio()
     return jsonify([r.to_dict() for r in relatorios]), 200
 
 @relatorio_bp.route("/<int:relatorio_id>", methods=["GET"])
