@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_migrate import Migrate
+from flask_cors import CORS  # IMPORTANTE: adiciona o CORS
 from src.config.database import db, bcrypt
 from src.config.config import SECRET_KEY, DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT, APP_PORT
 
@@ -15,13 +16,14 @@ from src.controllers.colaborador.configuracoes_controller import configuracoes_b
 
 # Gestor
 from src.controllers.gestor.equipe_controller import equipe_bp
-from src.controllers.gestor.gestor_feedback_controller import gestor_feedback_bp # type: ignore
-from src.controllers.gestor.gestor_perfil_controller import gestor_perfil_bp # type: ignore
+from src.controllers.gestor.gestor_feedback_controller import gestor_feedback_bp  # type: ignore
+from src.controllers.gestor.gestor_perfil_controller import gestor_perfil_bp  # type: ignore
 from src.controllers.gestor.relatorio_controller import relatorio_bp
 
 
 def create_app():
     app = Flask(__name__)
+    CORS(app, resources={r"/*": {"origins": "*"}})  # habilita CORS para todas as rotas
 
     # Config
     app.config["SECRET_KEY"] = SECRET_KEY
