@@ -43,3 +43,8 @@ venv\Scripts\activate      # Windows
 
 ## Teste das rotas com Postman
 Importe o arquivo postman/treinamentos.postman_collection
+
+---
+
+## Licença
+Este projeto é de uso interno
