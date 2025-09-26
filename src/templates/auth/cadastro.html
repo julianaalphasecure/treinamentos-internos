@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Alpha Secure</title>
+    <link rel="stylesheet" href="/src/static/css/auth/cadastro.css">
+    <link rel="shortcut icon" href="/src/static/img/logo header.png" type="image/x-icon"> 
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="logo">
+            <img src="/src/static/img/logo header.png" alt="Logo Alpha Secure">
+        </div>
+        <nav class="nav-links">
+            <a href="/src/templates/auth/login.html">Login</a>
+            <a href="#" class="highlight">Cadastre-se</a>
+        </nav>
+    </header>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="main-container">
+        <div class="image-side">
+            <img src="/src/static/img/img_cadastro.webp" alt="Imagem Cadastro">
+        </div>
+        <div class="form-side">
+            <div class="form-card">
+                <h2>Cadastre-se</h2>
+                <p>Realize seu cadastro aqui para entrar na plataforma de treinamentos</p>
+                <img src="/src/static/img/logo_cadastre.png" class="logo_cadastre">
+                <form id="cadastro-form">
+                    <label for="re">RE</label>
+                    <input type="text" id="re" name="re" required placeholder="Digite seu re...">
+
+                    <label for="nome">Nome</label>
+                    <input type="text" id="nome" name="nome" required placeholder="Digite seu nome...">
+
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required placeholder="Digite seu email...">
+
+                    <label for="senha">Senha</label>
+                    <input type="password" id="senha" name="senha" required placeholder="Digite sua senha...">
+
+                    <label for="tipo_acesso">Tipo de Acesso</label>
+                    <select id="tipo_acesso" name="tipo_acesso" required>
+                        <option value="colaborador">Colaborador</option>
+                        <option value="gestor">Gestor</option>
+                    </select>
+
+                    <button type="submit">Cadastrar</button>
+                </form>
+                <p>Já possui conta? <a href="/login">Faça login</a></p>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <divc class="logo_footer">
+            <img src="/src/static/img/logo_cadastre.png">
+        </div>
+        <div class="redes sociais">
+            <img src="" alt="Instagram">
+            <img src="" alt="Facebook">
+            <img src="" alt="Linkedin">
+        </div>
+        <hr>
+        <p>&copy; 2025 Alpha Secure. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="/src/static/css/auth/cadastro.css"></script>
+</body>
+</html>
