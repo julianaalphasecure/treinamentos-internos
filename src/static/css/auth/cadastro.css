@@ -1,0 +1,167 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+/* HEADER */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #0F2940; 
+    padding: 15px 50px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.25); /* efeito 3D suave */
+}
+
+.logo img {
+    height: 60px;
+    width: auto;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+    font-weight: bold;
+    padding: 8px 12px;
+    border-radius: 5px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.nav-links a:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.nav-links a.highlight {
+    background-color: #E28E44;
+    color: #fff;
+}
+
+/* MAIN */
+.main-container {
+    display: flex;
+    justify-content: center;   /* centraliza horizontalmente */
+    align-items: center;       /* centraliza verticalmente */
+    padding: 50px;
+    gap: 50px;
+    flex-wrap: wrap;           /* para telas menores, form e imagem não saiam da tela */
+}
+
+/* Ajusta largura do form e da imagem */
+.form-side .form-card {
+    width: 400px;               /* aumenta o form para ficar mais equilibrado */
+    padding: 50px;
+}
+
+.image-side img {
+    max-width: 500px;
+    border-radius: 15px;
+    position: relative;
+    left: 130px;               /* sobreposição do form */
+    z-index: 1;
+}
+
+
+
+
+.form-card {
+    position: relative;    
+    z-index: 0;
+}
+
+
+.form-side .form-card {
+    background-color: white; 
+    padding: 50px 45px; /* mais largura e altura */
+    border-radius: 15px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08), 0 4px 10px rgba(0, 0, 0, 0.1); /* menos 3D */
+    width: 700px; /* mais largo */
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.form-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.form-card h2 {
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+}
+
+.logo_cadastre {
+    display: block;
+    margin: 0 auto 5px auto; /* centraliza a logo e adiciona espaço abaixo */
+    width: 150px;
+}
+
+.form-card label {
+    display: block;
+    margin-bottom: 5px;
+    margin-top: 15px;
+    color: #555;
+}
+
+.form-card input,
+.form-card select {
+    width: 100%;
+    padding: 12px; /* campos maiores */
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+.form-card button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 20px;
+    background-color: #DD6E0D;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.form-card button:hover {
+    background-color: #E28E44;
+    color: black;
+}
+
+.form-card p {
+    margin-top: 15px;
+    text-align: center;
+    color: #555;
+}
+
+.form-card p a {
+    color: #007BFF;
+    text-decoration: none;
+}
+
+/* FOOTER */
+.footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #f1f1f1;
+    margin-top: 50px;
+}
+
+.footer .logo_footer img {
+    max-width: 120px;
+    margin-bottom: 10px;
+}
+
+.footer .redes_sociais img {
+    width: 30px;
+    margin: 0 10px;
+    cursor: pointer;
+}
+
