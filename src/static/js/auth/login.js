@@ -18,12 +18,12 @@ document.getElementById("login-form").addEventListener("submit", async function(
     if (response.ok) {
       alert("Login realizado com sucesso!");
 
-      // Se a API retornar token, armazena
+      
       if (result.token) {
         localStorage.setItem("token", result.token);
       }
 
-      // Salva também o tipo de acesso, se a API retornar
+      
       if (result.tipo_acesso) {
         localStorage.setItem("tipo_acesso", result.tipo_acesso);
       }
