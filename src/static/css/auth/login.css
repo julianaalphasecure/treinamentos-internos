@@ -1,57 +1,196 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
 body {
-  font-family: Arial, sans-serif;
-  background: #f4f4f4;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin: 0;
+    position: relative;
+    background: white;
+    overflow-x: hidden;
 }
 
-.login-container {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  width: 300px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+
+
+/* HEADER */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #F4F7F8;
+    padding: 15px 50px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.25);
 }
 
-h2 {
-  text-align: center;
-  margin-bottom: 20px;
+.logo img {
+    height: 60px;
+    width: auto;
 }
 
-form {
-  display: flex;
-  flex-direction: column;
+.nav-links a {
+    color: black;
+    text-decoration: none;
+    margin-left: 20px;
+    font-weight: bold;
+    padding: 8px 12px;
+    border-radius: 30px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.nav-links a:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+.nav-links a.highlight {
+    background-color: #df6f0d;
+    color: black;
 }
 
-label {
-  margin-top: 10px;
+/* MAIN */
+.main-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    gap: 50px;
+    position: relative;
+    overflow: hidden;
+    margin-top: 50px; /* adiciona espaço entre header e form */
 }
 
-input {
-  padding: 8px;
-  margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+.image-side img {
+    position: relative;
+    max-width: 400px;
+    transform: translateX(80px); /* sobreposição */
+    z-index: 3;
 }
 
-button {
-  margin-top: 15px;
-  padding: 10px;
-  background: #2196F3;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+.form-side .form-card {
+    background-color: white;
+    padding: 25px 30px;   /* altura menor */
+    border-radius: 15px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08), 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 600px;
+    z-index: 2;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.form-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
-button:hover {
-  background: #0b7dda;
+.form-card h2 {
+    margin-bottom: 15px;
+    color: #333;
+    text-align: center;
 }
 
-p {
-  text-align: center;
-  margin-top: 15px;
+.logo_cadastre {
+    display: block;
+    margin: 0 auto 10px auto;
+    width: 120px;
+}
+
+.form-card label {
+    display: block;
+    margin-bottom: 5px;
+    margin-top: 12px;
+    color: #555;
+}
+
+.form-card input,
+.form-card select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+.form-card button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 18px;
+    background-color: #DD6E0D;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+}
+.form-card button:hover {
+    background-color: #E28E44;
+    color: black;
+}
+
+.form-card p {
+    margin-top: 12px;
+    text-align: center;
+    color: #555;
+}
+.form-card p a {
+    color: #007BFF;
+    text-decoration: none;
+}
+
+.footer {
+    background-color: #f8f8f8; /* neutro */
+    color: #666;
+    text-align: center;
+    padding: 30px 20px; /* espaço suficiente para não grudar */
+    margin-top: 60px; /* separa do form */
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.footer-separator {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin-bottom: 15px;
+}
+
+.footer-links a {
+    color: #666;
+    text-decoration: none;
+    margin: 0 5px;
+    transition: color 0.2s;
+}
+
+.footer-links a:hover {
+    color: #E28E44; /* destaque sutil ao passar o mouse */
+}
+
+.footer-copy {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+
+
+/* Responsividade */
+@media (max-width: 1024px) {
+    .main-container {
+        flex-direction: column;
+        padding: 40px 20px;
+        gap: 30px;
+    }
+    .image-side img {
+        transform: none;
+        max-width: 250px;
+    }
+    .form-side .form-card {
+        width: 90%;
+        padding: 30px 25px;
+    }
+}
+@media (max-width: 767px) {
+    .image-side img {
+        display: none;
+    }
+    .form-side .form-card {
+        width: 100%;
+        padding: 25px 20px;
+    }
 }
