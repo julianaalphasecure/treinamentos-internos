@@ -1,4 +1,4 @@
-document.getElementById("form-cadastro").addEventListener("submit", async function(e) {
+document.getElementById("cadastro-form").addEventListener("submit", async function(e) {
   e.preventDefault();
 
   const dados = {
@@ -19,7 +19,7 @@ document.getElementById("form-cadastro").addEventListener("submit", async functi
     const result = await response.json();
     if (response.ok) {
       alert("Cadastro realizado com sucesso!");
-      window.location.href = "login.html";
+      window.location.href = "/src/templates/auth/login.html"; // caminho ajustado pro seu login
     } else {
       alert(result.error || "Erro ao cadastrar");
     }

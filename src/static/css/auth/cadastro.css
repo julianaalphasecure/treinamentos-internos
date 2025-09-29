@@ -15,11 +15,11 @@ body::before {
     content: "";
     position: absolute;
     top: 0;
-    left: -10%;
-    width: 50%;
+    left: -46%;
+    width: 58%;
     height: 100%;
-    background: #A8B4C4;
-    transform: skewX(-10deg);
+    background: #3B4B5A;
+    transform: skewX(-35deg);
     z-index: -1;
 }
 
@@ -132,8 +132,8 @@ body::before {
     font-size: 15px;
 }
 .form-card button:hover {
-    background-color: #E28E44;
-    color: black;
+    background-color: #ff7700;
+    color: white;
 }
 
 .form-card p {
