@@ -28,13 +28,13 @@ document.getElementById("login-form").addEventListener("submit", async function(
         localStorage.setItem("tipo_acesso", result.tipo_acesso);
       }
 
-      // Redirecionamento com base no tipo de acesso
+      
       if (result.tipo_acesso === "gestor") {
         window.location.href = "/src/templates/gestor/dashboard.html"; 
       } else if (result.tipo_acesso === "colaborador") {
         window.location.href = "/src/templates/colaborador/modulo.html"; 
       } else {
-        // fallback se a API não retornar nada
+        
         window.location.href = "/src/templates/home.html";
       }
     } else {
