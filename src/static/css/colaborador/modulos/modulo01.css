@@ -1,3 +1,4 @@
+/* ===== Ajustado ===== */
 * {
   margin: 0;
   padding: 0;
@@ -8,6 +9,18 @@
 body {
   background: #f5f7fa;
   color: #333;
+}
+
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -36%;
+    width: 42%;
+    height: 100%;
+    background: #9cb3c9;
+    transform: skewX(-28deg);
+    z-index: -1;
 }
 
 /* HEADER */
@@ -29,27 +42,121 @@ body {
 }
 
 .voltar_home {
-    background-color:#dbeafe;
-    padding: 10px 15px;
-    border-radius: 15px;
-    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.466);
-    
+  background-color:#dbeafe;
+  padding: 10px 15px;
+  border-radius: 15px;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.466);
 }
 
 .voltar_home a{
-    text-decoration: none;
-    color: black;
+  text-decoration: none;
+  color: black;
 }
 .voltar_home p {
-    font-size: 1.em;
+  font-size: 1.em;
+}
+
+/* CARROSSEL */
+.modules-carousel {
+  position: relative;   /* importante: para posicionar os controles */
+  overflow: hidden;
+  width: 100%;
+  height: 70vh; /* altura do carrossel: 70% da tela (ajuste se quiser maior) */
+}
+
+.modules h2, p {
+  text-align: center;
+}
+
+.modules h2 {
+  color: hwb(219 1% 76% / 0.8);
+}
+
+.modules-wrapper {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+  height: 100%;
+}
+
+.modules-slide {
+  min-width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.module-card {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 89%;
+  height: 110%;
+  overflow: hidden;
+}
+
+.module-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; 
+  border-radius: 12px;
 }
 
 
 
+.module-card button {
+  background: #eb7f0c;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s, transform 0.3s;
+}
 
+.module-card button:hover {
+  background: #f08944;
+  transform: translateY(-2px);
+}
 
+/* CONTROLES (embaixo da imagem, centralizados) */
+.carousel-controls {
+  position: absolute;
+  bottom: -22px;           /* fica visível abaixo da imagem */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 20px;              /* espaço entre as setas */
+  z-index: 50;            /* acima do conteúdo */
+  pointer-events: auto;
+}
 
+.carousel-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;        /* garante tamanho mínimo do círculo */
+  min-height: 44px;
+  padding: 8px 12px;
+  border-radius: 50%;
+  background: rgba(3, 23, 61, 0.9);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;        /* tamanho legível da seta */
+  box-shadow: 0 6px 12px rgba(0,0,0,0.12);
+  transition: background 0.18s, transform 0.12s;
+}
 
+.carousel-btn:hover { 
+  background: rgba(30, 60, 114, 1);
+  transform: translateY(-2px);
+}
+.carousel-btn:focus { outline: none; box-shadow: 0 0 0 4px rgba(3,23,61,0.12); }
 
 
 
