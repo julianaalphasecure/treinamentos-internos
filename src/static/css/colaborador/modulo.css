@@ -358,3 +358,15 @@ body {
     margin-top: 10px;
     font-size: 14px;
 }
+
+.footer::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -46%;
+    width: 58%;
+    height: 100%;
+    background: #3B4B5A;
+    transform: skewX(-35deg);
+    z-index: -1;
+}

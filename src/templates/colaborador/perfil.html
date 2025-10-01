@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Peril</title>
+    <link rel="stylesheet" href="/src/static/css/colaborador/perfil.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="shortcut icon" href="/src/static/img/logo header.png" type="image/x-icon">
+</head>
+<body>
+    
+<header class="header">
+  <div class="logo-box">
+    <img src="/src/static/img/logo_cadastre.png" alt="Logo Alpha Secure">
+  </div>
+  <div class="user-box">
+    <span id="user-name">Olá, Usuário</span>
+    <span class="user-role">Colaborador</span>
+  </div>
+</header>
+
+<section class="banner">
+  <img src="/src/static/img/banner.png" alt="Banner Plataforma">
+</section>
+
+<section class="info-cards-container">
+  <div class="info-cards">
+    <div class="card">
+      <p>Ser uma empresa referência por sua <br> excelência em segurança e serviços.</p>
+      <img src="/src/static/img/missao_icon.webp" alt="Missão">
+    </div>
+    <div class="card destaque">
+      <p>Disponibilizar ao mercado soluções em serviços agregando tecnologia, atendimentos personalizado e técnicas de trabalho.</p>
+      <img src="/src/static/img/visao_icons.webp" alt="Visão">
+    </div>
+    <div class="card">
+      <p>Transparência, responsabilidade, ética e eficiência, consolidando assim a relação com nossos parceiros comerciais e colaboradores.</p>
+      <img src="/src/static/img/valores_icon.webp" alt="Valores">
+    </div>
+  </div>
+</section>
+
+<div class="main-container">
+
+  <aside class="sidebar">
+    <nav>
+      <ul>
+        <li><a href="#" class="active">Meu Perfil</a></li>
+        <li><a href="/src/templates/colaborador/modulo.html">Módulos</a></li>
+        <li><a href="/src/templates/colaborador/progresso.html">Meu Progresso</a></li>
+        <li><a href="/src/templates/colaborador/feedback.html">Feedback</a></li>
+        <li><a href="/src/templates/colaborador/configuracoes.html">Configurações</a></li>
+        <li><a href="/src/templates/auth/login.html">Sair</a></li>
+      </ul>
+    </nav>
+  </aside>
+  
+
+<div class="content">
+  <section class="perfil">
+    <h2>Meu Perfil</h2>
+    <p>Gerencie suas informações pessoais e configurações</p>
+
+    <div class="perfil-card">
+  <div class="perfil-info">
+    <img src="/src/static/img/foto.png" alt="Foto" class="perfil-img">
+
+    <div class="perfil-textos">
+      <h3 id="perfil-nome">Mariana Oliveira</h3>
+      <span class="tag">Colaborador</span>
+    </div>
+  </div>
+
+  <div class="perfil-detalhes">
+    <p><b>Nome Completo:</b> <span id="perfil-nome-completo">Mariana Oliveira</span></p>
+    <p><b>Telefone:</b> <span id="perfil-telefone">(11) 98765-4321</span></p>
+    <p><b>RE:</b> <span id="perfil-re">02543</span></p>
+    <p><b>E-mail:</b> <span id="perfil-email">mariana.oliveira@gmail.com</span></p>
+    <p><b>Departamento:</b> <span id="perfil-departamento">Monitoramento</span></p>
+  </div>
+
+  <div class="perfil-actions">
+    <button class="btn-editar">Editar</button>
+  </div>
+
+
+
+  </section>
+
+
+  <section class="dashboard">
+    <div class="card estatisticas">
+      <h3>Minhas Estatísticas</h3>
+      <p><b>Progresso Geral:</b> 78%</p>
+      <div class="progress-bar">
+        <div class="progress" style="width:78%"></div>
+      </div>
+      <p><b>Módulos Concluídos:</b> 6</p>
+      <p><b>Nota Média:</b> 85%</p>
+    </div>
+
+    <div class="card conquistas">
+      <h3>Conquistas</h3>
+      <ul>
+        <li>Primeira Certificação - 15/09/2025</li>
+        <li>Sequência de 7 dias - 20/09/2025</li>
+        <li>Nota Máxima - 25/09/2025</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Editar Perfil</h2>
+    <form id="form-perfil">
+      <label>Nome Completo</label>
+      <input type="text" id="input-nome" required>
+
+      <label>E-mail</label>
+      <input type="email" id="input-email" required>
+
+      <label>Telefone</label>
+      <input type="text" id="input-telefone" required>
+
+      <label>Departamento</label>
+      <input type="text" id="input-departamento">
+
+      <label>RE</label>
+      <input type="text" id="input-re">
+
+      <button type="submit" class="btn-salvar">Salvar</button>
+    </form>
+  </div>
+</div>
+
+
+
+<script src="/src/static/js/colaborador/perfil.js"></script>
+</body>
+</html>
