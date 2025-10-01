@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrix Energia - Módulo 01</title>
+    <link rel="stylesheet" href="/src/static/css/colaborador/modulos/modulo02.css">
+    <link rel="shortcut icon" href="/src/static/img/logo header.png" type="image/x-icon">
+</head>
+<body>
+
+<header class="header">
+  <div class="logo-box">
+    <img src="/src/static/img/logo_cadastre.png" alt="Logo Alpha Secure">
+  </div>
+  <div class="voltar_home">
+    <a href="/src/templates/colaborador/modulo.html"><p>Home</p></a>
+  </div>
+</header>
+
+<section class="modules">
+  <h2>Bem-vindo(a) ao módulo 03 - Monitoramento de Usina</h2>
+  <p>Complete esse módulo para avançar para os exercícios</p>
+
+  <div class="modules-carousel">
+    <div class="modules-wrapper">
+      <!-- Slides de conteúdo -->
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/" alt="página 01"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/" alt="página 02"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/" alt="página 03"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/" alt="página 04"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/" alt="página 05"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/" alt="página 06"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/" alt="página 07"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/" alt="página 08"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/" alt="página 09"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/" alt="página 10"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/" alt="página 11"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/" alt="página 12"></div></div>
+      <!-- Último slide com botão finalizar -->
+      <div class="modules-slide">
+        <div class="module-card">
+          <img src="/src/static/img/modulo01/mod 01 pag 13.png" alt="Última página">
+          <button class="btn-finalizar">Finalizar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="carousel-controls">
+    <button class="carousel-btn prev">&#10094;</button>
+    <button class="carousel-btn next">&#10095;</button>
+  </div>
+</section>
+
+<section class="exercises" style="display: none; text-align: center;">
+  <h2>Exercícios do Módulo 03</h2>
+  <br>
+  <hr>
+  <br>
+  <form id="exercise-form">
+    <div class="question" data-answer="c">
+      <p>1. Em relação ao evento "Falha de auto teste", qual dos procedimentos abaixo é considerado INCORRETO?</p>
+      <label><input type="radio" name="q1" value="a"> A) Aguardar 5 minutos antes de qualquer ação, para evitar ações indevidas por oscilações temporárias</label><br>
+      <label><input type="radio" name="q1" value="b"> B) Se o GPRS apresentar horário de última comunicação superior ao do evento, encerrar evento</label><br>
+      <label><input type="radio" name="q1" value="c"> C) Caso o GPRS, esteja inativo e o cftv apresente imagens sem anormalidades, o evento deve permanecer aberto</label><br>
+      <label><input type="radio" name="q1" value="d"> D) O procedimento varia conforme o status da unidade (aberta ou fechada)</label>
+    </div>
+    <br>
+
+    <div class="question" data-answer="d">
+      <p>2. Um disparo de alarme ocorre em uma unidade fechada com o CFTV off-line. Qual deve ser a ação imediata do operador, segundo o protocolo?</p>
+      <label><input type="radio" name="q2" value="a"> A) Entrar em contato com o gerente da unidade e aguardar posicionamento</label><br>
+      <label><input type="radio" name="q2" value="b"> B) Tentar nova comunicação via GPRS</label><br>
+      <label><input type="radio" name="q2" value="c"> C) Encerrar o evento por falta de verificação remota</label><br>
+      <label><input type="radio" name="q2" value="d"> D) Encaminhar uma viatura ao local para verificar a situação</label>
+    </div>
+    <br>
+
+    <div class="question" data-answer="b">
+      <p>3. Qual das alternativas representa um evento que, mesmo relacionado a um botão físico, pode ser interpretado como problema técnico em certas circunstâncias?</p>
+      <label><input type="radio" name="q3" value="a"> A) Disparo de alarme</label><br>
+      <label><input type="radio" name="q3" value="b"> B) Disparo de pânico</label><br>
+      <label><input type="radio" name="q3" value="c"> C) Não armado</label><br>
+      <label><input type="radio" name="q3" value="d"> D) Desarme fora do horário</label>
+    </div>
+    <br>
+
+    <div class="question" data-answer="b">
+      <p>4. Quando um evento de "Desarme fora do horário" ocorre, qual das ações abaixo é INCORRETA segundo o procedimento padrão?</p>
+      <label><input type="radio" name="q4" value="a"> A) Acessar o CFTV para identificar a movimentação no local</label><br>
+      <label><input type="radio" name="q4" value="b"> B) Se contrassenha for incorreta, encerrar o evento e informar o gerente</label><br>
+      <label><input type="radio" name="q4" value="c"> C) Em caso de movimentação suspeita, encaminhar pronto atendimento ao local</label><br>
+      <label><input type="radio" name="q4" value="d"> D) Se o contato for estabelecido e a contrassenha for correta, questionar o motivo do desarme</label>
+    </div>
+    <br>
+
+        <div class="question" data-answer="c">
+      <p>5. Em que situação o evento de "Teste de reporte periódico" exigirá tratativa do operador?</p>
+      <label><input type="radio" name="q5" value="a"> A) Quando o teste ocorrer fora da grade horária programada</label><br>
+      <label><input type="radio" name="q5" value="b"> B) Quando houver falha de comunicação anterior registrada</label><br>
+      <label><input type="radio" name="q5" value="c"> C) Quando ele não for recebido, gerando outro tipo de evento</label><br>
+      <label><input type="radio" name="q5" value="d"> D) Quando o usuário não confirmar a ativação do alarme</label>
+    </div>
+    <br>
+
+    <div class="question" data-answer="c">
+      <p>6. Sobre o evento "Armado pelo usuário", qual afirmação está correta?</p>
+      <label><input type="radio" name="q6" value="a"> A) Sempre exige confirmação por telefone com responsável</label><br>
+      <label><input type="radio" name="q6" value="b"> B) Pode ser identificado o usuário, desde que o alarme esteja ativado remotamente</label><br>
+      <label><input type="radio" name="q6" value="c"> C) Se as abas de usuários estiverem corretamente configurados, o nome do responsável aparece junto ao evento</label><br>
+      <label><input type="radio" name="q6" value="d"> D) Só ocorre se houver disparo posterior do alarme</label>
+    </div>
+    <br>
+    
+    <div class="question" data-answer="b">
+      <p>7. Qual alternativa apresneta corretamente a relação entre GPRS e o sistema de monitoramento?</p>
+      <label><input type="radio" name="q7" value="a"> A) O GPRS substitui completamente a internet local e o CFTV</label><br>
+      <label><input type="radio" name="q7" value="b"> B) O GPRS atua como recurso de backup, permitindo a comunicação em caso de falha de internet local</label><br>
+      <label><input type="radio" name="q7" value="c"> C) O GPRS gera os eventos automaticamente sem necessidade de sensores</label><br>
+      <label><input type="radio" name="q7" value="d"> D) O GPRS só é utilizado em unidades com alarme desativado</label>
+    </div>
+    <br>
+
+     <div class="question" data-answer="c">
+      <p>8. Em uma situação real, um operador verifica que o horário de última comunicação via GPRS é 5 minutos anterior ao horário do evento de falha de auto teste. Qual deve ser sua ação? </p>
+      <label><input type="radio" name="q8" value="a"> A) </label><br>
+      <label><input type="radio" name="q8" value="b"> B) </label><br>
+      <label><input type="radio" name="q8" value="c"> C) </label><br>
+      <label><input type="radio" name="q8" value="d"> D) </label>
+    </div>
+    <br>
+
+    <div class="question" data-answer="d">
+      <p>9. </p>
+      <label><input type="radio" name="q9" value="a"> A) </label><br>
+      <label><input type="radio" name="q9" value="b"> B) </label><br>
+      <label><input type="radio" name="q9" value="c"> C) </label><br>
+      <label><input type="radio" name="q9" value="d"> D) </label>
+    </div>
+    <br>
+
+     <div class="question" data-answer="b">
+      <p>10. </p>
+      <label><input type="radio" name="q9" value="a"> A) </label><br>
+      <label><input type="radio" name="q9" value="b"> B) </label><br>
+      <label><input type="radio" name="q9" value="c"> C) </label><br>
+      <label><input type="radio" name="q9" value="d"> D) </label>
+    </div>
+    <br>
+
+   
+
+    <button type="submit" class="btn-submit">Enviar Exercícios</button>
+  </form>
+  <div id="score" style="margin-top:20px; font-size:18px; font-weight:bold;"></div>
+</section>
+
+<footer class="footer">
+  <hr class="footer-separator">
+  <div class="footer-links">
+    <a href="#">Política de Privacidade</a> | 
+    <a href="#">Termos de Uso</a> | 
+    <a href="#">Suporte</a>
+  </div>
+  <p class="footer-copy">&copy; 2025 Alpha Secure. Todos os direitos reservados.</p>
+</footer>
+
+<script src="/src/static/js/colaborador/modulos/modulo01.js"></script>
+</body>
+</html>
