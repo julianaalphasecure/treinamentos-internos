@@ -62,13 +62,13 @@ body {
 .image-side img {
     position: relative;
     max-width: 400px;
-    transform: translateX(80px); /* sobreposição */
+    transform: translateX(80px); 
     z-index: 3;
 }
 
 .form-side .form-card {
     background-color: white;
-    padding: 25px 30px;   /* altura menor */
+    padding: 25px 30px;   
     border-radius: 15px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08), 0 4px 10px rgba(0, 0, 0, 0.1);
     width: 600px;

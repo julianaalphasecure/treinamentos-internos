@@ -10,7 +10,7 @@ body {
     overflow-x: hidden;
 }
 
-/* faixa inclinada de fundo */
+
 body::before {
     content: "";
     position: absolute;
@@ -23,7 +23,7 @@ body::before {
     z-index: -1;
 }
 
-/* HEADER */
+
 .header {
     display: flex;
     justify-content: space-between;
