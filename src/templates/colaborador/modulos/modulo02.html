@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matrix Energia - Módulo 01</title>
-    <link rel="stylesheet" href="/src/static/css/colaborador/modulos/modulo02.css">
-    <link rel="shortcut icon" href="/src/static/img/logo header.png" type="image/x-icon">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matrix Energia - Módulo 07</title>
+<link rel="stylesheet" href="/src/static/css/colaborador/modulos/modulo01.css">
+<link rel="shortcut icon" href="/src/static/img/logo header.png" type="image/x-icon">
 </head>
 <body>
 
@@ -19,12 +19,11 @@
 </header>
 
 <section class="modules">
-  <h2>Bem-vindo(a) ao módulo 02 - Monitoramento de Usina</h2>
+  <h2>Bem-vindo(a) ao módulo 02 - Athon Energia </h2>
   <p>Complete esse módulo para avançar para os exercícios</p>
 
   <div class="modules-carousel">
     <div class="modules-wrapper">
-      <!-- Slides de conteúdo -->
       <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo02.png" alt="página 01"></div></div>
       <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo02/mod 02 pag 02.png" alt="página 02"></div></div>
       <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo02/mod 02 pag 03.png" alt="página 03"></div></div>
@@ -38,6 +37,7 @@
       <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo02/mod 02 pag 11.png" alt="página 11"></div></div>
       
       
+     
       <div class="modules-slide">
         <div class="module-card">
           <img src="/src/static/img/modulo02/mod 02 pag 12.png" alt="Última página">
@@ -50,110 +50,128 @@
   <div class="carousel-controls">
     <button class="carousel-btn prev">&#10094;</button>
     <button class="carousel-btn next">&#10095;</button>
+    <button id="download-btn"><img src="/src/static/img/baixar_modulo.webp" alt="Baixar PDF"></button>
+    <button id="fullscreen-btn"><img src="/src/static/img/icone_telaCheia.webp" alt="Tela Cheia"></button>
   </div>
 </section>
 
-<section class="exercises" style="display: none; text-align: center;">
-  <h2>Exercícios do Módulo 02</h2>
-  <br>
-  <hr>
-  <br>
-  <form id="exercise-form">
-    <div class="question" data-answer="d">
-      <p>1. Em caso de alarme sem imagem visível da causa, o operador deve:</p>
-      <label><input type="radio" name="q1" value="a"> A) Ignorar o alarme até que ele se repita</label><br>
-      <label><input type="radio" name="q1" value="b"> B) Encaminhar de imediato uma equipe de manutenção</label><br>
-      <label><input type="radio" name="q1" value="c"> C) Registrar como alarme falso sem necessidade de ação</label><br>
-      <label><input type="radio" name="q1" value="d"> D) Direcionar pronto atendimento para verificação</label>
+<section class="exercises">
+  <h2>Exercícios do Módulo 07</h2>
+  <div id="timer">Tempo restante: 30:00</div>
+  <div class="exercise-wrapper">
+    <div class="exercise-slide" data-answer="d">
+      <p><strong>1.</strong>Em caso de alarme sem imagem visível da causa, o operador deve: </p>
+      <div class="options">
+        <label><input type="radio" name="q1" value="a">Ignorar o alarme até que ele se repita </label>
+        <label><input type="radio" name="q1" value="b">Encaminhar de imediato uma equipe de manutenção </label>
+        <label><input type="radio" name="q1" value="c">Registrar como alarme falso sem necessidade de ação </label>
+        <label><input type="radio" name="q1" value="d">Direcionar pronto atendimento para verificação do local </label>
+      </div>
     </div>
-    <br>
 
-    <div class="question" data-answer="c">
-      <p>2. Quais sistemas devem ser avaliados em uma queda de energia?</p>
-      <label><input type="radio" name="q2" value="a"> A) Apenas o controle de acesso</label><br>
-      <label><input type="radio" name="q2" value="b"> B) Apenas câmeras e alarmes</label><br>
-      <label><input type="radio" name="q2" value="c"> C) Sistemas de alarme, câmeras, iluminação e controle de acesso</label><br>
-      <label><input type="radio" name="q2" value="d"> D) Apenas comunicação com a equipe de campo</label>
+    <div class="exercise-slide" data-answer="c">
+      <p><strong>2.</strong>Quais sistemas devem ser avaliados em uma queda de energia? </p>
+      <div class="options">
+        <label><input type="radio" name="q2" value="a">Apenas o controle de acesso</label>
+        <label><input type="radio" name="q2" value="b">Apenas câmeras e alarmes </label>
+        <label><input type="radio" name="q2" value="c">Sistemas de alarme, câmeras, iluminação e controle de acesso </label>
+        <label><input type="radio" name="q2" value="d">Apenas comunicação com a equipe de campo </label>
+      </div>
     </div>
-    <br>
 
-    <div class="question" data-answer="c">
-      <p>3. Em qual situação o acionamento da polícia é recomendado?</p>
-      <label><input type="radio" name="q3" value="a"> A) Perda de sinal de internet</label><br>
-      <label><input type="radio" name="q3" value="b"> B) Desligamento voluntário do sistema</label><br>
-      <label><input type="radio" name="q3" value="c"> C) Presença suspeita persistente no entorno da usina</label><br>
-      <label><input type="radio" name="q3" value="d"> D) Troca de vigilância no local</label>
+    <div class="exercise-slide" data-answer="c">
+      <p><strong>3.</strong>Em qual situação o acionamento da polícia é recomendado? </p>
+      <div class="options">
+        <label><input type="radio" name="q3" value="a">Perda de sinal de internet </label>
+        <label><input type="radio" name="q3" value="b">Desligamento voluntário do sistema  </label>
+        <label><input type="radio" name="q3" value="c">Presença suspeita persistente no entorno da usina  </label>
+        <label><input type="radio" name="q3" value="d">Troca de vigilância no local </label>
+      </div>
     </div>
-    <br>
 
-    <div class="question" data-answer="a">
-      <p>4. Quando a polícia não puder atender, qual medida deve ser tomada primeiro?</p>
-      <label><input type="radio" name="q4" value="a"> A) Repetir a tentativa de contato ao menos duas vezes</label><br>
-      <label><input type="radio" name="q4" value="b"> B) Ignorar a ocorrência</label><br>
-      <label><input type="radio" name="q4" value="c"> C) Esperar que o cliente ligue para a polícia</label><br>
-      <label><input type="radio" name="q4" value="d"> D) Acionar a coordenação apenas</label>
+    <div class="exercise-slide" data-answer="a">
+      <p><strong>4.</strong>Quando a polícia não puder atender, qual medida deve ser tomada primeiro? </p>
+      <div class="options">
+        <label><input type="radio" name="q4" value="a">Repetir a tentativa de contato ao menos duas vezes </label>
+        <label><input type="radio" name="q4" value="b">Ignorar a ocorrência  </label>
+        <label><input type="radio" name="q4" value="c">Esperar que o cliente ligue para a polícia  </label>
+        <label><input type="radio" name="q4" value="d">Acionar a coordenação apenas  </label>
+      </div>
     </div>
-    <br>
 
-        <div class="question" data-answer="a">
-      <p>5. O primeiro responsável a ser acionado em campo após uma ocorrência</p>
-      <label><input type="radio" name="q5" value="a"> A) O gerente geral da empresa</label><br>
-      <label><input type="radio" name="q5" value="b"> B) O responsável técnico do cliente</label><br>
-      <label><input type="radio" name="q5" value="c"> C) A coordenação regional</label><br>
-      <label><input type="radio" name="q5" value="d"> D) A equipe de pronto atendimento</label>
+    <div class="exercise-slide" data-answer="a">
+      <p><strong>5.</strong>O primeiro responsável a ser acionado em campo após uma ocorrência é: </p>
+      <div class="options">
+        <label><input type="radio" name="q5" value="a">O gerente geral da empresa  </label>
+        <label><input type="radio" name="q5" value="b">O responsável técnico do cliente  </label>
+        <label><input type="radio" name="q5" value="c">A coordenação regional  </label>
+        <label><input type="radio" name="q5" value="d">A equipe de pronto atendimento  </label>
+      </div>
     </div>
-    <br>
 
-    <div class="question" data-answer="b">
-      <p>6. Em caso de falha total no sistema de vídeo, o operador deve:</p>
-      <label><input type="radio" name="q6" value="a"> A) Esperar retorno automático do sistema</label><br>
-      <label><input type="radio" name="q6" value="b"> B) Acionar TI, manutenção e iniciar contingência</label><br>
-      <label><input type="radio" name="q6" value="c"> C) Notificar apenas o mantenedor técnico</label><br>
-      <label><input type="radio" name="q6" value="d"> D) Ignorar, caso seja fora do horário comercial</label>
+    <div class="exercise-slide" data-answer="b">
+      <p><strong>6.</strong>Em caso de falha total no sistema de vídeo, o operador deve: </p>
+      <div class="options">
+        <label><input type="radio" name="q5" value="a">Esperar retorno automático do sistema </label>
+        <label><input type="radio" name="q5" value="b">Acionar TI, manutenção e iniciar contigência </label>
+        <label><input type="radio" name="q5" value="c">Notificar apenas o mantenedor técnico </label>
+        <label><input type="radio" name="q5" value="d">Ignorar, caso seja fora do horário comercial  </label>
+      </div>
     </div>
-    <br>
+
+    <div class="exercise-slide" data-answer="b">
+      <p><strong>7.</strong>Qual ação deve ser feita ao identificar uma câmera off-line em área crítica?</p>
+      <div class="options">
+        <label><input type="radio" name="q5" value="a">Nenhuma, se for de madrugada </label>
+        <label><input type="radio" name="q5" value="b">Reforçar vigilância presencial no local  </label>
+        <label><input type="radio" name="q5" value="c">Substituir a câmera de forma remota  </label>
+        <label><input type="radio" name="q5" value="d">Desabilitar a câmera do sistema  </label>
+      </div>
+    </div>
+
+    <div class="exercise-slide" data-answer="c">
+      <p><strong>8.</strong>A ausência de imagem em um alarme invalida o acionamento de apoio? </p>
+      <div class="options">
+        <label><input type="radio" name="q5" value="a">Sim, a imagem é obrigatória </label>
+        <label><input type="radio" name="q5" value="b">Sim, se for em período noturno </label>
+        <label><input type="radio" name="q5" value="c">Não, se houver indícios de risco, o acionamento deve ocorrer  </label>
+        <label><input type="radio" name="q5" value="d">Depende apenas da opnião do operador  </label>
+      </div>
+    </div>
+
+    <div class="exercise-slide" data-answer="d">
+      <p><strong>9.</strong>A quem compete o escalonamento e decisões estratégicas em eventos de maior gravidade? </p>
+      <div class="options">
+        <label><input type="radio" name="q5" value="a">Vigilância local  </label>
+        <label><input type="radio" name="q5" value="b">Técnico de manutenção  </label>
+        <label><input type="radio" name="q5" value="c">Operador de monitoramento </label>
+        <label><input type="radio" name="q5" value="d">Gerência da gestão central  </label>
+      </div>
+    </div>
+
     
-    <div class="question" data-answer="b">
-      <p>7. Qual ação deve ser feita ao identificar uma câmera off-line em área crítica?</p>
-      <label><input type="radio" name="q7" value="a"> A) Nenhuma, se for de madrugada</label><br>
-      <label><input type="radio" name="q7" value="b"> B) Reforçar vigilância presencial no local</label><br>
-      <label><input type="radio" name="q7" value="c"> C) Substituir a câmera de forma remota</label><br>
-      <label><input type="radio" name="q7" value="d"> D) Desabilitar a câmera do sistema</label>
+
+    <div class="exercise-slide" data-answer="b">
+      <p><strong>10.</strong>Ao registrar uma ocorrência, o operador deve:  </p>
+      <div class="options">
+        <label><input type="radio" name="q10" value="a">Salvar apenas se solicitado  </label>
+        <label><input type="radio" name="q10" value="b">Detalhar os passos tomados e os responsáveis acionados  </label>
+        <label><input type="radio" name="q10" value="c">Ignorar se não houver dano visível </label>
+        <label><input type="radio" name="q10" value="d">USar termos genéricos para acelerar o processo  </label>
+      </div>
     </div>
-    <br>
+    
 
-     <div class="question" data-answer="c">
-      <p>8. A ausência de imagem em um alarme invalida o acionamento de apoio?</p>
-      <label><input type="radio" name="q8" value="a"> A) Sim, a imagem é obrigatória</label><br>
-      <label><input type="radio" name="q8" value="b"> B) Sim, se for em período noturno</label><br>
-      <label><input type="radio" name="q8" value="c"> C) Não, se houver indícios de risco, o acionamento deve ocorrer</label><br>
-      <label><input type="radio" name="q8" value="d"> D) Depende apenas da opnião do operador</label>
-    </div>
-    <br>
+  </div>
 
-    <div class="question" data-answer="d">
-      <p>9. A quem compete o escalonamento e decisões estratéticas em eventos de maior gravidade?</p>
-      <label><input type="radio" name="q9" value="a"> A) Vigilância local</label><br>
-      <label><input type="radio" name="q9" value="b"> B) Técnico de manutenção</label><br>
-      <label><input type="radio" name="q9" value="c"> C) Operador de monitoramento</label><br>
-      <label><input type="radio" name="q9" value="d"> D) Gerência da gestão central</label>
-    </div>
-    <br>
+  <div class="exercise-controls">
+    <button class="carousel-btn prev-exercise">&#10094;</button>
+    <button class="carousel-btn next-exercise">&#10095;</button>
+  </div>
 
-     <div class="question" data-answer="b">
-      <p>10. Ao registrar uma ocorrência, o operador deve:</p>
-      <label><input type="radio" name="q9" value="a"> A) Salvar apenas se solicitado</label><br>
-      <label><input type="radio" name="q9" value="b"> B) Detalhar os passos tomados e os responsáveis acionados</label><br>
-      <label><input type="radio" name="q9" value="c"> C) Ignorar se não houver dano visível</label><br>
-      <label><input type="radio" name="q9" value="d"> D) Usar termos genéricos para acelerar o processo</label>
-    </div>
-    <br>
-
-   
-
-    <button type="submit" class="btn-submit">Enviar Exercícios</button>
-  </form>
-  <div id="score" style="margin-top:20px; font-size:18px; font-weight:bold;"></div>
+  <button id="submit-exercises" class="btn-submit">Enviar Exercícios</button>
+  <div id="score"></div>
+  <div id="result-message"></div>
 </section>
 
 <footer class="footer">
@@ -166,6 +184,6 @@
   <p class="footer-copy">&copy; 2025 Alpha Secure. Todos os direitos reservados.</p>
 </footer>
 
-<script src="/src/static/js/colaborador/modulos/modulo02.js"></script>
+<script src="/src/static/js/colaborador/modulos/modulo01.js"></script>
 </body>
 </html>

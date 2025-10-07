@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matrix Energia - Módulo 01</title>
-    <link rel="stylesheet" href="/src/static/css/colaborador/modulos/modulo02.css">
-    <link rel="shortcut icon" href="/src/static/img/logo header.png" type="image/x-icon">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matrix Energia - Módulo 07</title>
+<link rel="stylesheet" href="/src/static/css/colaborador/modulos/modulo01.css">
+<link rel="shortcut icon" href="/src/static/img/logo header.png" type="image/x-icon">
 </head>
 <body>
 
@@ -19,26 +19,28 @@
 </header>
 
 <section class="modules">
-  <h2>Bem-vindo(a) ao módulo 03 - Monitoramento de Usina</h2>
+  <h2>Bem-vindo(a) ao módulo 01 - Matrix Energia </h2>
   <p>Complete esse módulo para avançar para os exercícios</p>
 
   <div class="modules-carousel">
     <div class="modules-wrapper">
-      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/mod 05 pag 11 (1).png" alt="página 01"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo05/mod 05 pag 02.png" alt="página 02"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo05/mod 05 pag 03.png" alt="página 03"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo05/mod 05 pag 04.png" alt="página 04"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo05/mod 05 pag 05.png" alt="página 05"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo05/mod 05 pag 06.png" alt="página 06"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo05/mod 05 pag 07.png" alt="página 07"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo05/mod 05 pag 08.png" alt="página 08"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo05/mod 05 pag 09.png" alt="página 09"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo05/mod 05 pag 10.png" alt="página 10"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo 01.png" alt="página 01"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod 01pag 02.png" alt="página 02"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod 01 pag 03.png" alt="página 03"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod 01 pag 04.png" alt="página 04"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod 01 pag 05.png" alt="página 05"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod 01 pag 06.png" alt="página 06"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod 01 pag 07.png" alt="página 07"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod 01 pag 08.png" alt="página 08"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod 01 pag 09.png" alt="página 09"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod 01 pag 10.png" alt="página 10"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod 01 pag 11.png" alt="página 11"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod 01 pag 12.png" alt="página 12"></div></div>
       
-    
+     
       <div class="modules-slide">
         <div class="module-card">
-          <img src="/src/static/img/modulo05/mod 05 pag 11.png" alt="Última página">
+          <img src="/src/static/img/modulo01/mod 01 pag 13.png" alt="Última página">
           <button class="btn-finalizar">Finalizar</button>
         </div>
       </div>
@@ -48,110 +50,128 @@
   <div class="carousel-controls">
     <button class="carousel-btn prev">&#10094;</button>
     <button class="carousel-btn next">&#10095;</button>
+    <button id="download-btn"><img src="/src/static/img/baixar_modulo.webp" alt="Baixar PDF"></button>
+    <button id="fullscreen-btn"><img src="/src/static/img/icone_telaCheia.webp" alt="Tela Cheia"></button>
   </div>
 </section>
 
-<section class="exercises" style="display: none; text-align: center;">
-  <h2>Exercícios do Módulo 03</h2>
-  <br>
-  <hr>
-  <br>
-  <form id="exercise-form">
-    <div class="question" data-answer="c">
-      <p>1. Em relação ao evento "Falha de auto teste", qual dos procedimentos abaixo é considerado INCORRETO?</p>
-      <label><input type="radio" name="q1" value="a"> A) Aguardar 5 minutos antes de qualquer ação, para evitar ações indevidas por oscilações temporárias</label><br>
-      <label><input type="radio" name="q1" value="b"> B) Se o GPRS apresentar horário de última comunicação superior ao do evento, encerrar evento</label><br>
-      <label><input type="radio" name="q1" value="c"> C) Caso o GPRS, esteja inativo e o cftv apresente imagens sem anormalidades, o evento deve permanecer aberto</label><br>
-      <label><input type="radio" name="q1" value="d"> D) O procedimento varia conforme o status da unidade (aberta ou fechada)</label>
+<section class="exercises">
+  <h2>Exercícios do Módulo 07</h2>
+  <div id="timer">Tempo restante: 30:00</div>
+  <div class="exercise-wrapper">
+    <div class="exercise-slide" data-answer="d">
+      <p><strong>1.</strong> </p>
+      <div class="options">
+        <label><input type="radio" name="q1" value="a"> </label>
+        <label><input type="radio" name="q1" value="b"> </label>
+        <label><input type="radio" name="q1" value="c"> </label>
+        <label><input type="radio" name="q1" value="d"> </label>
+      </div>
     </div>
-    <br>
 
-    <div class="question" data-answer="d">
-      <p>2. Um disparo de alarme ocorre em uma unidade fechada com o CFTV off-line. Qual deve ser a ação imediata do operador, segundo o protocolo?</p>
-      <label><input type="radio" name="q2" value="a"> A) Entrar em contato com o gerente da unidade e aguardar posicionamento</label><br>
-      <label><input type="radio" name="q2" value="b"> B) Tentar nova comunicação via GPRS</label><br>
-      <label><input type="radio" name="q2" value="c"> C) Encerrar o evento por falta de verificação remota</label><br>
-      <label><input type="radio" name="q2" value="d"> D) Encaminhar uma viatura ao local para verificar a situação</label>
+    <div class="exercise-slide" data-answer="b">
+      <p><strong>2.</strong> </p>
+      <div class="options">
+        <label><input type="radio" name="q2" value="a"></label>
+        <label><input type="radio" name="q2" value="b"> </label>
+        <label><input type="radio" name="q2" value="c"> </label>
+        <label><input type="radio" name="q2" value="d"> </label>
+      </div>
     </div>
-    <br>
 
-    <div class="question" data-answer="b">
-      <p>3. Qual das alternativas representa um evento que, mesmo relacionado a um botão físico, pode ser interpretado como problema técnico em certas circunstâncias?</p>
-      <label><input type="radio" name="q3" value="a"> A) Disparo de alarme</label><br>
-      <label><input type="radio" name="q3" value="b"> B) Disparo de pânico</label><br>
-      <label><input type="radio" name="q3" value="c"> C) Não armado</label><br>
-      <label><input type="radio" name="q3" value="d"> D) Desarme fora do horário</label>
+    <div class="exercise-slide" data-answer="c">
+      <p><strong>3.</strong> </p>
+      <div class="options">
+        <label><input type="radio" name="q3" value="a"> </label>
+        <label><input type="radio" name="q3" value="b">  </label>
+        <label><input type="radio" name="q3" value="c">  </label>
+        <label><input type="radio" name="q3" value="d"> </label>
+      </div>
     </div>
-    <br>
 
-    <div class="question" data-answer="b">
-      <p>4. Quando um evento de "Desarme fora do horário" ocorre, qual das ações abaixo é INCORRETA segundo o procedimento padrão?</p>
-      <label><input type="radio" name="q4" value="a"> A) Acessar o CFTV para identificar a movimentação no local</label><br>
-      <label><input type="radio" name="q4" value="b"> B) Se contrassenha for incorreta, encerrar o evento e informar o gerente</label><br>
-      <label><input type="radio" name="q4" value="c"> C) Em caso de movimentação suspeita, encaminhar pronto atendimento ao local</label><br>
-      <label><input type="radio" name="q4" value="d"> D) Se o contato for estabelecido e a contrassenha for correta, questionar o motivo do desarme</label>
+    <div class="exercise-slide" data-answer="c">
+      <p><strong>4.</strong> </p>
+      <div class="options">
+        <label><input type="radio" name="q4" value="a"> </label>
+        <label><input type="radio" name="q4" value="b">  </label>
+        <label><input type="radio" name="q4" value="c">  </label>
+        <label><input type="radio" name="q4" value="d">  </label>
+      </div>
     </div>
-    <br>
 
-        <div class="question" data-answer="c">
-      <p>5. Em que situação o evento de "Teste de reporte periódico" exigirá tratativa do operador?</p>
-      <label><input type="radio" name="q5" value="a"> A) Quando o teste ocorrer fora da grade horária programada</label><br>
-      <label><input type="radio" name="q5" value="b"> B) Quando houver falha de comunicação anterior registrada</label><br>
-      <label><input type="radio" name="q5" value="c"> C) Quando ele não for recebido, gerando outro tipo de evento</label><br>
-      <label><input type="radio" name="q5" value="d"> D) Quando o usuário não confirmar a ativação do alarme</label>
+    <div class="exercise-slide" data-answer="c">
+      <p><strong>5.</strong> </p>
+      <div class="options">
+        <label><input type="radio" name="q5" value="a">  </label>
+        <label><input type="radio" name="q5" value="b">  </label>
+        <label><input type="radio" name="q5" value="c">  </label>
+        <label><input type="radio" name="q5" value="d">  </label>
+      </div>
     </div>
-    <br>
 
-    <div class="question" data-answer="c">
-      <p>6. Sobre o evento "Armado pelo usuário", qual afirmação está correta?</p>
-      <label><input type="radio" name="q6" value="a"> A) Sempre exige confirmação por telefone com responsável</label><br>
-      <label><input type="radio" name="q6" value="b"> B) Pode ser identificado o usuário, desde que o alarme esteja ativado remotamente</label><br>
-      <label><input type="radio" name="q6" value="c"> C) Se as abas de usuários estiverem corretamente configurados, o nome do responsável aparece junto ao evento</label><br>
-      <label><input type="radio" name="q6" value="d"> D) Só ocorre se houver disparo posterior do alarme</label>
+    <div class="exercise-slide" data-answer="c">
+      <p><strong>6.</strong> </p>
+      <div class="options">
+        <label><input type="radio" name="q5" value="a"> </label>
+        <label><input type="radio" name="q5" value="b"> </label>
+        <label><input type="radio" name="q5" value="c"> </label>
+        <label><input type="radio" name="q5" value="d">  </label>
+      </div>
     </div>
-    <br>
+
+    <div class="exercise-slide" data-answer="b">
+      <p><strong>7.</strong></p>
+      <div class="options">
+        <label><input type="radio" name="q5" value="a"> </label>
+        <label><input type="radio" name="q5" value="b">  </label>
+        <label><input type="radio" name="q5" value="c">  </label>
+        <label><input type="radio" name="q5" value="d">  </label>
+      </div>
+    </div>
+
+    <div class="exercise-slide" data-answer="c">
+      <p><strong>8.</strong> </p>
+      <div class="options">
+        <label><input type="radio" name="q5" value="a"> </label>
+        <label><input type="radio" name="q5" value="b"> </label>
+        <label><input type="radio" name="q5" value="c">  </label>
+        <label><input type="radio" name="q5" value="d">  </label>
+      </div>
+    </div>
+
+    <div class="exercise-slide" data-answer="b">
+      <p><strong>9.</strong> </p>
+      <div class="options">
+        <label><input type="radio" name="q5" value="a">  </label>
+        <label><input type="radio" name="q5" value="b">  </label>
+        <label><input type="radio" name="q5" value="c"> </label>
+        <label><input type="radio" name="q5" value="d">  </label>
+      </div>
+    </div>
+
     
-    <div class="question" data-answer="b">
-      <p>7. Qual alternativa apresneta corretamente a relação entre GPRS e o sistema de monitoramento?</p>
-      <label><input type="radio" name="q7" value="a"> A) O GPRS substitui completamente a internet local e o CFTV</label><br>
-      <label><input type="radio" name="q7" value="b"> B) O GPRS atua como recurso de backup, permitindo a comunicação em caso de falha de internet local</label><br>
-      <label><input type="radio" name="q7" value="c"> C) O GPRS gera os eventos automaticamente sem necessidade de sensores</label><br>
-      <label><input type="radio" name="q7" value="d"> D) O GPRS só é utilizado em unidades com alarme desativado</label>
+
+    <div class="exercise-slide" data-answer="c">
+      <p><strong>10.</strong>  </p>
+      <div class="options">
+        <label><input type="radio" name="q10" value="a">  </label>
+        <label><input type="radio" name="q10" value="b">  </label>
+        <label><input type="radio" name="q10" value="c"> </label>
+        <label><input type="radio" name="q10" value="d">  </label>
+      </div>
     </div>
-    <br>
+    
 
-     <div class="question" data-answer="c">
-      <p>8. Em uma situação real, um operador verifica que o horário de última comunicação via GPRS é 5 minutos anterior ao horário do evento de falha de auto teste. Qual deve ser sua ação? </p>
-      <label><input type="radio" name="q8" value="a"> A) Encerrar o evento, pois o tempo está dentro do aceitável</label><br>
-      <label><input type="radio" name="q8" value="b"> B) Encerrar o evento e notificar o cliente</label><br>
-      <label><input type="radio" name="q8" value="c"> C) Considerar que houve falha na comunicação e acessar o CFTV da unidade</label><br>
-      <label><input type="radio" name="q8" value="d"> D) Aguardar novo teste de reporte antes de qualquer ação</label>
-    </div>
-    <br>
+  </div>
 
-    <div class="question" data-answer="b">
-      <p>9. Um evento de "Não armado" foi gerado. Qual das opções abaico descreve a tratativa correta caso o operador consiga contato com a unidade?</p>
-      <label><input type="radio" name="q9" value="a"> A) Realizar o procedimento de senha/contrassenha e encerrar o evento</label><br>
-      <label><input type="radio" name="q9" value="b"> B) Questionar o horário em que o alarme será ativado e registrar no sistema</label><br>
-      <label><input type="radio" name="q9" value="c"> C) Verificar o CFTV e confirmar que a unidade está fechada</label><br>
-      <label><input type="radio" name="q9" value="d"> D) Encaminhar viatura ao local para confirmar a integridade do sistema</label>
-    </div>
-    <br>
+  <div class="exercise-controls">
+    <button class="carousel-btn prev-exercise">&#10094;</button>
+    <button class="carousel-btn next-exercise">&#10095;</button>
+  </div>
 
-     <div class="question" data-answer="c">
-      <p>10. Durante o atendimento a um disparo de pânico, a contrassenha informada não é compatível. Qual é a conduta adequada do operador?</p>
-      <label><input type="radio" name="q9" value="a"> A) Encerra o evento, pois pode se tratar de erro humano</label><br>
-      <label><input type="radio" name="q9" value="b"> B) Enviar e-mail para o cliente relatando o incidente</label><br>
-      <label><input type="radio" name="q9" value="c"> C) Encaminhar pronto atendimento ao local e acionar o 190</label><br>
-      <label><input type="radio" name="q9" value="d"> D) Aguardar novo disparo para confirmar emergência</label>
-    </div>
-    <br>
-
-   
-
-    <button type="submit" class="btn-submit">Enviar Exercícios</button>
-  </form>
-  <div id="score" style="margin-top:20px; font-size:18px; font-weight:bold;"></div>
+  <button id="submit-exercises" class="btn-submit">Enviar Exercícios</button>
+  <div id="score"></div>
+  <div id="result-message"></div>
 </section>
 
 <footer class="footer">

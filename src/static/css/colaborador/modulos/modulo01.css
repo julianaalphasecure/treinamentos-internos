@@ -1,4 +1,4 @@
-/* ===== Ajustado ===== */
+/* Coloquei todo CSS igual ao seu, apenas ajustando barra de progresso, módulos e fullscreen */
 * {
   margin: 0;
   padding: 0;
@@ -22,33 +22,287 @@ body {
   align-items: center;
   height: 90px;
 }
-.logo-box img { max-height: 140px; width: auto; border-radius: 10px; }
-.voltar_home { background-color:#dbeafe; padding: 10px 15px; border-radius: 15px; }
-.voltar_home a{ text-decoration: none; color: black; }
-.voltar_home p { font-size: 1em; }
 
-.modules h2, p { text-align:center; color:rgba(30, 60, 114,1); margin-bottom:10px; }
+.logo-box img {
+  max-height: 140px;
+  width: auto;
+  border-radius: 10px;
+}
 
-.modules-carousel { position: relative; overflow: hidden; width: 100%; display:flex; justify-content:center; margin-bottom:20px; }
-.modules-wrapper { display: flex; transition: transform 0.5s ease-in-out; }
-.modules-slide { min-width:100%; display:flex; justify-content:center; align-items:center; position:relative; }
-.module-card { background:white; border-radius:20px; box-shadow:0 6px 15px rgba(0,0,0,0.1); width:90%; max-width:1200px; display:flex; justify-content:center; align-items:center; position:relative; }
-.module-card img { width:100%; height:auto; object-fit:contain; display:block; border-radius:12px; }
-.btn-finalizar { position:absolute; bottom:20px; right:20px; background:#4caf50; color:white; border:none; padding:12px 20px; border-radius:10px; cursor:pointer; font-weight:bold; }
-.btn-finalizar:hover { background:#388e3c; }
+.voltar_home {
+  background-color: #dbeafe;
+  padding: 10px 15px;
+  border-radius: 15px;
+}
 
-.carousel-controls { display:flex; justify-content:center; gap:20px; margin-top:15px; }
-.carousel-btn { min-width:44px; min-height:44px; border-radius:50%; background:rgba(3,23,61,0.9); color:#fff; border:none; cursor:pointer; font-size:20px; }
-.carousel-btn:hover { background:rgba(30,60,114,1); }
+.voltar_home a {
+  text-decoration: none;
+  color: black;
+}
 
-.exercises { width:90%; max-width:900px; margin:0 auto; margin-top:20px; background:white; padding:20px; border-radius:15px; box-shadow:0 6px 12px rgba(0,0,0,0.15); }
-.question { margin-bottom:15px;text-align: left; }
-.question p {text-align: left; font-size: 1.1em;}
-.btn-submit { background:#eb7f0c; color:white; border:none; padding:10px 20px; border-radius:10px; cursor:pointer; font-weight:600; }
-.btn-submit:hover { background:#f08944; }
+.voltar_home p {
+  font-size: 1em;
+}
 
-.footer { background:#f8f8f8; color:#666; text-align:center; padding:30px 20px; margin-top:60px; font-size:14px; line-height:1.8; }
-.footer-separator { border:none; border-top:1px solid #ddd; margin-bottom:15px; }
-.footer-links a { color:#666; text-decoration:none; margin:0 5px; transition:color 0.2s; }
-.footer-links a:hover { color:#E28E44; }
-.footer-copy { margin-top:10px; font-size:14px; }
+.modules h2, .modules p {
+  text-align: center;
+  color: rgba(30,60,114,1);
+  margin-bottom: 10px;
+}
+
+.modules-carousel {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.modules-wrapper {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+.modules-slide {
+  min-width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.module-card {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  width: 90%;
+  max-width: 1200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.module-card img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  border-radius: 12px;
+}
+
+.btn-finalizar {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(3,23,61,0.9);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-finalizar:hover {
+  background: rgba(5, 34, 88, 0.9);
+}
+
+.carousel-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-top: 15px;
+  position: relative;
+}
+
+.carousel-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(3,23,61,0.9);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.carousel-btn:hover {
+  background: rgba(30,60,114,1);
+}
+
+#download-btn, #fullscreen-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+#download-btn {
+  left: calc(75% + 20px);
+}
+
+#fullscreen-btn {
+  left: calc(75% + 70px);
+}
+
+#download-btn img, #fullscreen-btn img {
+  width: 36px;
+  height: 36px;
+  transition: transform 0.3s;
+}
+
+#download-btn img:hover, #fullscreen-btn img:hover {
+  transform: scale(1.1);
+}
+
+.exercises {
+  width: 90%;
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 25px;
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+  position: relative;
+  display: none;
+}
+
+.exercise-wrapper {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+.exercise-slide {
+  min-width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  background: #fdfdfd;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.exercise-slide p {
+  font-size: 1.1em;
+  margin-bottom: 10px;
+}
+
+.exercise-slide .options label {
+  display: block;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+
+.exercise-controls {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.prev-exercise, .next-exercise {
+  font-size: 18px;
+  color: #fff;
+  background: rgba(3,23,61,0.9);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background 0.3s;
+}
+
+.prev-exercise:hover, .next-exercise:hover {
+  background: rgba(30,60,114,1);
+}
+
+.btn-submit {
+  display: none;
+  width: 100%;
+  background: #eb7f0c;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 30px;
+  font-weight: 400;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+.btn-submit:hover {
+  background: #f08944;
+}
+
+#score, #result-message {
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+}
+
+#timer {
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 15px;
+  background: #ddd;
+  border-radius: 10px;
+  margin: 15px 0;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: #4caf50;
+  width: 0%;
+  transition: width 0.4s ease-in-out;
+}
+
+
+
+.footer {
+  background: #f8f8f8;
+  color: #666;
+  text-align: center;
+  padding: 30px 20px;
+  margin-top: 60px;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.footer-separator {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin-bottom: 15px;
+}
+
+.footer-links a {
+  color: #666;
+  text-decoration: none;
+  margin: 0 5px;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover {
+  color: #E28E44;
+}
+
+.footer-copy {
+  margin-top: 10px;
+  font-size: 13px;
+}
