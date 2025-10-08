@@ -55,6 +55,90 @@
     </nav>
   </aside>
 
+  <div class="config-container">
+  <div class="config-header">
+    <div>
+      <h2>Configurações</h2>
+      <p>Personalize suas preferências e notificações</p>
+    </div>
+    <button id="reset-btn">Restaurar padrões</button>
+  </div>
+
+  <!-- CARD: NOTIFICAÇÕES -->
+  <div class="config-card">
+    <div class="card-header">
+      <img src="/src/static/img/icons/notification.png" alt="Notificações">
+      <h3>Notificações</h3>
+    </div>
+
+    <div class="option">
+      <label><input type="checkbox" id="emailNotif"> Notificação por E-mail</label>
+      <p>Receba atualizações importantes por e-mail</p>
+    </div>
+
+    <div class="option">
+      <label><input type="checkbox" id="pushNotif"> Notificações Push</label>
+      <p>Receba notificações no navegador</p>
+    </div>
+
+    <div class="option">
+      <label><input type="checkbox" id="smsNotif"> SMS</label>
+      <p>Receba alertas importantes por SMS</p>
+    </div>
+
+    <div class="option">
+      <label><input type="checkbox" id="feedbackNotif"> Feedbacks da Gestão</label>
+      <p>Seja notificado quando receber feedbacks</p>
+    </div>
+  </div>
+
+  <!-- CARD: PRIVACIDADE -->
+  <div class="config-card">
+    <div class="card-header">
+      <img src="/src/static/img/icons/privacy.png" alt="Privacidade">
+      <h3>Privacidade</h3>
+    </div>
+
+    <div class="option">
+      <label><input type="checkbox" id="showProgress"> Permita que outros vejam seu progresso</label>
+    </div>
+
+    <div class="option">
+      <label><input type="checkbox" id="ranking"> Aparecer no Ranking</label>
+      <p>Participar do ranking público</p>
+    </div>
+  </div>
+
+
+  <div class="config-card">
+    <div class="card-header">
+      <h3>Aparência</h3>
+    </div>
+
+    <div class="option">
+      <label for="theme">Tema</label>
+      <select id="theme">
+        <option value="claro">Claro</option>
+        <option value="escuro">Escuro</option>
+      </select>
+    </div>
+
+    <div class="option">
+      <label for="language">Idioma</label>
+      <select id="language">
+        <option value="pt-br">Português (Brasil)</option>
+        <option value="en">Inglês</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<script src="/src/static/js/configuracoes.js"></script>
+
+
+<script src="/src/static/js/configuracoes.js"></script>
+
+
   <script src="/src/static/js/colaborador/configuracoes.js"></script>
 </body>
 </html>
