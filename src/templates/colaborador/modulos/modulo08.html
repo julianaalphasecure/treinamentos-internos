@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matrix Energia - Módulo 01</title>
-    <link rel="stylesheet" href="/src/static/css/colaborador/modulos/modulo02.css">
-    <link rel="shortcut icon" href="/src/static/img/logo header.png" type="image/x-icon">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matrix Energia - Módulo 07</title>
+<link rel="stylesheet" href="/src/static/css/colaborador/modulos/modulo01.css">
+<link rel="shortcut icon" href="/src/static/img/logo header.png" type="image/x-icon">
 </head>
 <body>
 
@@ -19,25 +19,25 @@
 </header>
 
 <section class="modules">
-  <h2>Bem-vindo(a) ao módulo 08 - BASA (Banco Amazônia)</h2>
+  <h2>Bem-vindo(a) ao módulo 08 - Banco da Amazônia </h2>
   <p>Complete esse módulo para avançar para os exercícios</p>
 
   <div class="modules-carousel">
     <div class="modules-wrapper">
-      <!-- Slides de conteúdo -->
-      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/" alt="página 01"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/" alt="página 02"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/" alt="página 03"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/" alt="página 04"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/" alt="página 05"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/" alt="página 06"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/" alt="página 07"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/" alt="página 08"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/" alt="página 09"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/" alt="página 10"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/" alt="página 11"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/" alt="página 12"></div></div>
-      <!-- Último slide com botão finalizar -->
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo 01.png" alt="página 01"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod 01pag 02.png" alt="página 02"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod 01 pag 03.png" alt="página 03"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod 01 pag 04.png" alt="página 04"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod 01 pag 05.png" alt="página 05"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod 01 pag 06.png" alt="página 06"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod 01 pag 07.png" alt="página 07"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod 01 pag 08.png" alt="página 08"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod 01 pag 09.png" alt="página 09"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod 01 pag 10.png" alt="página 10"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod 01 pag 11.png" alt="página 11"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod 01 pag 12.png" alt="página 12"></div></div>
+      
+     
       <div class="modules-slide">
         <div class="module-card">
           <img src="/src/static/img/modulo01/mod 01 pag 13.png" alt="Última página">
@@ -50,110 +50,128 @@
   <div class="carousel-controls">
     <button class="carousel-btn prev">&#10094;</button>
     <button class="carousel-btn next">&#10095;</button>
+    <button id="download-btn"><img src="/src/static/img/baixar_modulo.webp" alt="Baixar PDF"></button>
+    <button id="fullscreen-btn"><img src="/src/static/img/icone_telaCheia.webp" alt="Tela Cheia"></button>
   </div>
 </section>
 
-<section class="exercises" style="display: none; text-align: center;">
+<section class="exercises">
   <h2>Exercícios do Módulo 08</h2>
-  <br>
-  <hr>
-  <br>
-  <form id="exercise-form">
-    <div class="question" data-answer="b">
-      <p>1. O horário de auto arme da tesouraria da agência é:</p>
-      <label><input type="radio" name="q1" value="a"> A) 22h00</label><br>
-      <label><input type="radio" name="q1" value="b"> B) 21h00</label><br>
-      <label><input type="radio" name="q1" value="c"> C) 20h30</label><br>
-      <label><input type="radio" name="q1" value="d"> D) 06h00</label>
+  <div id="timer">Tempo restante: 30:00</div>
+  <div class="exercise-wrapper">
+    <div class="exercise-slide" data-answer="b">
+      <p><strong>1.</strong>O horário de auto arme da tesouraria da agência é: </p>
+      <div class="options">
+        <label><input type="radio" name="q1" value="a">22h00 </label>
+        <label><input type="radio" name="q1" value="b">21h00 </label>
+        <label><input type="radio" name="q1" value="c">20h30 </label>
+        <label><input type="radio" name="q1" value="d">06h00 </label>
+      </div>
     </div>
-    <br>
 
-    <div class="question" data-answer="c">
-      <p>2. Em caso de entrada fora do expediente com pessoa acompanhando o gerente, o procedimento correto é:</p>
-      <label><input type="radio" name="q2" value="a"> A) Aguardar a entrada do gerente</label><br>
-      <label><input type="radio" name="q2" value="b"> B) Liberar ambos após verificação facial</label><br>
-      <label><input type="radio" name="q2" value="c"> C) Recusar a entrada e acionar GESEC e GERED</label><br>
-      <label><input type="radio" name="q2" value="d"> D) Permitir apenas o gerente entrar</label>
+    <div class="exercise-slide" data-answer="c">
+      <p><strong>2.</strong>Em caso de entrada fora do expediente com pessoa acompanhando o gerente, o procedimento correto é: </p>
+      <div class="options">
+        <label><input type="radio" name="q2" value="a">Aguardar a entrada do gerente</label>
+        <label><input type="radio" name="q2" value="b">Liberar ambos após verificação facial </label>
+        <label><input type="radio" name="q2" value="c">Recusar a entrada e acionar GESEC e GERED </label>
+        <label><input type="radio" name="q2" value="d">Permitir apenas o gerente entrar </label>
+      </div>
     </div>
-    <br>
 
-    <div class="question" data-answer="c">
-      <p>3. Em caso de disparo de botão de pânico, qual a ação inicial?</p>
-      <label><input type="radio" name="q3" value="a"> A) Aguardar confirmação por WhatsApp</label><br>
-      <label><input type="radio" name="q3" value="b"> B) Acionar diretamente a polícia militar</label><br>
-      <label><input type="radio" name="q3" value="c"> C) Observar via CFTV e só acionar se houver sinistro</label><br>
-      <label><input type="radio" name="q3" value="d"> D) Informar apenas ao gerente</label>
+    <div class="exercise-slide" data-answer="c">
+      <p><strong>3.</strong>Em caso de disparo de botão de pânico, qual a ação inicial? </p>
+      <div class="options">
+        <label><input type="radio" name="q3" value="a">Aguardar confirmação por WhataApp </label>
+        <label><input type="radio" name="q3" value="b">Acionar diretamente a polícia militar  </label>
+        <label><input type="radio" name="q3" value="c">Observar via CFTV e só acionar se houver sinistro  </label>
+        <label><input type="radio" name="q3" value="d">Informar apenas ao gerente </label>
+      </div>
     </div>
-    <br>
 
-    <div class="question" data-answer="b">
-      <p>4. Qual das opções exige ordem de serviço no sistema Cherwell?</p>
-      <label><input type="radio" name="q4" value="a"> A) Queda de energia</label><br>
-      <label><input type="radio" name="q4" value="b"> B) Recadastramento de funcionário</label><br>
-      <label><input type="radio" name="q4" value="c"> C) Arrastão criminoso</label><br>
-      <label><input type="radio" name="q4" value="d"> D) Entrada de moradores de rua</label>
+    <div class="exercise-slide" data-answer="b">
+      <p><strong>4.</strong>Qual das opções exige ordem de serviço no sistema Cherwell? </p>
+      <div class="options">
+        <label><input type="radio" name="q4" value="a">Queda de energia </label>
+        <label><input type="radio" name="q4" value="b">Recadastramento de funcionário  </label>
+        <label><input type="radio" name="q4" value="c">Arrastão criminoso  </label>
+        <label><input type="radio" name="q4" value="d">Entrada de moradores de rua  </label>
+      </div>
     </div>
-    <br>
 
-        <div class="question" data-answer="a">
-      <p>5. O desarme do hall de atendimento ocorre automaticamente às:</p>
-      <label><input type="radio" name="q5" value="a"> A) 06h00</label><br>
-      <label><input type="radio" name="q5" value="b"> B) 07h30</label><br>
-      <label><input type="radio" name="q5" value="c"> C) 08h00</label><br>
-      <label><input type="radio" name="q5" value="d"> D) 05h00</label>
+    <div class="exercise-slide" data-answer="a">
+      <p><strong>5.</strong>O desarme do hall de atendimento ocorre automaticamente às: </p>
+      <div class="options">
+        <label><input type="radio" name="q5" value="a">06h00 </label>
+        <label><input type="radio" name="q5" value="b">07h30 </label>
+        <label><input type="radio" name="q5" value="c">08h00 </label>
+        <label><input type="radio" name="q5" value="d">05h00 </label>
+      </div>
     </div>
-    <br>
 
-    <div class="question" data-answer="b">
-      <p>6. Quais sensores podem causar disparo acidental?</p>
-      <label><input type="radio" name="q6" value="a"> A) CFTV, ATM, GN</label><br>
-      <label><input type="radio" name="q6" value="b"> B) Sensor sísmico, quebra vidro e de presença</label><br>
-      <label><input type="radio" name="q6" value="c"> C) Detector de fumaça e som</label><br>
-      <label><input type="radio" name="q6" value="d"> D) Controle de acesso e porta de cofre</label>
+    <div class="exercise-slide" data-answer="b">
+      <p><strong>6.</strong>Quais sensores podem causar disparo acidental? </p>
+      <div class="options">
+        <label><input type="radio" name="q5" value="a">CFTV, ATM, GN </label>
+        <label><input type="radio" name="q5" value="b">Sensor sísmico, quebra vidro e de presença </label>
+        <label><input type="radio" name="q5" value="c">Detector de fumaça e som </label>
+        <label><input type="radio" name="q5" value="d">Controle de acesso e porta de cofre  </label>
+      </div>
     </div>
-    <br>
+
+    <div class="exercise-slide" data-answer="c">
+      <p><strong>7.</strong>O acesso ao cofre fora de horário só é permitido em:</p>
+      <div class="options">
+        <label><input type="radio" name="q5" value="a">Autorização de emergência médica </label>
+        <label><input type="radio" name="q5" value="b">Situações de emergência médica </label>
+        <label><input type="radio" name="q5" value="c">Acompanhamento da polícia em caso de sinistro  </label>
+        <label><input type="radio" name="q5" value="d">Mudança de turno </label>
+      </div>
+    </div>
+
+    <div class="exercise-slide" data-answer="c">
+      <p><strong>8.</strong>Quais situações requerem aviso com 24h de antecedência ao GESEC? </p>
+      <div class="options">
+        <label><input type="radio" name="q5" value="a">Solicitação de café da manhã no banco </label>
+        <label><input type="radio" name="q5" value="b">Entrada de gerente para retirada de documentos </label>
+        <label><input type="radio" name="q5" value="c">Abertura excepcional da agência ou trabalho de terceiros  </label>
+        <label><input type="radio" name="q5" value="d">Reposição de insumos nos ATMs </label>
+      </div>
+    </div>
+
+    <div class="exercise-slide" data-answer="c">
+      <p><strong>9.</strong>Se a polícia estiver em outra ocorrência, a central deve: </p>
+      <div class="options">
+        <label><input type="radio" name="q5" value="a">Enviar o gerente até a agência  </label>
+        <label><input type="radio" name="q5" value="b">Ignorar o alarme </label>
+        <label><input type="radio" name="q5" value="c">Acompanhar pelo CFTV e preservar o gerente </label>
+        <label><input type="radio" name="q5" value="d">Desarmar os sensores </label>
+      </div>
+    </div>
+
     
-    <div class="question" data-answer="c">
-      <p>7. O acesso ao cofre fora de horário só é permitido em:</p>
-      <label><input type="radio" name="q7" value="a"> A) Autorização direta do gerente</label><br>
-      <label><input type="radio" name="q7" value="b"> B) Situações de emergência médica</label><br>
-      <label><input type="radio" name="q7" value="c"> C) Acompanhamento da polícia em caso de sinistro</label><br>
-      <label><input type="radio" name="q7" value="d"> D) Mudança de turno</label>
+
+    <div class="exercise-slide" data-answer="c">
+      <p><strong>10.</strong>Quando há moradores de rua no hall após 22h15, o procedimento correto é:  </p>
+      <div class="options">
+        <label><input type="radio" name="q10" value="a">Acionar o GN sem aviso  </label>
+        <label><input type="radio" name="q10" value="b">Ignorar e agurdar a saída espontânea  </label>
+        <label><input type="radio" name="q10" value="c">Acionar sirene, abrir hall manualmente e se necessário, usar GN curto </label>
+        <label><input type="radio" name="q10" value="d">Enviar gerente para retirada  </label>
+      </div>
     </div>
-    <br>
+    
 
-     <div class="question" data-answer="c">
-      <p>8. Quais situações requerem aviso com 24h de antecedência ao GESEC?</p>
-      <label><input type="radio" name="q8" value="a"> A) Solicitação de café da manhã no banco</label><br>
-      <label><input type="radio" name="q8" value="b"> B) Entrada de gerente para retirada de documentos</label><br>
-      <label><input type="radio" name="q8" value="c"> C) Abertura excepcional da agência ou trabalho de terceiros</label><br>
-      <label><input type="radio" name="q8" value="d"> D) Reposição de insumos nos ATMs</label>
-    </div>
-    <br>
+  </div>
 
-    <div class="question" data-answer="c">
-      <p>9. Se a polícia estiver em outra ocorrência, a entral deve:</p>
-      <label><input type="radio" name="q9" value="a"> A) Enviar o gerente até a agência</label><br>
-      <label><input type="radio" name="q9" value="b"> B) Ignorar o alarme</label><br>
-      <label><input type="radio" name="q9" value="c"> C) Acompanhar pelo CFTV e preservar o gerente</label><br>
-      <label><input type="radio" name="q9" value="d"> D) Desarmar os sensores</label>
-    </div>
-    <br>
+  <div class="exercise-controls">
+    <button class="carousel-btn prev-exercise">&#10094;</button>
+    <button class="carousel-btn next-exercise">&#10095;</button>
+  </div>
 
-     <div class="question" data-answer="c">
-      <p>10. Quando há moradores de rua no hall após 22h15, o procedimento correto é:</p>
-      <label><input type="radio" name="q9" value="a"> A) Acionar o GN sem aviso</label><br>
-      <label><input type="radio" name="q9" value="b"> B) Acionar e aguradr a saída espontânea</label><br>
-      <label><input type="radio" name="q9" value="c"> C) Acionar sirene, abrir hall manualmente e se necessário, usar GB curto</label><br>
-      <label><input type="radio" name="q9" value="d"> D) Enviar gerente para retirada</label>
-    </div>
-    <br>
-
-   
-
-    <button type="submit" class="btn-submit">Enviar Exercícios</button>
-  </form>
-  <div id="score" style="margin-top:20px; font-size:18px; font-weight:bold;"></div>
+  <button id="submit-exercises" class="btn-submit">Enviar Exercícios</button>
+  <div id="score"></div>
+  <div id="result-message"></div>
 </section>
 
 <footer class="footer">
