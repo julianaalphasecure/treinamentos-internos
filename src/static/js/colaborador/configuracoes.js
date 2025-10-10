@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const language = document.getElementById('language');
   const resetBtn = document.getElementById('reset-btn');
 
- 
+  // Carregar preferências salvas
   checkboxes.forEach(id => {
     const el = document.getElementById(id);
     const saved = localStorage.getItem(id);
@@ -19,21 +19,21 @@ document.addEventListener('DOMContentLoaded', () => {
   const savedLang = localStorage.getItem('language') || 'pt-br';
   language.value = savedLang;
 
-
+  // Alteração de tema
   theme.addEventListener('change', () => {
     const value = theme.value;
     localStorage.setItem('theme', value);
     document.body.setAttribute('data-theme', value);
   });
 
-  
+  // Alteração de idioma
   language.addEventListener('change', () => {
     const value = language.value;
     localStorage.setItem('language', value);
     showToast('Idioma alterado para: ' + (value === 'pt-br' ? 'Português (Brasil)' : 'Inglês'));
   });
 
- 
+  // Restaurar padrões
   resetBtn.addEventListener('click', () => {
     localStorage.clear();
     checkboxes.forEach(id => (document.getElementById(id).checked = false));
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     showToast('Preferências restauradas para o padrão.');
   });
 
-  
+  // Toast de feedback
   function showToast(msg) {
     const toast = document.createElement('div');
     toast.className = 'toast';
@@ -56,3 +56,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 2500);
   }
 });
+
+const themeSelect = document.getElementById("theme-select");
+const body = document.body;
+const toast = document.getElementById("toast");
+const feedbackForm = document.getElementById("feedbackForm");
+
+
+themeSelect.addEventListener("change", (e) => {
+  if (e.target.value === "escuro") {
+    body.setAttribute("data-theme", "escuro");
+  } else {
+    body.removeAttribute("data-theme");
+  }
+});
+
+
+feedbackForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 2500);
+  feedbackForm.reset();
+});
+
+

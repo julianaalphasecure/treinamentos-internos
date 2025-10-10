@@ -10,120 +10,18 @@ body {
   color: #333;
 }
 
-/* HEADER */
-.header {
-  background: #fff;
-  border-radius: 80px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
-  padding: 15px 30px;
-  margin: 15px auto 30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 100px;
-  max-width: 1200px;
-}
 
-.logo-box img {
-  max-height: 140px;
-  width: auto;
-  border-radius: 10px;
-}
-
-.user-box {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}
-
-#user-name {
-  font-size: 1.1rem;
-  font-weight: bold;
-}
-
-.user-role {
-  margin-top: 5px;
-  background: #dbeafe;
-  color: #1e3c72;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 600;
-}
-
-/* BANNER */
-.banner {
-  margin: 20px auto;
-  border-radius: 20px;
-  overflow: visible;
-  width: 70%;
-  max-width: 900px;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.25),0 6px 6px rgba(0,0,0,0.15);
-  perspective: 1000px;
-  padding-bottom: 20px;
-}
-
-.banner img {
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-  display: block;
-  border-radius: 20px;
-  transition: transform 0.3s;
-}
-
-.banner img:hover {
-  transform: rotateX(5deg) rotateY(5deg) translateZ(10px);
-}
-
-/* INFO CARDS */
-.info-cards {
-  display: flex;
-  justify-content: center;
-  gap: 50px;
-  flex-wrap: wrap;
-  padding: 20px 10px;
-  width: 90%;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.info-cards .card {
-  background: white;
-  padding: 40px 25px;
-  border-radius: 25px;
-  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-  text-align: center;
-  flex: 1 1 300px;
-  max-width: 350px;
-  transition: transform 0.3s;
-}
-
-.info-cards .card:hover {
-  transform: translateY(-5px);
-}
-
-.info-cards .card img {
-  width: 60px;
-  height: 60px;
-  margin-top: 20px;
-  position: relative;
-  z-index: 2;
-}
-
-
-/* MAIN CONTAINER */
 .main-container {
   display: flex;
   align-items: flex-start;
-  gap: 30px; /* espaço entre sidebar e conteúdo */
+  gap: 30px; 
   max-width: 1400px;
   width: 100%;
-  padding: 0 20px; /* controla espaçamento interno da página */
-  margin: 0; /* remove centralização */
+  padding: 0 20px; 
+  margin: 0; 
 }
 
-/* SIDEBAR */
+
 .sidebar {
   flex-shrink: 0;
   width: 220px;
@@ -137,16 +35,13 @@ body {
   margin: 0;
 }
 
-/* CONTEÚDO */
+
 .content {
   flex: 1;
   max-width: 1200px;
   padding: 40px;
   margin: 0;
 }
-
-
-
 
 .sidebar ul li {
   margin-bottom: 20px;
@@ -211,7 +106,7 @@ body {
 }
 
 .perfil-img {
-  width: 120px;  /* aumentei o tamanho */
+  width: 120px;  
   height: 120px;
   border-radius: 50%;
   object-fit: cover;
@@ -236,7 +131,7 @@ body {
 
 .perfil-detalhes {
   margin-top: 15px;
-  text-align: left; /* infos alinhadas à esquerda */
+  text-align: left;
   width: 100%;
   max-width: 600px;
 }
@@ -266,7 +161,6 @@ body {
 }
 
 
-/* DASHBOARD */
 .dashboard {
   display: flex;
   gap: 25px;
@@ -293,7 +187,7 @@ body {
   font-weight: bold;
 }
 
-/* Barra de progresso */
+
 .progress-bar {
   background: #e4e7eb;
   border-radius: 12px;
@@ -308,7 +202,6 @@ body {
   transition: width 0.6s ease;
 }
 
-/* Lista de conquistas */
 .conquistas ul {
   list-style: none;
   padding-left: 0;
@@ -323,7 +216,6 @@ body {
   border-bottom: none;
 }
 
-/* MODAL */
 .modal {
   display: none;
   position: fixed;

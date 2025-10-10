@@ -10,113 +10,14 @@ body {
   color: #333;
 }
 
-/* HEADER */
-.header {
-  background: #fff;
-  border-radius: 80px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
-  padding: 15px 30px;
-  margin: 15px 20px 30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 100px;
-}
 
-.logo-box img {
-  max-height: 140px;
-  width: auto;
-  border-radius: 10px;
-}
 
-.user-box {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}
-
-#user-name {
-  font-size: 1.1rem;
-  font-weight: bold;
-}
-
-.user-role {
-  margin-top: 5px;
-  background: #dbeafe;
-  color: #1e3c72;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 600;
-}
-
-/* BANNER */
-.banner {
-  margin: 20px auto;
-  border-radius: 20px;
-  overflow: visible;
-  width: 70%;
-  max-width: 900px;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.25),0 6px 6px rgba(0,0,0,0.15);
-  perspective: 1000px;
-  padding-bottom: 20px;
-}
-
-.banner img {
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-  display: block;
-  border-radius: 20px;
-  transition: transform 0.3s;
-}
-
-.banner img:hover {
-  transform: rotateX(5deg) rotateY(5deg) translateZ(10px);
-}
-
-/* INFO CARDS */
-.info-cards {
-  display: flex;
-  justify-content: center;
-  gap: 50px;
-  flex-wrap: wrap;
-  padding: 20px 10px;
-  width: 90%;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.info-cards .card {
-  background: white;
-  padding: 40px 25px;
-  border-radius: 25px;
-  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-  text-align: center;
-  flex: 1 1 300px;
-  max-width: 350px;
-  transition: transform 0.3s;
-}
-
-.info-cards .card:hover {
-  transform: translateY(-5px);
-}
-
-.info-cards .card img {
-  width: 60px;
-  height: 60px;
-  margin-top: 20px;
-  position: relative;
-  z-index: 2;
-}
-
-/* CONTAINER PRINCIPAL */
 .main-container {
   display: flex;
   margin: 30px 20px;
 }
 
-/* SIDEBAR */
+
 .sidebar {
   width: 220px;
   position: sticky;
@@ -165,7 +66,7 @@ body {
   gap: 40px;
 }
 
-/* Seção Progresso */
+
 .progresso h1 {
   font-size: 2rem;
   margin-bottom: 10px;
@@ -231,7 +132,7 @@ body {
   background: #357ab7;
 }
 
-/* Seção Conquistas */
+
 .conquistas h2 {
   font-size: 1.3rem;
   margin-bottom: 15px;
