@@ -4,13 +4,13 @@ let currentIndex = 0;
 let moduleLocked = false; 
 let isFullScreen = false;
 
-// Atualiza carrossel e barra de progresso
+
 function updateCarousel() {
   wrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
   updateProgressBar();
 }
 
-// Botões do carrossel
+
 document.querySelector('.next').addEventListener('click', () => {
   if(!moduleLocked || isFullScreen) {
     if(currentIndex < slides.length - 1) currentIndex++;
@@ -41,7 +41,7 @@ btnFinalizar.addEventListener('click', () => {
   startTimer();
 });
 
-// Carrossel de exercícios
+
 const exWrapper = document.querySelector('.exercise-wrapper');
 const exSlides = document.querySelectorAll('.exercise-slide');
 let exIndex = 0;
@@ -99,7 +99,7 @@ document.getElementById('submit-exercises').addEventListener('click', () => {
 
   scoreDisplay.textContent = `Você acertou ${score} de ${exSlides.length} questões (${percent}%)`;
 
-  // Limpa conteúdo anterior
+
   resultMessage.innerHTML = '';
 
   if(percent >= 70) {
@@ -109,7 +109,7 @@ document.getElementById('submit-exercises').addEventListener('click', () => {
     msg.textContent = '🎉 Parabéns! Você finalizou o Módulo 07 com sucesso.';
     resultMessage.appendChild(msg);
 
-    // Botão para ir para a home ou próximo módulo
+    
     const nextBtn = document.createElement('button');
     nextBtn.textContent = 'Ir para a Home';
     nextBtn.classList.add('btn-submit');
@@ -141,7 +141,6 @@ document.getElementById('submit-exercises').addEventListener('click', () => {
 
 
 
-// Download
 document.getElementById('download-btn').addEventListener('click', () => {
   const link = document.createElement('a');
   link.href = '/src/static/pdf/modulo07.pdf';
@@ -149,7 +148,7 @@ document.getElementById('download-btn').addEventListener('click', () => {
   link.click();
 });
 
-// Fullscreen - ajustado para o slide atual
+
 const fullscreenBtn = document.getElementById('fullscreen-btn');
 
 fullscreenBtn.addEventListener('click', () => {
