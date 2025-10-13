@@ -1,114 +1,124 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu Peril</title>
-    <link rel="stylesheet" href="/src/static/css/colaborador/perfil.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="shortcut icon" href="/src/static/img/logo header.png" type="image/x-icon">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meu Perfil</title>
+  <link rel="stylesheet" href="/src/static/css/colaborador/perfil.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="shortcut icon" href="/src/static/img/logo header.png" type="image/x-icon">
 </head>
 <body>
-    
+  <div class="main-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <nav>
+        <ul>
+          <li><a href="/src/templates/colaborador/modulo.html">Módulos</a></li>
+          <li><a href="#" class="active">Meu Perfil</a></li>
+          <li><a href="/src/templates/colaborador/progresso.html">Meu Progresso</a></li>
+          <li><a href="/src/templates/colaborador/feedback.html">Feedback</a></li>
+          <li><a href="/src/templates/colaborador/configuracoes.html">Configurações</a></li>
+          <li><a href="/src/templates/auth/login.html">Sair</a></li>
+        </ul>
+      </nav>
+    </aside>
 
-<div class="main-container">
+    <!-- Conteúdo principal -->
+    <div class="content">
+      <section class="perfil">
+        <h2>Meu Perfil</h2>
+        <p>Gerencie suas informações pessoais e sua foto</p>
 
-  <aside class="sidebar">
-    <nav>
-      <ul>
-        <li><a href="/src/templates/colaborador/modulo.html">Módulos</a></li>
-         <li><a href="#" class="active">Meu Perfil</a></li>
-        <li><a href="/src/templates/colaborador/progresso.html">Meu Progresso</a></li>
-        <li><a href="/src/templates/colaborador/feedback.html">Feedback</a></li>
-        <li><a href="/src/templates/colaborador/configuracoes.html">Configurações</a></li>
-        <li><a href="/src/templates/auth/login.html">Sair</a></li>
-      </ul>
-    </nav>
-  </aside>
-  
+        <!-- Feedback página -->
+        <div id="perfil-feedback" class="form-feedback" style="display:none;"></div>
 
-<div class="content">
-  <section class="perfil">
-    <h2>Meu Perfil</h2>
-    <p>Gerencie suas informações pessoais e configurações</p>
+        <div class="perfil-card">
+          <div class="perfil-info">
+            <img src="/src/static/img/foto.png" alt="Foto" class="perfil-img" id="foto-perfil">
+            <div class="perfil-textos">
+              <h3 id="perfil-nome">Carregando...</h3>
+              <span class="tag">Colaborador</span>
+            </div>
+          </div>
 
-    <div class="perfil-card">
-  <div class="perfil-info">
-    <img src="/src/static/img/foto.png" alt="Foto" class="perfil-img">
+          <div class="perfil-detalhes">
+            <p><b>Nome Completo:</b> <span id="perfil-nome-completo">-</span></p>
+            <p><b>Telefone:</b> <span id="perfil-telefone">-</span></p>
+            <p><b>RE:</b> <span id="perfil-re">-</span></p>
+            <p><b>E-mail:</b> <span id="perfil-email">-</span></p>
+            <p><b>Departamento:</b> <span id="perfil-departamento">-</span></p>
+          </div>
 
-    <div class="perfil-textos">
-      <h3 id="perfil-nome">Mariana Oliveira</h3>
-      <span class="tag">Colaborador</span>
+          <div class="perfil-actions">
+            <button class="btn-editar">Editar Perfil</button>
+            <button class="btn-senha">Alterar Senha</button>
+          </div>
+        </div>
+      </section>
     </div>
   </div>
 
-  <div class="perfil-detalhes">
-    <p><b>Nome Completo:</b> <span id="perfil-nome-completo">Mariana Oliveira</span></p>
-    <p><b>Telefone:</b> <span id="perfil-telefone">(11) 98765-4321</span></p>
-    <p><b>RE:</b> <span id="perfil-re">02543</span></p>
-    <p><b>E-mail:</b> <span id="perfil-email">mariana.oliveira@gmail.com</span></p>
-    <p><b>Departamento:</b> <span id="perfil-departamento">Monitoramento</span></p>
-  </div>
+  <!-- Modal de edição -->
+  <div class="modal" id="modal-perfil">
+    <div class="modal-content">
+      <span class="close" id="close-perfil">&times;</span>
+      <h2>Editar Perfil</h2>
+      <div id="modal-feedback" class="form-feedback" style="display:none;"></div>
+      <form id="form-perfil" enctype="multipart/form-data">
+        <label>Nome Completo</label>
+        <input type="text" id="input-nome" required>
 
-  <div class="perfil-actions">
-    <button class="btn-editar">Editar</button>
-  </div>
+        <label>E-mail</label>
+        <input type="email" id="input-email" required>
 
+        <label>Telefone</label>
+        <input type="text" id="input-telefone">
 
+        <label>Departamento</label>
+        <input type="text" id="input-departamento">
 
-  </section>
+        <label>Foto de Perfil</label>
+        <p>Inserir a foto tirada na empresa!</p>
+        <input type="file" id="input-foto" accept="image/*">
 
-
-  <section class="dashboard">
-    <div class="card estatisticas">
-      <h3>Minhas Estatísticas</h3>
-      <p><b>Progresso Geral:</b> 78%</p>
-      <div class="progress-bar">
-        <div class="progress" style="width:78%"></div>
-      </div>
-      <p><b>Módulos Concluídos:</b> 6</p>
-      <p><b>Nota Média:</b> 85%</p>
+        <button type="submit" class="btn-salvar">Salvar</button>
+      </form>
     </div>
-
-    <div class="card conquistas">
-      <h3>Conquistas</h3>
-      <ul>
-        <li>Primeira Certificação - 15/09/2025</li>
-        <li>Sequência de 7 dias - 20/09/2025</li>
-        <li>Nota Máxima - 25/09/2025</li>
-      </ul>
-    </div>
-  </section>
-</div>
-
-
-<div class="modal" id="modal">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <h2>Editar Perfil</h2>
-    <form id="form-perfil">
-      <label>Nome Completo</label>
-      <input type="text" id="input-nome" required>
-
-      <label>E-mail</label>
-      <input type="email" id="input-email" required>
-
-      <label>Telefone</label>
-      <input type="text" id="input-telefone" required>
-
-      <label>Departamento</label>
-      <input type="text" id="input-departamento">
-
-      <label>RE</label>
-      <input type="text" id="input-re">
-
-      <button type="submit" class="btn-salvar">Salvar</button>
-    </form>
   </div>
-</div>
 
+  <!-- Modal de alterar senha -->
+  <div class="modal" id="modal-senha">
+    <div class="modal-content">
+      <span class="close" id="close-senha">&times;</span>
+      <h2>Alterar Senha</h2>
+      <div id="modal-senha-feedback" class="form-feedback" style="display:none;"></div>
+      <form id="form-senha">
+        <label>Senha Atual</label>
+        <input type="password" id="senha-atual" required>
 
+        <label>Nova Senha</label>
+        <input type="password" id="nova-senha" required>
 
-<script src="/src/static/js/colaborador/perfil.js"></script>
+        <label>Confirmar Nova Senha</label>
+        <input type="password" id="confirmar-senha" required>
+
+        <button type="submit" class="btn-salvar">Alterar Senha</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <hr class="footer-separator">
+    <div class="footer-links">
+        <a href="#">Política de Privacidade</a> | 
+        <a href="#">Termos de Uso</a> | 
+        <a href="#">Suporte</a>
+    </div>
+    <p class="footer-copy">&copy; 2025 Alpha Secure. Todos os direitos reservados.</p>
+  </footer>
+
+  <script src="/src/static/js/colaborador/perfil.js"></script>
 </body>
 </html>
