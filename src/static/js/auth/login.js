@@ -1,5 +1,17 @@
-document.getElementById("login-form").addEventListener("submit", async function(e) {
+const form = document.getElementById("login-form");
+
+// Cria a div de feedback dinamicamente
+const feedbackDiv = document.createElement("div");
+feedbackDiv.classList.add("form-feedback");
+form.appendChild(feedbackDiv);
+
+form.addEventListener("submit", async function(e) {
   e.preventDefault();
+
+  // Limpa feedback anterior
+  feedbackDiv.style.display = "none";
+  feedbackDiv.classList.remove("success", "error");
+  feedbackDiv.textContent = "";
 
   const dados = {
     email: document.getElementById("email").value,
@@ -16,31 +28,44 @@ document.getElementById("login-form").addEventListener("submit", async function(
     const result = await response.json();
 
     if (response.ok) {
-      alert("Login realizado com sucesso!");
+      feedbackDiv.textContent = "Login realizado com sucesso!";
+      feedbackDiv.classList.add("success");
+      feedbackDiv.style.display = "block";
 
-      
+      // Armazena dados no localStorage
+      if (result.usuario) {
+        if (result.usuario.id) {
+          localStorage.setItem("usuario_id", result.usuario.id);
+        }
+        if (result.usuario.nome) {
+          localStorage.setItem("nomeUsuario", result.usuario.nome);
+        }
+        if (result.usuario.tipo_acesso) {
+          localStorage.setItem("tipo_acesso", result.usuario.tipo_acesso);
+        }
+      }
+
       if (result.token) {
         localStorage.setItem("token", result.token);
       }
 
-      
-      if (result.tipo_acesso) {
-        localStorage.setItem("tipo_acesso", result.tipo_acesso);
-      }
+      // Redireciona após 1.5 segundos
+      setTimeout(() => {
+        if (result.usuario.tipo_acesso === "gestor") {
+          window.location.href = "/src/templates/gestor/dashboard.html";
+        } else {
+          window.location.href = "/src/templates/colaborador/modulo.html";
+        }
+      }, 1500);
 
-      
-      if (result.tipo_acesso === "gestor") {
-        window.location.href = "/src/templates/gestor/dashboard.html"; 
-      } else if (result.tipo_acesso === "colaborador") {
-        window.location.href = "/src/templates/colaborador/modulo.html"; 
-      } else {
-        
-        window.location.href = "/src/templates/home.html";
-      }
     } else {
-      alert(result.error || "Erro ao fazer login");
+      feedbackDiv.textContent = result.error || "Erro ao fazer login";
+      feedbackDiv.classList.add("error");
+      feedbackDiv.style.display = "block";
     }
   } catch (error) {
-    alert("Erro de conexão com o servidor");
+    feedbackDiv.textContent = "Erro de conexão com o servidor";
+    feedbackDiv.classList.add("error");
+    feedbackDiv.style.display = "block";
   }
 });

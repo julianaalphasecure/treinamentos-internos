@@ -1,5 +1,17 @@
-document.getElementById("cadastro-form").addEventListener("submit", async function(e) {
+const form = document.getElementById("cadastro-form");
+
+// Cria a div de feedback dinamicamente
+const feedbackDiv = document.createElement("div");
+feedbackDiv.classList.add("form-feedback");
+form.appendChild(feedbackDiv);
+
+form.addEventListener("submit", async function(e) {
   e.preventDefault();
+
+  // Limpa feedback anterior
+  feedbackDiv.style.display = "none";
+  feedbackDiv.classList.remove("success", "error");
+  feedbackDiv.textContent = "";
 
   const dados = {
     re: document.getElementById("re").value,
@@ -17,13 +29,24 @@ document.getElementById("cadastro-form").addEventListener("submit", async functi
     });
 
     const result = await response.json();
+
     if (response.ok) {
-      alert("Cadastro realizado com sucesso!");
-      window.location.href = "/src/templates/auth/login.html"; // caminho ajustado pro seu login
+      feedbackDiv.textContent = "Cadastro realizado com sucesso!";
+      feedbackDiv.classList.add("success");
+      feedbackDiv.style.display = "block";
+
+      // Redireciona após 1.5 segundos
+      setTimeout(() => {
+        window.location.href = "/src/templates/auth/login.html";
+      }, 1500);
     } else {
-      alert(result.error || "Erro ao cadastrar");
+      feedbackDiv.textContent = result.error || "Erro ao cadastrar";
+      feedbackDiv.classList.add("error");
+      feedbackDiv.style.display = "block";
     }
   } catch (error) {
-    alert("Erro de conexão com o servidor");
+    feedbackDiv.textContent = "Erro de conexão com o servidor";
+    feedbackDiv.classList.add("error");
+    feedbackDiv.style.display = "block";
   }
 });
