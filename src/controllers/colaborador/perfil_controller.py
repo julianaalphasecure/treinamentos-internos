@@ -1,7 +1,9 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, current_app, url_for
+from werkzeug.utils import secure_filename
+import os
 from src.services.colaborador.perfil_service import PerfilService
 
-perfil_bp = Blueprint("perfil_bp", __name__)
+perfil_bp = Blueprint("perfil_bp", __name__, url_prefix="/colaborador/perfil")
 
 @perfil_bp.route("/<int:usuario_id>", methods=["GET"])
 def obter_perfil(usuario_id):
@@ -12,8 +14,42 @@ def obter_perfil(usuario_id):
 
 @perfil_bp.route("/<int:usuario_id>", methods=["PUT"])
 def atualizar_perfil(usuario_id):
-    data = request.get_json()
-    usuario = PerfilService.update_perfil(usuario_id, data)
-    if usuario:
-        return jsonify({"message": "Perfil atualizado com sucesso", "usuario": usuario.to_dict()}), 200
-    return jsonify({"error": "Usuário não encontrado"}), 404
+    usuario = PerfilService.get_perfil(usuario_id)
+    if not usuario:
+        return jsonify({"error": "Usuário não encontrado"}), 404
+
+    try:
+        nome = request.form.get("nome")
+        email = request.form.get("email")
+        telefone = request.form.get("telefone")
+        departamento = request.form.get("departamento")
+        foto = request.files.get("foto")
+
+        dados = {
+            "nome": nome,
+            "email": email,
+            "telefone": telefone,
+            "departamento": departamento
+        }
+
+        # Salva foto se existir
+        if foto:
+            filename = secure_filename(foto.filename)
+            pasta_fotos = os.path.join(current_app.static_folder, "fotos_perfil")
+            os.makedirs(pasta_fotos, exist_ok=True)
+            caminho_foto = os.path.join(pasta_fotos, filename)
+            foto.save(caminho_foto)
+            dados["foto"] = url_for("static", filename=f"fotos_perfil/" + filename, _external=False)
+
+        usuario_atualizado = PerfilService.update_perfil(usuario_id, dados)
+        if usuario_atualizado:
+            return jsonify({
+                "message": "Perfil atualizado com sucesso",
+                "usuario": usuario_atualizado.to_dict()
+            }), 200
+
+        return jsonify({"error": "Falha ao atualizar perfil"}), 400
+
+    except Exception as e:
+        # Retorna o erro real para depuração
+        return jsonify({"error": f"Erro interno: {str(e)}"}), 500

@@ -12,6 +12,10 @@ class Usuario(db.Model):
         db.Enum("colaborador", "gestor", name="tipo_acesso_enum"),
         nullable=False
     )
+    telefone = db.Column(db.String(20))
+    departamento = db.Column(db.String(100))
+    foto = db.Column(db.String(255))
+
     data_criacao = db.Column(db.DateTime, server_default=db.func.now(), nullable=False)
 
     def set_password(self, senha):
@@ -28,4 +32,8 @@ class Usuario(db.Model):
             "email": self.email,
             "tipo_acesso": self.tipo_acesso,
             "data_criacao": self.data_criacao,
+            "telefone": self.telefone,
+            "departamento": self.departamento,
+            "foto": self.foto,
+            
         }
