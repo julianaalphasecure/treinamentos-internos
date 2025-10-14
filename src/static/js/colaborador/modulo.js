@@ -1,46 +1,76 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Pega o nome do usuário do localStorage
   const userName = localStorage.getItem("nomeUsuario") || "Usuário";
+  document.getElementById("user-name").textContent = `Olá, ${userName}`;
 
-  // Atualiza o elemento do header, se existir
-  const userNameElement = document.getElementById("user-name");
-  if (userNameElement) {
-    userNameElement.textContent = `Olá, ${userName}`;
-  }
+  const wrapper = document.querySelector(".modules-wrapper");
+  const prevBtn = document.querySelector(".carousel-btn.prev");
+  const nextBtn = document.querySelector(".carousel-btn.next");
+  const searchInput = document.querySelector(".search-bar input");
 
-  // CARROSSEL
-  const wrapper = document.querySelector('.modules-wrapper');
-  const slides = document.querySelectorAll('.modules-slide');
-  const prevBtn = document.querySelector('.carousel-btn.prev');
-  const nextBtn = document.querySelector('.carousel-btn.next');
+  // Captura todos os módulos do HTML
+  const allModules = Array.from(document.querySelectorAll(".module-card")).map(card => {
+    return {
+      titulo: card.querySelector("h3").textContent,
+      html: card.outerHTML
+    };
+  });
 
-  if (!wrapper || slides.length === 0) return;
-
+  let filteredModules = [...allModules];
   let currentSlide = 0;
-  const totalSlides = slides.length;
 
-  // Função para atualizar a posição do carrossel
+  // Função para renderizar módulos em slides 2x2
+  function renderModules() {
+    wrapper.innerHTML = "";
+
+    for (let i = 0; i < filteredModules.length; i += 4) {
+      const slideModules = filteredModules.slice(i, i + 4);
+      const slide = document.createElement("div");
+      slide.classList.add("modules-slide");
+
+      slideModules.forEach(mod => {
+        slide.insertAdjacentHTML("beforeend", mod.html); // clona o HTML do módulo
+      });
+
+      wrapper.appendChild(slide);
+    }
+
+    currentSlide = 0;
+    updateCarousel();
+  }
+
+  // Atualiza a posição do carrossel
   function updateCarousel() {
-    const offset = -currentSlide * 100; // cada slide ocupa 100% da largura
+    const slides = document.querySelectorAll(".modules-slide");
+    const totalSlides = slides.length;
+    const offset = -currentSlide * 100;
     wrapper.style.transform = `translateX(${offset}%)`;
+
+    prevBtn.style.display = totalSlides <= 1 ? "none" : "block";
+    nextBtn.style.display = totalSlides <= 1 ? "none" : "block";
   }
 
-  // Botão próximo
-  if (nextBtn) {
-    nextBtn.addEventListener('click', () => {
-      currentSlide = (currentSlide + 1) % totalSlides; // loop infinito
-      updateCarousel();
-    });
-  }
+  // Navegação
+  nextBtn.addEventListener("click", () => {
+    const slides = document.querySelectorAll(".modules-slide");
+    currentSlide = (currentSlide + 1) % slides.length;
+    updateCarousel();
+  });
 
+  prevBtn.addEventListener("click", () => {
+    const slides = document.querySelectorAll(".modules-slide");
+    currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+    updateCarousel();
+  });
 
-  if (prevBtn) {
-    prevBtn.addEventListener('click', () => {
-      currentSlide = (currentSlide - 1 + totalSlides) % totalSlides; // loop infinito
-      updateCarousel();
-    });
-  }
+  // Pesquisa de módulos
+  searchInput.addEventListener("input", () => {
+    const query = searchInput.value.toLowerCase();
+    filteredModules = allModules.filter(mod =>
+      mod.titulo.toLowerCase().includes(query)
+    );
+    renderModules();
+  });
 
   // Inicializa carrossel
-  updateCarousel();
+  renderModules();
 });

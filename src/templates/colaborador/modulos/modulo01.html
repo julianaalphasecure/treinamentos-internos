@@ -21,6 +21,7 @@
 <section class="modules">
   <h2>Bem-vindo(a) ao módulo 01 - Matrix Energia </h2>
   <p>Complete esse módulo para avançar para os exercícios</p>
+  <p>Para colocar no modo noturno clilque na tecla <b>M</b> e para abrir as notas para anotações clilca <b>N</b></p>
 
   <div class="modules-carousel">
     <div class="modules-wrapper">
@@ -46,12 +47,30 @@
       </div>
     </div>
   </div>
+ 
+<div id="progress-text" style="text-align:center; margin-bottom:8px; font-weight:bold;">Slide 1 de 13</div>
+
+
+<div class="thumbnails" style="display:flex; justify-content:center; gap:5px; margin-bottom:15px; overflow-x:auto; padding:5px 0;"></div>
+
+
+<div id="quick-notes-container">
+  <div style="display:flex; justify-content:space-between; align-items:center;">
+    <strong>Notas rápidas</strong>
+    <button id="close-notes" style="background:none; border:none; cursor:pointer;">✖</button>
+  </div>
+  <textarea id="quick-notes"></textarea>
+</div>
+
+
 
   <div class="carousel-controls">
     <button class="carousel-btn prev">&#10094;</button>
     <button class="carousel-btn next">&#10095;</button>
     <button id="download-btn"><img src="/src/static/img/baixar_modulo.webp" alt="Baixar PDF"></button>
     <button id="fullscreen-btn"><img src="/src/static/img/icone_telaCheia.webp" alt="Tela Cheia"></button>
+    <button id="dark-mode-btn" title="Modo Noturno">🌙</button>
+    
   </div>
 </section>
 

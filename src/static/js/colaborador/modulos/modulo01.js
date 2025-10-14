@@ -148,6 +148,104 @@ document.getElementById('download-btn').addEventListener('click', () => {
   link.click();
 });
 
+// Miniaturas
+const thumbnailsContainer = document.querySelector('.thumbnails');
+
+slides.forEach((slide, idx) => {
+  const thumb = document.createElement('img');
+  thumb.src = slide.querySelector('img').src;
+  if(idx === 0) thumb.classList.add('active');
+  thumb.addEventListener('click', () => {
+    currentIndex = idx;
+    updateCarousel();
+  });
+  thumbnailsContainer.appendChild(thumb);
+});
+
+function updateThumbnails() {
+  const thumbs = document.querySelectorAll('.thumbnails img');
+  thumbs.forEach((t, i) => t.classList.toggle('active', i === currentIndex));
+}
+
+// Progresso detalhado
+const progressText = document.getElementById('progress-text');
+function updateProgressText() {
+  progressText.textContent = `Slide ${currentIndex + 1} de ${slides.length}`;
+}
+
+// Atualizar funções
+function updateCarousel() {
+  wrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
+  updateProgressBar();
+  updateThumbnails();
+  updateProgressText();
+}
+
+// Notas rápidas
+const quickNotesContainer = document.getElementById('quick-notes-container');
+const quickNotesTextarea = document.getElementById('quick-notes');
+const closeNotesBtn = document.getElementById('close-notes');
+
+// Atalho 'N' para abrir/fechar notas
+document.addEventListener('keydown', (e) => {
+  if(e.key.toLowerCase() === 'n') {
+    quickNotesContainer.style.display = quickNotesContainer.style.display === 'none' ? 'block' : 'none';
+  }
+});
+
+closeNotesBtn.addEventListener('click', () => {
+  quickNotesContainer.style.display = 'none';
+});
+
+// Salvar notas no localStorage
+quickNotesTextarea.addEventListener('input', () => {
+  localStorage.setItem('modulo01_notes', quickNotesTextarea.value);
+});
+
+// Carregar notas salvas
+window.addEventListener('load', () => {
+  const savedNotes = localStorage.getItem('modulo01_notes');
+  if(savedNotes) quickNotesTextarea.value = savedNotes;
+});
+
+// Modo noturno / contraste
+let darkMode = false;
+function toggleDarkMode() {
+  darkMode = !darkMode;
+  document.body.style.background = darkMode ? '#1e1e1e' : '#f5f7fa';
+  document.body.style.color = darkMode ? '#f5f5f5' : '#333';
+  document.querySelectorAll('.module-card').forEach(c => c.style.filter = darkMode ? 'brightness(0.8)' : 'brightness(1)');
+}
+
+// Tecla 'M' para modo noturno
+document.addEventListener('keydown', (e) => {
+  if(e.key.toLowerCase() === 'm') toggleDarkMode();
+});
+
+
+document.addEventListener('keydown', (e) => {
+  if(e.key === 'ArrowRight') document.querySelector('.next').click();
+  if(e.key === 'ArrowLeft') document.querySelector('.prev').click();
+  if(e.key.toLowerCase() === 'f') fullscreenBtn.click();
+  if(e.key.toLowerCase() === 'd') document.getElementById('download-btn').click();
+});
+
+btnFinalizar.addEventListener('click', () => {
+  exercisesSection.style.display = 'block';
+  moduleLocked = true; 
+  nextBtn.style.opacity = '0.4';
+  prevBtn.style.opacity = '0.4';
+  nextBtn.style.cursor = 'not-allowed';
+  prevBtn.style.cursor = 'not-allowed';
+  window.scrollTo({top: exercisesSection.offsetTop - 20, behavior: 'smooth'});
+  startTimer();
+
+ 
+  localStorage.removeItem('currentModuleSlide');
+});
+
+
+
 
 const fullscreenBtn = document.getElementById('fullscreen-btn');
 
@@ -186,6 +284,7 @@ fullscreenBtn.addEventListener('click', () => {
 });
 
 
+
 const progressBarContainer = document.createElement('div');
 progressBarContainer.classList.add('progress-bar');
 const progressBarFill = document.createElement('div');
@@ -200,3 +299,8 @@ function updateProgressBar() {
 
 updateProgressBar();
 
+const darkModeBtn = document.getElementById('dark-mode-btn');
+
+darkModeBtn.addEventListener('click', () => {
+  document.body.classList.toggle('dark-mode');
+});
