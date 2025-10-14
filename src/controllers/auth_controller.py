@@ -1,16 +1,18 @@
-from flask import Blueprint, request, redirect, url_for, flash, render_template
+from flask import Blueprint, request, jsonify, render_template
 from src.services.auth_service import AuthService
 
 auth_bp = Blueprint("auth_bp", __name__, url_prefix="/auth")
 auth_service = AuthService()
 
-@auth_bp.route("/registrar", methods=["POST"])
+# --- Cadastro via JSON ---
+@auth_bp.route("/cadastro", methods=["POST"])
 def registrar():
-    re = request.form.get("re")
-    nome = request.form.get("nome")
-    email = request.form.get("email")
-    senha = request.form.get("senha")
-    tipo_acesso = request.form.get("tipo_acesso")
+    dados = request.get_json()  # Recebe JSON do fetch
+    re = dados.get("re")
+    nome = dados.get("nome")
+    email = dados.get("email")
+    senha = dados.get("senha")
+    tipo_acesso = dados.get("tipo_acesso")
 
     usuario, erro = auth_service.registrar_usuario(
         re=re,
@@ -21,32 +23,34 @@ def registrar():
     )
 
     if usuario:
-        flash("Usuário registrado com sucesso!", "success")
-        return redirect(url_for("auth_bp.login_form"))  
+        return jsonify({"success": True, "message": "Cadastro realizado com sucesso!"}), 200
     else:
-        flash(erro or "Falha ao registrar usuário", "danger")
-        return redirect(url_for("auth_bp.registrar_form"))  
+        return jsonify({"success": False, "error": erro or "Falha ao registrar usuário"}), 400
 
+# --- Formulário de cadastro via GET ---
+@auth_bp.route("/cadastro", methods=["GET"])
+def registrar_form():
+    return render_template("auth/cadastro.html")
 
+# --- Login ---
 @auth_bp.route("/login", methods=["POST"])
 def login():
-    email = request.form.get("email")
-    senha = request.form.get("senha")
+    dados = request.get_json()  # Recebe JSON do fetch
+    email = dados.get("email")
+    senha = dados.get("senha")
 
     usuario = auth_service.autenticar_usuario(email=email, senha=senha)
 
     if usuario:
-       
-        return redirect(url_for("modulos"))  
+        # Retorna JSON com dados do usuário (pode incluir token JWT aqui)
+        return jsonify({"success": True, "usuario": {
+            "id": usuario.id,
+            "nome": usuario.nome,
+            "tipo_acesso": usuario.tipo_acesso
+        }}), 200
     else:
-        flash("Email ou senha inválidos", "danger")
-        return redirect(url_for("auth_bp.login_form"))  
-
-
-@auth_bp.route("/registrar", methods=["GET"])
-def registrar_form():
-    return render_template("registrar.html")
+        return jsonify({"success": False, "error": "Email ou senha inválidos"}), 400
 
 @auth_bp.route("/login", methods=["GET"])
 def login_form():
-    return render_template("login.html")
+    return render_template("auth/login.html")

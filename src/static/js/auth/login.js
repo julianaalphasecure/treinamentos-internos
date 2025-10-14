@@ -5,7 +5,7 @@ const feedbackDiv = document.createElement("div");
 feedbackDiv.classList.add("form-feedback");
 form.appendChild(feedbackDiv);
 
-form.addEventListener("submit", async function(e) {
+form.addEventListener("submit", async function (e) {
   e.preventDefault();
 
   // Limpa feedback anterior
@@ -28,28 +28,18 @@ form.addEventListener("submit", async function(e) {
     const result = await response.json();
 
     if (response.ok) {
-      feedbackDiv.textContent = "Login realizado com sucesso!";
+      feedbackDiv.textContent = result.message;
       feedbackDiv.classList.add("success");
       feedbackDiv.style.display = "block";
 
       // Armazena dados no localStorage
       if (result.usuario) {
-        if (result.usuario.id) {
-          localStorage.setItem("usuario_id", result.usuario.id);
-        }
-        if (result.usuario.nome) {
-          localStorage.setItem("nomeUsuario", result.usuario.nome);
-        }
-        if (result.usuario.tipo_acesso) {
-          localStorage.setItem("tipo_acesso", result.usuario.tipo_acesso);
-        }
+        localStorage.setItem("usuario_id", result.usuario.id);
+        localStorage.setItem("nomeUsuario", result.usuario.nome);
+        localStorage.setItem("tipo_acesso", result.usuario.tipo_acesso);
       }
 
-      if (result.token) {
-        localStorage.setItem("token", result.token);
-      }
-
-      // Redireciona após 1.5 segundos
+      // Redireciona de acordo com o tipo de acesso após 1.5s
       setTimeout(() => {
         if (result.usuario.tipo_acesso === "gestor") {
           window.location.href = "/src/templates/gestor/dashboard.html";

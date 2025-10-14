@@ -1,6 +1,4 @@
 const form = document.getElementById("cadastro-form");
-
-// Cria a div de feedback dinamicamente
 const feedbackDiv = document.createElement("div");
 feedbackDiv.classList.add("form-feedback");
 form.appendChild(feedbackDiv);
@@ -8,7 +6,6 @@ form.appendChild(feedbackDiv);
 form.addEventListener("submit", async function(e) {
   e.preventDefault();
 
-  // Limpa feedback anterior
   feedbackDiv.style.display = "none";
   feedbackDiv.classList.remove("success", "error");
   feedbackDiv.textContent = "";
@@ -22,7 +19,7 @@ form.addEventListener("submit", async function(e) {
   };
 
   try {
-    const response = await fetch("http://127.0.0.1:5000/auth/registrar", {
+    const response = await fetch("/auth/cadastro", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(dados)
@@ -30,14 +27,13 @@ form.addEventListener("submit", async function(e) {
 
     const result = await response.json();
 
-    if (response.ok) {
-      feedbackDiv.textContent = "Cadastro realizado com sucesso!";
+    if (response.ok && result.success) {
+      feedbackDiv.textContent = result.message;
       feedbackDiv.classList.add("success");
       feedbackDiv.style.display = "block";
 
-      // Redireciona após 1.5 segundos
       setTimeout(() => {
-        window.location.href = "/src/templates/auth/login.html";
+        window.location.href = "/auth/login"; // Agora redireciona para a rota Flask
       }, 1500);
     } else {
       feedbackDiv.textContent = result.error || "Erro ao cadastrar";
