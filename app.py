@@ -1,10 +1,11 @@
+import os
 from flask import Flask
 from flask_migrate import Migrate
-from flask_cors import CORS  # IMPORTANTE: adiciona o CORS
+from flask_cors import CORS
 from src.config.database import db, bcrypt
 from src.config.config import SECRET_KEY, DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT, APP_PORT
 
-# Importa os blueprints
+
 from src.controllers.auth_controller import auth_bp
 
 # Colaborador
@@ -22,10 +23,15 @@ from src.controllers.gestor.relatorio_controller import relatorio_bp
 
 
 def create_app():
-    app = Flask(__name__)
-    CORS(app, resources={r"/*": {"origins": "*"}})  # habilita CORS para todas as rotas
+   
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    template_dir = os.path.join(base_dir, "src/templates")
+    static_dir = os.path.join(base_dir, "src/static")
 
-    # Config
+    app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
+    CORS(app, resources={r"/*": {"origins": "*"}})  
+
+    # Configurações
     app.config["SECRET_KEY"] = SECRET_KEY
     app.config["SQLALCHEMY_DATABASE_URI"] = (
         f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
