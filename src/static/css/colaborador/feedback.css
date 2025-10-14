@@ -137,3 +137,19 @@ h2 {
   background-color: #e0b06b;
 }
 
+.feedback-list p {
+  text-align: center;
+  color: #888;
+  font-style: italic;
+}
+
+.mark-read-btn:disabled {
+  background-color: #ccc;
+  cursor: default;
+}
+
+@media (max-width: 600px) {
+  .feedback-card {
+    padding: 15px;
+  }
+}
