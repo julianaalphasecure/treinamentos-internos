@@ -62,7 +62,6 @@ body {
   display: flex;
   transition: transform 0.5s ease-in-out;
 }
-
 .modules-slide {
   min-width: 100%;
   display: flex;
@@ -70,6 +69,7 @@ body {
   align-items: center;
   position: relative;
 }
+
 
 .module-card {
   background: white;
@@ -90,6 +90,65 @@ body {
   display: block;
   border-radius: 12px;
 }
+
+.dark-slide {
+  display: none;
+}
+
+body.dark-mode .dark-slide {
+  display: flex;
+}
+
+body.dark-mode .modules-slide:not(.dark-slide) {
+  display: none;
+}
+/* Modo noturno - exercícios */
+body.dark-mode .exercises {
+  background: #2c2c2c;
+  color: #f0f0f0;
+}
+
+body.dark-mode  .modules h2{
+  color: white;
+}
+
+body.dark-mode .modules p{
+  color: white;
+}
+
+body.dark-mode .exercise-slide {
+  background: #3a3a3a;
+  color: #f0f0f0;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+
+body.dark-mode .exercise-slide p {
+  color: #f0f0f0;
+}
+
+body.dark-mode .exercise-slide .options label {
+  color: #f0f0f0;
+}
+
+body.dark-mode .exercise-slide input[type="radio"] {
+  accent-color: #4caf50; /* cor do radio no modo escuro */
+}
+
+body.dark-mode .exercise-controls .prev-exercise,
+body.dark-mode .exercise-controls .next-exercise {
+  background: rgba(100, 100, 100, 0.8);
+  color: #fff;
+}
+
+body.dark-mode .btn-submit {
+  background: #eb7f0c;
+  color: #fff;
+}
+
+body.dark-mode .btn-submit:hover {
+  background: #f08944;
+}
+
 
 .thumbnails img {
   width: 60px;
@@ -119,12 +178,55 @@ body {
   background: transparent;
   border: none;
   cursor: pointer;
-  font-size: 24px;
+  width: 36px;
+  height: 36px;
 }
 
-/* Notas rápidas fixas */
+#dark-mode-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* Notas rápidas fixas no canto direito */
 #quick-notes-container {
-  display: block; /* agora sempre visível */
+  position: fixed;
+  top: 100px;
+  right: 20px;
+  width: 280px;
+  height: 300px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  padding: 12px;
+  z-index: 1000;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+#quick-notes-container strong {
+  font-size: 1em;
+}
+
+#quick-notes-container #close-notes {
+  font-size: 16px;
+  line-height: 1;
+  color: #333;
+}
+
+#quick-notes {
+  flex: 1;
+  margin-top: 10px;
+  width: 100%;
+  height: 100%;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 6px;
+  font-size: 0.9em;
+  resize: vertical;
+  overflow-y: auto;
 }
 
 /* Modo noturno */
@@ -146,13 +248,22 @@ body.dark-mode .module-card img {
   filter: brightness(0.8);
 }
 
+body.dark-mode #quick-notes-container {
+  background: #333;
+}
+
+body.dark-mode #quick-notes {
+  background: #222;
+  color: #f0f0f0;
+  border: 1px solid #555;
+}
+
 body.dark-mode .carousel-btn,
 body.dark-mode #download-btn img,
 body.dark-mode #fullscreen-btn img,
 body.dark-mode #dark-mode-btn {
   filter: brightness(0.9);
 }
-
 
 .btn-finalizar {
   position: absolute;
@@ -165,6 +276,7 @@ body.dark-mode #dark-mode-btn {
   border-radius: 10px;
   cursor: pointer;
   font-weight: bold;
+  z-index: 10;
 }
 
 .btn-finalizar:hover {
@@ -207,62 +319,6 @@ body.dark-mode #dark-mode-btn {
   cursor: pointer;
 }
 
-/* Notas rápidas fixas no canto direito */
-#quick-notes-container {
-  position: fixed;
-  top: 100px;        /* distância do topo */
-  right: 20px;       /* distância da borda direita */
-  width: 280px;      /* largura do bloco */
-  height: 300px;     /* altura do bloco */
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  padding: 12px;
-  z-index: 1000;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Cabeçalho do bloco de notas */
-#quick-notes-container strong {
-  font-size: 1em;
-}
-
-/* Botão de fechar (opcional) */
-#quick-notes-container #close-notes {
-  font-size: 16px;
-  line-height: 1;
-  color: #333;
-}
-
-/* Área de texto */
-#quick-notes {
-  flex: 1;
-  margin-top: 10px;
-  width: 100%;
-  height: 100%;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 6px;
-  font-size: 0.9em;
-  resize: vertical; /* usuário pode redimensionar verticalmente */
-  overflow-y: auto;
-}
-
-/* Modo noturno */
-body.dark-mode #quick-notes-container {
-  background: #333;
-  color: #f0f0f0;
-}
-
-body.dark-mode #quick-notes {
-  background: #222;
-  color: #f0f0f0;
-  border: 1px solid #555;
-}
-
-
 #download-btn {
   left: calc(75% + 20px);
 }
@@ -281,6 +337,7 @@ body.dark-mode #quick-notes {
   transform: scale(1.1);
 }
 
+/* Seção exercícios */
 .exercises {
   width: 90%;
   max-width: 800px;
@@ -391,8 +448,7 @@ body.dark-mode #quick-notes {
   transition: width 0.4s ease-in-out;
 }
 
-
-
+/* Footer */
 .footer {
   background: #f8f8f8;
   color: #666;
