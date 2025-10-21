@@ -74,3 +74,38 @@ document.addEventListener("DOMContentLoaded", () => {
   // Inicializa carrossel
   renderModules();
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Recupera preferências salvas
+  const savedTheme = localStorage.getItem("theme") || "claro";
+  const savedFont = localStorage.getItem("font-size") || "padrao";
+
+  document.body.setAttribute("data-theme", savedTheme);
+  document.body.setAttribute("data-font", savedFont);
+
+  // Função para alterar tema
+  window.setTheme = (theme) => {
+    document.body.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  };
+
+  // Função para alterar tamanho da fonte
+  window.setFontSize = (size) => {
+    document.body.setAttribute("data-font", size);
+    localStorage.setItem("font-size", size);
+  };
+
+  // Função para mostrar toast
+  window.showToast = (msg, duration = 2500) => {
+    const toast = document.createElement("div");
+    toast.className = "toast";
+    toast.textContent = msg;
+    document.body.appendChild(toast);
+
+    setTimeout(() => toast.classList.add("show"), 100);
+    setTimeout(() => {
+      toast.classList.remove("show");
+      setTimeout(() => toast.remove(), 400);
+    }, duration);
+  };
+});
