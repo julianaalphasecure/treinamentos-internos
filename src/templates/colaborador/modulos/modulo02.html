@@ -19,11 +19,13 @@
 </header>
 
 <section class="modules">
-  <h2>Bem-vindo(a) ao módulo 02 - Athon Energia </h2>
+  <h2>Bem-vindo(a) ao módulo 02 - Matrix Athon Energia </h2>
   <p>Complete esse módulo para avançar para os exercícios</p>
+  
 
   <div class="modules-carousel">
     <div class="modules-wrapper">
+      <!-- Slides normais -->
       <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo02/mod 02 pag 01.png" alt="página 01"></div></div>
       <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo02/mod 02 pag 02.png" alt="página 02"></div></div>
       <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo02/mod 02 pag 03.png" alt="página 03"></div></div>
@@ -35,16 +37,14 @@
       <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo02/mod 02 pag 09.png" alt="página 09"></div></div>
       <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo02/mod 02 pag 10.png" alt="página 10"></div></div>
       <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo02/mod 02 pag 11.png" alt="página 11"></div></div>
-      
-      
-     
+  
       <div class="modules-slide">
         <div class="module-card">
           <img src="/src/static/img/modulo02/mod 02 pag 12.png" alt="Última página">
           <button class="btn-finalizar">Finalizar</button>
         </div>
       </div>
-         <div class="modules-slide dark-slide"><div class="module-card"><img src="/src/static/img/modulo02dark/mod02 pag01 dark.png" alt="página 01 dark"></div></div>
+       <div class="modules-slide dark-slide"><div class="module-card"><img src="/src/static/img/modulo02dark/mod02 pag01 dark.png" alt="página 01 dark"></div></div>
   <div class="modules-slide dark-slide"><div class="module-card"><img src="/src/static/img/modulo02dark/mod02 pag02 dark.png" alt="página 02 dark"></div></div>
   <div class="modules-slide dark-slide"><div class="module-card"><img src="/src/static/img/modulo02dark/mod02 pag03 dark.png" alt="página 03 dark"></div></div>
   <div class="modules-slide dark-slide"><div class="module-card"><img src="/src/static/img/modulo02dark/mod02 pag04 dark.png" alt="página 04 dark"></div></div>
@@ -55,29 +55,21 @@
   <div class="modules-slide dark-slide"><div class="module-card"><img src="/src/static/img/modulo02dark/mod02 pag09 dark.png" alt="página 09 dark"></div></div>
   <div class="modules-slide dark-slide"><div class="module-card"><img src="/src/static/img/modulo02dark/mod02 pag10 dark.png" alt="página 10 dark"></div></div>
   <div class="modules-slide dark-slide"><div class="module-card"><img src="/src/static/img/modulo02dark/mod02 pag11 dark.png" alt="página 11 dark"></div></div>
-  
+ 
   <div class="modules-slide dark-slide">
     <div class="module-card">
-      <img src="/src/static/img/modulo02dark/" alt="Última página dark">
+      <img src="/src/static/img/modulo02dark/mod02 pag12 dark.png" alt="Última página dark">
       <button class="btn-finalizar">Finalizar</button>
     </div>
   </div>
     </div>
   </div>
+
  
-<div id="progress-text" style="text-align:center; margin-bottom:8px; font-weight:bold;">Slide 1 de 13</div>
 
+  <div id="progress-text" style="text-align:center; margin-bottom:8px; font-weight:bold;">Slide 1 de 13</div>
+  <div class="thumbnails" style="display:flex; justify-content:center; gap:5px; margin-bottom:15px; overflow-x:auto; padding:5px 0;"></div>
 
-<div class="thumbnails" style="display:flex; justify-content:center; gap:5px; margin-bottom:15px; overflow-x:auto; padding:5px 0;"></div>
-
-
-<div id="quick-notes-container" style="position:fixed; top:100px; right:20px; width:250px; background:#fff; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.2); padding:10px; display:none; z-index:1000;">
-  <div style="display:flex; justify-content:space-between; align-items:center;">
-    <strong>Notas rápidas</strong>
-    <button id="close-notes" style="background:none; border:none; cursor:pointer;">✖</button>
-  </div>
-  <textarea id="quick-notes" style="width:100%; height:150px; margin-top:10px; border-radius:6px; border:1px solid #ccc; padding:5px;"></textarea>
-</div>
 
 
   <div class="carousel-controls">
@@ -85,7 +77,7 @@
     <button class="carousel-btn next">&#10095;</button>
     <button id="download-btn"><img src="/src/static/img/baixar_modulo.webp" alt="Baixar PDF"></button>
     <button id="fullscreen-btn"><img src="/src/static/img/icone_telaCheia.webp" alt="Tela Cheia"></button>
-     <button id="dark-mode-btn" title="Modo Noturno"><img src="/src/static/img/botão_modoescuro.webp" alt=""></button>
+    <button id="dark-mode-btn" title="Modo Noturno"><img src="/src/static/img/botão_modoescuro.webp" alt=""></button>
   </div>
 </section>
 
@@ -146,40 +138,40 @@
     <div class="exercise-slide" data-answer="b">
       <p><strong>6.</strong>Em caso de falha total no sistema de vídeo, o operador deve: </p>
       <div class="options">
-        <label><input type="radio" name="q5" value="a">Esperar retorno automático do sistema </label>
-        <label><input type="radio" name="q5" value="b">Acionar TI, manutenção e iniciar contigência </label>
-        <label><input type="radio" name="q5" value="c">Notificar apenas o mantenedor técnico </label>
-        <label><input type="radio" name="q5" value="d">Ignorar, caso seja fora do horário comercial  </label>
+        <label><input type="radio" name="q6" value="a">Esperar retorno automático do sistema </label>
+        <label><input type="radio" name="q6" value="b">Acionar TI, manutenção e iniciar contigência </label>
+        <label><input type="radio" name="q6" value="c">Notificar apenas o mantenedor técnico </label>
+        <label><input type="radio" name="q6" value="d">Ignorar, caso seja fora do horário comercial  </label>
       </div>
     </div>
 
     <div class="exercise-slide" data-answer="b">
       <p><strong>7.</strong>Qual ação deve ser feita ao identificar uma câmera off-line em área crítica?</p>
       <div class="options">
-        <label><input type="radio" name="q5" value="a">Nenhuma, se for de madrugada </label>
-        <label><input type="radio" name="q5" value="b">Reforçar vigilância presencial no local  </label>
-        <label><input type="radio" name="q5" value="c">Substituir a câmera de forma remota  </label>
-        <label><input type="radio" name="q5" value="d">Desabilitar a câmera do sistema  </label>
+        <label><input type="radio" name="q7" value="a">Nenhuma, se for de madrugada </label>
+        <label><input type="radio" name="q7" value="b">Reforçar vigilância presencial no local  </label>
+        <label><input type="radio" name="q7" value="c">Substituir a câmera de forma remota  </label>
+        <label><input type="radio" name="q7" value="d">Desabilitar a câmera do sistema  </label>
       </div>
     </div>
 
     <div class="exercise-slide" data-answer="c">
       <p><strong>8.</strong>A ausência de imagem em um alarme invalida o acionamento de apoio? </p>
       <div class="options">
-        <label><input type="radio" name="q5" value="a">Sim, a imagem é obrigatória </label>
-        <label><input type="radio" name="q5" value="b">Sim, se for em período noturno </label>
-        <label><input type="radio" name="q5" value="c">Não, se houver indícios de risco, o acionamento deve ocorrer  </label>
-        <label><input type="radio" name="q5" value="d">Depende apenas da opnião do operador  </label>
+        <label><input type="radio" name="q8" value="a">Sim, a imagem é obrigatória </label>
+        <label><input type="radio" name="q8" value="b">Sim, se for em período noturno </label>
+        <label><input type="radio" name="q8" value="c">Não, se houver indícios de risco, o acionamento deve ocorrer  </label>
+        <label><input type="radio" name="q8" value="d">Depende apenas da opnião do operador  </label>
       </div>
     </div>
 
     <div class="exercise-slide" data-answer="d">
       <p><strong>9.</strong>A quem compete o escalonamento e decisões estratégicas em eventos de maior gravidade? </p>
       <div class="options">
-        <label><input type="radio" name="q5" value="a">Vigilância local  </label>
-        <label><input type="radio" name="q5" value="b">Técnico de manutenção  </label>
-        <label><input type="radio" name="q5" value="c">Operador de monitoramento </label>
-        <label><input type="radio" name="q5" value="d">Gerência da gestão central  </label>
+        <label><input type="radio" name="q9" value="a">Vigilância local  </label>
+        <label><input type="radio" name="q9" value="b">Técnico de manutenção  </label>
+        <label><input type="radio" name="q9" value="c">Operador de monitoramento </label>
+        <label><input type="radio" name="q9" value="d">Gerência da gestão central  </label>
       </div>
     </div>
 

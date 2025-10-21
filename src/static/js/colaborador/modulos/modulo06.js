@@ -200,23 +200,7 @@ function updateProgressBar() {
 }
 updateProgressBar();
 
-// ================== NOTAS RÁPIDAS ==================
-const quickNotesContainer = document.getElementById('quick-notes-container');
-const quickNotesTextarea = document.getElementById('quick-notes');
-const closeNotesBtn = document.getElementById('close-notes');
 
-document.addEventListener('keydown', e => {
-  if(e.key.toLowerCase() === 'n') {
-    quickNotesContainer.style.display = quickNotesContainer.style.display === 'none' ? 'block' : 'none';
-  }
-});
-
-closeNotesBtn.addEventListener('click', () => quickNotesContainer.style.display = 'none');
-quickNotesTextarea.addEventListener('input', () => localStorage.setItem('modulo01_notes', quickNotesTextarea.value));
-window.addEventListener('load', () => {
-  const savedNotes = localStorage.getItem('modulo01_notes');
-  if(savedNotes) quickNotesTextarea.value = savedNotes;
-});
 
 // ================== MODO NOTURNO ==================
 function toggleDarkMode() {
