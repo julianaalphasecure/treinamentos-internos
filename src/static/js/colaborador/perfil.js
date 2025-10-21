@@ -1,11 +1,7 @@
 const modalPerfil = document.getElementById("modal-perfil");
-const modalSenha = document.getElementById("modal-senha");
 const btnEditar = document.querySelector(".btn-editar");
-const btnSenha = document.querySelector(".btn-senha");
 const spanFecharPerfil = document.getElementById("close-perfil");
-const spanFecharSenha = document.getElementById("close-senha");
 const formPerfil = document.getElementById("form-perfil");
-const formSenha = document.getElementById("form-senha");
 
 const baseURL = "http://127.0.0.1:5000/colaborador/perfil";
 const usuarioId = localStorage.getItem("usuario_id");
@@ -58,16 +54,12 @@ async function carregarPerfil() {
 
 carregarPerfil();
 
-// ====== Abrir modais ======
+// ====== Abrir e fechar modal ======
 btnEditar.onclick = () => modalPerfil.style.display = "flex";
-btnSenha.onclick = () => modalSenha.style.display = "flex";
-
-// ====== Fechar modais ======
 spanFecharPerfil.onclick = () => modalPerfil.style.display = "none";
-spanFecharSenha.onclick = () => modalSenha.style.display = "none";
+
 window.onclick = (e) => {
   if (e.target === modalPerfil) modalPerfil.style.display = "none";
-  if (e.target === modalSenha) modalSenha.style.display = "none";
 };
 
 // ====== Preview foto ======
@@ -119,43 +111,37 @@ formPerfil.onsubmit = async (e) => {
   }
 };
 
-// ====== Alterar senha ======
-formSenha.onsubmit = async (e) => {
-  e.preventDefault();
-  const feedback = document.getElementById("modal-senha-feedback");
+document.addEventListener("DOMContentLoaded", () => {
+  // Recupera preferências salvas
+  const savedTheme = localStorage.getItem("theme") || "claro";
+  const savedFont = localStorage.getItem("font-size") || "padrao";
 
-  const senhaAtual = document.getElementById("senha-atual").value;
-  const novaSenha = document.getElementById("nova-senha").value;
-  const confirmarSenha = document.getElementById("confirmar-senha").value;
+  document.body.setAttribute("data-theme", savedTheme);
+  document.body.setAttribute("data-font", savedFont);
 
-  if (novaSenha !== confirmarSenha) {
-    feedback.textContent = "As senhas não coincidem!";
-    feedback.classList.add("error");
-    feedback.style.display = "block";
-    return;
-  }
+  // Função para alterar tema
+  window.setTheme = (theme) => {
+    document.body.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  };
 
-  try {
-    const res = await fetch(`http://127.0.0.1:5000/colaborador/alterar-senha/${usuarioId}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ senha_atual: senhaAtual, nova_senha: novaSenha })
-    });
-    const result = await res.json();
+  // Função para alterar tamanho da fonte
+  window.setFontSize = (size) => {
+    document.body.setAttribute("data-font", size);
+    localStorage.setItem("font-size", size);
+  };
 
-    if (res.ok) {
-      feedback.textContent = "Senha alterada com sucesso!";
-      feedback.classList.add("success");
-      feedback.style.display = "block";
-      modalSenha.style.display = "none";
-    } else {
-      feedback.textContent = result.error || "Erro ao alterar senha";
-      feedback.classList.add("error");
-      feedback.style.display = "block";
-    }
-  } catch (err) {
-    feedback.textContent = "Erro de conexão com o servidor";
-    feedback.classList.add("error");
-    feedback.style.display = "block";
-  }
-};
+  // Função para mostrar toast
+  window.showToast = (msg, duration = 2500) => {
+    const toast = document.createElement("div");
+    toast.className = "toast";
+    toast.textContent = msg;
+    document.body.appendChild(toast);
+
+    setTimeout(() => toast.classList.add("show"), 100);
+    setTimeout(() => {
+      toast.classList.remove("show");
+      setTimeout(() => toast.remove(), 400);
+    }, duration);
+  };
+});
