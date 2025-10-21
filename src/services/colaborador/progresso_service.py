@@ -30,3 +30,12 @@ class ProgressoService:
 
         db.session.commit()
         return progresso
+
+    @staticmethod
+    def delete_progresso(progresso_id):
+        progresso = Progresso.query.get(progresso_id)
+        if not progresso:
+            return None
+        db.session.delete(progresso)
+        db.session.commit()
+        return progresso

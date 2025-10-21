@@ -4,6 +4,7 @@ class Modulo(db.Model):
     __tablename__ = "modulo"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    nome = db.Column(db.String(255), nullable=False)
     titulo = db.Column(db.String(200), nullable=False)
     descricao = db.Column(db.Text, nullable=True)
     carga_horaria = db.Column(db.Integer, nullable=True)
