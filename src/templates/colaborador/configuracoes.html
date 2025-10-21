@@ -5,15 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Configurações</title>
   <link rel="stylesheet" href="/src/static/css/colaborador/configuracoes.css" />
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-  />
-  <link
-    rel="shortcut icon"
-    href="/src/static/img/logo header.png"
-    type="image/x-icon"
-  />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="shortcut icon" href="/src/static/img/logo header.png" type="image/x-icon" />
 </head>
 <body>
   <div class="main-container">
@@ -30,51 +23,37 @@
       </nav>
     </aside>
 
-   <section class="config-content">
+    <section class="config-content">
       <div class="config-header">
         <div>
           <h2>Configurações</h2>
           <p>Gerencie suas preferências de sistema e aparência</p>
         </div>
+        <br>
         <button id="reset-btn">Restaurar padrões</button>
+        
       </div>
+      <br>
 
       <div class="config-grid">
+
+        <!-- Notificações -->
         <div class="config-card">
           <div class="card-header">
             <img src="/src/static/img/notificação_config.webp" alt="Notificações">
             <h3>Notificações</h3>
           </div>
           <div class="option">
-            <label><input type="checkbox" checked> Notificações por e-mail</label>
+            <label><input type="checkbox" id="emailNotif"> Notificações por e-mail</label>
             <p>Receba alertas e avisos diretamente em seu e-mail cadastrado.</p>
           </div>
           <div class="option">
-            <label><input type="checkbox"> Notificações Push</label>
+            <label><input type="checkbox" id="pushNotif"> Notificações Push</label>
             <p>Receba notificações no navegador</p>
           </div>
-          <div class="option">
-            <label><input type="checkbox"> SMS</label>
-            <p>Receba alertas importantes por SMS</p>
-          </div>
         </div>
 
-       
-        <div class="config-card">
-          <div class="card-header">
-            <h3>Privacidade</h3>
-          </div>
-          <div class="option">
-            <label><input type="checkbox" checked> Tornar perfil privado</label>
-            <p>Seu perfil ficará visível apenas para administradores.</p>
-          </div>
-          <div class="option">
-            <label><input type="checkbox"> Compartilhar dados de uso</label>
-            <p>Ajude-nos a melhorar a experiência enviando dados anônimos.</p>
-          </div>
-        </div>
-
-       
+        <!-- Aparência -->
         <div class="config-card">
           <div class="card-header">
             <h3>Aparência</h3>
@@ -95,9 +74,10 @@
             </select>
           </div>
         </div>
+
       </div>
 
-      
+      <!-- Suporte -->
       <div class="support-section">
         <div class="config-card support-card">
           <div class="card-header">
@@ -128,10 +108,18 @@
     </section>
   </div>
 
-  <div class="toast" id="toast">Feedback enviado com sucesso!</div>
+  <div class="toast" id="toast"></div>
 
-<div class="toast" id="toast">Feedback enviado com sucesso!</div>
-
+   <!-- Footer -->
+  <footer class="footer">
+    <hr class="footer-separator">
+    <div class="footer-links">
+        <a href="#">Política de Privacidade</a> | 
+        <a href="#">Termos de Uso</a> | 
+        <a href="#">Suporte</a>
+    </div>
+    <p class="footer-copy">&copy; 2025 Alpha Secure. Todos os direitos reservados.</p>
+  </footer>
 
   <script src="/src/static/js/colaborador/configuracoes.js"></script>
 </body>
