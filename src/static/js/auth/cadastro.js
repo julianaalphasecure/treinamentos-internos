@@ -1,5 +1,5 @@
 const form = document.getElementById("cadastro-form");
-const feedbackDiv = document.createElement("div");
+const feedbackDiv = document.getElementById("cadastro-feedback");
 feedbackDiv.classList.add("form-feedback");
 form.appendChild(feedbackDiv);
 
@@ -10,20 +10,30 @@ form.addEventListener("submit", async function(e) {
   feedbackDiv.classList.remove("success", "error");
   feedbackDiv.textContent = "";
 
-  const dados = {
-    re: document.getElementById("re").value,
-    nome: document.getElementById("nome").value,
-    email: document.getElementById("email").value,
-    senha: document.getElementById("senha").value,
-    tipo_acesso: document.getElementById("tipo_acesso").value
-  };
+  // Pega os valores do formulário
+  const re = document.getElementById("re").value.trim();
+  const nome = document.getElementById("nome").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const senha = document.getElementById("senha").value;
+  let tipo_acesso = document.getElementById("tipo_acesso").value.trim().toLowerCase();
+
+  // Garantir que o tipo de acesso seja válido
+  if (!["colaborador", "gestor"].includes(tipo_acesso)) {
+    feedbackDiv.textContent = "Tipo de acesso inválido. Escolha 'Colaborador' ou 'Gestor'.";
+    feedbackDiv.classList.add("error");
+    feedbackDiv.style.display = "block";
+    return;
+  }
+
+  const dados = { re, nome, email, senha, tipo_acesso };
 
   try {
-    const response = await fetch("/auth/cadastro", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(dados)
+    const response = await fetch("http://127.0.0.1:5000/auth/cadastro", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(dados)
     });
+
 
     const result = await response.json();
 
@@ -33,7 +43,7 @@ form.addEventListener("submit", async function(e) {
       feedbackDiv.style.display = "block";
 
       setTimeout(() => {
-        window.location.href = "/auth/login"; // Agora redireciona para a rota Flask
+        window.location.href = "login.html";
       }, 1500);
     } else {
       feedbackDiv.textContent = result.error || "Erro ao cadastrar";

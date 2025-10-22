@@ -12,6 +12,22 @@ def obter_perfil(usuario_id):
         return jsonify(usuario.to_dict()), 200
     return jsonify({"error": "Usuário não encontrado"}), 404
 
+@perfil_bp.route("/", methods=["GET"])
+def listar_colaboradores():
+    """Lista todos os usuários do tipo colaborador"""
+    try:
+        from src.models.usuario import Usuario  # evita import circular
+        colaboradores = Usuario.query.filter_by(tipo_acesso="colaborador").all()
+
+        if not colaboradores:
+            return jsonify({"message": "Nenhum colaborador encontrado"}), 200
+
+        return jsonify([c.to_dict() for c in colaboradores]), 200
+
+    except Exception as e:
+        return jsonify({"error": f"Erro interno: {str(e)}"}), 500
+
+
 @perfil_bp.route("/<int:usuario_id>", methods=["PUT"])
 def atualizar_perfil(usuario_id):
     usuario = PerfilService.get_perfil(usuario_id)
