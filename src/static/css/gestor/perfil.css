@@ -1,0 +1,99 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+body {
+  background: #f5f7fa;
+  color: #333;
+}
+
+
+.header {
+  background: #fffbfb25;
+  border-radius: 30px;
+  box-shadow: 0 6px 18px rgba(114, 114, 114, 0.15);
+  padding: 15px 30px;
+  margin: 15px 20px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100px;
+}
+
+.logo-box img {
+  max-height: 75px;
+  width: auto;
+  border-radius: 10px;
+}
+
+.user-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+#user-name {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.user-role {
+  margin-top: 5px;
+  background: #c2792577;
+  color: #c27925;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+
+
+.main-container {
+  display: flex;
+  margin: 30px 20px;
+}
+
+
+.sidebar {
+  width: 220px;
+  position: sticky;
+  top: 20px;
+  background: #fff;
+  border-radius: 20px;
+  padding: 50px 15px;
+  min-height: 700px;
+  box-shadow: inset 0 4px 10px rgba(0,0,0,0.05), 0 6px 12px rgba(0,0,0,0.1);
+}
+
+.sidebar ul li {
+  margin-bottom: 20px;
+}
+
+.sidebar ul li a {
+  display: block;
+  padding: 15px 20px;
+  border-radius: 15px;
+  text-decoration: none;
+  color: #333;
+  font-weight: 600;
+  transition: all 0.3s;
+  background: #f5f7fa;
+}
+
+.sidebar ul li a:hover {
+  background: #f88a15;
+  color: black;
+  box-shadow: 4px 4px 10px rgba(0,0,0,0.2);
+}
+
+.sidebar ul li a.active {
+  background: #f88a15;
+  color: black;
+  font-weight: bold;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  transform: translateX(30px); 
+}
