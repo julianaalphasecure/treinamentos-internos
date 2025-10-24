@@ -7,18 +7,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const nextBtn = document.querySelector(".carousel-btn.next");
   const searchInput = document.querySelector(".search-bar input");
 
-  // Captura todos os módulos do HTML
-  const allModules = Array.from(document.querySelectorAll(".module-card")).map(card => {
-    return {
-      titulo: card.querySelector("h3").textContent,
-      html: card.outerHTML
-    };
-  });
+  const allModules = Array.from(document.querySelectorAll(".module-card")).map(card => ({
+    titulo: card.querySelector("h3").textContent,
+    html: card.outerHTML
+  }));
 
   let filteredModules = [...allModules];
   let currentSlide = 0;
 
-  // Função para renderizar módulos em slides 2x2
   function renderModules() {
     wrapper.innerHTML = "";
 
@@ -28,8 +24,13 @@ document.addEventListener("DOMContentLoaded", () => {
       slide.classList.add("modules-slide");
 
       slideModules.forEach(mod => {
-        slide.insertAdjacentHTML("beforeend", mod.html); // clona o HTML do módulo
+        slide.insertAdjacentHTML("beforeend", mod.html);
       });
+
+      // Centraliza se slide tiver menos de 4 módulos
+      if (slideModules.length < 4) {
+        slide.style.justifyContent = "center";
+      }
 
       wrapper.appendChild(slide);
     }
@@ -38,7 +39,6 @@ document.addEventListener("DOMContentLoaded", () => {
     updateCarousel();
   }
 
-  // Atualiza a posição do carrossel
   function updateCarousel() {
     const slides = document.querySelectorAll(".modules-slide");
     const totalSlides = slides.length;
@@ -49,20 +49,21 @@ document.addEventListener("DOMContentLoaded", () => {
     nextBtn.style.display = totalSlides <= 1 ? "none" : "block";
   }
 
-  // Navegação
   nextBtn.addEventListener("click", () => {
     const slides = document.querySelectorAll(".modules-slide");
-    currentSlide = (currentSlide + 1) % slides.length;
-    updateCarousel();
+    if (currentSlide < slides.length - 1) {
+      currentSlide++;
+      updateCarousel();
+    }
   });
 
   prevBtn.addEventListener("click", () => {
-    const slides = document.querySelectorAll(".modules-slide");
-    currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-    updateCarousel();
+    if (currentSlide > 0) {
+      currentSlide--;
+      updateCarousel();
+    }
   });
 
-  // Pesquisa de módulos
   searchInput.addEventListener("input", () => {
     const query = searchInput.value.toLowerCase();
     filteredModules = allModules.filter(mod =>
@@ -71,41 +72,5 @@ document.addEventListener("DOMContentLoaded", () => {
     renderModules();
   });
 
-  // Inicializa carrossel
   renderModules();
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-  // Recupera preferências salvas
-  const savedTheme = localStorage.getItem("theme") || "claro";
-  const savedFont = localStorage.getItem("font-size") || "padrao";
-
-  document.body.setAttribute("data-theme", savedTheme);
-  document.body.setAttribute("data-font", savedFont);
-
-  // Função para alterar tema
-  window.setTheme = (theme) => {
-    document.body.setAttribute("data-theme", theme);
-    localStorage.setItem("theme", theme);
-  };
-
-  // Função para alterar tamanho da fonte
-  window.setFontSize = (size) => {
-    document.body.setAttribute("data-font", size);
-    localStorage.setItem("font-size", size);
-  };
-
-  // Função para mostrar toast
-  window.showToast = (msg, duration = 2500) => {
-    const toast = document.createElement("div");
-    toast.className = "toast";
-    toast.textContent = msg;
-    document.body.appendChild(toast);
-
-    setTimeout(() => toast.classList.add("show"), 100);
-    setTimeout(() => {
-      toast.classList.remove("show");
-      setTimeout(() => toast.remove(), 400);
-    }, duration);
-  };
 });
