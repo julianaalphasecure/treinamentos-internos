@@ -2,51 +2,54 @@ const modalPerfil = document.getElementById("modal-perfil");
 const btnEditar = document.querySelector(".btn-editar");
 const spanFecharPerfil = document.getElementById("close-perfil");
 const formPerfil = document.getElementById("form-perfil");
-
-const baseURL = "http://127.0.0.1:5000/colaborador/perfil";
-const usuarioId = localStorage.getItem("usuario_id");
-
 const pageFeedback = document.getElementById("perfil-feedback");
 const modalFeedback = document.getElementById("modal-feedback");
+const formSenha = document.getElementById("form-alterar-senha");
+const feedbackSenha = document.getElementById("feedback-senha");
 
-// ====== Verificar login ======
+
+const baseURL = "http://127.0.0.1:5000/auth/usuario";
+const usuarioId = localStorage.getItem("usuario_id");
+let usuarioEmail = "";
+
+
 if (!usuarioId) {
   pageFeedback.textContent = "Usuário não identificado. Faça login novamente.";
   pageFeedback.classList.add("error");
   pageFeedback.style.display = "block";
-  setTimeout(() => {
-    window.location.href = "/src/templates/auth/login.html";
-  }, 1500);
+  setTimeout(() => window.location.href = "/src/templates/auth/login.html", 1500);
 }
 
-// ====== Carregar perfil ======
+
 async function carregarPerfil() {
   try {
     const res = await fetch(`${baseURL}/${usuarioId}`);
+    if (!res.ok) throw new Error("Erro ao carregar perfil");
+
     const data = await res.json();
+    const usuario = data.usuario || data;
 
-    if (!res.ok) {
-      pageFeedback.textContent = data.error || "Erro ao carregar perfil";
-      pageFeedback.classList.add("error");
-      pageFeedback.style.display = "block";
-      return;
-    }
+    usuarioEmail = usuario.email || "";
 
-    document.getElementById("perfil-nome").innerText = data.nome || "Sem nome";
-    document.getElementById("perfil-nome-completo").innerText = data.nome || "-";
-    document.getElementById("perfil-email").innerText = data.email || "-";
-    document.getElementById("perfil-telefone").innerText = data.telefone || "-";
-    document.getElementById("perfil-departamento").innerText = data.departamento || "-";
-    document.getElementById("perfil-re").innerText = data.re || "-";
-    document.getElementById("foto-perfil").src = data.foto || "/src/static/img/foto.png";
+    document.getElementById("perfil-nome").innerText = usuario.nome || "Sem nome";
+    document.getElementById("perfil-nome-completo").innerText = usuario.nome || "-";
+    document.getElementById("perfil-email").innerText = usuario.email || "-";
+    document.getElementById("perfil-telefone").innerText = usuario.telefone || "-";
+    document.getElementById("perfil-departamento").innerText = usuario.departamento || "-";
+    document.getElementById("perfil-re").innerText = usuario.re || "-";
+    document.getElementById("foto-perfil").src = usuario.foto || "/src/static/img/foto.png";
 
-    document.getElementById("input-nome").value = data.nome || "";
-    document.getElementById("input-email").value = data.email || "";
-    document.getElementById("input-telefone").value = data.telefone || "";
-    document.getElementById("input-departamento").value = data.departamento || "";
+    document.getElementById("input-nome").value = usuario.nome || "";
+    document.getElementById("input-email").value = usuario.email || "";
+    document.getElementById("input-telefone").value = usuario.telefone || "";
+    document.getElementById("input-departamento").value = usuario.departamento || "";
+
+    const labelEmail = document.querySelector(".config-section ul li:first-child label");
+    if(labelEmail) labelEmail.textContent = `Por e-mail (${usuarioEmail})`;
 
   } catch (error) {
-    pageFeedback.textContent = "Erro de conexão com o servidor";
+    console.error(error);
+    pageFeedback.textContent = "Erro de conexão com o servidor ou usuário não encontrado.";
     pageFeedback.classList.add("error");
     pageFeedback.style.display = "block";
   }
@@ -54,28 +57,26 @@ async function carregarPerfil() {
 
 carregarPerfil();
 
-// ====== Abrir e fechar modal ======
+
 btnEditar.onclick = () => modalPerfil.style.display = "flex";
 spanFecharPerfil.onclick = () => modalPerfil.style.display = "none";
+window.onclick = (e) => { if (e.target === modalPerfil) modalPerfil.style.display = "none"; };
 
-window.onclick = (e) => {
-  if (e.target === modalPerfil) modalPerfil.style.display = "none";
-};
 
-// ====== Preview foto ======
 document.getElementById("input-foto").addEventListener("change", (e) => {
   const file = e.target.files[0];
-  if (file) {
+  if(file) {
     const reader = new FileReader();
     reader.onload = (ev) => document.getElementById("foto-perfil").src = ev.target.result;
     reader.readAsDataURL(file);
   }
 });
 
-// ====== Salvar perfil ======
+
 formPerfil.onsubmit = async (e) => {
   e.preventDefault();
-  const feedback = modalFeedback;
+  modalFeedback.style.display = "none";
+  modalFeedback.classList.remove("error", "success");
 
   const formData = new FormData();
   formData.append("nome", document.getElementById("input-nome").value);
@@ -84,64 +85,88 @@ formPerfil.onsubmit = async (e) => {
   formData.append("departamento", document.getElementById("input-departamento").value);
 
   const fotoFile = document.getElementById("input-foto").files[0];
-  if (fotoFile && fotoFile.size > 0) formData.append("foto", fotoFile);
+  if(fotoFile) formData.append("foto", fotoFile);
 
   try {
-    const res = await fetch(`${baseURL}/${usuarioId}`, {
-      method: "PUT",
-      body: formData
-    });
+    const res = await fetch(`${baseURL}/${usuarioId}`, { method: "PUT", body: formData });
     const result = await res.json();
 
-    if (res.ok) {
-      feedback.textContent = "Perfil atualizado com sucesso!";
-      feedback.classList.add("success");
-      feedback.style.display = "block";
+    if(res.ok) {
+      modalFeedback.textContent = "Perfil atualizado com sucesso!";
+      modalFeedback.classList.add("success");
+      modalFeedback.style.display = "block";
       modalPerfil.style.display = "none";
       carregarPerfil();
     } else {
-      feedback.textContent = result.error || "Erro ao atualizar perfil";
-      feedback.classList.add("error");
-      feedback.style.display = "block";
+      modalFeedback.textContent = result.error || "Erro ao atualizar perfil";
+      modalFeedback.classList.add("error");
+      modalFeedback.style.display = "block";
     }
-  } catch (err) {
-    feedback.textContent = "Erro de conexão com o servidor";
-    feedback.classList.add("error");
-    feedback.style.display = "block";
+  } catch(err) {
+    console.error(err);
+    modalFeedback.textContent = "Erro de conexão com o servidor";
+    modalFeedback.classList.add("error");
+    modalFeedback.style.display = "block";
   }
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-  // Recupera preferências salvas
-  const savedTheme = localStorage.getItem("theme") || "claro";
-  const savedFont = localStorage.getItem("font-size") || "padrao";
 
-  document.body.setAttribute("data-theme", savedTheme);
-  document.body.setAttribute("data-font", savedFont);
+formSenha.onsubmit = async (e) => {
+  e.preventDefault();
+  feedbackSenha.style.display = "none";
+  feedbackSenha.classList.remove("error", "success");
 
-  // Função para alterar tema
-  window.setTheme = (theme) => {
-    document.body.setAttribute("data-theme", theme);
-    localStorage.setItem("theme", theme);
-  };
+  const senhaAtual = document.getElementById("senha-atual").value;
+  const novaSenha = document.getElementById("nova-senha").value;
+  const confirmaSenha = document.getElementById("confirma-senha").value;
 
-  // Função para alterar tamanho da fonte
-  window.setFontSize = (size) => {
-    document.body.setAttribute("data-font", size);
-    localStorage.setItem("font-size", size);
-  };
+  if(novaSenha !== confirmaSenha) {
+    feedbackSenha.textContent = "As senhas não coincidem!";
+    feedbackSenha.classList.add("error");
+    feedbackSenha.style.display = "block";
+    return;
+  }
 
-  // Função para mostrar toast
-  window.showToast = (msg, duration = 2500) => {
-    const toast = document.createElement("div");
-    toast.className = "toast";
-    toast.textContent = msg;
-    document.body.appendChild(toast);
+  try {
+    const res = await fetch(`${baseURL}/${usuarioId}/alterar-senha`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ senha_atual: senhaAtual, nova_senha: novaSenha })
+    });
 
-    setTimeout(() => toast.classList.add("show"), 100);
-    setTimeout(() => {
-      toast.classList.remove("show");
-      setTimeout(() => toast.remove(), 400);
-    }, duration);
-  };
-});
+    const data = await res.json();
+    if(res.ok) {
+      feedbackSenha.textContent = "Senha alterada com sucesso!";
+      feedbackSenha.classList.add("success");
+      feedbackSenha.style.display = "block";
+      formSenha.reset();
+    } else {
+      feedbackSenha.textContent = data.error || "Erro ao alterar senha";
+      feedbackSenha.classList.add("error");
+      feedbackSenha.style.display = "block";
+    }
+  } catch(err) {
+    console.error(err);
+    feedbackSenha.textContent = "Erro de conexão com o servidor";
+    feedbackSenha.classList.add("error");
+    feedbackSenha.style.display = "block";
+  }
+};
+
+
+const toggleEmail = document.querySelector("#toggle-email");
+const togglePush = document.querySelector("#toggle-push");
+
+function atualizarNotificacao(tipo, status) {
+  fetch(`${baseURL}/${usuarioId}/notificacoes`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ tipo, status, email: usuarioEmail })
+  })
+  .then(res => res.json())
+  .then(data => console.log("Preferência atualizada:", data))
+  .catch(err => console.error("Erro ao atualizar notificação:", err));
+}
+
+if(toggleEmail) toggleEmail.addEventListener("change", function(){ atualizarNotificacao("email", this.checked); });
+if(togglePush) togglePush.addEventListener("change", function(){ atualizarNotificacao("push", this.checked); });

@@ -9,7 +9,7 @@
 </head>
 <body>
 
-    <header class="header">
+   <header class="header">
   <div class="logo-box">
     <img src="/src/static/img/logo header.png" alt="Logo Alpha Secure">
   </div>
@@ -34,6 +34,128 @@
       </ul>
     </nav>
   </aside>
+
+  <div class="content">
+      <section class="perfil">
+        <h2>Meu Perfil</h2>
+        <p>Gerencie suas informações pessoais e sua foto</p>
+
+        <div id="perfil-feedback" class="form-feedback" style="display:none;"></div>
+
+        <div class="perfil-card">
+          <div class="perfil-info">
+            <img src="/src/static/img/foto.png"  class="perfil-img" id="foto-perfil">
+            <div class="perfil-textos">
+              <h3 id="perfil-nome">Carregando...</h3>
+              <span class="tag">Gestor</span>
+            </div>
+          </div>
+
+          <div class="perfil-detalhes">
+            <p><b>Nome Completo:</b> <span id="perfil-nome-completo">-</span></p>
+            <p><b>Telefone:</b> <span id="perfil-telefone">-</span></p>
+            <p><b>RE:</b> <span id="perfil-re">-</span></p>
+            <p><b>E-mail:</b> <span id="perfil-email">-</span></p>
+            <p><b>Departamento:</b> <span id="perfil-departamento">-</span></p>
+          </div>
+
+          <div class="perfil-actions">
+            <button class="btn-editar">Editar Perfil</button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Modal de edição -->
+  <div class="modal" id="modal-perfil">
+    <div class="modal-content">
+      <span class="close" id="close-perfil">&times;</span>
+      <h2>Editar Perfil</h2>
+      <div id="modal-feedback" class="form-feedback" style="display:none;"></div>
+      <form id="form-perfil" enctype="multipart/form-data">
+        <label>Nome Completo</label>
+        <input type="text" id="input-nome" required>
+
+        <label>E-mail</label>
+        <input type="email" id="input-email" required>
+
+        <label>Telefone</label>
+        <input type="text" id="input-telefone">
+
+        <label>Departamento</label>
+        <input type="text" id="input-departamento">
+
+        <label>Foto de Perfil</label>
+        <p>Inserir a foto tirada na empresa!</p>
+        <input type="file" id="input-foto" accept="image/*">
+
+        <button type="submit" class="btn-salvar">Salvar</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="perfil-configuracoes">
+  <h2>Configurações</h2>
+  <div class="config-card">
+    
+   <div class="config-section" id="alterar-senha-section">
+  <h3>Alterar senha</h3>
+  <p>Altere sua senha regularmente para manter a segurança da sua conta.</p>
+  
+  <form id="form-alterar-senha">
+    <label for="senha-atual">Senha atual</label>
+    <input type="password" id="senha-atual" required placeholder="Digite sua senha atual">
+
+    <label for="nova-senha">Nova senha</label>
+    <input type="password" id="nova-senha" required placeholder="Digite a nova senha">
+
+    <label for="confirma-senha">Confirmar nova senha</label>
+    <input type="password" id="confirma-senha" required placeholder="Confirme a nova senha">
+
+    <button type="submit" class="btn-editar">Salvar nova senha</button>
+  </form>
+
+  <div id="feedback-senha" class="form-feedback" style="display:none;"></div>
+</div>
+
+    
+    <!-- Notificações -->
+    <div class="config-section">
+      <h3>Notificações</h3>
+      <ul>
+        <li>
+          <label>Por e-mail</label>
+          <label class="toggle-switch">
+            <input type="checkbox">
+            <span class="slider"></span>
+          </label>
+        </li>
+        <li>
+          <label>Por push</label>
+          <label class="toggle-switch">
+            <input type="checkbox">
+            <span class="slider"></span>
+          </label>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+
+
+  <!-- Footer -->
+  <footer class="footer">
+    <hr class="footer-separator">
+    <div class="footer-links">
+        <a href="#">Política de Privacidade</a> | 
+        <a href="#">Termos de Uso</a> | 
+        <a href="#">Suporte</a>
+    </div>
+    <p class="footer-copy">&copy; 2025 Alpha Secure. Todos os direitos reservados.</p>
+  </footer>
   
 </div>
 <script src="/src/static/js/gestor/perfil.js"></script> 
