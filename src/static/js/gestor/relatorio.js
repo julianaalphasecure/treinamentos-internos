@@ -35,6 +35,15 @@ async function carregarFeedback() {
       listaFeedback.appendChild(li);
     });
 
+      // ====== Exibir nome do gestor no header ======
+  const headerNome = document.getElementById("user-name");
+  if (headerNome) {
+    console.log("Nome do usuário logado:", usuario.nome); // debug
+    headerNome.textContent = `Olá, ${usuario.nome}`;
+  } else {
+    console.error("Elemento #user-name não encontrado no DOM");
+  }
+
     // Atualiza resumo
     const media = Math.round(totalProgresso / data.length);
     const taxaConclusao = Math.round((concluido / data.length) * 100);
