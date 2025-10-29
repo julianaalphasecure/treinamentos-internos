@@ -39,17 +39,17 @@ def deletar_progresso(progresso_id):
     return jsonify({"error": "Progresso não encontrado"}), 404
 
 
-# Rota específica para o frontend
 @progresso_bp.route("/frontend", methods=["GET"])
 def progresso_frontend():
-    # Se usar login: filtrar pelo usuário
-    # progresso = Progresso.query.filter_by(usuario_id=current_user.id).all()
-    progresso = ProgressoService.get_all_progresso()
+    # Obtém todos os progressos do usuário (ou todos, se não estiver logado)
+    progresso_list = ProgressoService.get_all_progresso()
 
     modulos_dict = {}
-    for p in progresso:
-        nome_modulo = p.modulo.nome
+    for p in progresso_list:
+        # Garante que p.modulo exista e tenha nome
+        nome_modulo = p.modulo.nome if p.modulo else f"Módulo {p.modulo_id}"
         percent = float(p.nota_final) if p.nota_final is not None else 0
+
         modulos_dict[p.modulo_id] = {
             "nome": nome_modulo,
             "percent": percent,
