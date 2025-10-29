@@ -26,21 +26,21 @@
   <div class="modules-carousel">
     <div class="modules-wrapper">
       <!-- Slides normais -->
-      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod 01 pag 01.png" alt="página 01"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod 01 pag 02 (1).png" alt="página 02"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod 01 pag 03 (1).png" alt="página 03"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod 01 pag 04 (1).png" alt="página 04"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod 01 pag 05 (1).png" alt="página 05"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod 01 pag 06.png" alt="página 06"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod 01 pag 07.png" alt="página 07"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod 01 pag 08.png" alt="página 08"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod 01 pag 09.png" alt="página 09"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod 01 pag 10.png" alt="página 10"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod 01 pag 11.png" alt="página 11"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod 01 pag 12.png" alt="página 12"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod01 pag01.png" alt="página 01"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod01 pag02.png" alt="página 02"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod01 pag03.png" alt="página 03"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod01 pag04.png" alt="página 04"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod01 pag05.png" alt="página 05"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod01 pag06.png" alt="página 06"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod01 pag07.png" alt="página 07"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod01 pag08.png" alt="página 08"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod01 pag09.png" alt="página 09"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod01 pag10.png" alt="página 10"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod01 pag11.png" alt="página 11"></div></div>
+      <div class="modules-slide"><div class="module-card"><img src="/src/static/img/modulo01/mod01 pag12.png" alt="página 12"></div></div>
       <div class="modules-slide">
         <div class="module-card">
-          <img src="/src/static/img/modulo01/mod 01 pag 13.png" alt="Última página">
+          <img src="/src/static/img/modulo01/mod01 end.png" alt="Última página">
           <button class="btn-finalizar">Finalizar</button>
         </div>
       </div>
@@ -76,118 +76,189 @@
     <button class="carousel-btn prev">&#10094;</button>
     <button class="carousel-btn next">&#10095;</button>
     <button id="download-btn"><img src="/src/static/img/baixar_modulo.webp" alt="Baixar PDF"></button>
-    <button id="fullscreen-btn"><img src="/src/static/img/icone_telaCheia.webp" alt="Tela Cheia"></button>
     <button id="dark-mode-btn" title="Modo Noturno"><img src="/src/static/img/botão_modoescuro.webp" alt=""></button>
   </div>
 </section>
 
 
 <section class="exercises">
-  <h2>Exercícios do Módulo 07</h2>
   <div id="timer">Tempo restante: 30:00</div>
+
+  <div class="exercise-progress">
+    <div class="exercise-progress-fill"></div>
+  </div>
+
   <div class="exercise-wrapper">
     <div class="exercise-slide" data-answer="b">
-      <p><strong>1.</strong> O que deve ser feito imediatamente após o recebimentos de um alarme de sinistro? </p>
+      <p><strong>1.</strong>Durante uma inspeção noturna, um alarme dispara, mas a câmera principal está sem visibilidade e as câmeras secundárias também não mostram nada. Qual é a conduta correta do operador?</p>
       <div class="options">
-        <label><input type="radio" name="q1" value="a"> Silenciar o alarme para evitar pânico</label>
-        <label><input type="radio" name="q1" value="b"> Verificar a origem e acionar os responsáveis</label>
-        <label><input type="radio" name="q1" value="c"> Registrar a ocorrência e agurdar o retorno da equipe</label>
-        <label><input type="radio" name="q1" value="d"> Ignorar se parecer um falso alarme</label>
+        <input type="radio" id="q1a" name="q1" value="a">
+        <label for="q1a">Silenciar o alarme e registrar como falso disparo no final do turno</label>
+
+        <input type="radio" id="q1b" name="q1" value="b">
+        <label for="q1b">Registrar como "sem visibilidade", solicitar imagens de ouitras câmeras e, se nada for identificado, encerrar com justificativa</label>
+
+        <input type="radio" id="q1c" name="q1" value="c">
+        <label for="q1c">Acionar imediatamente a Policia Militar por precaução</label>
+
+        <input type="radio" id="q1d" name="q1" value="d">
+        <label for="q1d">Ignorar o alarme, pois nenhuma evidência foi capturada</label>
       </div>
     </div>
 
-    <div class="exercise-slide" data-answer="c">
-      <p><strong>2.</strong> Um sinistro pode envolver: assinale a alternativa <b>INCORRETA</b> </p>
+    
+    <div class="exercise-slide" data-answer="b">
+      <p><strong>2.</strong>Se um sinistro é confirmado, mas o operador não consegue contato imediato com o supervisor plantonista, qual é a ação correta? </p>
       <div class="options">
-        <label><input type="radio" name="q2" value="a">Incêndio</label>
-        <label><input type="radio" name="q2" value="b">Invasão </label>
-        <label><input type="radio" name="q2" value="c">Atualização de software</label>
-        <label><input type="radio" name="q2" value="d">Acidente com colaborador </label>
-      </div>
-    </div>
+        <input type="radio" id="q2a" name="q2" value="a">
+        <label for="q2a">Registrar o evento e aguardar o supervisor retornar</label>
 
-    <div class="exercise-slide" data-answer="a">
-      <p><strong>3.</strong>Quais são os passos iniciais para tratar uma queda de energia?</p>
-      <div class="options">
-        <label><input type="radio" name="q3" value="a">Confirmar no sistema, acionar a equipe de campo e verificar abrangência </label>
-        <label><input type="radio" name="q3" value="b">Reiniciar o sistema de monitoramento </label>
-        <label><input type="radio" name="q3" value="c">Aguardar 30 minutos antes de qualquer ação  </label>
-        <label><input type="radio" name="q3" value="d">Comunicar a gestão central sem checar a origem </label>
+        <input type="radio" id="q2b" name="q2" value="b">
+        <label for="q2b">Acionar o CCO do cliente com todos os detalhes, enquanto tenta contato com o supervisor</label>
+
+        <input type="radio" id="q2c" name="q2" value="c">
+        <label for="q2c">Ignorar o acionamento da Policia Militar até falar com o supervisor</label>
+
+        <input type="radio" id="q2d" name="q2" value="d">
+        <label for="q2d">Silenciar o alarme temporariamente e relatar posteriormente</label>
       </div>
     </div>
 
     <div class="exercise-slide" data-answer="b">
-      <p><strong>4.</strong> Em casos de queda parcial de energia, qual deve ser o foco imediato do operador? </p>
+      <p><strong>3.</strong>Durante uma queda de energia total em todas as usinas, o operador identifica que apenas uma subestação local está funcionando. O procedimento correto é:</p>
       <div class="options">
-        <label><input type="radio" name="q4" value="a">Ligar para a imprensa local </label>
-        <label><input type="radio" name="q4" value="b">Avaliar áreas críticas da usina afetada  </label>
-        <label><input type="radio" name="q4" value="c">Desligar todo o sistema como precaução </label>
-        <label><input type="radio" name="q4" value="d">Acionar a equipe de TI  </label>
+        <input type="radio" id="q3a" name="q3" value="a">
+        <label for="q3a">Priorizar a restauração de energia nessa subestação antes de verificar outras áreas críticas</label>
+
+        <input type="radio" id="q3b" name="q3" value="b">
+        <label for="q3b">Confirmar com o CCO, realizar verificação remota dos equipamentos e comunicar a concessionárias, se necessário</label>
+
+        <input type="radio" id="q3c" name="q3" value="c">
+        <label for="q3c">Acionar apenas a equipe de campo, ignorando a comunicação com o CCO</label>
+
+        <input type="radio" id="q3d" name="q3" value="d">
+        <label for="q3d">Registrar o evento e aguardar a energia voltar automaticamente</label>
+      </div>
+    </div>
+
+    <div class="exercise-slide" data-answer="d">
+      <p><strong>4.</strong>Um falso disparo de alarme externo é registrado, mas logo em seguida outro disparo ocorre no mesmo local. Qual é a conduta correta do operador?</p>
+      <div class="options">
+        <input type="radio" id="q4a" name="q4" value="a">
+        <label for="q4a">Ignorar o segundo disparo, pois o primeiro já foi registrado como falso</label>
+
+        <input type="radio" id="q4b" name="q4" value="b">
+        <label for="q4b">Silenciar os alarmes dessa zona temporariamente para não gerar duplicidade</label>
+
+        <input type="radio" id="q4c" name="q4" value="c">
+        <label for="q4c">Apenas informar o supervisor sem registrar o evento</label>
+
+        <input type="radio" id="q4d" name="q4" value="d">
+        <label for="q4d">Tratar o segundo disparo como evento, realizando verificação completa e registro obrigatório</label>
       </div>
     </div>
 
     <div class="exercise-slide" data-answer="c">
-      <p><strong>5.</strong>A cronologia de acionamento em campo deve começar por quem? </p>
+      <p><strong>5.</strong>O operador precisa acionar a equipe de pronta resposta, mas a situação ainda não apresenta risco à integridade física da usina, apenas falha em sistemas operacionais sem impacto imediato. Qual é a decisão correta?</p>
       <div class="options">
-        <label><input type="radio" name="q5" value="a">Diretor Operacional  </label>
-        <label><input type="radio" name="q5" value="b">Manutenção </label>
-        <label><input type="radio" name="q5" value="c">Técnico Local </label>
-        <label><input type="radio" name="q5" value="d">Engenheiro de Segurança</label>
+        <input type="radio" id="q5a" name="q5" value="a">
+        <label for="q5a">Acionar a equipe imediatamente para evitar qualquer possibilidade de falha futura</label>
+
+        <input type="radio" id="q5b" name="q5" value="b">
+        <label for="q5b">Ignorar a falha, pois não há risco físico</label>
+
+        <input type="radio" id="q5c" name="q5" value="c">
+        <label for="q5c">Avaliar se o evento atende os critérios predefinidos para pronta resposta antes de acioná-la</label>
+
+        <input type="radio" id="q5d" name="q5" value="d">
+        <label for="q5d">Registrar no checklist interno, sem comunicação externa</label>
       </div>
     </div>
 
     <div class="exercise-slide" data-answer="b">
       <p><strong>6.</strong>Em qual situação o operador pode acionar diretamente a gestão central sem passar pela equipe de campo? </p>
       <div class="options">
-        <label><input type="radio" name="q6" value="a">Nenhuma, sempre há uma sequência fixa </label>
-        <label><input type="radio" name="q6" value="b">Quando há risco iminente à segurança ou falha grave evidente </label>
-        <label><input type="radio" name="q6" value="c">Sempre que quiser acelerar o processo </label>
-        <label><input type="radio" name="q6" value="d">Quando não conhece o técnico de plantão  </label>
+        <input type="radio" id="q6a" name="q6" value="a">
+        <label for="q6a">Nenhuma, sempre há uma sequência fixa</label>
+
+        <input type="radio" id="q6b" name="q6" value="b">
+        <label for="q6b">Quando há risco iminente à segurança ou falha grave evidente</label>
+
+        <input type="radio" id="q6c" name="q6" value="c">
+        <label for="q6c">Sempre que quiser acelerar o processo</label>
+
+        <input type="radio" id="q6d" name="q6" value="d">
+        <label for="q6d">Quando não conhece o técnico de plantão</label>
       </div>
     </div>
 
     <div class="exercise-slide" data-answer="d">
-      <p><strong>7.</strong>Qual informação NÂO é obrigatória ao comunicar um evento à gestão central?</p>
+      <p><strong>7.</strong>Qual informação NÃO é obrigatória ao comunicar um evento à gestão central? </p>
       <div class="options">
-        <label><input type="radio" name="q7" value="a">Tipo de ocorrência </label>
-        <label><input type="radio" name="q7" value="b">Local exato do evento  </label>
-        <label><input type="radio" name="q7" value="c">Status da ocorrência  </label>
-        <label><input type="radio" name="q7" value="d">Horário do seu almoço  </label>
+        <input type="radio" id="q7a" name="q7" value="a">
+        <label for="q7a">Tipo de ocorrência</label>
+
+        <input type="radio" id="q7b" name="q7" value="b">
+        <label for="q7b">Local exato do evento</label>
+
+        <input type="radio" id="q7c" name="q7" value="c">
+        <label for="q7c">Status da ocorrência</label>
+
+        <input type="radio" id="q7d" name="q7" value="d">
+        <label for="q7d">Horário do seu almoço</label>
       </div>
     </div>
 
     <div class="exercise-slide" data-answer="a">
-      <p><strong>8.</strong>A equipe de pronta resposta deve ser acionada quando: </p>
+      <p><strong>8.</strong>A equipe de pronta resposta deve ser acionada quando:</p>
       <div class="options">
-        <label><input type="radio" name="q8" value="a">Há falhas severas ou risco à segurança </label>
-        <label><input type="radio" name="q8" value="b">Há atraso na chegada do técnico local </label>
-        <label><input type="radio" name="q8" value="c">Há necessidade de manutenção de rotina  </label>
-        <label><input type="radio" name="q8" value="d">O operador não souber o que fazer  </label>
+        <input type="radio" id="q8a" name="q8" value="a">
+        <label for="q8a">Há falhas severas ou risco à segurança</label>
+
+        <input type="radio" id="q8b" name="q8" value="b">
+        <label for="q8b">Há atraso na chegada do técnico local</label>
+
+        <input type="radio" id="q8c" name="q8" value="c">
+        <label for="q8c">Há necessidade de manutenção de rotina</label>
+
+        <input type="radio" id="q8d" name="q8" value="d">
+        <label for="q8d">O operador não souber o que fazer</label>
       </div>
     </div>
 
     <div class="exercise-slide" data-answer="b">
       <p><strong>9.</strong>Qual o tempo máximo recomendado para chegada da equipe de pronta resposta, após o acionamento? </p>
       <div class="options">
-        <label><input type="radio" name="q9" value="a">10 minutos</label>
-        <label><input type="radio" name="q9" value="b">30 minutos</label>
-        <label><input type="radio" name="q9" value="c">15 minutos</label>
-        <label><input type="radio" name="q9" value="d">60 minutos</label>
+        <input type="radio" id="q9a" name="q9" value="a">
+        <label for="q9a">10 minutos</label>
+
+        <input type="radio" id="q9b" name="q9" value="b">
+        <label for="q9b">30 minutos</label>
+
+        <input type="radio" id="q9c" name="q9" value="c">
+        <label for="q9c">15 minutos</label>
+
+        <input type="radio" id="q9d" name="q9" value="d">
+        <label for="q9d">60 minutos</label>
       </div>
     </div>
-
-    
 
     <div class="exercise-slide" data-answer="b">
-      <p><strong>10.</strong>Todas as ocorrências e acionamento devem ser:  </p>
+      <p><strong>10.</strong>Todas as ocorrências e acionamento devem ser: </p>
       <div class="options">
-        <label><input type="radio" name="q10" value="a">Comunicado verbalmente apenas  </label>
-        <label><input type="radio" name="q10" value="b">Registrados no sistema e documentados  </label>
-        <label><input type="radio" name="q10" value="c">Apagados após resolução </label>
-        <label><input type="radio" name="q10" value="d">Trtatados como informação sigilosa, sem registro  </label>
+        <input type="radio" id="q10a" name="q10" value="a">
+        <label for="q10a">Comunicado verbalmente apenas</label>
+
+        <input type="radio" id="q10b" name="q10" value="b">
+        <label for="q10b">Registrados no sistema e documentados</label>
+
+        <input type="radio" id="q10c" name="q10" value="c">
+        <label for="q10c">Apagados após resolução</label>
+
+        <input type="radio" id="q10d" name="q10" value="d">
+        <label for="q10d">Tratados como informação sigilosa, sem registro</label>
       </div>
     </div>
-    
 
   </div>
 
@@ -200,6 +271,8 @@
   <div id="score"></div>
   <div id="result-message"></div>
 </section>
+
+
 
 <footer class="footer">
   <hr class="footer-separator">

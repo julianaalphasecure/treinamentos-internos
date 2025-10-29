@@ -79,117 +79,188 @@
     <button class="carousel-btn prev">&#10094;</button>
     <button class="carousel-btn next">&#10095;</button>
     <button id="download-btn"><img src="/src/static/img/baixar_modulo.webp" alt="Baixar PDF"></button>
-    <button id="fullscreen-btn"><img src="/src/static/img/icone_telaCheia.webp" alt="Tela Cheia"></button>
     <button id="dark-mode-btn" title="Modo Noturno"><img src="/src/static/img/botão_modoescuro.webp" alt=""></button>
   </div>
 </section>
 
 <section class="exercises">
-  <h2>Exercícios do Módulo 08</h2>
   <div id="timer">Tempo restante: 30:00</div>
+
+  <div class="exercise-progress">
+    <div class="exercise-progress-fill"></div>
+  </div>
+
   <div class="exercise-wrapper">
     <div class="exercise-slide" data-answer="b">
-      <p><strong>1.</strong>O horário de auto arme da tesouraria da agência é: </p>
+      <p><strong>1.</strong></p>
       <div class="options">
-        <label><input type="radio" name="q1" value="a">22h00 </label>
-        <label><input type="radio" name="q1" value="b">21h00 </label>
-        <label><input type="radio" name="q1" value="c">20h30 </label>
-        <label><input type="radio" name="q1" value="d">06h00 </label>
+        <input type="radio" id="q1a" name="q1" value="a">
+        <label for="q1a"></label>
+
+        <input type="radio" id="q1b" name="q1" value="b">
+        <label for="q1b"></label>
+
+        <input type="radio" id="q1c" name="q1" value="c">
+        <label for="q1c"></label>
+
+        <input type="radio" id="q1d" name="q1" value="d">
+        <label for="q1d"></label>
       </div>
     </div>
 
+    
     <div class="exercise-slide" data-answer="c">
-      <p><strong>2.</strong>Em caso de entrada fora do expediente com pessoa acompanhando o gerente, o procedimento correto é: </p>
+      <p><strong>2.</strong> </p>
       <div class="options">
-        <label><input type="radio" name="q2" value="a">Aguardar a entrada do gerente</label>
-        <label><input type="radio" name="q2" value="b">Liberar ambos após verificação facial </label>
-        <label><input type="radio" name="q2" value="c">Recusar a entrada e acionar GESEC e GERED </label>
-        <label><input type="radio" name="q2" value="d">Permitir apenas o gerente entrar </label>
-      </div>
-    </div>
+        <input type="radio" id="q2a" name="q2" value="a">
+        <label for="q2a"></label>
 
-    <div class="exercise-slide" data-answer="c">
-      <p><strong>3.</strong>Em caso de disparo de botão de pânico, qual a ação inicial? </p>
-      <div class="options">
-        <label><input type="radio" name="q3" value="a">Aguardar confirmação por WhataApp </label>
-        <label><input type="radio" name="q3" value="b">Acionar diretamente a polícia militar  </label>
-        <label><input type="radio" name="q3" value="c">Observar via CFTV e só acionar se houver sinistro  </label>
-        <label><input type="radio" name="q3" value="d">Informar apenas ao gerente </label>
-      </div>
-    </div>
+        <input type="radio" id="q2b" name="q2" value="b">
+        <label for="q2b"></label>
 
-    <div class="exercise-slide" data-answer="b">
-      <p><strong>4.</strong>Qual das opções exige ordem de serviço no sistema Cherwell? </p>
-      <div class="options">
-        <label><input type="radio" name="q4" value="a">Queda de energia </label>
-        <label><input type="radio" name="q4" value="b">Recadastramento de funcionário  </label>
-        <label><input type="radio" name="q4" value="c">Arrastão criminoso  </label>
-        <label><input type="radio" name="q4" value="d">Entrada de moradores de rua  </label>
+        <input type="radio" id="q2c" name="q2" value="c">
+        <label for="q2c"></label>
+
+        <input type="radio" id="q2d" name="q2" value="d">
+        <label for="q2d"></label>
       </div>
     </div>
 
     <div class="exercise-slide" data-answer="a">
-      <p><strong>5.</strong>O desarme do hall de atendimento ocorre automaticamente às: </p>
+      <p><strong>3.</strong></p>
       <div class="options">
-        <label><input type="radio" name="q5" value="a">06h00 </label>
-        <label><input type="radio" name="q5" value="b">07h30 </label>
-        <label><input type="radio" name="q5" value="c">08h00 </label>
-        <label><input type="radio" name="q5" value="d">05h00 </label>
+        <input type="radio" id="q3a" name="q3" value="a">
+        <label for="q3a"></label>
+
+        <input type="radio" id="q3b" name="q3" value="b">
+        <label for="q3b"></label>
+
+        <input type="radio" id="q3c" name="q3" value="c">
+        <label for="q3c"></label>
+
+        <input type="radio" id="q3d" name="q3" value="d">
+        <label for="q3d"></label>
       </div>
     </div>
 
     <div class="exercise-slide" data-answer="b">
-      <p><strong>6.</strong>Quais sensores podem causar disparo acidental? </p>
+      <p><strong>4.</strong>Em casos de queda parcial de energia, qual deve ser o foco imediato do operador? </p>
       <div class="options">
-        <label><input type="radio" name="q5" value="a">CFTV, ATM, GN </label>
-        <label><input type="radio" name="q5" value="b">Sensor sísmico, quebra vidro e de presença </label>
-        <label><input type="radio" name="q5" value="c">Detector de fumaça e som </label>
-        <label><input type="radio" name="q5" value="d">Controle de acesso e porta de cofre  </label>
+        <input type="radio" id="q4a" name="q4" value="a">
+        <label for="q4a">Ligar para a imprensa local</label>
+
+        <input type="radio" id="q4b" name="q4" value="b">
+        <label for="q4b">Avaliar áreas críticas da usina afetada</label>
+
+        <input type="radio" id="q4c" name="q4" value="c">
+        <label for="q4c">Desligar todo o sistema como precaução</label>
+
+        <input type="radio" id="q4d" name="q4" value="d">
+        <label for="q4d">Acionar a equipe de TI</label>
       </div>
     </div>
 
     <div class="exercise-slide" data-answer="c">
-      <p><strong>7.</strong>O acesso ao cofre fora de horário só é permitido em:</p>
+      <p><strong>5.</strong>A cronologia de acionamento em campo deve começar por quem? </p>
       <div class="options">
-        <label><input type="radio" name="q5" value="a">Autorização de emergência médica </label>
-        <label><input type="radio" name="q5" value="b">Situações de emergência médica </label>
-        <label><input type="radio" name="q5" value="c">Acompanhamento da polícia em caso de sinistro  </label>
-        <label><input type="radio" name="q5" value="d">Mudança de turno </label>
+        <input type="radio" id="q5a" name="q5" value="a">
+        <label for="q5a">Diretor Operacional</label>
+
+        <input type="radio" id="q5b" name="q5" value="b">
+        <label for="q5b">Manutenção</label>
+
+        <input type="radio" id="q5c" name="q5" value="c">
+        <label for="q5c">Técnico Local</label>
+
+        <input type="radio" id="q5d" name="q5" value="d">
+        <label for="q5d">Engenheiro de Segurança</label>
       </div>
     </div>
 
-    <div class="exercise-slide" data-answer="c">
-      <p><strong>8.</strong>Quais situações requerem aviso com 24h de antecedência ao GESEC? </p>
+    <div class="exercise-slide" data-answer="b">
+      <p><strong>6.</strong>Em qual situação o operador pode acionar diretamente a gestão central sem passar pela equipe de campo? </p>
       <div class="options">
-        <label><input type="radio" name="q5" value="a">Solicitação de café da manhã no banco </label>
-        <label><input type="radio" name="q5" value="b">Entrada de gerente para retirada de documentos </label>
-        <label><input type="radio" name="q5" value="c">Abertura excepcional da agência ou trabalho de terceiros  </label>
-        <label><input type="radio" name="q5" value="d">Reposição de insumos nos ATMs </label>
+        <input type="radio" id="q6a" name="q6" value="a">
+        <label for="q6a">Nenhuma, sempre há uma sequência fixa</label>
+
+        <input type="radio" id="q6b" name="q6" value="b">
+        <label for="q6b">Quando há risco iminente à segurança ou falha grave evidente</label>
+
+        <input type="radio" id="q6c" name="q6" value="c">
+        <label for="q6c">Sempre que quiser acelerar o processo</label>
+
+        <input type="radio" id="q6d" name="q6" value="d">
+        <label for="q6d">Quando não conhece o técnico de plantão</label>
       </div>
     </div>
 
-    <div class="exercise-slide" data-answer="c">
-      <p><strong>9.</strong>Se a polícia estiver em outra ocorrência, a central deve: </p>
+    <div class="exercise-slide" data-answer="d">
+      <p><strong>7.</strong>Qual informação NÃO é obrigatória ao comunicar um evento à gestão central? </p>
       <div class="options">
-        <label><input type="radio" name="q5" value="a">Enviar o gerente até a agência  </label>
-        <label><input type="radio" name="q5" value="b">Ignorar o alarme </label>
-        <label><input type="radio" name="q5" value="c">Acompanhar pelo CFTV e preservar o gerente </label>
-        <label><input type="radio" name="q5" value="d">Desarmar os sensores </label>
+        <input type="radio" id="q7a" name="q7" value="a">
+        <label for="q7a">Tipo de ocorrência</label>
+
+        <input type="radio" id="q7b" name="q7" value="b">
+        <label for="q7b">Local exato do evento</label>
+
+        <input type="radio" id="q7c" name="q7" value="c">
+        <label for="q7c">Status da ocorrência</label>
+
+        <input type="radio" id="q7d" name="q7" value="d">
+        <label for="q7d">Horário do seu almoço</label>
       </div>
     </div>
 
-    
-
-    <div class="exercise-slide" data-answer="c">
-      <p><strong>10.</strong>Quando há moradores de rua no hall após 22h15, o procedimento correto é:  </p>
+    <div class="exercise-slide" data-answer="a">
+      <p><strong>8.</strong>A equipe de pronta resposta deve ser acionada quando:</p>
       <div class="options">
-        <label><input type="radio" name="q10" value="a">Acionar o GN sem aviso  </label>
-        <label><input type="radio" name="q10" value="b">Ignorar e agurdar a saída espontânea  </label>
-        <label><input type="radio" name="q10" value="c">Acionar sirene, abrir hall manualmente e se necessário, usar GN curto </label>
-        <label><input type="radio" name="q10" value="d">Enviar gerente para retirada  </label>
+        <input type="radio" id="q8a" name="q8" value="a">
+        <label for="q8a">Há falhas severas ou risco à segurança</label>
+
+        <input type="radio" id="q8b" name="q8" value="b">
+        <label for="q8b">Há atraso na chegada do técnico local</label>
+
+        <input type="radio" id="q8c" name="q8" value="c">
+        <label for="q8c">Há necessidade de manutenção de rotina</label>
+
+        <input type="radio" id="q8d" name="q8" value="d">
+        <label for="q8d">O operador não souber o que fazer</label>
       </div>
     </div>
-    
+
+    <div class="exercise-slide" data-answer="b">
+      <p><strong>9.</strong>Qual o tempo máximo recomendado para chegada da equipe de pronta resposta, após o acionamento? </p>
+      <div class="options">
+        <input type="radio" id="q9a" name="q9" value="a">
+        <label for="q9a">10 minutos</label>
+
+        <input type="radio" id="q9b" name="q9" value="b">
+        <label for="q9b">30 minutos</label>
+
+        <input type="radio" id="q9c" name="q9" value="c">
+        <label for="q9c">15 minutos</label>
+
+        <input type="radio" id="q9d" name="q9" value="d">
+        <label for="q9d">60 minutos</label>
+      </div>
+    </div>
+
+    <div class="exercise-slide" data-answer="b">
+      <p><strong>10.</strong>Todas as ocorrências e acionamento devem ser: </p>
+      <div class="options">
+        <input type="radio" id="q10a" name="q10" value="a">
+        <label for="q10a">Comunicado verbalmente apenas</label>
+
+        <input type="radio" id="q10b" name="q10" value="b">
+        <label for="q10b">Registrados no sistema e documentados</label>
+
+        <input type="radio" id="q10c" name="q10" value="c">
+        <label for="q10c">Apagados após resolução</label>
+
+        <input type="radio" id="q10d" name="q10" value="d">
+        <label for="q10d">Tratados como informação sigilosa, sem registro</label>
+      </div>
+    </div>
 
   </div>
 

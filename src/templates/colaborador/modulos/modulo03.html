@@ -76,117 +76,188 @@
     <button class="carousel-btn prev">&#10094;</button>
     <button class="carousel-btn next">&#10095;</button>
     <button id="download-btn"><img src="/src/static/img/baixar_modulo.webp" alt="Baixar PDF"></button>
-    <button id="fullscreen-btn"><img src="/src/static/img/icone_telaCheia.webp" alt="Tela Cheia"></button>
     <button id="dark-mode-btn" title="Modo Noturno"><img src="/src/static/img/botão_modoescuro.webp" alt=""></button>
   </div>
 </section>
 
 <section class="exercises">
-  <h2>Exercícios do Módulo 07</h2>
   <div id="timer">Tempo restante: 30:00</div>
+
+  <div class="exercise-progress">
+    <div class="exercise-progress-fill"></div>
+  </div>
+
   <div class="exercise-wrapper">
-    <div class="exercise-slide" data-answer="c">
-      <p><strong>1.</strong>Sobre o alarme de sinistro, qual das opções representa uma ação correta a ser tomada ao receber um alerta sem alterações visíveis nas imagens? </p>
-      <div class="options">
-        <label><input type="radio" name="q1" value="a">Ignorar o evento e esperar novo alerta </label>
-        <label><input type="radio" name="q1" value="b">Acionar imediatamente a equipe de pronta resposta </label>
-        <label><input type="radio" name="q1" value="c">Tratar como possível disparo falso, mas registrar a ocorrência </label>
-        <label><input type="radio" name="q1" value="d">Encaminhar o caso diretamente à diretoria da empresa </label>
-      </div>
-    </div>
-
-    <div class="exercise-slide" data-answer="a">
-      <p><strong>2.</strong>Em caso de queda total da usina, qual as ações abaixo devem ser feitas primeiro? </p>
-      <div class="options">
-        <label><input type="radio" name="q2" value="a">Confirmar a queda por meio de múltiplos indicadores</label>
-        <label><input type="radio" name="q2" value="b">Aguardar retorno das imagens por 10 minutos </label>
-        <label><input type="radio" name="q2" value="c">Acionar imediatamente a equipe de manutenção </label>
-        <label><input type="radio" name="q2" value="d">Registrar o evento e encerrar o turno </label>
-      </div>
-    </div>
-
     <div class="exercise-slide" data-answer="b">
-      <p><strong>3.</strong>Em caso de câmera desconectada em local crítico, o operador deve: </p>
+      <p><strong>1.</strong></p>
       <div class="options">
-        <label><input type="radio" name="q3" value="a">Esperar que o sistema religue automaticamente </label>
-        <label><input type="radio" name="q3" value="b">Verificar possibilidade de sabotagem ou vandalismo  </label>
-        <label><input type="radio" name="q3" value="c">Ignorar, se for em área externa  </label>
-        <label><input type="radio" name="q3" value="d">Trocar a câmera de lugar </label>
-      </div>
-    </div>
+        <input type="radio" id="q1a" name="q1" value="a">
+        <label for="q1a"></label>
 
-    <div class="exercise-slide" data-answer="c">
-      <p><strong>4.</strong>Em relação a cronologia de acionamento em campo, o que deve ser feito caso não haja resposta da equipe local? </p>
-      <div class="options">
-        <label><input type="radio" name="q4" value="a">Repetir a tentativa após 2 horas </label>
-        <label><input type="radio" name="q4" value="b">Escalar diretamente à diretoria  </label>
-        <label><input type="radio" name="q4" value="c">Acionar a supervisão regional  </label>
-        <label><input type="radio" name="q4" value="d">Aguardar a próxima ronda noturna  </label>
-      </div>
-    </div>
+        <input type="radio" id="q1b" name="q1" value="b">
+        <label for="q1b"></label>
 
-    <div class="exercise-slide" data-answer="c">
-      <p><strong>5.</strong>Qual a ordem correta de acionamento no campo? </p>
-      <div class="options">
-        <label><input type="radio" name="q5" value="a">Gerente > Operador > Vigilante  </label>
-        <label><input type="radio" name="q5" value="b">Técnico Local > Diretor > Vigilante  </label>
-        <label><input type="radio" name="q5" value="c">Técnico ou Vigilante local > Supervisor regional > Manutenção/Engenharia  </label>
-        <label><input type="radio" name="q5" value="d">Coordenador > Vigilante > Cliente  </label>
-      </div>
-    </div>
+        <input type="radio" id="q1c" name="q1" value="c">
+        <label for="q1c"></label>
 
-    <div class="exercise-slide" data-answer="d">
-      <p><strong>6.</strong>A gestão central deve ser acionada quando: </p>
-      <div class="options">
-        <label><input type="radio" name="q6" value="a">O operador quiser registrar uma ocorrência leve </label>
-        <label><input type="radio" name="q6" value="b">A ronda noturna for feita com sucesso </label>
-        <label><input type="radio" name="q6" value="c">Uma câmera for desconectada por falha elétrica </label>
-        <label><input type="radio" name="q6" value="d">A equipe de campo não responder ou a situação for grave  </label>
-      </div>
-    </div>
-
-    <div class="exercise-slide" data-answer="b">
-      <p><strong>7.</strong>Quando deve-se acionar a equipe de pronta resposta</p>
-      <div class="options">
-        <label><input type="radio" name="q7" value="a">Falha no login do sistema </label>
-        <label><input type="radio" name="q7" value="b">Sinistro grave ou queda total  </label>
-        <label><input type="radio" name="q7" value="c">Ocorrência leve detectada por e-mail  </label>
-        <label><input type="radio" name="q7" value="d">Troca de vigilante  </label>
-      </div>
-    </div>
-
-    <div class="exercise-slide" data-answer="b">
-      <p><strong>8.</strong>Qual o objetivo principal da ronda noturna? </p>
-      <div class="options">
-        <label><input type="radio" name="q8" value="a">Garantir que o operador esteja ocupado </label>
-        <label><input type="radio" name="q8" value="b">Verificar a integridade da unidade e detectar riscos fora do horário comercial </label>
-        <label><input type="radio" name="q8" value="c">Substituir as câmeras de monitoramento  </label>
-        <label><input type="radio" name="q8" value="d">Realizar manutenção de equipamentos  </label>
-      </div>
-    </div>
-
-    <div class="exercise-slide" data-answer="d">
-      <p><strong>9.</strong>Qual é um dos principais objetivos da ronda noturna? </p>
-      <div class="options">
-        <label><input type="radio" name="q9" value="a">Atualizar o sistema de produção em tempo real  </label>
-        <label><input type="radio" name="q9" value="b">Realizar pequenos reparo nos equipamentos  </label>
-        <label><input type="radio" name="q9" value="c">Efetuar leitura manual dos dados do painel solar </label>
-        <label><input type="radio" name="q9" value="d">Detectar movimentação suspeitas e alterações visuais  </label>
+        <input type="radio" id="q1d" name="q1" value="d">
+        <label for="q1d"></label>
       </div>
     </div>
 
     
-
-    <div class="exercise-slide" data-answer="a">
-      <p><strong>10.</strong>Ao acionar a pronta resposta, o operador deve:  </p>
+    <div class="exercise-slide" data-answer="c">
+      <p><strong>2.</strong> </p>
       <div class="options">
-        <label><input type="radio" name="q10" value="a">Informar localização, tipo de evento, ações já realizadas e tempo estimado de chegada  </label>
-        <label><input type="radio" name="q10" value="b">Informar apenas o nome da usina  </label>
-        <label><input type="radio" name="q10" value="c">Acionar direto o cliente </label>
-        <label><input type="radio" name="q10" value="d">Acionar apenas se for durante o dia  </label>
+        <input type="radio" id="q2a" name="q2" value="a">
+        <label for="q2a"></label>
+
+        <input type="radio" id="q2b" name="q2" value="b">
+        <label for="q2b"></label>
+
+        <input type="radio" id="q2c" name="q2" value="c">
+        <label for="q2c"></label>
+
+        <input type="radio" id="q2d" name="q2" value="d">
+        <label for="q2d"></label>
       </div>
     </div>
-    
+
+    <div class="exercise-slide" data-answer="a">
+      <p><strong>3.</strong></p>
+      <div class="options">
+        <input type="radio" id="q3a" name="q3" value="a">
+        <label for="q3a"></label>
+
+        <input type="radio" id="q3b" name="q3" value="b">
+        <label for="q3b"></label>
+
+        <input type="radio" id="q3c" name="q3" value="c">
+        <label for="q3c"></label>
+
+        <input type="radio" id="q3d" name="q3" value="d">
+        <label for="q3d"></label>
+      </div>
+    </div>
+
+    <div class="exercise-slide" data-answer="b">
+      <p><strong>4.</strong> </p>
+      <div class="options">
+        <input type="radio" id="q4a" name="q4" value="a">
+        <label for="q4a"></label>
+
+        <input type="radio" id="q4b" name="q4" value="b">
+        <label for="q4b"></label>
+
+        <input type="radio" id="q4c" name="q4" value="c">
+        <label for="q4c"></label>
+
+        <input type="radio" id="q4d" name="q4" value="d">
+        <label for="q4d"></label>
+      </div>
+    </div>
+
+    <div class="exercise-slide" data-answer="c">
+      <p><strong>5.</strong></p>
+      <div class="options">
+        <input type="radio" id="q5a" name="q5" value="a">
+        <label for="q5a"></label>
+
+        <input type="radio" id="q5b" name="q5" value="b">
+        <label for="q5b"></label>
+
+        <input type="radio" id="q5c" name="q5" value="c">
+        <label for="q5c"></label>
+
+        <input type="radio" id="q5d" name="q5" value="d">
+        <label for="q5d"></label>
+      </div>
+    </div>
+
+    <div class="exercise-slide" data-answer="b">
+      <p><strong>6.</strong></p>
+      <div class="options">
+        <input type="radio" id="q6a" name="q6" value="a">
+        <label for="q6a"></label>
+
+        <input type="radio" id="q6b" name="q6" value="b">
+        <label for="q6b"></label>
+
+        <input type="radio" id="q6c" name="q6" value="c">
+        <label for="q6c"></label>
+
+        <input type="radio" id="q6d" name="q6" value="d">
+        <label for="q6d"></label>
+      </div>
+    </div>
+
+    <div class="exercise-slide" data-answer="d">
+      <p><strong>7.</strong></p>
+      <div class="options">
+        <input type="radio" id="q7a" name="q7" value="a">
+        <label for="q7a"></label>
+
+        <input type="radio" id="q7b" name="q7" value="b">
+        <label for="q7b"></label>
+
+        <input type="radio" id="q7c" name="q7" value="c">
+        <label for="q7c"></label>
+
+        <input type="radio" id="q7d" name="q7" value="d">
+        <label for="q7d"></label>
+      </div>
+    </div>
+
+    <div class="exercise-slide" data-answer="a">
+      <p><strong>8.</strong></p>
+      <div class="options">
+        <input type="radio" id="q8a" name="q8" value="a">
+        <label for="q8a"></label>
+
+        <input type="radio" id="q8b" name="q8" value="b">
+        <label for="q8b"></label>
+
+        <input type="radio" id="q8c" name="q8" value="c">
+        <label for="q8c"></label>
+
+        <input type="radio" id="q8d" name="q8" value="d">
+        <label for="q8d"></label>
+      </div>
+    </div>
+
+    <div class="exercise-slide" data-answer="b">
+      <p><strong>9.</strong></p>
+      <div class="options">
+        <input type="radio" id="q9a" name="q9" value="a">
+        <label for="q9a"></label>
+
+        <input type="radio" id="q9b" name="q9" value="b">
+        <label for="q9b"></label>
+
+        <input type="radio" id="q9c" name="q9" value="c">
+        <label for="q9c"></label>
+
+        <input type="radio" id="q9d" name="q9" value="d">
+        <label for="q9d"></label>
+      </div>
+    </div>
+
+    <div class="exercise-slide" data-answer="b">
+      <p><strong>10.</strong></p>
+      <div class="options">
+        <input type="radio" id="q10a" name="q10" value="a">
+        <label for="q10a"></label>
+
+        <input type="radio" id="q10b" name="q10" value="b">
+        <label for="q10b"></label>
+
+        <input type="radio" id="q10c" name="q10" value="c">
+        <label for="q10c"></label>
+
+        <input type="radio" id="q10d" name="q10" value="d">
+        <label for="q10d"></label>
+      </div>
+    </div>
 
   </div>
 
@@ -199,7 +270,6 @@
   <div id="score"></div>
   <div id="result-message"></div>
 </section>
-
 <footer class="footer">
   <hr class="footer-separator">
   <div class="footer-links">

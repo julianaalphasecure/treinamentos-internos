@@ -5,9 +5,61 @@
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
-body {
+html, body {
   background: #f5f7fa;
   color: #333;
+  overflow-x: hidden; /* remove rolagem horizontal */
+  width: 100%;
+}
+
+/* ===== MAIN CONTAINER ===== */
+.main-container {
+  display: flex;
+  margin: 30px 10px;
+  gap: 20px;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  width: 220px;
+  position: sticky;
+  top: 20px;
+  background: #fff;
+  border-radius: 20px;
+  padding: 50px 15px;
+  min-height: 700px;
+  box-shadow: inset 0 4px 10px rgba(0,0,0,0.05), 0 6px 12px rgba(0,0,0,0.1);
+  flex-shrink: 0;
+}
+
+/* ===== LINKS SIDEBAR ===== */
+.sidebar ul li {
+  margin-bottom: 20px;
+}
+
+.sidebar ul li a {
+  display: block;
+  padding: 15px 20px;
+  border-radius: 15px;
+  text-decoration: none;
+  color: #333;
+  font-weight: 600;
+  transition: all 0.3s;
+  background: #f5f7fa;
+}
+
+.sidebar ul li a:hover {
+  background: #f88a15;
+  color: black;
+  box-shadow: 4px 4px 10px rgba(0,0,0,0.2);
+}
+
+.sidebar ul li a.active {
+  background: #f88a15;
+  color: black;
+  font-weight: bold;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  transform: translateX(30px);
 }
 
 /* ===== HEADER ===== */
@@ -83,57 +135,11 @@ body {
   margin-top: 20px;
 }
 
-/* ===== MAIN CONTAINER ===== */
-.main-container {
-  display: flex;
-  margin: 30px 20px;
-}
-
-/* ===== SIDEBAR ===== */
-.sidebar {
-  width: 220px;
-  position: sticky;
-  top: 20px;
-  background: #fff;
-  border-radius: 20px;
-  padding: 50px 15px;
-  min-height: 700px;
-  box-shadow: inset 0 4px 10px rgba(0,0,0,0.05), 0 6px 12px rgba(0,0,0,0.1);
-}
-
-.sidebar ul li {
-  margin-bottom: 20px;
-}
-
-.sidebar ul li a {
-  display: block;
-  padding: 15px 20px;
-  border-radius: 15px;
-  text-decoration: none;
-  color: #333;
-  font-weight: 600;
-  transition: all 0.3s;
-  background: #f5f7fa;
-}
-
-.sidebar ul li a:hover {
-  background: #f88a15;
-  color: black;
-  box-shadow: 4px 4px 10px rgba(0,0,0,0.2);
-}
-
-.sidebar ul li a.active {
-  background: #f88a15;
-  color: black;
-  font-weight: bold;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-  transform: translateX(30px); 
-}
-
 /* ===== CONTENT ===== */
 .content {
   flex: 1;
-  margin-left: 30px;
+  margin-left: 0; /* remove recuo */
+  padding-right: 10px;
 }
 
 .search-bar {
@@ -175,44 +181,83 @@ body {
   text-align: center;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
+/* ==== STATUS CARDS ==== */
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.stat-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 1.5rem 2rem;
+  width: 220px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+
+.stat-card h3 {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.stat-value {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #093361;
+}
+
 
 /* ===== MODULES ===== */
 .modules-carousel {
-position: relative;
-overflow: hidden;
-width: 100%;
-margin-bottom: 40px; /* espaço para os botões */
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  margin-bottom: 40px;
 }
 
 .modules-wrapper {
-display: flex;
-transition: transform 0.5s ease-in-out;
-width: 100%;
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+  width: 100%;
 }
 
 .modules-slide {
-display: grid;
-grid-template-columns: repeat(4, 1fr); /* Padrão: 4 colunas em telas grandes */
-gap: 20px;
-min-width: 100%;
-flex-shrink: 0;
-padding: 5px; /* Pequeno padding para respiro */
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  min-width: 100%;
+  flex-shrink: 0;
+  padding: 5px;
+  box-sizing: border-box;
 }
 
 .module-card {
-background: white;
-border-radius: 20px;
-box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-display: flex;
-flex-direction: column;
-align-items: center;
-padding: 15px;
-width: 100%; /* Ocupa 100% da coluna do grid */
-height: 300px;
-text-align: center;
-
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px;
+  width: 95%;
+  height: 270px;
+  text-align: center;
+  transition: transform 0.3s;
 }
 
+.module-card:hover {
+  transform: translateY(-5px);
+}
 
 .module-card img {
   width: 100%;
@@ -230,7 +275,7 @@ text-align: center;
 }
 
 .progress-bar {
-  width: 90%;
+  width: 100%;
   height: 12px;
   background: #e0e0e0;
   border-radius: 10px;
@@ -241,8 +286,8 @@ text-align: center;
 .progress-bar-inner {
   background-color: #E28E44;
   height: 100%;
-  width: 0%; 
-  transition: width 0.3s;
+  width: 0%;
+  transition: width 0.5s ease;
 }
 
 .module-card button {
@@ -261,7 +306,7 @@ text-align: center;
   transform: translateY(-2px);
 }
 
-/* Botões do carrossel */
+/* ===== Botões do carrossel ===== */
 .carousel-controls {
   display: flex;
   justify-content: center;
@@ -283,29 +328,24 @@ text-align: center;
   background: rgba(30, 60, 114, 1);
 }
 
-/* ===== RESPONSIVO ===== */
+/* ===== RESPONSIVO (menu lateral fixo) ===== */
 @media (max-width: 1200px) {
   .modules-slide {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 992px) {
   .modules-slide {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto; /* ajusta altura dos cards */
-  }
-  .module-card {
-    max-width: 100%;
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 600px) {
   .modules-slide {
-    grid-template-columns: 1fr; /* 1 coluna */
-    grid-template-rows: repeat(4, auto); /* 4 linhas */
+    grid-template-columns: 1fr;
   }
+
   .module-card {
     width: 90%;
     margin: 0 auto;
@@ -314,11 +354,11 @@ text-align: center;
 
 /* ===== FOOTER ===== */
 .footer {
-  background-color: #f8f8f8; 
+  background-color: #f8f8f8;
   color: #666;
   text-align: center;
-  padding: 30px 20px; 
-  margin-top: 60px; 
+  padding: 30px 20px;
+  margin-top: 60px;
   font-size: 14px;
   line-height: 1.8;
 }
@@ -337,7 +377,7 @@ text-align: center;
 }
 
 .footer-links a:hover {
-  color: #E28E44; 
+  color: #E28E44;
 }
 
 .footer-copy {

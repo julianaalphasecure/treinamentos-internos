@@ -76,117 +76,188 @@
     <button class="carousel-btn prev">&#10094;</button>
     <button class="carousel-btn next">&#10095;</button>
     <button id="download-btn"><img src="/src/static/img/baixar_modulo.webp" alt="Baixar PDF"></button>
-    <button id="fullscreen-btn"><img src="/src/static/img/icone_telaCheia.webp" alt="Tela Cheia"></button>
     <button id="dark-mode-btn" title="Modo Noturno"><img src="/src/static/img/botão_modoescuro.webp" alt=""></button>
   </div>
 </section>
 
 <section class="exercises">
-  <h2>Exercícios do Módulo 06</h2>
   <div id="timer">Tempo restante: 30:00</div>
+
+  <div class="exercise-progress">
+    <div class="exercise-progress-fill"></div>
+  </div>
+
   <div class="exercise-wrapper">
+    <div class="exercise-slide" data-answer="b">
+      <p><strong>1.</strong>Em caso de alarme sem imagem visível da causa, o operador deve: </p>
+      <div class="options">
+        <input type="radio" id="q1a" name="q1" value="a">
+        <label for="q1a">Silenciar o alarme para evitar pânico</label>
+
+        <input type="radio" id="q1b" name="q1" value="b">
+        <label for="q1b">Verificar a origem e acionar os responsáveis</label>
+
+        <input type="radio" id="q1c" name="q1" value="c">
+        <label for="q1c">Registrar a ocorrência e aguardar o retorno da equipe</label>
+
+        <input type="radio" id="q1d" name="q1" value="d">
+        <label for="q1d">Ignorar se parecer um falso alarme</label>
+      </div>
+    </div>
+
+    
     <div class="exercise-slide" data-answer="c">
-      <p><strong>1.</strong>Qual é a principal função do agente de pronta resposta? </p>
+      <p><strong>2.</strong>Um sinistro pode envolver: assinale a alternativa INCORRETA </p>
       <div class="options">
-        <label><input type="radio" name="q1" value="a">Realizar rondas periódicas em áreas externas </label>
-        <label><input type="radio" name="q1" value="b">Atender chamadas telefônicas no monitoramento </label>
-        <label><input type="radio" name="q1" value="c">Verificar localmente em casos de disparos de alarme </label>
-        <label><input type="radio" name="q1" value="d">Fazer manutenção preventiva dos sensores </label>
+        <input type="radio" id="q2a" name="q2" value="a">
+        <label for="q2a">Incêndio</label>
+
+        <input type="radio" id="q2b" name="q2" value="b">
+        <label for="q2b">Invasão</label>
+
+        <input type="radio" id="q2c" name="q2" value="c">
+        <label for="q2c">Atualização de software</label>
+
+        <input type="radio" id="q2d" name="q2" value="d">
+        <label for="q2d">Acidente com colaborador</label>
+      </div>
+    </div>
+
+    <div class="exercise-slide" data-answer="a">
+      <p><strong>3.</strong>Quais são os passos iniciais para tratar uma queda de energia?</p>
+      <div class="options">
+        <input type="radio" id="q3a" name="q3" value="a">
+        <label for="q3a">Confirmar no sistema, acionar a equipe de campo e verificar abrangência</label>
+
+        <input type="radio" id="q3b" name="q3" value="b">
+        <label for="q3b">Reiniciar o sistema de monitoramento</label>
+
+        <input type="radio" id="q3c" name="q3" value="c">
+        <label for="q3c">Aguardar 30 minutos antes de qualquer ação</label>
+
+        <input type="radio" id="q3d" name="q3" value="d">
+        <label for="q3d">Comunicar a gestão central sem checar a origem</label>
       </div>
     </div>
 
     <div class="exercise-slide" data-answer="b">
-      <p><strong>2.</strong>O que caracteriza a ronda? </p>
+      <p><strong>4.</strong>Em casos de queda parcial de energia, qual deve ser o foco imediato do operador? </p>
       <div class="options">
-        <label><input type="radio" name="q2" value="a">Sempre ocorre após disparo de alarme</label>
-        <label><input type="radio" name="q2" value="b">É a verificação sem disparo de alarme, motivado por situações específicas </label>
-        <label><input type="radio" name="q2" value="c">É usada apenas quando há invasão confirmada </label>
-        <label><input type="radio" name="q2" value="d">Só pode ser realizada pela polícia militar </label>
+        <input type="radio" id="q4a" name="q4" value="a">
+        <label for="q4a">Ligar para a imprensa local</label>
+
+        <input type="radio" id="q4b" name="q4" value="b">
+        <label for="q4b">Avaliar áreas críticas da usina afetada</label>
+
+        <input type="radio" id="q4c" name="q4" value="c">
+        <label for="q4c">Desligar todo o sistema como precaução</label>
+
+        <input type="radio" id="q4d" name="q4" value="d">
+        <label for="q4d">Acionar a equipe de TI</label>
+      </div>
+    </div>
+
+    <div class="exercise-slide" data-answer="c">
+      <p><strong>5.</strong>A cronologia de acionamento em campo deve começar por quem? </p>
+      <div class="options">
+        <input type="radio" id="q5a" name="q5" value="a">
+        <label for="q5a">Diretor Operacional</label>
+
+        <input type="radio" id="q5b" name="q5" value="b">
+        <label for="q5b">Manutenção</label>
+
+        <input type="radio" id="q5c" name="q5" value="c">
+        <label for="q5c">Técnico Local</label>
+
+        <input type="radio" id="q5d" name="q5" value="d">
+        <label for="q5d">Engenheiro de Segurança</label>
       </div>
     </div>
 
     <div class="exercise-slide" data-answer="b">
-      <p><strong>3.</strong>Qual sensor é mais indicados para uso em entradas e janelas internas, evitando disparos falsos? </p>
+      <p><strong>6.</strong>Em qual situação o operador pode acionar diretamente a gestão central sem passar pela equipe de campo? </p>
       <div class="options">
-        <label><input type="radio" name="q3" value="a">IVA - Infravermelho Ativo </label>
-        <label><input type="radio" name="q3" value="b">IVP - Infravermelho Passivo  </label>
-        <label><input type="radio" name="q3" value="c">Sensor magnético  </label>
-        <label><input type="radio" name="q3" value="d">Câmera IP </label>
+        <input type="radio" id="q6a" name="q6" value="a">
+        <label for="q6a">Nenhuma, sempre há uma sequência fixa</label>
+
+        <input type="radio" id="q6b" name="q6" value="b">
+        <label for="q6b">Quando há risco iminente à segurança ou falha grave evidente</label>
+
+        <input type="radio" id="q6c" name="q6" value="c">
+        <label for="q6c">Sempre que quiser acelerar o processo</label>
+
+        <input type="radio" id="q6d" name="q6" value="d">
+        <label for="q6d">Quando não conhece o técnico de plantão</label>
       </div>
     </div>
 
     <div class="exercise-slide" data-answer="d">
-      <p><strong>4.</strong>No monitoramento Kit-Anti-Arrastão, quais equipamentos compõem a instalação básica? </p>
+      <p><strong>7.</strong>Qual informação NÃO é obrigatória ao comunicar um evento à gestão central? </p>
       <div class="options">
-        <label><input type="radio" name="q4" value="a">Câmera IP, sirene e cerca elétrica </label>
-        <label><input type="radio" name="q4" value="b">Dois IVPs, sensor magnético e dois botões de pânico  </label>
-        <label><input type="radio" name="q4" value="c">Câmera IP, teclado e central de alarme  </label>
-        <label><input type="radio" name="q4" value="d">Câmera IP, sensor magnético e dois botões de pânico  </label>
+        <input type="radio" id="q7a" name="q7" value="a">
+        <label for="q7a">Tipo de ocorrência</label>
+
+        <input type="radio" id="q7b" name="q7" value="b">
+        <label for="q7b">Local exato do evento</label>
+
+        <input type="radio" id="q7c" name="q7" value="c">
+        <label for="q7c">Status da ocorrência</label>
+
+        <input type="radio" id="q7d" name="q7" value="d">
+        <label for="q7d">Horário do seu almoço</label>
       </div>
     </div>
 
     <div class="exercise-slide" data-answer="a">
-      <p><strong>5.</strong>Qual é a ordem correta de acionamento no monitoramento de alarme com CFTV? </p>
+      <p><strong>8.</strong>A equipe de pronta resposta deve ser acionada quando:</p>
       <div class="options">
-        <label><input type="radio" name="q5" value="a">Polícia Militar > Pronta resposta > Supervisor > Cliente  </label>
-        <label><input type="radio" name="q5" value="b">Cliente > Polícia Militar > Supervisor > Pronta resposta  </label>
-        <label><input type="radio" name="q5" value="c">Supervisor > Cliente > Pronta resposta > Polícia Militar  </label>
-        <label><input type="radio" name="q5" value="d">Pronta resposta > Polícia Militar > Cliente > Supervisor  </label>
-      </div>
-    </div>
+        <input type="radio" id="q8a" name="q8" value="a">
+        <label for="q8a">Há falhas severas ou risco à segurança</label>
 
-    <div class="exercise-slide" data-answer="a">
-      <p><strong>6.</strong>O evento de "Teste de Reporte Periódico" no SIGMA significa: </p>
-      <div class="options">
-        <label><input type="radio" name="q6" value="a">Teste automático da central de alarme feito a cada 1 hora </label>
-        <label><input type="radio" name="q6" value="b">Teste manual realizado pelo operador do monitoramento </label>
-        <label><input type="radio" name="q6" value="c">Falha de energia que afeta a comunicação </label>
-        <label><input type="radio" name="q6" value="d">Relatório diário enviados para o cliente  </label>
-      </div>
-    </div>
+        <input type="radio" id="q8b" name="q8" value="b">
+        <label for="q8b">Há atraso na chegada do técnico local</label>
 
-    <div class="exercise-slide" data-answer="c">
-      <p><strong>7.</strong>O que deve ser feito quando ocorre "Falha de Comunicação" no sistema de alarme?</p>
-      <div class="options">
-        <label><input type="radio" name="q7" value="a">Encerrar imediatamente o evento </label>
-        <label><input type="radio" name="q7" value="b">Apenas gerar um relatório no SIGMA  </label>
-        <label><input type="radio" name="q7" value="c">Verificar imagens, contatar colaborador e acompanhar até normalizar  </label>
-        <label><input type="radio" name="q7" value="d">Acionar diretamente a Polícia militar  </label>
+        <input type="radio" id="q8c" name="q8" value="c">
+        <label for="q8c">Há necessidade de manutenção de rotina</label>
+
+        <input type="radio" id="q8d" name="q8" value="d">
+        <label for="q8d">O operador não souber o que fazer</label>
       </div>
     </div>
 
     <div class="exercise-slide" data-answer="b">
-      <p><strong>8.</strong>O evento "Disparo de Pânico" deve ser tratado da seguinte forma: </p>
+      <p><strong>9.</strong> </p>
       <div class="options">
-        <label><input type="radio" name="q8" value="a">Sempre ignorado, pois pode ser apenas teste </label>
-        <label><input type="radio" name="q8" value="b">Contato imediato, senha/contrassenha e, se negativo, acionar pronta resposta + 190 </label>
-        <label><input type="radio" name="q8" value="c">Apenas comunicado ao supervisor  </label>
-        <label><input type="radio" name="q8" value="d">Resolvido com abertura de ordem de serviço  </label>
+        <input type="radio" id="q9a" name="q9" value="a">
+        <label for="q9a"></label>
+
+        <input type="radio" id="q9b" name="q9" value="b">
+        <label for="q9b"></label>
+
+        <input type="radio" id="q9c" name="q9" value="c">
+        <label for="q9c"></label>
+
+        <input type="radio" id="q9d" name="q9" value="d">
+        <label for="q9d"></label>
       </div>
     </div>
 
     <div class="exercise-slide" data-answer="b">
-      <p><strong>9.</strong>O evento "Não Armado" ocorre quando: </p>
+      <p><strong>10.</strong></p>
       <div class="options">
-        <label><input type="radio" name="q9" value="a">O alarme dispara sem motivo  </label>
-        <label><input type="radio" name="q9" value="b">A central não recebe teste automático  </label>
-        <label><input type="radio" name="q9" value="c">O alarme não foi ativados no horário programado </label>
-        <label><input type="radio" name="q9" value="d">A bateria da central apresenta carga baixa  </label>
+        <input type="radio" id="q10a" name="q10" value="a">
+        <label for="q10a"></label>
+
+        <input type="radio" id="q10b" name="q10" value="b">
+        <label for="q10b"></label>
+
+        <input type="radio" id="q10c" name="q10" value="c">
+        <label for="q10c"></label>
+
+        <input type="radio" id="q10d" name="q10" value="d">
+        <label for="q10d"></label>
       </div>
     </div>
-
-    
-
-    <div class="exercise-slide" data-answer="c">
-      <p><strong>10.</strong>Quando a central registra "Tamper", o que isso significa?  </p>
-      <div class="options">
-        <label><input type="radio" name="q10" value="a">Alteração na programação feita pelo cliente  </label>
-        <label><input type="radio" name="q10" value="b">Perda de comunicação entre central e sensores  </label>
-        <label><input type="radio" name="q10" value="c">Adulteração ou abertura indevida de sensores/central </label>
-        <label><input type="radio" name="q10" value="d">Alarme disparado fora do horário programado  </label>
-      </div>
-    </div>
-    
 
   </div>
 

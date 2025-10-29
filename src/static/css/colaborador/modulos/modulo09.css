@@ -1,0 +1,606 @@
+* { 
+  margin: 0; 
+  padding: 0; 
+  box-sizing: border-box; 
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; 
+} 
+
+body { 
+  background: #f5f7fa; 
+  color: #333; 
+} 
+
+.header { 
+  background: #fff; 
+  border-radius: 80px; 
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15); 
+  padding: 15px 35px; 
+  margin: 15px 20px 30px; 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  height: 90px; 
+} 
+
+.logo-box img { 
+  max-height: 140px; 
+  width: auto; 
+  border-radius: 10px; 
+} 
+
+.voltar_home { 
+  background-color: #dbeafe; 
+  padding: 10px 15px; 
+  border-radius: 15px; 
+} 
+
+.voltar_home a { 
+  text-decoration: none; 
+  color: black; 
+} 
+
+.voltar_home p { 
+  font-size: 1em; 
+} 
+
+.modules h2, .modules p { 
+  text-align: center; 
+  color: rgba(30,60,114,1); 
+  margin-bottom: 10px; 
+} 
+
+.modules-carousel { 
+  position: relative; 
+  overflow: hidden; 
+  width: 100%; 
+  display: flex; 
+  justify-content: center; 
+  margin-bottom: 20px; 
+} 
+
+.modules-wrapper { 
+  display: flex; 
+  transition: transform 0.5s ease-in-out; 
+} 
+
+.modules-slide { 
+  min-width: 100%; 
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  position: relative; 
+} 
+
+.module-card { 
+  background: white; 
+  border-radius: 20px; 
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1); 
+  width: 90%; 
+  max-width: 1200px; 
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  position: relative; 
+} 
+
+.module-card img { 
+  width: 100%; 
+  height: auto; 
+  object-fit: contain; 
+  display: block; 
+  border-radius: 12px; 
+} 
+
+.dark-slide { 
+  display: none; 
+} 
+
+body.dark-mode .dark-slide { 
+  display: flex; 
+} 
+
+body.dark-mode .modules-slide:not(.dark-slide) { 
+  display: none; 
+} 
+
+/* Modo noturno - exercícios */ 
+body.dark-mode .exercises { 
+  background: #2c2c2c; 
+  color: #f0f0f0; 
+} 
+
+body.dark-mode .modules h2{ 
+  color: white; 
+} 
+
+body.dark-mode .modules p{ 
+  color: white; 
+} 
+
+body.dark-mode .exercise-slide { 
+  background: #3a3a3a; 
+  color: #f0f0f0; 
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5); 
+} 
+
+body.dark-mode .exercise-slide p { 
+  color: #f0f0f0; 
+} 
+
+body.dark-mode .exercise-slide .options label { 
+  color: #f0f0f0; 
+} 
+
+body.dark-mode .exercise-slide input[type="radio"] { 
+  accent-color: #4caf50; 
+} 
+
+body.dark-mode .exercise-controls .prev-exercise, 
+body.dark-mode .exercise-controls .next-exercise { 
+  background: rgba(100, 100, 100, 0.8); 
+  color: #fff; 
+} 
+
+body.dark-mode .btn-submit { 
+  background: #eb7f0c; 
+  color: #fff; 
+} 
+
+body.dark-mode .btn-submit:hover { 
+  background: #f08944; 
+} 
+
+.thumbnails img { 
+  width: 60px; 
+  height: 40px; 
+  object-fit: cover; 
+  cursor: pointer; 
+  border: 2px solid transparent; 
+  border-radius: 5px; 
+  transition: border 0.2s; 
+} 
+
+.thumbnails img.active { 
+  border: 2px solid #1e3c72; 
+} 
+
+/* Botão modo noturno */ 
+#dark-mode-btn { 
+  position: absolute; 
+  top: 50%; 
+  left: calc(75% + 120px); 
+  transform: translateY(-50%); 
+  background: transparent; 
+  border: none; 
+  cursor: pointer; 
+  width: 46px; 
+  height: 46px; 
+} 
+
+#dark-mode-btn img { 
+  width: 100%; 
+  height: 100%; 
+  object-fit: contain; 
+  display: block; 
+} 
+
+body.dark-mode { 
+  background: #1c1c1c; 
+  color: #f0f0f0; 
+} 
+
+body.dark-mode .header, 
+body.dark-mode .module-card, 
+body.dark-mode .exercises, 
+body.dark-mode #quick-notes-container, 
+body.dark-mode .footer { 
+  background: #2c2c2c; 
+  color: #f0f0f0; 
+} 
+
+body.dark-mode .module-card img { 
+  filter: brightness(0.8); 
+} 
+
+body.dark-mode #quick-notes-container { 
+  background: #333; 
+} 
+
+body.dark-mode #quick-notes { 
+  background: #222; 
+  color: #f0f0f0; 
+  border: 1px solid #555; 
+} 
+
+body.dark-mode .carousel-btn, 
+body.dark-mode #download-btn img, 
+body.dark-mode #fullscreen-btn img, 
+body.dark-mode #dark-mode-btn { 
+  filter: brightness(0.9); 
+} 
+
+.btn-finalizar { 
+  position: absolute; 
+  bottom: 20px; 
+  right: 20px; 
+  background: #004C7F; 
+  color: white; 
+  border: none; 
+  padding: 12px 20px; 
+  border-radius: 40px; 
+  cursor: pointer; 
+  font-weight: bold; 
+  z-index: 10; 
+} 
+
+.carousel-controls { 
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  gap: 80px; 
+  margin-top: 15px; 
+  position: relative; 
+} 
+
+.carousel-btn { 
+  width: 40px; 
+  height: 40px; 
+  border-radius: 80%; 
+  background: #004C7F; 
+  color: #fff; 
+  border: none; 
+  cursor: pointer; 
+  font-size: 20px; 
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+} 
+
+#download-btn{ 
+  position: absolute; 
+  top: 50%; 
+  transform: translateY(-50%); 
+  background: transparent; 
+  border: none; 
+  cursor: pointer; 
+} 
+
+#download-btn { 
+  left: calc(75% + 75px); 
+} 
+
+#dark-mode-btn { 
+  left: calc(75% + 120px); 
+} 
+
+#download-btn img { 
+  width: 36px; 
+  height: 36px; 
+  transition: transform 0.3s; 
+} 
+
+#download-btn img:hover { 
+  transform: scale(1.1); 
+} 
+
+/* Ajuste de tamanho dos exercícios */
+.exercises {
+    width: 95%;           
+    max-width: 1200px;    
+    margin: 40px auto; 
+    padding: 30px;   
+    background: #fff; 
+    border-radius: 15px; 
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1); 
+    display: none; 
+    position: relative; 
+    overflow: hidden; 
+}
+
+.exercise-wrapper { 
+  display: flex; 
+  transition: transform 0.5s ease-in-out; 
+} 
+
+.exercise-slide { 
+  flex: 0 0 100%;       
+  min-width: 100%; 
+  min-height: 500px;    
+  padding: 40px 30px;   
+  border-radius: 20px; 
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1); 
+  background: #fdfdfd; 
+  transition: transform 0.3s, box-shadow 0.3s; 
+} 
+
+.exercise-slide p { 
+  font-size: 1.25em;    
+  margin-bottom: 20px; 
+} 
+
+.options label { 
+  position: relative; 
+  display: flex; 
+  align-items: center; 
+  margin-bottom: 12px; 
+  padding: 15px 20px; 
+  border-radius: 15px; 
+  cursor: pointer; 
+  border: 1px solid #ccc; 
+  transition: all 0.3s; 
+} 
+
+.options input[type="radio"] { 
+  display: none; 
+} 
+
+.options input[type="radio"]:checked + label, 
+.options label.selected { 
+  background: #e0f7fa; 
+  border-color: #4caf50; 
+  box-shadow: 0 3px 8px rgba(76,175,80,0.3); 
+} 
+
+.exercise-controls { 
+  display: flex; 
+  justify-content: space-between; 
+  margin-top: 20px; 
+} 
+
+.prev-exercise, .next-exercise { 
+  font-size: 20px; 
+  background: #004C7F; 
+  color: #fff; 
+  border: none; 
+  border-radius: 70%; 
+  width: 38px; 
+  height: 38px; 
+  cursor: pointer; 
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  transition: background 0.3s; 
+} 
+
+.prev-exercise:hover, .next-exercise:hover { 
+  background: #3057a1; 
+  transform: scale(1.1); 
+} 
+
+.btn-submit { 
+  display: none; 
+  width: 100%; 
+  background: #eb7f0c; 
+  color: white; 
+  border: none; 
+  padding: 12px; 
+  border-radius: 30px; 
+  font-weight: 400; 
+  cursor: pointer; 
+  margin-top: 15px; 
+} 
+
+.btn-submit:hover { 
+  background: #f08944; 
+} 
+
+/* Timer original */ 
+#timer { 
+  text-align: center; 
+  font-size: 18px; 
+  font-weight: bold; 
+  margin-bottom: 15px; 
+} 
+
+/* Barra de progresso das questões */ 
+.exercise-progress { 
+  width: 100%; 
+  height: 10px; 
+  background: #ddd; 
+  border-radius: 8px; 
+  margin-bottom: 20px; 
+  overflow: hidden; 
+} 
+
+.exercise-progress-fill { 
+  width: 0%; 
+  height: 100%; 
+  background: #4caf50; 
+  transition: width 0.4s ease-in-out; 
+} 
+
+/* Footer */ 
+.footer { 
+  background: #f8f8f8; 
+  color: #666; 
+  text-align: center; 
+  padding: 30px 20px; 
+  margin-top: 60px; 
+  font-size: 14px; 
+  line-height: 1.8; 
+} 
+
+.footer-separator { 
+  border: none; 
+  border-top: 1px solid #ddd; 
+  margin-bottom: 15px; 
+} 
+
+.footer-links a { 
+  color: #666; 
+  text-decoration: none; 
+  margin: 0 5px; 
+  transition: color 0.2s; 
+} 
+
+.footer-links a:hover { 
+  color: #E28E44; 
+} 
+
+.footer-copy { 
+  margin-top: 10px; 
+  font-size: 13px; 
+} 
+
+/* ======================
+   Overlay de Resultado Final
+   ====================== */
+#result-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  padding: 20px;
+}
+
+.result-card {
+  background: #fff;
+  color: #333;
+  border-radius: 20px;
+  padding: 50px 40px;
+  max-width: 600px;
+  width: 90%;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  transform: scale(0.95);
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.result-card.pop-in {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.result-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #004C7F;
+  margin-bottom: 15px;
+}
+
+.result-score {
+  font-size: 1.3rem;
+  color: #555;
+  margin-bottom: 25px;
+}
+
+/* Overlay de resultado - botões */
+.result-actions {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+.result-actions .btn-submit,
+.result-actions .btn-secondary {
+  padding: 12px 28px;
+  border-radius: 30px;
+  font-size: 1.05em;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+/* Botão primário */
+.result-actions .btn-submit {
+  background: #eb7f0c;
+  color: #fff;
+}
+
+.result-actions .btn-submit:hover {
+  background: #f08944;
+}
+
+/* Botão secundário */
+.result-actions .btn-secondary {
+  background: #ccc;
+  color: #333;
+}
+
+.result-actions .btn-secondary:hover {
+  background: #bbb;
+}
+
+/* Dark Mode */
+body.dark-mode .result-actions .btn-submit {
+  background: #eb7f0c;
+  color: #fff;
+}
+
+body.dark-mode .result-actions .btn-submit:hover {
+  background: #f08944;
+}
+
+body.dark-mode .result-actions .btn-secondary {
+  background: #555;
+  color: #fff;
+}
+
+body.dark-mode .result-actions .btn-secondary:hover {
+  background: #777;
+}
+
+/* Ocultar/mostrar com base no resultado */
+.result-actions .btn-refazer {
+  display: none; /* será mostrado se fail */
+}
+
+.result-actions .btn-proximo {
+  display: none; /* será mostrado se success */
+}
+
+.result-card.success .btn-proximo {
+  display: inline-block;
+}
+
+.result-card.fail .btn-refazer {
+  display: inline-block;
+}
+
+/* Dark Mode Overlay */
+body.dark-mode #result-overlay {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+body.dark-mode .result-card {
+  background: #2c2c2c;
+  color: #f0f0f0;
+}
+
+body.dark-mode .result-title {
+  color: #eb7f0c;
+}
+
+body.dark-mode .result-card.success .result-title {
+  color: #81c784;
+}
+
+body.dark-mode .result-card.fail .result-title {
+  color: #ef9a9a;
+}
+
+body.dark-mode .result-actions .btn-submit {
+  background: #eb7f0c;
+  color: #fff;
+}
+
+body.dark-mode .result-actions .btn-submit:hover {
+  background: #f08944;
+}
+
+body.dark-mode .result-actions .btn-secondary {
+  background: #555;
+  color: #fff;
+}
+
+body.dark-mode .result-actions .btn-secondary:hover {
+  background: #777;
+}

@@ -76,117 +76,188 @@
     <button class="carousel-btn prev">&#10094;</button>
     <button class="carousel-btn next">&#10095;</button>
     <button id="download-btn"><img src="/src/static/img/baixar_modulo.webp" alt="Baixar PDF"></button>
-    <button id="fullscreen-btn"><img src="/src/static/img/icone_telaCheia.webp" alt="Tela Cheia"></button>
     <button id="dark-mode-btn" title="Modo Noturno"><img src="/src/static/img/botão_modoescuro.webp" alt=""></button>
   </div>
 </section>
 
 <section class="exercises">
-  <h2>Exercícios do Módulo 04</h2>
   <div id="timer">Tempo restante: 30:00</div>
+
+  <div class="exercise-progress">
+    <div class="exercise-progress-fill"></div>
+  </div>
+
   <div class="exercise-wrapper">
-    <div class="exercise-slide" data-answer="c">
-      <p><strong>1.</strong>Qual é o procedimento correto caso a área trancada do corredor lateral do galpão seja acessada sem aviso prévio durante o horário comercial? </p>
+    <div class="exercise-slide" data-answer="b">
+      <p><strong>1.</strong></p>
       <div class="options">
-        <label><input type="radio" name="q1" value="a">Registrar o evento e aguardar contato do responsável </label>
-        <label><input type="radio" name="q1" value="b">Acionar imediatamente a polícia militar e bloquear o acesso </label>
-        <label><input type="radio" name="q1" value="c">Acionar o contato de checagem, registrar imagens e confirmar o fechamento posterior </label>
-        <label><input type="radio" name="q1" value="d">Desconsiderar, pois a movimentação pode ser rotineira durante o horário comercial </label>
+        <input type="radio" id="q1a" name="q1" value="a">
+        <label for="q1a"></label>
+
+        <input type="radio" id="q1b" name="q1" value="b">
+        <label for="q1b"></label>
+
+        <input type="radio" id="q1c" name="q1" value="c">
+        <label for="q1c"></label>
+
+        <input type="radio" id="q1d" name="q1" value="d">
+        <label for="q1d"></label>
+      </div>
+    </div>
+
+    
+    <div class="exercise-slide" data-answer="c">
+      <p><strong>2.</strong> </p>
+      <div class="options">
+        <input type="radio" id="q2a" name="q2" value="a">
+        <label for="q2a"></label>
+
+        <input type="radio" id="q2b" name="q2" value="b">
+        <label for="q2b"></label>
+
+        <input type="radio" id="q2c" name="q2" value="c">
+        <label for="q2c"></label>
+
+        <input type="radio" id="q2d" name="q2" value="d">
+        <label for="q2d"></label>
       </div>
     </div>
 
     <div class="exercise-slide" data-answer="a">
-      <p><strong>2.</strong>Em caso de queda parcial das câmeras, qual deve ser a sequência de ações do operador? </p>
+      <p><strong>3.</strong></p>
       <div class="options">
-        <label><input type="radio" name="q2" value="a">Registrar o horário, identificar câmeras afetadas, acionar suporte técnico e informar o gestor</label>
-        <label><input type="radio" name="q2" value="b">Reiniciar o sistema e agurdar retorno automático </label>
-        <label><input type="radio" name="q2" value="c">Acionar a polícia, registrar o evento e informar o contato de contigência </label>
-        <label><input type="radio" name="q2" value="d">Desconsiderar o evento parcial e priorizar outras ocorrências </label>
+        <input type="radio" id="q3a" name="q3" value="a">
+        <label for="q3a"></label>
+
+        <input type="radio" id="q3b" name="q3" value="b">
+        <label for="q3b"></label>
+
+        <input type="radio" id="q3c" name="q3" value="c">
+        <label for="q3c"></label>
+
+        <input type="radio" id="q3d" name="q3" value="d">
+        <label for="q3d"></label>
       </div>
     </div>
 
     <div class="exercise-slide" data-answer="b">
-      <p><strong>3.</strong>Os contatos de contigência devem ser acionados: </p>
+      <p><strong>4.</strong></p>
       <div class="options">
-        <label><input type="radio" name="q3" value="a">Quando o operador desejar reforçar a segurança </label>
-        <label><input type="radio" name="q3" value="b">Quando o contato de checagem principal não responde  </label>
-        <label><input type="radio" name="q3" value="c">Em qualquer situação, antes do contato de checagem  </label>
-        <label><input type="radio" name="q3" value="d">Somente em horário comercial </label>
+        <input type="radio" id="q4a" name="q4" value="a">
+        <label for="q4a"></label>
+
+        <input type="radio" id="q4b" name="q4" value="b">
+        <label for="q4b"></label>
+
+        <input type="radio" id="q4c" name="q4" value="c">
+        <label for="q4c"></label>
+
+        <input type="radio" id="q4d" name="q4" value="d">
+        <label for="q4d"></label>
       </div>
     </div>
 
     <div class="exercise-slide" data-answer="c">
-      <p><strong>4.</strong>O que caracteriza as "áreas trancadas" do pátio de leilões? </p>
+      <p><strong>5.</strong></p>
       <div class="options">
-        <label><input type="radio" name="q4" value="a">Locais destinados ao público externo </label>
-        <label><input type="radio" name="q4" value="b">Corredores de acesso livre para funcionários  </label>
-        <label><input type="radio" name="q4" value="c">Zonas sensíveis onde são guardadas motos de maior valor  </label>
-        <label><input type="radio" name="q4" value="d">Galpões destinados à manutenção de veículos  </label>
-      </div>
-    </div>
+        <input type="radio" id="q5a" name="q5" value="a">
+        <label for="q5a"></label>
 
-    <div class="exercise-slide" data-answer="d">
-      <p><strong>5.</strong>Qual ação deve ser tomada ao identificar a abertura de uma área trancada fora do horário permitido? </p>
-      <div class="options">
-        <label><input type="radio" name="q5" value="a">Ignorar se não houver movimentação de veículos  </label>
-        <label><input type="radio" name="q5" value="b">Acionar o contato de contigência imediatamente  </label>
-        <label><input type="radio" name="q5" value="c">Apenas registrar o horário  </label>
-        <label><input type="radio" name="q5" value="d">Acionar o contato de checagem e registrar horário, imagens e fechamento  </label>
-      </div>
-    </div>
+        <input type="radio" id="q5b" name="q5" value="b">
+        <label for="q5b"></label>
 
-    <div class="exercise-slide" data-answer="c">
-      <p><strong>6.</strong>Um terceiro liga solicitando imagens do pátio. O que o operador deve fazer? </p>
-      <div class="options">
-        <label><input type="radio" name="q6" value="a">Encaminhar apenas se for alguém conhecido </label>
-        <label><input type="radio" name="q6" value="b">Informar que a solicitação deve ser feita por e-mail, sem realizar o envio direto </label>
-        <label><input type="radio" name="q6" value="c">Redirecionar a solicitação aos responsáveis por e-mail, sem realizar o envio direto </label>
-        <label><input type="radio" name="q6" value="d">Solicitar autorização verbal e, se concedida, enviar os arquivos  </label>
-      </div>
-    </div>
+        <input type="radio" id="q5c" name="q5" value="c">
+        <label for="q5c"></label>
 
-    <div class="exercise-slide" data-answer="c">
-      <p><strong>7.</strong>O que o operador deve fazer caso todas as câmeras da unidade saiam do ar durante a madrugada e o contato de checagem não atenda?</p>
-      <div class="options">
-        <label><input type="radio" name="q7" value="a">Acionar diretamente a polícia e encerra o relatório após </label>
-        <label><input type="radio" name="q7" value="b">Aguardar 30 minutos e tentar contato novamente  </label>
-        <label><input type="radio" name="q7" value="c">Acionar os contatos de contigência na ordem definida e informar a gestão central  </label>
-        <label><input type="radio" name="q7" value="d">Desconsiderar, já que é comum falha técnica fora do horário comercial </label>
+        <input type="radio" id="q5d" name="q5" value="d">
+        <label for="q5d"></label>
       </div>
     </div>
 
     <div class="exercise-slide" data-answer="b">
-      <p><strong>8.</strong>Qual o canal correto para acionar o contato de checagem? </p>
+      <p><strong>6.</strong></p>
       <div class="options">
-        <label><input type="radio" name="q8" value="a">Redes sociais corporativos </label>
-        <label><input type="radio" name="q8" value="b">Ligação via canal oficial </label>
-        <label><input type="radio" name="q8" value="c">Comunicação direta com a portaria  </label>
-        <label><input type="radio" name="q8" value="d">Via e-mail  </label>
+        <input type="radio" id="q6a" name="q6" value="a">
+        <label for="q6a"></label>
+
+        <input type="radio" id="q6b" name="q6" value="b">
+        <label for="q6b"></label>
+
+        <input type="radio" id="q6c" name="q6" value="c">
+        <label for="q6c"></label>
+
+        <input type="radio" id="q6d" name="q6" value="d">
+        <label for="q6d"></label>
       </div>
     </div>
 
     <div class="exercise-slide" data-answer="d">
-      <p><strong>9.</strong>Se o contato de checagem não atender, qual a sequência correta dos contatos de contigência? </p>
-      <div class="options">
-        <label><input type="radio" name="q9" value="a">Responsável 1 > Polícia Militar > Responsável 2 > Checagem  </label>
-        <label><input type="radio" name="q9" value="b">Polícia Militar > Checagem local > Reponsável 1 > Responsável 2  </label>
-        <label><input type="radio" name="q9" value="c">Responsável 2 > Checagem local > Responsável 1 > Polícia Militar </label>
-        <label><input type="radio" name="q9" value="d">Checagem local > Polícia Militar > Responsável 1 > Responsável 2  </label>
+      <p><strong>7.</strong></p>
+     <div class="options">
+        <input type="radio" id="q7a" name="q7" value="a">
+        <label for="q7a"></label>
+
+        <input type="radio" id="q7b" name="q7" value="b">
+        <label for="q7b"></label>
+
+        <input type="radio" id="q7c" name="q7" value="c">
+        <label for="q7c"></label>
+
+        <input type="radio" id="q7d" name="q7" value="d">
+        <label for="q7d"></label>
       </div>
     </div>
 
-    
-
-    <div class="exercise-slide" data-answer="c">
-      <p><strong>10.</strong>Em caso de ocorrência, o que o operador deve fazer?  </p>
+    <div class="exercise-slide" data-answer="a">
+      <p><strong>8.</strong></p>
       <div class="options">
-        <label><input type="radio" name="q10" value="a">Escrever um bilhete e deixar na mesa do supervisor  </label>
-        <label><input type="radio" name="q10" value="b">Falar verbalmente com o segurança local  </label>
-        <label><input type="radio" name="q10" value="c">Gerar ocorrência no sistema e encaminhar e-mail aos responsáveis, com todos os dados e anexos necessários </label>
-        <label><input type="radio" name="q10" value="d">Ligar para o cliente solicitando instruções  </label>
+        <input type="radio" id="q8a" name="q8" value="a">
+        <label for="q8a"></label>
+
+        <input type="radio" id="q8b" name="q8" value="b">
+        <label for="q8b"></label>
+
+        <input type="radio" id="q8c" name="q8" value="c">
+        <label for="q8c"></label>
+
+        <input type="radio" id="q8d" name="q8" value="d">
+        <label for="q8d"></label>
       </div>
     </div>
-    
+
+    <div class="exercise-slide" data-answer="b">
+      <p><strong>9.</strong> </p>
+      <div class="options">
+        <input type="radio" id="q9a" name="q9" value="a">
+        <label for="q9a"></label>
+
+        <input type="radio" id="q9b" name="q9" value="b">
+        <label for="q9b"></label>
+
+        <input type="radio" id="q9c" name="q9" value="c">
+        <label for="q9c"></label>
+
+        <input type="radio" id="q9d" name="q9" value="d">
+        <label for="q9d"></label>
+      </div>
+    </div>
+
+    <div class="exercise-slide" data-answer="b">
+      <p><strong>10.</strong></p>
+      <div class="options">
+        <input type="radio" id="q10a" name="q10" value="a">
+        <label for="q10a"></label>
+
+        <input type="radio" id="q10b" name="q10" value="b">
+        <label for="q10b"></label>
+
+        <input type="radio" id="q10c" name="q10" value="c">
+        <label for="q10c"></label>
+
+        <input type="radio" id="q10d" name="q10" value="d">
+        <label for="q10d"></label>
+      </div>
+    </div>
 
   </div>
 
