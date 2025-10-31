@@ -5,7 +5,6 @@ from flask_cors import CORS
 from src.config.database import db, bcrypt
 from src.config.config import SECRET_KEY, DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT, APP_PORT
 
-
 from src.controllers.auth_controller import auth_bp
 
 # Colaborador
@@ -22,8 +21,9 @@ from src.controllers.gestor.gestor_perfil_controller import gestor_perfil_bp  # 
 from src.controllers.gestor.relatorio_controller import relatorio_bp
 
 
+
 def create_app():
-   
+
     base_dir = os.path.dirname(os.path.abspath(__file__))
     template_dir = os.path.join(base_dir, "src/templates")
     static_dir = os.path.join(base_dir, "src/static")
@@ -31,17 +31,19 @@ def create_app():
     app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
     CORS(app, resources={r"/*": {"origins": "*"}})  
 
-    # Configurações
+    # Configurações Flask
     app.config["SECRET_KEY"] = SECRET_KEY
     app.config["SQLALCHEMY_DATABASE_URI"] = (
         f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
     )
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
+
     # Inicializa extensões
     db.init_app(app)
     bcrypt.init_app(app)
     Migrate(app, db)
+  
 
     # Registra os blueprints
     app.register_blueprint(auth_bp, url_prefix="/auth")
@@ -60,7 +62,6 @@ def create_app():
     app.register_blueprint(relatorio_bp, url_prefix="/gestor/relatorio")
 
     return app
-
 
 if __name__ == "__main__":
     app = create_app()
