@@ -1,6 +1,6 @@
 const form = document.getElementById("login-form");
 
-// Cria a div de feedback dinamicamente
+// Feedback dinâmico
 const feedbackDiv = document.createElement("div");
 feedbackDiv.classList.add("form-feedback");
 form.appendChild(feedbackDiv);
@@ -8,7 +8,6 @@ form.appendChild(feedbackDiv);
 form.addEventListener("submit", async function (e) {
   e.preventDefault();
 
-  // Limpa feedback anterior
   feedbackDiv.style.display = "none";
   feedbackDiv.classList.remove("success", "error");
   feedbackDiv.textContent = "";
@@ -28,34 +27,40 @@ form.addEventListener("submit", async function (e) {
     const result = await response.json();
 
     if (response.ok && result.usuario) {
-      // Feedback positivo
-      feedbackDiv.textContent = "Login realizado com sucesso!";
-      feedbackDiv.classList.add("success");
-      feedbackDiv.style.display = "block";
+      const usuario = result.usuario;
 
-      // Armazena dados no localStorage
-      localStorage.setItem("usuario_id", result.usuario.id);
-      localStorage.setItem("usuario_logado", JSON.stringify(result.usuario)); // <-- chave esperada pelo equipe.js
+      // Limpa dados antigos
+      localStorage.clear();
 
-      // Redireciona de acordo com o tipo de acesso após 1.5s
-      setTimeout(() => {
-        if (result.usuario.tipo_acesso === "gestor") {
-          window.location.href = "/src/templates/gestor/equipe.html";
-        } else {
-          window.location.href = "/src/templates/colaborador/modulo.html";
-        }
-      }, 1500);
+      // Salva conforme tipo de acesso
+      if (usuario.tipo_acesso === "gestor") {
+        localStorage.setItem("usuario_gestor", JSON.stringify(usuario));
+        localStorage.setItem("usuario_id", usuario.id);
+        localStorage.setItem("nomeUsuario", usuario.nome);
+        window.location.href = "/src/templates/gestor/equipe.html";
+
+      } else if (usuario.tipo_acesso === "colaborador") {
+        localStorage.setItem("usuario_colaborador", JSON.stringify(usuario));
+        localStorage.setItem("usuario_id", usuario.id);
+        localStorage.setItem("nomeUsuario", usuario.nome);
+        window.location.href = "/src/templates/colaborador/modulo.html";
+
+      } else {
+        feedbackDiv.textContent = "Tipo de acesso inválido.";
+        feedbackDiv.classList.add("error");
+        feedbackDiv.style.display = "block";
+      }
 
     } else {
-      // Feedback de erro
       feedbackDiv.textContent = result.error || "Erro ao fazer login";
       feedbackDiv.classList.add("error");
       feedbackDiv.style.display = "block";
     }
+
   } catch (error) {
     feedbackDiv.textContent = "Erro de conexão com o servidor";
     feedbackDiv.classList.add("error");
     feedbackDiv.style.display = "block";
-    console.error("Erro no fetch de login:", error);
+    console.error(error);
   }
 });

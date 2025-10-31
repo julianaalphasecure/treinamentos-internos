@@ -1,11 +1,18 @@
+// ====== Verificar tipo de acesso ======
+const usuarioLogado = JSON.parse(localStorage.getItem("usuario_gestor"));
+const usuarioId = usuarioLogado ? usuarioLogado.id : null;
+
+if (!usuarioLogado || usuarioLogado.tipo_acesso !== "gestor") {
+  alert("Acesso restrito à área do gestor.");
+  window.location.href = "/src/templates/auth/login.html";
+}
+
 const modalPerfil = document.getElementById("modal-perfil");
 const btnEditar = document.querySelector(".btn-editar");
 const spanFecharPerfil = document.getElementById("close-perfil");
 const formPerfil = document.getElementById("form-perfil");
 
-const baseURL = "http://127.0.0.1:5000/usuario"; // rota base para usuário
-const usuarioId = localStorage.getItem("usuario_id");
-
+const baseURL = "http://127.0.0.1:5000/usuario";
 const pageFeedback = document.getElementById("perfil-feedback");
 const modalFeedback = document.getElementById("modal-feedback");
 
@@ -18,7 +25,7 @@ if (!usuarioId) {
 }
 
 // ====== Carregar perfil ======
-let usuarioEmail = ""; // variável global do email
+let usuarioEmail = "";
 async function carregarPerfil() {
   try {
     const res = await fetch(`${baseURL}/${usuarioId}`);
@@ -31,7 +38,7 @@ async function carregarPerfil() {
       return;
     }
 
-    const usuario = data.usuario || data; // dependendo do JSON
+    const usuario = data.usuario || data;
     usuarioEmail = usuario.email || "";
 
     document.getElementById("perfil-nome").innerText = usuario.nome || "Sem nome";
@@ -47,12 +54,9 @@ async function carregarPerfil() {
     document.getElementById("input-telefone").value = usuario.telefone || "";
     document.getElementById("input-departamento").value = usuario.departamento || "";
 
-    // Atualiza label do email nas notificações
     const labelEmail = document.querySelector(".config-section ul li:first-child label");
     if(labelEmail) labelEmail.textContent = `Por e-mail (${usuarioEmail})`;
 
-    // Aqui você poderia recuperar preferências de notificação do backend
-    // e setar os toggles (exemplo: fetch /usuario/<id>/notificacoes)
   } catch (error) {
     pageFeedback.textContent = "Erro de conexão com o servidor";
     pageFeedback.classList.add("error");
@@ -89,7 +93,7 @@ formPerfil.onsubmit = async (e) => {
   formData.append("departamento", document.getElementById("input-departamento").value);
 
   const fotoFile = document.getElementById("input-foto").files[0];
-  if (fotoFile && fotoFile.size > 0) formData.append("foto", fotoFile);
+  if (fotoFile) formData.append("foto", fotoFile);
 
   try {
     const res = await fetch(`${baseURL}/${usuarioId}`, { method: "PUT", body: formData });
@@ -101,6 +105,12 @@ formPerfil.onsubmit = async (e) => {
       feedback.style.display = "block";
       modalPerfil.style.display = "none";
       carregarPerfil();
+
+      // Atualiza localStorage do gestor
+      const usuarioAtualizado = { ...usuarioLogado, ...Object.fromEntries(formData) };
+      localStorage.setItem("usuario_gestor", JSON.stringify(usuarioAtualizado));
+      localStorage.setItem("nomeUsuario", usuarioAtualizado.nome);
+
     } else {
       feedback.textContent = result.error || "Erro ao atualizar perfil";
       feedback.classList.add("error");
@@ -112,77 +122,3 @@ formPerfil.onsubmit = async (e) => {
     feedback.style.display = "block";
   }
 };
-
-// ====== Alterar senha ======
-const btnAlterarSenha = document.querySelector(".btn-alterar-senha");
-btnAlterarSenha.onclick = () => {
-  // Aqui você pode abrir um modal de alteração de senha
-  alert("Abrir modal ou página de alteração de senha");
-};
-
-const formSenha = document.getElementById("form-alterar-senha");
-const feedbackSenha = document.getElementById("feedback-senha");
-
-formSenha.onsubmit = async (e) => {
-  e.preventDefault();
-
-  const senhaAtual = document.getElementById("senha-atual").value;
-  const novaSenha = document.getElementById("nova-senha").value;
-  const confirmaSenha = document.getElementById("confirma-senha").value;
-
-  if (novaSenha !== confirmaSenha) {
-    feedbackSenha.textContent = "As senhas não coincidem!";
-    feedbackSenha.classList.add("error");
-    feedbackSenha.style.display = "block";
-    return;
-  }
-
-  try {
-    const res = await fetch(`${baseURL}/usuario/${usuarioId}/alterar-senha`, {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({senha_atual: senhaAtual, nova_senha: novaSenha})
-    });
-
-    const data = await res.json();
-
-    if (res.ok) {
-      feedbackSenha.textContent = "Senha alterada com sucesso!";
-      feedbackSenha.classList.add("success");
-      feedbackSenha.style.display = "block";
-      formSenha.reset();
-    } else {
-      feedbackSenha.textContent = data.error || "Erro ao alterar senha";
-      feedbackSenha.classList.add("error");
-      feedbackSenha.style.display = "block";
-    }
-  } catch (err) {
-    feedbackSenha.textContent = "Erro de conexão com o servidor";
-    feedbackSenha.classList.add("error");
-    feedbackSenha.style.display = "block";
-  }
-};
-
-
-// ====== Notificações ======
-const toggleEmail = document.querySelector("#toggle-email");
-const togglePush = document.querySelector("#toggle-push");
-
-function atualizarNotificacao(tipo, status) {
-  fetch(`${baseURL}/${usuarioId}/notificacoes`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ tipo, status, email: usuarioEmail })
-  })
-  .then(res => res.json())
-  .then(data => console.log("Preferência atualizada:", data))
-  .catch(err => console.error("Erro ao atualizar notificação:", err));
-}
-
-toggleEmail.addEventListener("change", function() {
-  atualizarNotificacao("email", this.checked);
-});
-
-togglePush.addEventListener("change", function() {
-  atualizarNotificacao("push", this.checked);
-});

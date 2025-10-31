@@ -1,31 +1,27 @@
+// ====== Verificar tipo de acesso ======
+let usuarioLogado = JSON.parse(localStorage.getItem("usuario_colaborador"));
+const usuarioId = usuarioLogado ? usuarioLogado.id : null;
+
+if (!usuarioLogado || usuarioLogado.tipo_acesso !== "colaborador") {
+  alert("Acesso restrito à área do colaborador.");
+  window.location.href = "/src/templates/auth/login.html";
+}
+
 const modalPerfil = document.getElementById("modal-perfil");
 const btnEditar = document.querySelector(".btn-editar");
 const spanFecharPerfil = document.getElementById("close-perfil");
 const formPerfil = document.getElementById("form-perfil");
 const pageFeedback = document.getElementById("perfil-feedback");
 const modalFeedback = document.getElementById("modal-feedback");
-const formSenha = document.getElementById("form-alterar-senha");
-const feedbackSenha = document.getElementById("feedback-senha");
-
 
 const baseURL = "http://127.0.0.1:5000/auth/usuario";
-const usuarioId = localStorage.getItem("usuario_id");
 let usuarioEmail = "";
 
-
-if (!usuarioId) {
-  pageFeedback.textContent = "Usuário não identificado. Faça login novamente.";
-  pageFeedback.classList.add("error");
-  pageFeedback.style.display = "block";
-  setTimeout(() => window.location.href = "/src/templates/auth/login.html", 1500);
-}
-
-
+// ====== Carregar perfil ======
 async function carregarPerfil() {
   try {
     const res = await fetch(`${baseURL}/${usuarioId}`);
     if (!res.ok) throw new Error("Erro ao carregar perfil");
-
     const data = await res.json();
     const usuario = data.usuario || data;
 
@@ -44,12 +40,8 @@ async function carregarPerfil() {
     document.getElementById("input-telefone").value = usuario.telefone || "";
     document.getElementById("input-departamento").value = usuario.departamento || "";
 
-    const labelEmail = document.querySelector(".config-section ul li:first-child label");
-    if(labelEmail) labelEmail.textContent = `Por e-mail (${usuarioEmail})`;
-
   } catch (error) {
-    console.error(error);
-    pageFeedback.textContent = "Erro de conexão com o servidor ou usuário não encontrado.";
+    pageFeedback.textContent = "Erro ao carregar dados do servidor.";
     pageFeedback.classList.add("error");
     pageFeedback.style.display = "block";
   }
@@ -57,23 +49,25 @@ async function carregarPerfil() {
 
 carregarPerfil();
 
+// ====== Modal perfil ======
+btnEditar.onclick = () => (modalPerfil.style.display = "flex");
+spanFecharPerfil.onclick = () => (modalPerfil.style.display = "none");
+window.onclick = (e) => {
+  if (e.target === modalPerfil) modalPerfil.style.display = "none";
+};
 
-btnEditar.onclick = () => modalPerfil.style.display = "flex";
-spanFecharPerfil.onclick = () => modalPerfil.style.display = "none";
-window.onclick = (e) => { if (e.target === modalPerfil) modalPerfil.style.display = "none"; };
-
-
+// ====== Preview foto ======
 document.getElementById("input-foto").addEventListener("change", (e) => {
   const file = e.target.files[0];
-  if(file) {
+  if (file) {
     const reader = new FileReader();
-    reader.onload = (ev) => document.getElementById("foto-perfil").src = ev.target.result;
+    reader.onload = (ev) => (document.getElementById("foto-perfil").src = ev.target.result);
     reader.readAsDataURL(file);
   }
 });
 
-
-formPerfil.onsubmit = async (e) => {
+// ====== Atualizar perfil ======
+formPerfil.addEventListener("submit", async (e) => {
   e.preventDefault();
   modalFeedback.style.display = "none";
   modalFeedback.classList.remove("error", "success");
@@ -85,16 +79,25 @@ formPerfil.onsubmit = async (e) => {
   formData.append("departamento", document.getElementById("input-departamento").value);
 
   const fotoFile = document.getElementById("input-foto").files[0];
-  if(fotoFile) formData.append("foto", fotoFile);
+  if (fotoFile) formData.append("foto", fotoFile);
 
   try {
-    const res = await fetch(`${baseURL}/${usuarioId}`, { method: "PUT", body: formData });
+    const res = await fetch(`${baseURL}/${usuarioId}`, {
+      method: "PUT",
+      body: formData,
+    });
+
     const result = await res.json();
 
-    if(res.ok) {
+    if (res.ok) {
       modalFeedback.textContent = "Perfil atualizado com sucesso!";
       modalFeedback.classList.add("success");
       modalFeedback.style.display = "block";
+
+      const usuarioAtualizado = { ...usuarioLogado, ...Object.fromEntries(formData) };
+      localStorage.setItem("usuario_colaborador", JSON.stringify(usuarioAtualizado));
+      localStorage.setItem("nomeUsuario", usuarioAtualizado.nome);
+
       modalPerfil.style.display = "none";
       carregarPerfil();
     } else {
@@ -102,71 +105,10 @@ formPerfil.onsubmit = async (e) => {
       modalFeedback.classList.add("error");
       modalFeedback.style.display = "block";
     }
-  } catch(err) {
-    console.error(err);
+  } catch (err) {
     modalFeedback.textContent = "Erro de conexão com o servidor";
     modalFeedback.classList.add("error");
     modalFeedback.style.display = "block";
   }
-};
-
-
-formSenha.onsubmit = async (e) => {
-  e.preventDefault();
-  feedbackSenha.style.display = "none";
-  feedbackSenha.classList.remove("error", "success");
-
-  const senhaAtual = document.getElementById("senha-atual").value;
-  const novaSenha = document.getElementById("nova-senha").value;
-  const confirmaSenha = document.getElementById("confirma-senha").value;
-
-  if(novaSenha !== confirmaSenha) {
-    feedbackSenha.textContent = "As senhas não coincidem!";
-    feedbackSenha.classList.add("error");
-    feedbackSenha.style.display = "block";
-    return;
-  }
-
-  try {
-    const res = await fetch(`${baseURL}/${usuarioId}/alterar-senha`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ senha_atual: senhaAtual, nova_senha: novaSenha })
-    });
-
-    const data = await res.json();
-    if(res.ok) {
-      feedbackSenha.textContent = "Senha alterada com sucesso!";
-      feedbackSenha.classList.add("success");
-      feedbackSenha.style.display = "block";
-      formSenha.reset();
-    } else {
-      feedbackSenha.textContent = data.error || "Erro ao alterar senha";
-      feedbackSenha.classList.add("error");
-      feedbackSenha.style.display = "block";
-    }
-  } catch(err) {
-    console.error(err);
-    feedbackSenha.textContent = "Erro de conexão com o servidor";
-    feedbackSenha.classList.add("error");
-    feedbackSenha.style.display = "block";
-  }
-};
-
-
-const toggleEmail = document.querySelector("#toggle-email");
-const togglePush = document.querySelector("#toggle-push");
-
-function atualizarNotificacao(tipo, status) {
-  fetch(`${baseURL}/${usuarioId}/notificacoes`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ tipo, status, email: usuarioEmail })
-  })
-  .then(res => res.json())
-  .then(data => console.log("Preferência atualizada:", data))
-  .catch(err => console.error("Erro ao atualizar notificação:", err));
-}
-
-if(toggleEmail) toggleEmail.addEventListener("change", function(){ atualizarNotificacao("email", this.checked); });
-if(togglePush) togglePush.addEventListener("change", function(){ atualizarNotificacao("push", this.checked); });
+});
+ 
