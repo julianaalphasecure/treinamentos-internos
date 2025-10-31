@@ -1,14 +1,41 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const userName = localStorage.getItem("nomeUsuario") || "Usuário";
-  document.getElementById("user-name").textContent = `Olá, ${userName}`;
+document.addEventListener("DOMContentLoaded", async () => {
+  const userNameElement = document.getElementById("user-name");
+  const usuarioId = localStorage.getItem("usuario_id");
 
+  // ================== VERIFICA LOGIN ==================
+  if (!usuarioId) {
+    userNameElement.textContent = "Olá, Usuário";
+    console.warn("Usuário não identificado, redirecionando para login.");
+    setTimeout(() => {
+      window.location.href = "/src/templates/auth/login.html";
+    }, 1500);
+    return;
+  }
+
+  // ================== CARREGAR DADOS DO USUÁRIO ==================
+  try {
+    const res = await fetch(`http://127.0.0.1:5000/auth/usuario/${usuarioId}`);
+    if (!res.ok) throw new Error("Erro ao buscar usuário");
+    const data = await res.json();
+
+    const usuario = data.usuario || data;
+    const nomeUsuario = usuario.nome || "Usuário";
+
+    userNameElement.textContent = `Olá, ${nomeUsuario}`;
+    localStorage.setItem("nomeUsuario", nomeUsuario); // mantém sincronizado
+  } catch (err) {
+    console.error("Erro ao buscar usuário:", err);
+    userNameElement.textContent = "Olá, Usuário";
+  }
+
+  // ================== VARIÁVEIS ==================
   const wrapper = document.querySelector(".modules-wrapper");
   const prevBtn = document.querySelector(".carousel-btn.prev");
   const nextBtn = document.querySelector(".carousel-btn.next");
   const searchInput = document.querySelector(".search-bar input");
 
   const allModules = Array.from(document.querySelectorAll(".module-card")).map(card => ({
-    id: card.dataset.id || "", // opcional, mas não usado na API
+    id: card.dataset.id || "",
     titulo: card.querySelector("h3").textContent,
     html: card.outerHTML
   }));
@@ -32,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     currentSlide = 0;
     updateCarousel();
-    carregarProgresso(); // atualiza barras e stats
+    carregarProgresso();
   }
 
   function updateCarousel() {
@@ -64,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderModules();
   });
 
-  // ================== FUNÇÃO DE PROGRESSO ==================
+  // ================== PROGRESSO ==================
   async function carregarProgresso() {
     try {
       const response = await fetch("http://localhost:5000/colaborador/progresso/frontend");
@@ -94,11 +121,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const bar = card.querySelector(".progress-bar-inner");
         if (!bar) return;
 
-        const moduloAPI = modulosAPI[idx]; // associa pelo índice
+        const moduloAPI = modulosAPI[idx];
         if (moduloAPI) {
           let percent = moduloAPI.percent;
           if (percent > 100) percent = 100;
-          bar.style.width = percent + "%";
+          bar.style.width = `${percent}%`;
         }
       });
 

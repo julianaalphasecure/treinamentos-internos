@@ -282,8 +282,8 @@ function startTimer() {
 // ================== DOWNLOAD ==================
 document.getElementById('download-btn').addEventListener('click', () => {
   const link = document.createElement('a');
-  link.href = '/src/static/pdf/modulo01.pdf';
-  link.download = 'Modulo01_Conteudo.pdf';
+  link.href = '/src/static/pdf/modulo02.pdf';
+  link.download = 'Modulo02_Conteudo.pdf';
   link.click();
 });
 
