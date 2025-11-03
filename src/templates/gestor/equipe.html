@@ -5,47 +5,59 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard Gestor - Alpha Secure</title>
   <link rel="stylesheet" href="/src/static/css/gestor/equipe.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="shortcut icon" href="/src/static/img/logo header.png" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="shortcut icon" href="/src/static/img/logo header.png" type="image/x-icon">
 </head>
 <body>
 
- <header class="header">
-  <div class="logo-box">
-    <img src="/src/static/img/logo header.png" alt="Logo Alpha Secure">
+  <header class="header">
+    <div class="logo-box">
+      <img src="/src/static/img/logo header.png" alt="Logo Alpha Secure">
+    </div>
+    <div class="user-box">
+      <span id="user-name">Olá,</span>
+      <span class="user-role">Gestor</span>
+    </div>
+  </header>
+
+  <section class="info-cards-container">
+  <div class="info-cards">
+    <div class="card">
+      <p>Ser uma empresa referência por sua <br> excelência em segurança e serviços.</p>
+      <img src="/src/static/img/missao_icon.webp" alt="Missão">
+    </div>
+    <div class="card destaque">
+      <p>Disponibilizar ao mercado soluções em serviços agregando tecnologia, atendimentos personalizado e técnicas de trabalho.</p>
+      <img src="/src/static/img/visao_icons.webp" alt="Visão">
+    </div>
+    <div class="card">
+      <p>Transparência, responsabilidade, ética e eficiência, consolidando assim a relação com nossos parceiros comerciais e colaboradores.</p>
+      <img src="/src/static/img/valores_icon.webp" alt="Valores">
+    </div>
   </div>
-  <div class="user-box">
-    <span id="user-name">Olá,</span>
-    <span class="user-role">Gestor</span>
-  </div>
-</header>
+</section>
 
+  <div class="main-container">
 
+    <aside class="sidebar">
+      <nav>
+        <ul>
+          <li><a href="#" class="active">Equipe</a></li>
+          <li><a href="/src/templates/gestor/relatorio.html">Feedback</a></li>
+          <li><a href="/src/templates/auth/login.html">Sair</a></li>
+        </ul>
+      </nav>
+    </aside>
 
-<div class="main-container">
-
-  <aside class="sidebar">
-    <nav>
-      <ul>
-         <li><a href="#" class="active">Equipe</a></li>
-        <li><a href="/src/templates/gestor/relatorio.html">Feedback</a></li>
-        <li><a href="/src/templates/gestor/perfil.html">Meu Perfil</a></li>
-        <li><a href="/src/templates/auth/login.html">Sair</a></li>
-      </ul>
-    </nav>
-  </aside>
-  
-
-  <main class="content">
+    <main class="content">
       <header class="header">
         <h2>Visualização da Equipe</h2>
       </header>
 
-      <main class="content">
-    <div class="search-bar">
-      <i class="fas fa-search"></i>
-      <input type="text" placeholder="Buscar por nome ou RE...">
-    </div>
+      <div class="search-bar">
+        <i class="fas fa-search"></i>
+        <input type="text" placeholder="Buscar por nome ou RE...">
+      </div>
 
       <section id="lista-equipe" class="lista-equipe">
         <!-- Cards dos colaboradores aparecem aqui -->
@@ -61,8 +73,8 @@
         <button id="btn-ver-tudo" class="btn-ver-tudo">Ver tudo</button>
       </div>
     </main>
-  </div>
 
+  </div>
 
   <script src="/src/static/js/gestor/equipe.js"></script>
 </body>
