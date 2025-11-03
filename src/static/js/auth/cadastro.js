@@ -1,58 +1,65 @@
-const form = document.getElementById("cadastro-form");
-const feedbackDiv = document.getElementById("cadastro-feedback");
-feedbackDiv.classList.add("form-feedback");
-form.appendChild(feedbackDiv);
+document.addEventListener("DOMContentLoaded", () => {
+  const formCadastro = document.getElementById("cadastro-form"); // corrigido
+  const feedbackCadastro = document.getElementById("cadastro-feedback");
+  const baseURL = "http://127.0.0.1:5000/auth/cadastro";
 
-form.addEventListener("submit", async function(e) {
-  e.preventDefault();
+  if (!formCadastro || !feedbackCadastro) return;
 
-  feedbackDiv.style.display = "none";
-  feedbackDiv.classList.remove("success", "error");
-  feedbackDiv.textContent = "";
+  formCadastro.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-  // Pega os valores do formulário
-  const re = document.getElementById("re").value.trim();
-  const nome = document.getElementById("nome").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const senha = document.getElementById("senha").value;
-  let tipo_acesso = document.getElementById("tipo_acesso").value.trim().toLowerCase();
+    feedbackCadastro.textContent = "";
+    feedbackCadastro.classList.remove("error", "success");
+    feedbackCadastro.style.display = "none";
 
-  // Garantir que o tipo de acesso seja válido
-  if (!["colaborador", "gestor"].includes(tipo_acesso)) {
-    feedbackDiv.textContent = "Tipo de acesso inválido. Escolha 'Colaborador' ou 'Gestor'.";
-    feedbackDiv.classList.add("error");
-    feedbackDiv.style.display = "block";
-    return;
-  }
+    // Captura valores do formulário
+    const re = document.getElementById("re").value.trim(); // corrigido
+    const nome = document.getElementById("nome").value.trim(); // corrigido
+    const email = document.getElementById("email").value.trim(); // corrigido
+    const senha = document.getElementById("senha").value.trim(); // corrigido
+    const tipo_acesso = document.getElementById("tipo_acesso").value.trim().toLowerCase(); // corrigido
 
-  const dados = { re, nome, email, senha, tipo_acesso };
-
-  try {
-    const response = await fetch("http://127.0.0.1:5000/auth/cadastro", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify(dados)
-    });
-
-
-    const result = await response.json();
-
-    if (response.ok && result.success) {
-      feedbackDiv.textContent = result.message;
-      feedbackDiv.classList.add("success");
-      feedbackDiv.style.display = "block";
-
-      setTimeout(() => {
-        window.location.href = "login.html";
-      }, 1500);
-    } else {
-      feedbackDiv.textContent = result.error || "Erro ao cadastrar";
-      feedbackDiv.classList.add("error");
-      feedbackDiv.style.display = "block";
+    if (!re || !nome || !email || !senha || !tipo_acesso) {
+      feedbackCadastro.textContent = "Todos os campos são obrigatórios.";
+      feedbackCadastro.classList.add("error");
+      feedbackCadastro.style.display = "block";
+      return;
     }
-  } catch (error) {
-    feedbackDiv.textContent = "Erro de conexão com o servidor";
-    feedbackDiv.classList.add("error");
-    feedbackDiv.style.display = "block";
-  }
+
+    if (!["colaborador", "gestor"].includes(tipo_acesso)) {
+      feedbackCadastro.textContent = "Tipo de acesso inválido. Escolha 'colaborador' ou 'gestor'.";
+      feedbackCadastro.classList.add("error");
+      feedbackCadastro.style.display = "block";
+      return;
+    }
+
+    try {
+      const res = await fetch(baseURL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ re, nome, email, senha, tipo_acesso })
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        feedbackCadastro.textContent = data.message || "Cadastro realizado com sucesso!";
+        feedbackCadastro.classList.add("success");
+        feedbackCadastro.style.display = "block";
+
+        setTimeout(() => {
+          window.location.href = "/src/templates/auth/login.html";
+        }, 1500);
+      } else {
+        feedbackCadastro.textContent = data.error || "Erro ao cadastrar usuário.";
+        feedbackCadastro.classList.add("error");
+        feedbackCadastro.style.display = "block";
+      }
+
+    } catch (err) {
+      feedbackCadastro.textContent = "Erro de conexão com o servidor.";
+      feedbackCadastro.classList.add("error");
+      feedbackCadastro.style.display = "block";
+    }
+  });
 });
