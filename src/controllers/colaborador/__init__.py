@@ -7,8 +7,7 @@ from src.controllers.colaborador.perfil_controller import *
 from src.controllers.colaborador.progresso_controller import *
 
 from src.controllers.gestor.equipe_controller import *
-from src.controllers.gestor.gestor_feedback_controller import * # type: ignore
-from src.controllers.gestor.gestor_perfil_controller import * # type: ignore
+from src.controllers.gestor.gestor_feedback_controller import * 
 from src.controllers.gestor.relatorio_controller import *
 
 __all__ = [
@@ -22,6 +21,5 @@ __all__ = [
 
     "equipe_controller",
     "gestor_feedback_controller",
-    "gestor_perfil_controller",
     "relatorio_controller",
 ]

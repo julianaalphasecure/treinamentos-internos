@@ -8,25 +8,17 @@ perfil_bp = Blueprint("perfil_bp", __name__, url_prefix="/colaborador/perfil")
 @perfil_bp.route("/<int:usuario_id>", methods=["GET"])
 def obter_perfil(usuario_id):
     usuario = PerfilService.get_perfil(usuario_id)
-    if usuario:
-        return jsonify(usuario.to_dict()), 200
-    return jsonify({"error": "Usuário não encontrado"}), 404
+    if not usuario:
+        return jsonify({"error": "Usuário não encontrado"}), 404
 
-@perfil_bp.route("/", methods=["GET"])
-def listar_colaboradores():
-    """Lista todos os usuários do tipo colaborador"""
-    try:
-        from src.models.usuario import Usuario  # evita import circular
-        colaboradores = Usuario.query.filter_by(tipo_acesso="colaborador").all()
-
-        if not colaboradores:
-            return jsonify({"message": "Nenhum colaborador encontrado"}), 200
-
-        return jsonify([c.to_dict() for c in colaboradores]), 200
-
-    except Exception as e:
-        return jsonify({"error": f"Erro interno: {str(e)}"}), 500
-
+    usuario_dict = usuario.to_dict()
+    # garante campos preenchidos
+    usuario_dict["foto"] = usuario_dict.get("foto") or "/src/static/img/foto.png"
+    usuario_dict["telefone"] = usuario_dict.get("telefone") or ""
+    usuario_dict["departamento"] = usuario_dict.get("departamento") or ""
+    usuario_dict["nome"] = usuario_dict.get("nome") or ""
+    usuario_dict["email"] = usuario_dict.get("email") or ""
+    return jsonify({"usuario": usuario_dict}), 200
 
 @perfil_bp.route("/<int:usuario_id>", methods=["PUT"])
 def atualizar_perfil(usuario_id):
@@ -35,20 +27,14 @@ def atualizar_perfil(usuario_id):
         return jsonify({"error": "Usuário não encontrado"}), 404
 
     try:
-        nome = request.form.get("nome")
-        email = request.form.get("email")
-        telefone = request.form.get("telefone")
-        departamento = request.form.get("departamento")
-        foto = request.files.get("foto")
-
         dados = {
-            "nome": nome,
-            "email": email,
-            "telefone": telefone,
-            "departamento": departamento
+            "nome": request.form.get("nome"),
+            "email": request.form.get("email"),
+            "telefone": request.form.get("telefone"),
+            "departamento": request.form.get("departamento")
         }
 
-        # Salva foto se existir
+        foto = request.files.get("foto")
         if foto:
             filename = secure_filename(foto.filename)
             pasta_fotos = os.path.join(current_app.static_folder, "fotos_perfil")
@@ -59,13 +45,15 @@ def atualizar_perfil(usuario_id):
 
         usuario_atualizado = PerfilService.update_perfil(usuario_id, dados)
         if usuario_atualizado:
-            return jsonify({
-                "message": "Perfil atualizado com sucesso",
-                "usuario": usuario_atualizado.to_dict()
-            }), 200
+            usuario_dict = usuario_atualizado.to_dict()
+            usuario_dict["foto"] = usuario_dict.get("foto") or "/src/static/img/foto.png"
+            usuario_dict["telefone"] = usuario_dict.get("telefone") or ""
+            usuario_dict["departamento"] = usuario_dict.get("departamento") or ""
+            usuario_dict["nome"] = usuario_dict.get("nome") or ""
+            usuario_dict["email"] = usuario_dict.get("email") or ""
+            return jsonify({"message": "Perfil atualizado com sucesso", "usuario": usuario_dict}), 200
 
         return jsonify({"error": "Falha ao atualizar perfil"}), 400
-
     except Exception as e:
-        # Retorna o erro real para depuração
+        print("Erro ao atualizar perfil:", e)
         return jsonify({"error": f"Erro interno: {str(e)}"}), 500

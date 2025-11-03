@@ -5,6 +5,10 @@ class ProgressoService:
     @staticmethod
     def get_all_progresso():
         return Progresso.query.all()
+
+    @staticmethod
+    def get_all_progresso_usuario(usuario_id):
+        return Progresso.query.filter_by(usuario_id=usuario_id).all()
     
     @staticmethod
     def get_progresso_by_id(progresso_id):

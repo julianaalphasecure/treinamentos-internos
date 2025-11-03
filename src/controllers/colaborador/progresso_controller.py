@@ -1,59 +1,28 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, jsonify
 from src.services.colaborador.progresso_service import ProgressoService
+from src.models.modulos import Modulo
 from flask_login import current_user # type: ignore
 
 progresso_bp = Blueprint("progresso_bp", __name__, url_prefix="/colaborador/progresso")
 
-# Rota padrão CRUD
-@progresso_bp.route("/", methods=["GET"])
-def listar_progresso():
-    progresso = ProgressoService.get_all_progresso()
-    return jsonify([p.to_dict() for p in progresso]), 200
-
-@progresso_bp.route("/<int:progresso_id>", methods=["GET"])
-def obter_progresso(progresso_id):
-    progresso = ProgressoService.get_progresso_by_id(progresso_id)
-    if progresso:
-        return jsonify(progresso.to_dict()), 200
-    return jsonify({"error": "Progresso não encontrado"}), 404
-
-@progresso_bp.route("/", methods=["POST"])
-def criar_progresso():
-    data = request.get_json()
-    progresso = ProgressoService.create_progresso(data)
-    return jsonify(progresso.to_dict()), 201
-
-@progresso_bp.route("/<int:progresso_id>", methods=["PUT"])
-def atualizar_progresso(progresso_id):
-    data = request.get_json()
-    progresso = ProgressoService.update_progresso(progresso_id, data)
-    if progresso:
-        return jsonify({"message": "Progresso atualizado com sucesso", "progresso": progresso.to_dict()}), 200
-    return jsonify({"error": "Progresso não encontrado"}), 404
-
-@progresso_bp.route("/<int:progresso_id>", methods=["DELETE"])
-def deletar_progresso(progresso_id):
-    progresso = ProgressoService.delete_progresso(progresso_id)
-    if progresso:
-        return jsonify({"message": "Progresso deletado com sucesso"}), 200
-    return jsonify({"error": "Progresso não encontrado"}), 404
-
-
 @progresso_bp.route("/frontend", methods=["GET"])
 def progresso_frontend():
-    # Obtém todos os progressos do usuário (ou todos, se não estiver logado)
-    progresso_list = ProgressoService.get_all_progresso()
+    # Pega o usuário logado (ou 1º usuário se quiser teste sem login)
+    usuario_id = getattr(current_user, 'id', 1)
 
+    progresso_list = ProgressoService.get_all_progresso_usuario(usuario_id)
     modulos_dict = {}
-    for p in progresso_list:
-        # Garante que p.modulo exista e tenha nome
-        nome_modulo = p.modulo.nome if p.modulo else f"Módulo {p.modulo_id}"
-        percent = float(p.nota_final) if p.nota_final is not None else 0
 
-        modulos_dict[p.modulo_id] = {
-            "nome": nome_modulo,
+    # Garante que todos os módulos apareçam
+    for modulo in Modulo.query.all():
+        progresso = next((p for p in progresso_list if p.modulo_id == modulo.id), None)
+        percent = float(progresso.nota_final) if progresso and progresso.nota_final else 0
+        status = progresso.status if progresso else 'nao_iniciado'
+        modulos_dict[modulo.id] = {
+            "nome": modulo.nome,
             "percent": percent,
-            "nota": percent
+            "nota": percent,
+            "status": status
         }
 
     modulos = list(modulos_dict.values())
@@ -67,4 +36,14 @@ def progresso_frontend():
     if all(m['nota'] >= 90 for m in modulos):
         badges.append({"titulo": "Perfeccionista", "descricao": "Complete todos os módulos com 90%"})
 
-    return jsonify({"modulos": modulos, "badges": badges})
+    # contadores
+    total_modulos = len(modulos)
+    concluidos = sum(1 for m in modulos if m['status'] == 'concluido')
+    nao_iniciados = total_modulos - concluidos
+
+    return jsonify({
+        "modulos": modulos,
+        "badges": badges,
+        "concluidos": concluidos,
+        "nao_iniciados": nao_iniciados
+    })
