@@ -1,13 +1,13 @@
 from src.config.database import db, bcrypt
 from src.models.usuario import Usuario
 from src.models.colaborador import Colaborador
-from src.models.progresso import Progresso
 from src.models.modulos import Modulo
+from src.models.progresso import Progresso
 from sqlalchemy import or_
 from datetime import datetime
 
+
 class AuthService:
-    # --- Registrar usuário ---
     def registrar_usuario(self, re, nome, email, senha, tipo_acesso):
         if not all([re, nome, email, senha, tipo_acesso]):
             return None, "Todos os campos são obrigatórios."
@@ -29,9 +29,7 @@ class AuthService:
             db.session.add(usuario)
             db.session.flush()  # garante que o id seja gerado
 
-            # --- Se for colaborador ---
             if tipo_acesso == "colaborador":
-                # Cria registro na tabela Colaborador
                 colaborador = Colaborador(
                     id=usuario.id,
                     nome=nome,
@@ -42,13 +40,13 @@ class AuthService:
                 )
                 db.session.add(colaborador)
 
-                # Cria registros de progresso inicial para todos os módulos
+                # cria progresso inicial de todos os módulos
                 modulos = Modulo.query.all()
                 for modulo in modulos:
                     progresso = Progresso(
                         usuario_id=usuario.id,
                         modulo_id=modulo.id,
-                        status='nao_iniciado',
+                        status="nao_iniciado",
                         nota_final=0
                     )
                     db.session.add(progresso)
@@ -60,7 +58,6 @@ class AuthService:
             print("Erro ao cadastrar usuário:", e)
             return None, "Erro interno no servidor."
 
-    # --- Autenticar usuário ---
     def autenticar_usuario(self, email, senha):
         if not email or not senha:
             return None
