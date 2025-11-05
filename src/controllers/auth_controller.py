@@ -1,6 +1,7 @@
-from flask import Blueprint, request, jsonify, render_template
-from src.services.auth_service import AuthService
 from src.services.colaborador.colaborador_service import ColaboradorService
+from flask import Blueprint, request, jsonify, render_template
+from flask_jwt_extended import create_access_token 
+from src.services.auth_service import AuthService
 
 auth_bp = Blueprint("auth_bp", __name__, url_prefix="/auth")
 auth_service = AuthService()
@@ -38,11 +39,18 @@ def login():
     if not usuario:
         return jsonify({"error": "Credenciais inválidas"}), 401
 
-    # Se for colaborador, atualiza status para online
+
+    access_token = create_access_token(identity=usuario.id)
+
     if usuario.tipo_acesso.lower() == "colaborador":
         ColaboradorService.set_status(usuario.id, "online")
 
-    return jsonify({"success": True, "usuario": usuario.to_dict()}), 200
+    # 2. RETORNA O TOKEN E O OBJETO DO USUÁRIO
+    return jsonify({
+        "success": True, 
+        "access_token": access_token, 
+        "usuario": usuario.to_dict()
+    }), 200
 
 # --- Logout ---
 @auth_bp.route("/logout", methods=["POST"])

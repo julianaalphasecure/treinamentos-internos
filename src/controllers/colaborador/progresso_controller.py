@@ -1,5 +1,10 @@
 from flask import Blueprint, jsonify, request
-from flask_login import current_user
+# Remova a importação de flask_login se você não a usa em outras partes
+# from flask_login import current_user 
+
+# >>> ADICIONE ESTAS DUAS IMPORTAÇÕES DO FLASK-JWT-EXTENDED <<<
+from flask_jwt_extended import jwt_required, get_jwt_identity 
+
 from src.services.colaborador.progresso_service import ProgressoService
 from src.services.colaborador.colaborador_service import ColaboradorService
 
@@ -7,10 +12,16 @@ progresso_bp = Blueprint("progresso_bp", __name__, url_prefix="/colaborador/prog
 
 
 @progresso_bp.route("/frontend", methods=["GET"])
+# >>> ADICIONE O DECORADOR DE PROTEÇÃO JWT AQUI <<<
+@jwt_required() 
 def progresso_frontend():
-    usuario_id = getattr(current_user, "id", None)
+    # >>> MUDANÇA: Use get_jwt_identity() para obter o ID do token <<<
+    usuario_id = get_jwt_identity() 
+    
     if not usuario_id:
-        return jsonify({"error": "Usuário não autenticado"}), 401
+        # Tecnicamente, se @jwt_required() passar, get_jwt_identity() não deve ser None, 
+        # mas mantemos a verificação para segurança.
+        return jsonify({"error": "Token inválido ou expirado"}), 401
 
     ProgressoService.inicializar_progresso_usuario(usuario_id)
     progresso_list = ProgressoService.get_all_progresso_usuario(usuario_id)
@@ -38,7 +49,14 @@ def progresso_frontend():
 
 
 @progresso_bp.route("/finalizar/<int:usuario_id>/<int:modulo_id>", methods=["POST"])
+# >>> MUDANÇA: Proteger esta rota também, se o front-end envia o token <<<
+@jwt_required()
 def finalizar_modulo(usuario_id, modulo_id):
+    # Verificação de segurança (opcional, mas recomendado)
+    # user_do_token = get_jwt_identity()
+    # if user_do_token != usuario_id:
+    #     return jsonify({"error": "Acesso negado: ID do token não corresponde ao URL"}), 403
+    
     data = request.get_json() or {}
     nota_final = data.get("nota_final", 100)
     progresso = ProgressoService.finalizar_modulo(usuario_id, modulo_id, nota_final)
@@ -48,3 +66,4 @@ def finalizar_modulo(usuario_id, modulo_id):
         "status": progresso.status,
         "percent": float(progresso.nota_final)
     }), 200
+

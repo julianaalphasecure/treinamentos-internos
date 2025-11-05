@@ -1,65 +1,58 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const formCadastro = document.getElementById("cadastro-form"); // corrigido
-  const feedbackCadastro = document.getElementById("cadastro-feedback");
-  const baseURL = "http://127.0.0.1:5000/auth/cadastro";
+const form = document.getElementById("login-form");
 
-  if (!formCadastro || !feedbackCadastro) return;
-
-  formCadastro.addEventListener("submit", async (e) => {
+form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    feedbackCadastro.textContent = "";
-    feedbackCadastro.classList.remove("error", "success");
-    feedbackCadastro.style.display = "none";
+    const email = document.getElementById("email").value.trim();
+    const senha = document.getElementById("senha").value.trim();
 
-    // Captura valores do formulário
-    const re = document.getElementById("re").value.trim(); // corrigido
-    const nome = document.getElementById("nome").value.trim(); // corrigido
-    const email = document.getElementById("email").value.trim(); // corrigido
-    const senha = document.getElementById("senha").value.trim(); // corrigido
-    const tipo_acesso = document.getElementById("tipo_acesso").value.trim().toLowerCase(); // corrigido
-
-    if (!re || !nome || !email || !senha || !tipo_acesso) {
-      feedbackCadastro.textContent = "Todos os campos são obrigatórios.";
-      feedbackCadastro.classList.add("error");
-      feedbackCadastro.style.display = "block";
-      return;
-    }
-
-    if (!["colaborador", "gestor"].includes(tipo_acesso)) {
-      feedbackCadastro.textContent = "Tipo de acesso inválido. Escolha 'colaborador' ou 'gestor'.";
-      feedbackCadastro.classList.add("error");
-      feedbackCadastro.style.display = "block";
-      return;
+    if (!email || !senha) {
+        alert("Preencha todos os campos");
+        return;
     }
 
     try {
-      const res = await fetch(baseURL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ re, nome, email, senha, tipo_acesso })
-      });
+        const res = await fetch("http://localhost:5000/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, senha })
+        });
 
-      const data = await res.json();
+        const data = await res.json();
 
-      if (res.ok) {
-        feedbackCadastro.textContent = data.message || "Cadastro realizado com sucesso!";
-        feedbackCadastro.classList.add("success");
-        feedbackCadastro.style.display = "block";
+        if (!res.ok) {
+            alert(data.error || "Erro no login");
+            return;
+        }
 
-        setTimeout(() => {
-          window.location.href = "/src/templates/auth/login.html";
-        }, 1500);
-      } else {
-        feedbackCadastro.textContent = data.error || "Erro ao cadastrar usuário.";
-        feedbackCadastro.classList.add("error");
-        feedbackCadastro.style.display = "block";
-      }
+    
+        
+        // 1. Defina qual propriedade do objeto 'data' contém o token JWT
+        const tokenJWT = data.access_token || data.token; // Use 'data.token' se o Flask usar essa chave
+
+        if (!tokenJWT) {
+            alert("Resposta da API de login incompleta: Token JWT não encontrado.");
+            return;
+        }
+
+        // 2. Salva o token com a chave CORRETA que o modulo.js espera!
+        localStorage.setItem("token_colaborador", tokenJWT); 
+        
+        // =========================================================
+
+        const usuario = data.usuario;
+
+        // Usa a propriedade correta do backend
+        if (usuario.tipo_acesso === "colaborador") {
+            localStorage.setItem("usuario_colaborador", JSON.stringify(usuario));
+            window.location.href = "/src/templates/colaborador/modulo.html";
+        } else if (usuario.tipo_acesso === "gestor") {
+            localStorage.setItem("usuario_gestor", JSON.stringify(usuario));
+            window.location.href = "/src/templates/gestor/equipe.html";
+        }
 
     } catch (err) {
-      feedbackCadastro.textContent = "Erro de conexão com o servidor.";
-      feedbackCadastro.classList.add("error");
-      feedbackCadastro.style.display = "block";
+        alert("Erro de conexão com o servidor");
+        console.error(err);
     }
-  });
 });

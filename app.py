@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, jsonify
 from flask_migrate import Migrate
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
@@ -10,7 +10,7 @@ from src.config.config import SECRET_KEY, DB_HOST, DB_USER, DB_PASSWORD, DB_NAME
 from src.controllers.auth_controller import auth_bp
 
 # --- Controllers Colaborador ---
-from src.controllers.colaborador.colaborador_controller import colaborador_bp  # ⚠️ mover para cima
+from src.controllers.colaborador.colaborador_controller import colaborador_bp 
 from src.controllers.colaborador.perfil_controller import perfil_bp as colab_perfil_bp
 from src.controllers.colaborador.feedback_controller import colab_feedback_bp
 from src.controllers.colaborador.progresso_controller import progresso_bp
@@ -27,8 +27,12 @@ def create_app():
     template_dir = os.path.join(base_dir, "src/templates")
     static_dir = os.path.join(base_dir, "src/static")
 
+    # 1. DEFINIÇÃO DO OBJETO 'app' (CORREÇÃO DE NameError)
     app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
-    CORS(app, resources={r"/*": {"origins": "*"}})
+    
+    # 2. CORS AGORA USA O 'app' DEFINIDO
+    # ===== CORREÇÃO CRÍTICA DO CORS =====
+    CORS(app, resources={r"/*": {"origins": "*", "allow_headers": ["Content-Type", "Authorization"]}})
 
     # ===== Configurações Flask =====
     app.config["SECRET_KEY"] = SECRET_KEY
@@ -37,15 +41,31 @@ def create_app():
     )
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-    # ===== JWT =====
-    app.config["JWT_SECRET_KEY"] = SECRET_KEY
-    jwt = JWTManager(app)
-
-    # ===== Inicialização =====
+    # ===== INICIALIZAÇÃO DE EXTENSÕES =====
+    # Inicializar db e bcrypt
     db.init_app(app)
     bcrypt.init_app(app)
     Migrate(app, db)
-
+    
+    # ===== JWT (Inicialização única e limpa) =====
+    app.config["JWT_SECRET_KEY"] = SECRET_KEY
+    jwt = JWTManager(app)
+    
+    # ===== CALLBACKS JWT =====
+    
+    # 1. Callback de erro JWT
+    @jwt.invalid_token_loader
+    @jwt.unauthorized_loader
+    @jwt.expired_token_loader
+    def custom_auth_error(callback):
+        # Retorna 401 (Unauthorized)
+        return jsonify(error=callback), 401 
+    
+    # 2. Callback para definir a identidade do usuário no token
+    @jwt.user_identity_loader
+    def user_identity_lookup(user):
+        return user 
+    
     # ===== Registro de Blueprints =====
 
     # --- Auth ---

@@ -1,3 +1,4 @@
+// login.js (VERSÃO FINAL COM TENTATIVA DE SALVAR E REDIRECIONAR)
 const form = document.getElementById("login-form");
 
 form.addEventListener("submit", async (e) => {
@@ -26,11 +27,23 @@ form.addEventListener("submit", async (e) => {
         }
 
         const usuario = data.usuario;
+        
+        // --- CORREÇÃO: SALVANDO O TOKEN (NÃO BLOQUEIA MAIS) ---
+        // O Flask deveria retornar 'access_token', mas se não retornar,
+        // o token será 'undefined', mas o script CONTINUARÁ para o redirecionamento
+        const tokenJWT = data.access_token;
+        if (tokenJWT) {
+            localStorage.setItem("token_colaborador", tokenJWT);
+        } else {
+             // Deixa um log no console, mas NÃO BLOQUEIA
+             console.warn("Atenção: Token JWT não recebido do servidor. A autenticação na próxima página pode falhar."); 
+        }
+        // ----------------------------------
 
         // Usa a propriedade correta do backend
         if (usuario.tipo_acesso === "colaborador") {
             localStorage.setItem("usuario_colaborador", JSON.stringify(usuario));
-            window.location.href = "/src/templates/colaborador/modulo.html";
+            window.location.href = "/src/templates/colaborador/modulo.html"; // <<<< FINALMENTE VAI REDIRECIONAR
         } else if (usuario.tipo_acesso === "gestor") {
             localStorage.setItem("usuario_gestor", JSON.stringify(usuario));
             window.location.href = "/src/templates/gestor/equipe.html";
