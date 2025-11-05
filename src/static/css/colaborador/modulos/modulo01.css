@@ -133,6 +133,7 @@ body.dark-mode .exercise-slide .options label {
 
 body.dark-mode .exercise-slide input[type="radio"] { 
   accent-color: #4caf50; 
+  color: black;
 } 
 
 body.dark-mode .exercise-controls .prev-exercise, 

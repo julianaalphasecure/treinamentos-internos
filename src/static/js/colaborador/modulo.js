@@ -75,56 +75,88 @@ document.addEventListener("DOMContentLoaded", async () => {
     renderModules();
   });
 
-  // ================== CARREGAR PROGRESSO ==================
-  async function carregarProgresso() {
-    try {
-      const response = await fetch(`http://127.0.0.1:5000/colaborador/progresso/${usuarioId}`);
-      if (!response.ok) throw new Error("Erro ao buscar progresso");
+// ... (restante do seu modulo.js)
 
-      const data = await response.json();
-      const modulosAPI = data.modulos || [];
-
-      // Contadores
-      let concluidos = 0;
-      let naoIniciados = 0;
-
-      modulosAPI.forEach(m => {
-        if (m.status === "concluido") concluidos++;
-        if (m.status === "nao_iniciado") naoIniciados++;
-      });
-
-      const statCards = document.querySelectorAll(".stat-card");
-      if (statCards.length >= 2) {
-        statCards[0].innerHTML = `<h3>Concluídos</h3><p class="stat-value">${concluidos}</p>`;
-        statCards[1].innerHTML = `<h3>Não Iniciados</h3><p class="stat-value">${naoIniciados}</p>`;
-      }
-
-      // Atualiza cada módulo
-      const cards = document.querySelectorAll(".module-card");
-      cards.forEach((card) => {
-        const bar = card.querySelector(".progress-bar-inner");
-        if (!bar) return;
-
-        const moduloId = parseInt(card.dataset.id);
-        const moduloAPI = modulosAPI.find(m => m.modulo_id === moduloId);
-
-        if (moduloAPI) {
-          let percent = moduloAPI.nota_final || 0;
-          if (percent > 100) percent = 100;
-          bar.style.width = `${percent}%`;
-
-          if (moduloAPI.status === "concluido") {
-            card.classList.add("concluido");
-          } else {
-            card.classList.remove("concluido");
-          }
-        }
-      });
-    } catch (error) {
-      console.error("Erro ao carregar progresso:", error);
+// ================== CARREGAR PROGRESSO (COM DIAGNÓSTICO) ==================
+async function carregarProgresso() {
+    // 1. OBTÉM O TOKEN E VERIFICA SE ELE EXISTE
+    const TOKEN = localStorage.getItem("token_colaborador"); 
+    
+    // LINHA DE DIAGNÓSTICO IMPORTANTE
+    console.log("Token lido do localStorage:", TOKEN ? "Token presente" : "Token AUSENTE/NULL"); 
+    
+    if (!TOKEN) {
+        console.error("Token de autenticação ausente. Por favor, faça login.");
+        // Removi o alert para evitar que ele fique aparecendo toda hora.
+        return; 
     }
-  }
 
+    try {
+        // 2. FAZ A REQUISIÇÃO, ENVIANDO O TOKEN
+        const response = await fetch(`http://127.0.0.1:5000/colaborador/progresso/frontend`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${TOKEN}`, // Envio do token
+                "Content-Type": "application/json"
+            }
+        }); 
+
+        // 3. TRATAMENTO DE ERRO
+        if (response.status === 401 || response.status === 403) {
+             // O alert só aparece se houver o erro de autenticação.
+             alert("Sessão expirada ou Token inválido. Por favor, faça login novamente."); 
+             throw new Error("Não autorizado. Token inválido ou expirado.");
+        }
+        if (!response.ok) {
+             throw new Error(`Erro ${response.status} ao buscar progresso.`);
+        }
+
+        // ... (O resto do código de atualização de progresso continua aqui)
+        
+        const data = await response.json();
+        const modulosAPI = data.modulos || [];
+        const statsAPI = data.stats || { concluidos: 0, nao_iniciados: 9 }; 
+
+        // ATUALIZA CONTADORES
+        const statCards = document.querySelectorAll(".stat-card p.stat-value");
+        if (statCards.length >= 2) {
+            statCards[0].textContent = statsAPI.concluidos; 
+            statCards[1].textContent = statsAPI.nao_iniciados; 
+        } 
+
+        // ATUALIZA BARRAS
+        const cards = document.querySelectorAll(".module-card");
+        cards.forEach((card) => {
+            const bar = card.querySelector(".progress-bar-inner");
+            if (!bar) return;
+
+            const moduloId = parseInt(card.dataset.id); 
+            const moduloAPI = modulosAPI.find(m => m.modulo_id === moduloId);
+
+            if (moduloAPI) {
+                let percent = moduloAPI.percent || 0; 
+                if (percent > 100) percent = 100;
+                
+                bar.style.width = `${percent}%`;
+
+                if (moduloAPI.status === "concluido") {
+                    card.classList.add("concluido");
+                } else {
+                    card.classList.remove("concluido");
+                }
+            } else {
+                bar.style.width = "0%";
+            }
+        });
+        
+        // ... (Fim do resto do código de atualização de progresso)
+
+
+    } catch (error) {
+        console.error("Erro ao carregar progresso:", error);
+        // O alert de sessão expirada agora está dentro do bloco if (401/403)
+    }
+}
   // ================== FINALIZAR MÓDULO ==================
   async function finalizarModulo(moduloId, nota = 100) {
     try {
