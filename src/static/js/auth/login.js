@@ -1,4 +1,4 @@
-// login.js (VERSÃO FINAL COM TENTATIVA DE SALVAR E REDIRECIONAR)
+// login.js (VERSÃO FINAL COM TENTATIVA DE SALVAR E REDIRECIONAR E DIAGNÓSTICO)
 const form = document.getElementById("login-form");
 
 form.addEventListener("submit", async (e) => {
@@ -20,6 +20,9 @@ form.addEventListener("submit", async (e) => {
         });
 
         const data = await res.json();
+        
+        // >>> ADIÇÃO 1: DIAGNÓSTICO DA RESPOSTA DO SERVIDOR <<<
+        console.log("Resposta completa do servidor (data):", data);
 
         if (!res.ok) {
             alert(data.error || "Erro no login");
@@ -29,14 +32,15 @@ form.addEventListener("submit", async (e) => {
         const usuario = data.usuario;
         
         // --- CORREÇÃO: SALVANDO O TOKEN (NÃO BLOQUEIA MAIS) ---
-        // O Flask deveria retornar 'access_token', mas se não retornar,
-        // o token será 'undefined', mas o script CONTINUARÁ para o redirecionamento
         const tokenJWT = data.access_token;
+
         if (tokenJWT) {
             localStorage.setItem("token_colaborador", tokenJWT);
+            // >>> ADIÇÃO 2: DIAGNÓSTICO DE SALVAMENTO <<<
+            console.log("Token recebido e salvo com sucesso:", tokenJWT.substring(0, 30) + '...');
         } else {
-             // Deixa um log no console, mas NÃO BLOQUEIA
-             console.warn("Atenção: Token JWT não recebido do servidor. A autenticação na próxima página pode falhar."); 
+            // Deixa um log no console, mas NÃO BLOQUEIA
+            console.warn("Atenção: Token JWT não recebido do servidor. Salvamento falhou."); 
         }
         // ----------------------------------
 

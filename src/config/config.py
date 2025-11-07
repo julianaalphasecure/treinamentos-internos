@@ -5,7 +5,7 @@ load_dotenv()
 
 
 FLASK_ENV = os.getenv("FLASK_ENV", "development")
-SECRET_KEY = os.getenv("SECRET_KEY", "chave_secreta")
+SECRET_KEY = os.getenv("SECRET_KEY", "chavesecreta")
 
 
 DB_HOST = os.getenv("DB_HOST", "localhost")

@@ -1,9 +1,39 @@
 document.addEventListener("DOMContentLoaded", () => {
+    
+    const TOKEN = localStorage.getItem("token_colaborador");
 
+    if (!TOKEN) {
+        console.error("Token de autenticação ausente. Não é possível carregar progresso.");
+        // Redireciona se for uma página protegida
+        setTimeout(() => {
+            window.location.href = "/src/templates/auth/login.html"; 
+        }, 500);
+        return;
+    }
+    
     // ---------- Função principal para carregar progresso ----------
     async function carregarProgresso() {
         try {
-            const response = await fetch('/colaborador/progresso/frontend');
+          const response = await fetch('http://127.0.0.1:5000/colaborador/progresso/frontend', { 
+            method: "GET",
+            headers: {
+                'Authorization': `Bearer ${TOKEN}`, 
+                'Content-Type': 'application/json'
+            }
+        });
+            
+            // Tratamento de 401/403
+            if (response.status === 401 || response.status === 403) {
+                console.error('Sessão expirada ou Token inválido.');
+                localStorage.removeItem("token_colaborador");
+                localStorage.removeItem("usuario_colaborador");
+                showToast('Sessão expirada. Por favor, faça login.');
+                setTimeout(() => {
+                    window.location.href = "/src/templates/auth/login.html"; 
+                }, 1000);
+                return;
+            }
+
             if (!response.ok) throw new Error('Erro ao buscar dados');
 
             const dados = await response.json();
@@ -23,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <div class="barra">
                         <div class="preenchimento" style="width:0%"></div>
                     </div>
-                    <span class="nota">${modulo.nota}%</span>
+                    <span class="nota">${modulo.percent}%</span>
                 `;
 
                 // Insere antes do botão "Ver Mais" se existir
@@ -40,10 +70,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 }, 300);
             });
 
-            // ---------- Carrega badges ----------
+            // ---------- Carrega badges (Assumindo que a API retornará 'badges') ----------
             const containerBadges = document.querySelector('.conquistas');
             containerBadges.innerHTML = '<h2>Conquistas e Badges</h2>'; // limpa badges
-            dados.badges.forEach(badge => {
+            // Verifica se 'badges' existe na resposta, senão usa array vazio
+            const badges = dados.badges || []; 
+            badges.forEach(badge => {
                 const div = document.createElement('div');
                 div.className = 'badge';
                 div.innerHTML = `<h3>${badge.titulo}</h3><p>${badge.descricao}</p>`;
@@ -59,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
     carregarProgresso();
 
 
-    // ---------- Botão "Ver Mais" ----------
+    // ---------- Botão "Ver Mais" (Mantido como estava) ----------
     const verMaisBtn = document.getElementById('verMaisBtn');
     if (verMaisBtn) {
         verMaisBtn.addEventListener('click', () => {
@@ -74,6 +106,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 {nome: 'Módulo 08 - BASA (Banco Amazônia)', percent: 0, nota: 0},
             ];
 
+            const containerModulos = document.querySelector('.progresso-modulos');
+
             maisModulos.forEach(m => {
                 const div = document.createElement('div');
                 div.className = 'modulo';
@@ -87,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <span class="nota">${m.nota}%</span>
                 `;
 
-                document.querySelector('.progresso-modulos').insertBefore(div, verMaisBtn);
+                containerModulos.insertBefore(div, verMaisBtn);
 
                 setTimeout(() => {
                     div.querySelector('.preenchimento').style.width = m.percent + '%';
@@ -99,7 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ---------- Tema e tamanho de fonte ----------
+    // ---------- Funções de UI (Mantidas) ----------
     const savedTheme = localStorage.getItem("theme") || "claro";
     const savedFont = localStorage.getItem("font-size") || "padrao";
 
@@ -116,7 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("font-size", size);
     };
 
-    // ---------- Toasts ----------
+    // ---------- Toasts (Mantidas) ----------
     window.showToast = (msg, duration = 2500) => {
         const toast = document.createElement("div");
         toast.className = "toast";

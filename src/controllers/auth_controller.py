@@ -40,7 +40,7 @@ def login():
         return jsonify({"error": "Credenciais inválidas"}), 401
 
 
-    access_token = create_access_token(identity=usuario.id)
+    access_token = create_access_token(identity=str(usuario.id))
 
     if usuario.tipo_acesso.lower() == "colaborador":
         ColaboradorService.set_status(usuario.id, "online")
