@@ -9,49 +9,45 @@
 </head>
 <body>
     
-
-
-
 <div class="main-container">
 
-  <aside class="sidebar">
-    <nav>
-      <ul>
+    <aside class="sidebar">
+        <nav>
+            <ul>
+                <li><a href="/src/templates/gestor/equipe.html">Equipe</a></li>
+                <li><a href="#" class="active">Feedback</a></li>
+                <li><a href="/src/templates/auth/login.html">Sair</a></li>
+            </ul>
+        </nav>
+    </aside>
+    
+    <div class="feedback-central-container">
+        <h2>Envio Rápido de Feedback</h2>
+        <p class="subtitulo">Pesquise o colaborador e envie feedback direcionado.</p>
+
+        <div class="caixa-feedback-envio">
+            <form id="feedback-form">
+                
+                <div class="campo-pesquisa-colaborador">
+                    <label for="colaborador-search">Enviar para:</label>
+                    <input type="text" id="colaborador-search" placeholder="Digite o nome do colaborador..." required>
+                    <input type="hidden" id="colaborador-destino-id" value=""> 
+                    <div id="search-results" class="search-results">
+                        </div>
+                </div>
+
+                <input type="text" id="feedback-titulo" placeholder="Título do Feedback (Opcional)" maxlength="100">
+
+                <textarea id="feedback-mensagem" placeholder="Digite sua mensagem de feedback detalhada aqui..." rows="12" required></textarea>
+
+                <div class="form-actions">
+                    <span id="feedback-status-message"></span>
+                    <button type="submit" id="btn-enviar-feedback" class="btn-enviar-feedback" disabled>Enviar Feedback</button>
+                </div>
+            </form>
+        </div>
         
-        <li><a href="/src/templates/gestor/equipe.html">Equipe</a></li>
-             <li><a href="#" class="active">Feedback</a></li>
-        <li><a href="/src/templates/auth/login.html">Sair</a></li>
-      </ul>
-    </nav>
-  </aside>
-  
-  <div class="feedback-container">
-  <h2>Relatório de Desempenho</h2>
-  <p class="subtitulo">Análise detalhada do progresso da equipe</p>
-
-  <div class="resumo-desempenho">
-    <div class="progresso">
-      <span>Progresso Médio</span>
-      <strong id="progresso-medio">0%</strong>
-    </div>
-    <div class="conclusao">
-      <span>Taxa de Conclusão</span>
-      <strong id="taxa-conclusao">0%</strong>
-    </div>
-  </div>
-
-  <br>
-
-  <h3>Enviar Feedback</h3>
-  <p>Envie feedback direcionado para os colaboradores</p>
-
-  <ul id="lista-feedback" class="lista-feedback">
-    <!-- Lista de colaboradores preenchida pelo JS -->
-  </ul>
-
-  <button id="btn-ver-todos-feedback" class="btn-ver-todos">Ver todos</button>
-</div>
-
+        </div>
 </div>
 
 <script src="/src/static/js/gestor/relatorio.js"></script>
