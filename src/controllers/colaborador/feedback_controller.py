@@ -1,7 +1,35 @@
 from flask import Blueprint, request, jsonify
 from src.services.colaborador.feedback_service import FeedbackService
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 colab_feedback_bp = Blueprint("colab_feedback_bp", __name__, url_prefix="/colaborador/feedback")
+
+@colab_feedback_bp.route("/meus-feedbacks", methods=["GET"])
+@jwt_required() # Protege a rota
+def listar_feedbacks_colaborador():
+    """Rota para listar feedbacks DESTE colaborador."""
+    # Extrai o ID do usuário logado do token JWT
+    colaborador_id = get_jwt_identity() 
+    
+    feedbacks = FeedbackService.get_feedbacks_by_colaborador(colaborador_id)
+    return jsonify([f.to_dict() for f in feedbacks]), 200
+
+# ROTA PARA MARCAR COMO LIDO
+@colab_feedback_bp.route("/marcar-lido/<int:feedback_id>", methods=["PUT"])
+@jwt_required()
+def marcar_feedback_lido(feedback_id):
+    feedback = FeedbackService.marcar_como_lido(feedback_id)
+    if feedback:
+        return jsonify({"message": "Feedback marcado como lido", "lido": feedback.lido}), 200
+    return jsonify({"error": "Feedback não encontrado"}), 404
+
+
+@colab_feedback_bp.route("/", methods=["POST"])
+def criar_feedback():
+    data = request.get_json()
+    # Idealmente, o gestor_id viria do JWT do gestor aqui!
+    feedback = FeedbackService.create_feedback(data)
+    return jsonify(feedback.to_dict()), 201
 
 @colab_feedback_bp.route("/", methods=["GET"])
 def listar_feedbacks():
@@ -15,11 +43,6 @@ def obter_feedback(feedback_id):
         return jsonify(feedback.to_dict()), 200
     return jsonify({"error": "Feedback não encontrado"}), 404
 
-@colab_feedback_bp.route("/", methods=["POST"])
-def criar_feedback():
-    data = request.get_json()
-    feedback = FeedbackService.create_feedback(data)
-    return jsonify(feedback.to_dict()), 201
 
 @colab_feedback_bp.route("/<int:feedback_id>", methods=["PUT"])
 def atualizar_feedback(feedback_id):

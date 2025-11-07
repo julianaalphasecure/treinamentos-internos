@@ -1,6 +1,9 @@
 const feedbackList = document.getElementById('feedbackList');
 const viewAllBtn = document.getElementById('viewAllBtn');
 
+// URLs da API
+const baseURL = "http://127.0.0.1:5000/colaborador/feedback";
+
 // Formata a data
 function formatDate(datetime) {
     const date = new Date(datetime);
@@ -13,37 +16,70 @@ function formatDate(datetime) {
     });
 }
 
-// Carrega feedbacks via API
+// ================== Carrega feedbacks via API (JWT Protegido) ==================
 async function loadFeedbacks() {
-    try {
-        const response = await fetch('/colaborador/feedback/');
-        const data = await response.json();
+    const TOKEN = localStorage.getItem("token_colaborador"); 
 
+    if (!TOKEN) {
+        console.error("Token de colaborador não encontrado.");
+        feedbackList.innerHTML = '<p>Erro de autenticação. Por favor, faça login novamente.</p>';
+        return;
+    }
+
+    try {
+        // ROTA ATUALIZADA: Busca os feedbacks APENAS DESTE colaborador
+        const response = await fetch(`${baseURL}/meus-feedbacks`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${TOKEN}`,
+                'Content-Type': 'application/json'
+            }
+        }); 
+        
+        // Tratar erro de autenticação ou servidor
+        if (!response.ok) {
+            if (response.status === 401 || response.status === 403) {
+                // Forçar logout se o token for inválido/expirado
+                localStorage.removeItem("token_colaborador");
+                localStorage.removeItem("usuario_colaborador");
+                window.location.href = "/src/templates/auth/login.html";
+                return;
+            }
+            throw new Error(`Erro ${response.status} ao carregar feedbacks.`);
+        }
+
+        const data = await response.json();
         feedbackList.innerHTML = '';
 
         if (data.length === 0) {
-            feedbackList.innerHTML = '<p>Nenhum feedback recebido.</p>';
+            feedbackList.innerHTML = '<p>Nenhum feedback recebido. Bom trabalho!</p>';
             viewAllBtn.style.display = 'none';
             return;
         }
 
+        // Renderiza os cards de feedback
         data.forEach(fb => {
             const card = document.createElement('div');
             card.classList.add('feedback-card');
             card.dataset.id = fb.id;
-            if (fb.lido) card.classList.add('read');
+            if (fb.lido) {
+                card.classList.add('read');
+            } else {
+                card.classList.add('unread'); 
+            }
 
             const tipo = fb.tipo || 'Feedback';
-            const gestor = fb.gestor?.nome || `ID ${fb.gestor_id}`;
+            // Usa gestor_nome que o Model retorna
+            const gestorNome = fb.gestor_nome || `ID ${fb.gestor_id}`; 
 
             card.innerHTML = `
                 <div class="feedback-header">
                     <span class="feedback-type">${tipo}</span>
-                    <span class="feedback-from">De: ${gestor}</span>
+                    <span class="feedback-from">De: ${gestorNome}</span>
                     <span class="feedback-date">${formatDate(fb.data_feedback)}</span>
                 </div>
                 <div class="feedback-message">${fb.mensagem}</div>
-                <button class="mark-read-btn">${fb.lido ? 'Lida' : 'Marcar como lida'}</button>
+                <button class="mark-read-btn" ${fb.lido ? 'disabled' : ''}>${fb.lido ? 'Lida' : 'Marcar como lida'}</button>
             `;
 
             feedbackList.appendChild(card);
@@ -51,24 +87,34 @@ async function loadFeedbacks() {
 
     } catch (err) {
         console.error('Erro ao carregar feedbacks:', err);
+        feedbackList.innerHTML = `<p>Falha ao carregar feedbacks: ${err.message}</p>`;
     }
 }
 
-// Marca como lido via API
+// ================== Marca como lido via API (PUT) ==================
 feedbackList.addEventListener('click', async (e) => {
-    if (e.target.classList.contains('mark-read-btn')) {
+    if (e.target.classList.contains('mark-read-btn') && !e.target.disabled) {
         const card = e.target.closest('.feedback-card');
         const feedbackId = card.dataset.id;
+        const TOKEN = localStorage.getItem("token_colaborador");
 
         try {
-            await fetch(`/colaborador/feedback/${feedbackId}`, {
+            // ROTA ATUALIZADA: Chama o endpoint de marcar-lido
+            const response = await fetch(`${baseURL}/marcar-lido/${feedbackId}`, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ lido: true })
+                headers: { 
+                    'Authorization': `Bearer ${TOKEN}`
+                }
             });
+
+            if (!response.ok) throw new Error("Falha ao marcar como lido.");
+            
+            // Atualiza o DOM
             card.classList.add('read');
+            card.classList.remove('unread');
             e.target.disabled = true;
             e.target.textContent = 'Lida';
+
         } catch (err) {
             console.error('Erro ao marcar feedback como lido:', err);
         }
@@ -76,11 +122,9 @@ feedbackList.addEventListener('click', async (e) => {
 });
 
 viewAllBtn.addEventListener('click', loadFeedbacks);
-
-// Inicializa ao carregar página
 loadFeedbacks();
 
-// ================== Preferências do usuário ==================
+// ================== Preferências do usuário (Mantido) ==================
 document.addEventListener("DOMContentLoaded", () => {
     const savedTheme = localStorage.getItem("theme") || "claro";
     const savedFont = localStorage.getItem("font-size") || "padrao";

@@ -1,6 +1,7 @@
 from src.config.database import db
 from src.models.feedback import Feedback
 
+
 class FeedbackService:
     @staticmethod
     def get_all_feedbacks():
