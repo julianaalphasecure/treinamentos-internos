@@ -11,6 +11,9 @@ def listar_feedbacks_colaborador():
     # Extrai o ID do usuário logado do token JWT
     colaborador_id = get_jwt_identity() 
     
+    # 🚨 LINHA DE DEBUG ADICIONADA:
+    print(f"\n--- DEBUG (BUSCA): Colaborador logado buscando feedback com ID: {colaborador_id} ---\n") 
+    
     feedbacks = FeedbackService.get_feedbacks_by_colaborador(colaborador_id)
     return jsonify([f.to_dict() for f in feedbacks]), 200
 
@@ -27,7 +30,7 @@ def marcar_feedback_lido(feedback_id):
 @colab_feedback_bp.route("/", methods=["POST"])
 def criar_feedback():
     data = request.get_json()
-    # Idealmente, o gestor_id viria do JWT do gestor aqui!
+    # ATENÇÃO: Esta rota / é a rota PÚBLICA do Colaborador. A criação DEVE ser protegida no /gestor/relatorio/
     feedback = FeedbackService.create_feedback(data)
     return jsonify(feedback.to_dict()), 201
 

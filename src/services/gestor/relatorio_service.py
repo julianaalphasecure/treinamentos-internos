@@ -1,18 +1,12 @@
 from src.config.database import db
 from src.models.relatorio import Relatorio
 
+
 class RelatorioService:
     @staticmethod
-    def get_all_relatorios():
-        return Relatorio.query.all()
-    
-    @staticmethod
-    def get_relatorio_by_id(relatorio_id):
-        return Relatorio.query.get(relatorio_id)
-
-    @staticmethod
     def create_relatorio(data):
-        relatorio = Relatorio(**data)
+        # O modelo Relatorio agora tem colaborador_id, então o data deve conter essa chave.
+        relatorio = Relatorio(**data) 
         db.session.add(relatorio)
         db.session.commit()
         return relatorio
@@ -23,13 +17,15 @@ class RelatorioService:
         if not relatorio:
             return None
         
-        allowed_fields = ["titulo", "conteudo"]
+        # AJUSTE: Adicione colaborador_id se a edição de destino for permitida
+        allowed_fields = ["titulo", "conteudo", "colaborador_id"] 
         for key, value in data.items():
             if key in allowed_fields:
                 setattr(relatorio, key, value)
 
         db.session.commit()
         return relatorio
+    
             
     @staticmethod
     def delete_relatorio(relatorio_id):

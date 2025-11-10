@@ -15,22 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
     headerNome.textContent = `Olá, ${usuarioGestor.nome}`;
   }
 
-  // ====== Atualiza último login (heartbeat) ======
-  async function heartbeat() {
-    try {
-      await fetch(`${baseURL}/status/${usuarioGestor.id}`, {
-        method: "PUT",
-        headers: { 
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}` 
-        },
-        body: JSON.stringify({ status: "online" })
-      });
-    } catch (err) {
-      console.error("Erro no heartbeat:", err);
-    }
-  }
-
+ 
   // ====== Função para carregar equipe ======
   async function carregarEquipe() {
     try {
@@ -63,16 +48,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         card.innerHTML = `
           <div class="info-colaborador">
-            <img src="${foto}" alt="${colaborador.nome}" />
             <div class="dados">
               <p><strong>${colaborador.nome}</strong></p>
               <p>${colaborador.re || "Sem RE"}</p>
               <p>${colaborador.email || "Sem e-mail"}</p>
             </div>
           </div>
-          <span class="status ${statusClass}">
-            ${status === "online" ? "Online" : "Offline"}
-          </span>
         `;
 
         lista.appendChild(card);
@@ -83,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ====== Atualização em tempo real + heartbeat ======
-  carregarEquipe(); // primeiro carregamento
+  carregarEquipe();
   setInterval(() => {
     carregarEquipe();
     heartbeat();

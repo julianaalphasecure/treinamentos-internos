@@ -1,58 +1,65 @@
-const form = document.getElementById("login-form");
+// Arquivo: /src/static/js/auth/cadastro.js
+
+// CRÍTICO 1: Mudar para o ID do formulário de cadastro
+const form = document.getElementById("cadastro-form");
+// CRÍTICO 2: Definir a URL correta da sua API Flask para o cadastro
+const baseURL = "http://localhost:5000/auth/cadastro"; 
+// ^^^ VERIFIQUE SE ESTA É A ROTA CORRETA NO SEU BACKEND ^^^
 
 form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
+    // ✅ CRÍTICO 3: Previne o comportamento padrão do HTML (que causa o refresh)
+    e.preventDefault(); 
+    
+    // Coleta dos dados do formulário
+    const re = document.getElementById("re").value.trim();
+    const nome = document.getElementById("nome").value.trim();
     const email = document.getElementById("email").value.trim();
     const senha = document.getElementById("senha").value.trim();
+    const tipoAcesso = document.getElementById("tipo_acesso").value;
 
-    if (!email || !senha) {
-        alert("Preencha todos os campos");
+    const feedbackDiv = document.getElementById("cadastro-feedback");
+    feedbackDiv.textContent = ''; // Limpa mensagens anteriores
+
+    if (!re || !nome || !email || !senha || !tipoAcesso) {
+        alert("Preencha todos os campos obrigatórios.");
         return;
     }
 
     try {
-        const res = await fetch("http://localhost:5000/auth/login", {
+        const res = await fetch(baseURL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, senha })
+            body: JSON.stringify({ 
+                re: re, 
+                nome: nome, 
+                email: email, 
+                senha: senha,
+                tipo_acesso: tipoAcesso 
+            })
         });
 
         const data = await res.json();
 
         if (!res.ok) {
-            alert(data.error || "Erro no login");
+            // Falha no cadastro (ex: email já existe)
+            feedbackDiv.style.color = 'red';
+            feedbackDiv.textContent = data.error || "Erro ao tentar cadastrar usuário.";
+            console.error("Erro de Cadastro:", data);
             return;
         }
 
-    
+        // SUCESSO NO CADASTRO
+        feedbackDiv.style.color = 'green';
+        feedbackDiv.textContent = data.message || "Cadastro realizado com sucesso! Redirecionando para o login...";
+
         
-        // 1. Defina qual propriedade do objeto 'data' contém o token JWT
-        const tokenJWT = data.access_token || data.token; // Use 'data.token' se o Flask usar essa chave
-
-        if (!tokenJWT) {
-            alert("Resposta da API de login incompleta: Token JWT não encontrado.");
-            return;
-        }
-
-        // 2. Salva o token com a chave CORRETA que o modulo.js espera!
-        localStorage.setItem("token_colaborador", tokenJWT); 
-        
-        // =========================================================
-
-        const usuario = data.usuario;
-
-        // Usa a propriedade correta do backend
-        if (usuario.tipo_acesso === "colaborador") {
-            localStorage.setItem("usuario_colaborador", JSON.stringify(usuario));
-            window.location.href = "/src/templates/colaborador/modulo.html";
-        } else if (usuario.tipo_acesso === "gestor") {
-            localStorage.setItem("usuario_gestor", JSON.stringify(usuario));
-            window.location.href = "/src/templates/gestor/equipe.html";
-        }
+        setTimeout(() => {
+             window.location.href = "/src/templates/auth/login.html";
+        }, 2000); 
 
     } catch (err) {
-        alert("Erro de conexão com o servidor");
-        console.error(err);
+        feedbackDiv.style.color = 'red';
+        feedbackDiv.textContent = "Erro de conexão com o servidor. Verifique o console.";
+        console.error("Erro de conexão/API:", err);
     }
 });

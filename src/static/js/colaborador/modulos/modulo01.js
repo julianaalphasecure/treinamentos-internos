@@ -11,7 +11,7 @@ const totalSlides = slidesNormal.length;
 
 // Variáveis de Autenticação e Regra de Negócio
 const USUARIO_ID = JSON.parse(localStorage.getItem("usuario_colaborador"))?.id; // Obtém o ID do usuário
-const TOKEN = localStorage.getItem("token_colaborador");
+const TOKEN = localStorage.getItem("token_colaborador"); // Token JWT do colaborador
 const REQUISITO_APROVACAO = 80; // Requisito de aprovação em %
 
 // ================== FUNÇÃO ATUALIZA CARROSSEL ==================
@@ -42,7 +42,14 @@ function loadModuleProgress(moduleId) {
 async function finalizarModuloAPI(moduloId, notaFinal) {
     if (!USUARIO_ID) {
         console.error("ID do usuário não encontrado.");
-        alert("Erro: Usuário não autenticado.");
+        alert("Erro: Usuário não autenticado. Faça login novamente.");
+        return;
+    }
+    
+    // Verifica se o token existe antes de tentar enviar
+    if (!TOKEN) {
+        console.error("Token de autenticação ausente.");
+        alert("Erro: Token de autenticação ausente. Faça login novamente.");
         return;
     }
 
@@ -51,15 +58,15 @@ async function finalizarModuloAPI(moduloId, notaFinal) {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                // Se o seu Flask exigir autenticação JWT/Bearer:
-                // "Authorization": `Bearer ${TOKEN}` 
+                // ✅ CORREÇÃO: Envio do token JWT no cabeçalho Authorization
+                "Authorization": `Bearer ${TOKEN}` 
             },
             body: JSON.stringify({ nota_final: notaFinal })
         });
 
         if (!response.ok) {
             // Tenta ler o erro do backend, se houver
-            const errorData = await response.json().catch(() => ({ error: "Erro desconhecido" }));
+            const errorData = await response.json().catch(() => ({ error: "Erro desconhecido ou falha na comunicação" }));
             throw new Error(`Erro ${response.status} ao finalizar módulo: ${errorData.error || response.statusText}`);
         }
 

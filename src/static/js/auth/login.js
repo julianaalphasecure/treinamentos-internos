@@ -1,4 +1,4 @@
-// login.js (VERSÃO FINAL COM TENTATIVA DE SALVAR E REDIRECIONAR E DIAGNÓSTICO)
+// Arquivo: login.js (CORRIGIDO)
 const form = document.getElementById("login-form");
 
 form.addEventListener("submit", async (e) => {
@@ -21,7 +21,6 @@ form.addEventListener("submit", async (e) => {
 
         const data = await res.json();
         
-        // >>> ADIÇÃO 1: DIAGNÓSTICO DA RESPOSTA DO SERVIDOR <<<
         console.log("Resposta completa do servidor (data):", data);
 
         if (!res.ok) {
@@ -30,28 +29,30 @@ form.addEventListener("submit", async (e) => {
         }
 
         const usuario = data.usuario;
-        
-        // --- CORREÇÃO: SALVANDO O TOKEN (NÃO BLOQUEIA MAIS) ---
         const tokenJWT = data.access_token;
-
-        if (tokenJWT) {
-            localStorage.setItem("token_colaborador", tokenJWT);
-            // >>> ADIÇÃO 2: DIAGNÓSTICO DE SALVAMENTO <<<
-            console.log("Token recebido e salvo com sucesso:", tokenJWT.substring(0, 30) + '...');
-        } else {
-            // Deixa um log no console, mas NÃO BLOQUEIA
-            console.warn("Atenção: Token JWT não recebido do servidor. Salvamento falhou."); 
+        
+        if (!tokenJWT) {
+            console.warn("Atenção: Token JWT não recebido do servidor. Login falhou."); 
+            return;
         }
-        // ----------------------------------
 
-        // Usa a propriedade correta do backend
+        // NOVO BLOCO DE LÓGICA: Salva o token e o usuário na chave correta
         if (usuario.tipo_acesso === "colaborador") {
+            // Salva o token para colaborador
+            localStorage.setItem("token_colaborador", tokenJWT); 
             localStorage.setItem("usuario_colaborador", JSON.stringify(usuario));
-            window.location.href = "/src/templates/colaborador/modulo.html"; // <<<< FINALMENTE VAI REDIRECIONAR
+            window.location.href = "/src/templates/colaborador/modulo.html"; 
+
         } else if (usuario.tipo_acesso === "gestor") {
+            // Salva o token para gestor
+            localStorage.setItem("token_gestor", tokenJWT); 
             localStorage.setItem("usuario_gestor", JSON.stringify(usuario));
             window.location.href = "/src/templates/gestor/equipe.html";
+        } else {
+            alert("Tipo de acesso desconhecido. Contate o administrador.");
         }
+
+        console.log(`Token recebido e salvo em localStorage. Chave: token_${usuario.tipo_acesso}`);
 
     } catch (err) {
         alert("Erro de conexão com o servidor");

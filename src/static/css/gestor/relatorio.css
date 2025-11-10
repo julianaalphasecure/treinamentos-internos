@@ -58,7 +58,7 @@ body {
   transform: translateX(30px); 
 }
 
-/* NOVO CONTÊINER CENTRALIZADO */
+
 .feedback-central-container {
   flex: 1; /* Ocupa o restante do espaço */
   max-width: 800px; /* Limita a largura do formulário */
@@ -69,7 +69,7 @@ body {
 .feedback-central-container h2 {
   font-size: 2rem;
   margin-bottom: 0.2rem;
-  color: #f88a15;
+  color: #152264;
 }
 
 .feedback-central-container .subtitulo {
@@ -116,7 +116,7 @@ body {
   display: block;
   font-weight: bold;
   margin-bottom: 5px;
-  color: #f88a15;
+  color: #152264;
 }
 
 
