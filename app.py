@@ -1,5 +1,5 @@
 import os
-from datetime import timedelta # <<< IMPORT OBRIGATÓRIO PARA O JWT <<<
+from datetime import timedelta 
 from flask import Flask, jsonify, current_app
 import traceback
 from flask_migrate import Migrate
@@ -34,7 +34,6 @@ def create_app():
     CORS(app, resources={r"/*": {"origins": "*", "allow_headers": ["Content-Type", "Authorization"]}})
 
     # ===== Configurações Flask =====
-    # APLICA TRIM: Garante que não há espaços em branco na chave
     app.config["SECRET_KEY"] = SECRET_KEY.strip() 
     app.config["SQLALCHEMY_DATABASE_URI"] = (
         f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
@@ -56,25 +55,28 @@ def create_app():
         print('==================================================================')
         return jsonify(error="Erro interno do servidor: falha no processamento da rota."), 500
     
-    # ===== JWT (Configuração de Chave e Tempo) =====
-    # APLICA TRIM e DEFINE TEMPO DE EXPIRAÇÃO
+    # ===== JWT=====
     app.config["JWT_SECRET_KEY"] = SECRET_KEY.strip()
-    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1) # <<< ADICIONADO <<<
-    
+    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=30)
     jwt = JWTManager(app)
     
-    # ===== CALLBACKS JWT (Mantidos) =====
+    # ===== CALLBACKS JWT =====
     @jwt.invalid_token_loader
     @jwt.unauthorized_loader
+    def handle_auth_error(error):
+        return jsonify(error=str(error)), 401 
+
+
     @jwt.expired_token_loader
-    def custom_auth_error(callback):
-        return jsonify(error=callback), 401 
+    def expired_token_callback(jwt_header, jwt_data):
     
+        return jsonify(error="O token de acesso expirou. Por favor, refaça o login."), 401 
+
     @jwt.user_identity_loader
     def user_identity_lookup(user):
-        return user 
+        return user
     
-    # ===== Registro de Blueprints (Mantidos) =====
+    # ===== Registro de Blueprints =====
     app.register_blueprint(auth_bp, url_prefix="/auth")
     app.register_blueprint(colaborador_bp, url_prefix="/colaborador")
     app.register_blueprint(colab_perfil_bp, url_prefix="/colaborador/perfil")
@@ -85,7 +87,7 @@ def create_app():
     app.register_blueprint(gestor_feedback_bp, url_prefix="/gestor/feedback")
     app.register_blueprint(relatorio_bp, url_prefix="/gestor/relatorio")
 
-    # ===== Debug: listar todas as rotas registradas =====
+   
     with app.app_context():
         print("\n=== ROTAS REGISTRADAS ===")
         for rule in app.url_map.iter_rules():
