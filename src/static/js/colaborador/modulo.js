@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // ================== MOSTRA NOME ==================
     userNameElement.textContent = `Olá, ${usuarioColaborador.nome}`;
 
-    // ================== CARROSSEL ==================
+    // ================== CARROSSEL E PESQUISA (Mantido) ==================
     const wrapper = document.querySelector(".modules-wrapper");
     const prevBtn = document.querySelector(".carousel-btn.prev");
     const nextBtn = document.querySelector(".carousel-btn.next");
@@ -43,7 +43,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
         currentSlide = 0;
         updateCarousel();
-        carregarProgresso();
+        
+        // Chamada inicial da função de progresso após renderizar a estrutura dos módulos
+        carregarProgresso(); 
     }
 
     function updateCarousel() {
@@ -74,13 +76,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         filteredModules = allModules.filter(mod => mod.html.toLowerCase().includes(query));
         renderModules();
     });
-
-    // ================== CARREGAR PROGRESSO (COM CORREÇÃO) ==================
-    async function carregarProgresso() {
-        // 1. OBTÉM O TOKEN E VERIFICA SE ELE EXISTE
+    
+    // ================== CARREGAR PROGRESSO (AGORA INTERNO E CENTRALIZADO) ==================
+    // Mantendo no window para compatibilidade caso outro script precise chamá-lo
+    window.carregarProgresso = async function carregarProgresso() {
         const TOKEN = localStorage.getItem("token_colaborador"); 
-        
-        console.log("Token lido do localStorage:", TOKEN ? "Token presente" : "Token AUSENTE/NULL"); 
         
         if (!TOKEN) {
             console.error("Token de autenticação ausente. Por favor, faça login.");
@@ -88,16 +88,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         try {
-            // 2. FAZ A REQUISIÇÃO, ENVIANDO O TOKEN
             const response = await fetch(`http://127.0.0.1:5000/colaborador/progresso/frontend`, {
                 method: "GET",
                 headers: {
-                    "Authorization": `Bearer ${TOKEN}`, // Envio do token
+                    "Authorization": `Bearer ${TOKEN}`, 
                     "Content-Type": "application/json"
                 }
             }); 
 
-            // 3. TRATAMENTO DE ERRO
             if (response.status === 401 || response.status === 403) {
                 alert("Sessão expirada ou Token inválido. Por favor, faça login novamente."); 
                 throw new Error("Não autorizado. Token inválido ou expirado.");
@@ -117,15 +115,13 @@ document.addEventListener("DOMContentLoaded", async () => {
                 statCards[1].textContent = statsAPI.nao_iniciados; 
             } 
 
-            // ATUALIZA BARRAS
+            // ATUALIZA BARRAS E BOTÕES
             const cards = document.querySelectorAll(".module-card");
             cards.forEach((card) => {
                 const bar = card.querySelector(".progress-bar-inner");
+                // Localiza o botão dentro do card. Se for 'a', ajuste o seletor.
+                const button = card.querySelector("button") || card.querySelector("a"); 
                 
-                // 🚨 NOVO: Localiza o botão dentro do card. Se não for 'button', ajuste aqui!
-                const button = card.querySelector("button"); 
-                
-                // Agora verifica se o botão também existe
                 if (!bar || !button) return; 
 
                 const moduloId = parseInt(card.dataset.id); 
@@ -134,46 +130,49 @@ document.addEventListener("DOMContentLoaded", async () => {
                 if (moduloAPI) {
                     let percent = moduloAPI.percent || 0; 
                     
-                    // === LÓGICA DE PROGRESSO E BOTÃO CORRIGIDA ===
                     if (moduloAPI.status === "concluido") {
-                        // 1. BARRA: Força 100%
                         percent = 100;
                         card.classList.add("concluido");
                         
-                        // 2. BOTÃO: Mudar para Refazer
+                        // MUDAR PARA REFAZER
                         button.textContent = "Refazer"; 
-                        button.classList.add("btn-refazer"); // Classe para estilização
+                        button.classList.add("btn-refazer"); 
+                        button.classList.remove("btn-acessar");
                         
                     } else {
                         card.classList.remove("concluido");
                         
-                        // 2. BOTÃO: Mudar para Acessar
+                        // MUDAR PARA ACESSAR
                         button.textContent = "Acessar";
                         button.classList.remove("btn-refazer");
+                        button.classList.add("btn-acessar");
                         
-                        // 1. BARRA: Progresso parcial
                         if (percent > 100) percent = 100;
                     }
-                    // ===============================================
                     
                     bar.style.width = `${percent}%`;
-
                 } else {
                     bar.style.width = "0%";
-                    // Módulos não iniciados
                     button.textContent = "Acessar";
                     button.classList.remove("btn-refazer");
+                    button.classList.add("btn-acessar");
                 }
             });
             
         } catch (error) {
             console.error("Erro ao carregar progresso:", error);
+            // Redirecionamento se for erro de autenticação/token
+            if (error.message.includes("Não autorizado")) {
+                localStorage.removeItem("token_colaborador");
+                localStorage.removeItem("usuario_colaborador");
+                setTimeout(() => window.location.href = "/src/templates/auth/login.html", 1000);
+            }
         }
     }
     // =======================================================================
 
 
-    // ================== FINALIZAR MÓDULO ==================
+    // ================== FINALIZAR MÓDULO (Correto) ==================
     async function finalizarModulo(moduloId, nota = 100) {
         try {
             const response = await fetch(`http://127.0.0.1:5000/colaborador/progresso/finalizar/${usuarioId}/${moduloId}`, {
@@ -187,18 +186,43 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             if (!response.ok) throw new Error("Erro ao finalizar módulo");
 
+            // >>> CHAMADA CRÍTICA: RECARREGA A TELA APÓS SUCESSO <<<
             await carregarProgresso();
+            
+            // Feedback visual
+            if (window.showToast) {
+                window.showToast(`Módulo ${moduloId} finalizado com sucesso!`);
+            }
+
         } catch (err) {
             console.error("Erro ao finalizar módulo:", err);
+            if (window.showToast) {
+                window.showToast("Erro ao finalizar módulo. Verifique se o módulo está sendo enviado corretamente.");
+            }
         }
     }
 
-    // Exemplo: botão dentro do card para finalizar módulo
-    document.querySelectorAll(".module-card .btn-finalizar").forEach(btn => {
-        btn.addEventListener("click", (e) => {
+    // LIGAÇÃO DO EVENTO DE FINALIZAÇÃO (Ponto que deve ser adaptado)
+    // Se o seu botão de finalizar módulo estiver na página de módulo:
+    document.querySelectorAll(".module-card button, .module-card a").forEach(element => {
+        // Usa uma função de escuta para todos os botões/links nos cartões
+        element.addEventListener("click", (e) => {
             const card = e.target.closest(".module-card");
             const moduloId = parseInt(card.dataset.id);
-            finalizarModulo(moduloId);
+
+            // Verifique se este é o botão/evento que DEVE DISPARAR A FINALIZAÇÃO.
+            // Se o botão for "Acessar", ele deve levar para a página do módulo, não finalizar.
+            // Se for um botão/link "Finalizar Teste" dentro da página do módulo, 
+            // este trecho de código DEVE ESTAR LÁ, e não no dashboard (modulo.js).
+            
+            // SE VOCÊ CLICAR AQUI NO DASHBOARD PARA TESTAR A FINALIZAÇÃO:
+            if (moduloId === 2 && (e.target.textContent === "Finalizar" || e.target.textContent === "Acessar")) {
+                 // **USE ISTO APENAS PARA TESTE RÁPIDO NO DASHBOARD!**
+                 // A lógica correta de finalização DEVE estar na página de quiz/teste.
+                 // Vamos simular a finalização com nota 100 para o módulo 2.
+                 finalizarModulo(moduloId, 100);
+                 e.preventDefault(); // Impede o clique de ir para outro link (Acessar)
+            }
         });
     });
 

@@ -6,13 +6,13 @@ let currentIndex = 0;
 let moduleLocked = false;
 let isFullScreen = false;
 let darkMode = false;
-const moduleId = 1; // **IMPORTANTE: ID numérico do Módulo 1 no seu banco de dados!**
+const moduleId = 1;
 const totalSlides = slidesNormal.length;
 
-// Variáveis de Autenticação e Regra de Negócio
-const USUARIO_ID = JSON.parse(localStorage.getItem("usuario_colaborador"))?.id; // Obtém o ID do usuário
-const TOKEN = localStorage.getItem("token_colaborador"); // Token JWT do colaborador
-const REQUISITO_APROVACAO = 80; // Requisito de aprovação em %
+
+const USUARIO_ID = JSON.parse(localStorage.getItem("usuario_colaborador"))?.id; 
+const TOKEN = localStorage.getItem("token_colaborador"); 
+const REQUISITO_APROVACAO = 80; 
 
 // ================== FUNÇÃO ATUALIZA CARROSSEL ==================
 function updateCarousel() {
@@ -20,8 +20,7 @@ function updateCarousel() {
     updateProgressBar();
     updateThumbnails();
     updateProgressText();
-    // mantendo o salvamento local para a posição da tela, mas removendo a atualização visual do progresso,
-    // que será feita na página principal após a conclusão via API.
+    
     saveModuleSlideProgress(moduleId, currentIndex); 
 }
 
@@ -46,7 +45,7 @@ async function finalizarModuloAPI(moduloId, notaFinal) {
         return;
     }
     
-    // Verifica se o token existe antes de tentar enviar
+   
     if (!TOKEN) {
         console.error("Token de autenticação ausente.");
         alert("Erro: Token de autenticação ausente. Faça login novamente.");
@@ -58,20 +57,17 @@ async function finalizarModuloAPI(moduloId, notaFinal) {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                // ✅ CORREÇÃO: Envio do token JWT no cabeçalho Authorization
                 "Authorization": `Bearer ${TOKEN}` 
             },
             body: JSON.stringify({ nota_final: notaFinal })
         });
 
         if (!response.ok) {
-            // Tenta ler o erro do backend, se houver
             const errorData = await response.json().catch(() => ({ error: "Erro desconhecido ou falha na comunicação" }));
             throw new Error(`Erro ${response.status} ao finalizar módulo: ${errorData.error || response.statusText}`);
         }
 
         console.log(`Módulo ${moduloId} finalizado com nota ${notaFinal}%. Redirecionando...`);
-        // Redireciona para a home de módulos para atualizar os contadores e a barra de progresso
         setTimeout(() => {
             window.location.href = '/src/templates/colaborador/modulo.html';
         }, 1500);
@@ -99,7 +95,6 @@ const overlay = document.createElement('div');
 overlay.id = 'result-overlay';
 overlay.setAttribute('role', 'dialog');
 overlay.setAttribute('aria-hidden', 'true');
-// O conteúdo do overlay permanece o mesmo
 overlay.innerHTML = `
     <div class="result-card" role="document">
         <h2 class="result-title"></h2>
@@ -131,7 +126,6 @@ function closeResultOverlay() {
     overlay.setAttribute('aria-hidden', 'true');
     document.documentElement.style.overflow = '';
     document.body.style.overflow = '';
-    // Adicione esta linha para remover a classe de animação ao fechar
     overlayCard.classList.remove('pop-in'); 
 }
 
@@ -212,7 +206,6 @@ document.getElementById('submit-exercises').addEventListener('click', () => {
     }
 
     openResultOverlay();
-    // ESSA LINHA É A CHAVE para garantir que o card apareça com a animação correta.
     overlayCard.classList.add('pop-in'); 
 });
 
@@ -412,5 +405,5 @@ document.addEventListener('keydown', e => {
 window.addEventListener('DOMContentLoaded', () => {
     currentIndex = loadModuleProgress(moduleId);
     updateCarousel();
-    updateExerciseCarousel(); // Garante que o carrossel de exercícios inicie no primeiro slide
+    updateExerciseCarousel(); 
 });
