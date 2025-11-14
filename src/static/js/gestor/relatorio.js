@@ -13,7 +13,7 @@ const baseURLColaborador = "http://127.0.0.1:5000/colaborador";
 const baseURLFeedback = "http://127.0.0.1:5000/gestor/relatorio/";
 const token = localStorage.getItem("token_gestor");
 
-// Armazena a lista completa de colaboradores (cache)
+
 let todosColaboradores = [];
 let colaboradorSelecionado = null; 
 let isSearchDropdownOpen = false;

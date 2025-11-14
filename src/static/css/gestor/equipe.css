@@ -1,257 +1,427 @@
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
 body {
-  background: #f5f7fa;
-  color: #333;
+background: #f5f7fa;
+color: #333;
 }
 
 
+/* ===== HEADER CORRIGIDO ===== */
+
+/* HEADER DEFINITIVO — FIX GARANTIDO */
 .header {
-  background: #fffbfb25;
-  border-radius: 30px;
-  box-shadow: 0 6px 18px rgba(114, 114, 114, 0.15);
-  padding: 15px 30px;
-  margin: 15px 20px 30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 100px;
+    background: #fff;
+    border-radius: 80px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+    padding: 0 40px;
+    margin: 15px 20px 30px;
+    height: 100px;
+
+    display: flex;
+    justify-content: space-between !important; 
+    align-items: center;
+
+    width: calc(100% - 40px);  /* EVITA QUEBRA DE LAYOUT */
+}
+
+
+/* LOGO SEM REPETIÇÃO */
+.logo-box {
+    display: flex;
+    align-items: center;
 }
 
 .logo-box img {
-  max-height: 75px;
-  width: auto;
-  border-radius: 10px;
+    height: 75px;
+    width: auto;
+    display: block;
+}
+
+.user-box span{
+    line-height: 1;
 }
 
 .user-box {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end !important; 
+    text-align: right !important;
+
+   
+
+    margin-left: auto !important;
 }
 
+
+
+/* TEXTOS */
 #user-name {
-  font-size: 1.1rem;
-  font-weight: bold;
+    font-size: 1.2rem;
+    font-weight: 700;
 }
 
 .user-role {
-  margin-top: 5px;
-  background: #c2792577;
-  color: #c27925;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 600;
+    background: #c2792577;
+    color: #c27925;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+ 
 }
 
-/* ===== INFO CARDS ===== */
+
 .info-cards {
-  display: flex;
-  justify-content: center;
-  gap: 50px;
-  flex-wrap: wrap;
-  padding: 20px 10px;
-  width: 90%;
-  max-width: 1200px;
-  margin: 0 auto;
+display: flex;
+justify-content: center;
+gap: 50px;
+flex-wrap: wrap;
+padding: 20px 10px;
+width: 90%;
+max-width: 1200px;
+margin: 0 auto;
 }
 
 .info-cards .card {
-  background: white;
-  padding: 40px 25px;
-  border-radius: 25px;
-  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-  text-align: center;
-  flex: 1 1 300px;
-  max-width: 350px;
-  transition: transform 0.3s;
+background: white;
+padding: 40px 25px;
+border-radius: 25px;
+box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+text-align: center;
+flex: 1 1 300px;
+max-width: 350px;
+transition: transform 0.3s;
 }
 
 .info-cards .card:hover {
-  transform: translateY(-5px);
+transform: translateY(-5px);
 }
 
 .info-cards .card img {
-  width: 60px;
-  height: 60px;
-  margin-top: 20px;
+width: 60px;
+height: 60px;
+margin-top: 20px;
 }
 
 
 .main-container {
-  display: flex;
-  margin: 30px 20px;
+display: flex;
+margin: 30px 20px;
 }
 
 
 .sidebar {
-  width: 220px;
-  position: sticky;
-  top: 20px;
-  background: #fff;
-  border-radius: 20px;
-  padding: 50px 15px;
-  min-height: 700px;
-  box-shadow: inset 0 4px 10px rgba(0,0,0,0.05), 0 6px 12px rgba(0,0,0,0.1);
+width: 220px;
+position: sticky;
+top: 20px;
+background: #fff;
+border-radius: 20px;
+padding: 50px 15px;
+min-height: 700px;
+box-shadow: inset 0 4px 10px rgba(0,0,0,0.05), 0 6px 12px rgba(0,0,0,0.1);
 }
 
 .sidebar ul li {
-  margin-bottom: 20px;
+margin-bottom: 20px;
 }
 
 .sidebar ul li a {
-  display: block;
-  padding: 15px 20px;
-  border-radius: 15px;
-  text-decoration: none;
-  color: #333;
-  font-weight: 600;
-  transition: all 0.3s;
-  background: #f5f7fa;
+display: block;
+padding: 15px 20px;
+border-radius: 15px;
+text-decoration: none;
+color: #333;
+font-weight: 600;
+transition: all 0.3s;
+background: #f5f7fa;
 }
 
 .sidebar ul li a:hover {
-  background: #f88a15;
-  color: black;
-  box-shadow: 4px 4px 10px rgba(0,0,0,0.2);
+background: #f88a15;
+color: black;
+box-shadow: 4px 4px 10px rgba(0,0,0,0.2);
 }
 
 .sidebar ul li a.active {
-  background: #f88a15;
-  color: black;
-  font-weight: bold;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-  transform: translateX(30px); 
+background: #f88a15;
+color: black;
+font-weight: bold;
+box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+transform: translateX(30px); 
 }
 
 
 
-.header h2 {
-  font-size: 22px;
-  color: #333;
+.content h2 { 
+font-size: 22px;
+color: #333;
+margin-bottom: 25px; 
 }
 
 .content {
-  flex: 1;
-  margin-left: 30px;
+flex: 1;
+margin-left: 30px;
 }
 
 .search-bar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #fff;
-  padding: 30px 20px;
-  border-radius: 50px;
-  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-  margin: 0 auto 25px auto;
-  max-width: 1000px;
+display: flex;
+align-items: center;
+justify-content: center;
+background: #fff;
+padding: 30px 20px;
+border-radius: 50px;
+box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+margin: 0 auto 25px auto;
+max-width: 1000px;
 }
 
 .search-bar i {
-  color: #555;
-  margin-right: 10px;
-  font-size: 1.2rem;
+color: #555;
+margin-right: 10px;
+font-size: 1.2rem;
 }
 
 .search-bar input {
-  flex: 1;
-  border: none;
-  outline: none;
-  font-size: 1rem;
+flex: 1;
+border: none;
+outline: none;
+font-size: 1rem;
 }
 
 .content {
-  flex: 1;
-  margin-left: 30px;
+flex: 1;
+margin-left: 30px;
 }
 
 /* LISTA DE EQUIPE */
 .lista-equipe {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+display: flex;
+flex-direction: column;
+gap: 15px;
 }
 
 .card-colaborador {
-  background: #fff;
-  border-radius: 12px;
-  padding: 15px 20px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+background: #fff;
+border-radius: 12px;
+padding: 15px 20px;
+box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+display: flex;
+align-items: center;
+justify-content: space-between;
+cursor: pointer; 
+transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card-colaborador:hover {
+transform: translateY(-3px);
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .info-colaborador {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+display: flex;
+align-items: center;
+gap: 10px;
 }
 
 .info-colaborador img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
+width: 40px;
+height: 40px;
+border-radius: 50%;
+object-fit: cover;
 }
 
 .dados {
-  display: flex;
-  flex-direction: column;
+display: flex;
+flex-direction: column;
 }
 
 .dados p {
-  font-size: 14px;
-  color: #333;
+font-size: 14px;
+color: #333;
 }
 
 .status {
-  background: #d1f7d6;
-  color: #0b8b1d;
-  border-radius: 20px;
-  padding: 5px 12px;
-  font-size: 13px;
-  font-weight: bold;
+background: #d1f7d6;
+color: #0b8b1d;
+border-radius: 20px;
+padding: 5px 12px;
+font-size: 13px;
+font-weight: bold;
 }
 
 .status.offline {
-  background: #eee;
-  color: #888;
+background: #eee;
+color: #888;
 }
 
 /* RODAPÉ */
 .footer-filtros {
-  margin-top: 20px;
-  display: flex;
-  justify-content: end;
-  gap: 15px;
+margin-top: 20px;
+display: flex;
+justify-content: end;
+gap: 15px;
 }
 
 #filtro-status {
-  border-radius: 12px;
-  padding: 8px 10px;
-  border: 1px solid #ccc;
-  outline: none;
+border-radius: 12px;
+padding: 8px 10px;
+border: 1px solid #ccc;
+outline: none;
 }
 
 .btn-ver-tudo {
-  background: #fbd1a2;
-  border: none;
-  padding: 8px 20px;
-  border-radius: 30px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: 0.2s;
+background: #fbd1a2;
+border: none;
+padding: 8px 20px;
+border-radius: 30px;
+cursor: pointer;
+font-weight: bold;
+transition: 0.2s;
 }
 
 .btn-ver-tudo:hover {
-  background: #f8b868;
+background: #f8b868;
 }
 
+/* ==========================================================
+   >>> NOVO CSS PARA O MODAL DE PROGRESSO <<<
+   ========================================================== */
+
+/* 1. Estilo para o container principal do modal */
+#modal-progresso {
+display: none; 
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0, 0, 0, 0.7); 
+justify-content: center; 
+align-items: center; 
+z-index: 1000; 
+opacity: 0; 
+transition: opacity 0.3s ease-in-out;
+}
+
+/* Estado visível do modal (controlado pelo JS) */
+#modal-progresso[style*="display: flex"] {
+opacity: 1;
+}
+
+/* 2. Estilo para o conteúdo interno do modal */
+#detalhes-progresso {
+background: #ffffff;
+padding: 25px;
+border-radius: 10px;
+max-width: 700px;
+width: 90%;
+box-shadow: 0 5px 25px rgba(0, 0, 0, 0.4);
+max-height: 80vh; 
+overflow-y: auto; 
+transform: translateY(-50px); 
+transition: transform 0.3s ease-in-out;
+}
+
+/* Transição de entrada do conteúdo */
+#modal-progresso[style*="display: flex"] > #detalhes-progresso {
+transform: translateY(0);
+}
+
+#detalhes-progresso h3 {
+margin-top: 0;
+color: black; 
+border-bottom: 2px solid #f5f7fa;
+padding-bottom: 10px;
+margin-bottom: 20px;
+font-size: 1.5em;
+}
+
+/* 3. Estilos de Estatísticas e Módulos */
+.estatisticas {
+display: flex;
+justify-content: space-around;
+padding: 10px;
+margin-bottom: 20px;
+border: 1px solid #e9ecef;
+border-radius: 5px;
+background-color: #f8f9fa;
+}
+
+.estatisticas strong {
+color: #0b8b1d; 
+font-size: 1.1em;
+}
+
+.progresso-modulos {
+padding: 10px 0;
+}
+
+.progresso-modulos .modulo {
+margin-bottom: 15px;
+font-size: 0.95em;
+padding: 5px 0;
+}
+
+/* Barra de Progresso */
+.progresso-modulos .barra {
+background-color: #e9ecef;
+border-radius: 5px;
+height: 10px;
+margin: 8px 0;
+overflow: hidden;
+}
+
+.progresso-modulos .preenchimento {
+height: 100%;
+background-color: #28a745; 
+transition: width 0.5s ease-in-out;
+}
+
+.progresso-modulos .nota {
+font-weight: bold;
+color: #495057;
+}
+
+/* Cores de Status Específicas */
+.modulo.concluido .preenchimento {
+background-color: #0b8b1d; /* Verde forte */
+}
+
+.modulo.em-andamento .preenchimento {
+background-color: #ffc107; /* Amarelo */
+}
+
+.modulo.nao-iniciado .preenchimento {
+background-color: #6c757d; /* Cinza */
+}
+
+
+/* 4. Estilo do Botão de Fechar */
+.btn-fechar-modal {
+float: right;
+margin-top: 20px;
+padding: 10px 25px;
+background-color: #dc3545; /* Vermelho */
+color: white;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+font-weight: bold;
+transition: background-color 0.2s;
+}
+
+.btn-fechar-modal:hover {
+background-color: #c82333;
+}
+
+/* Limpa o float do botão */
+#detalhes-progresso::after {
+content: "";
+display: table;
+clear: both;
+}

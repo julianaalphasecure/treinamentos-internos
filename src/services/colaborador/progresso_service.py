@@ -3,7 +3,9 @@ from src.config.database import db
 from src.models.progresso import Progresso
 from src.models.modulos import Modulo
 
+
 class ProgressoService:
+
     @staticmethod
     def get_all_progresso():
         return Progresso.query.all()
@@ -65,36 +67,32 @@ class ProgressoService:
                 db.session.add(novo)
         db.session.commit()
 
-   # src/services/colaborador/progresso_service.py (dentro da classe ProgressoService)
-
+    # >>> FUNÇÃO FINALIZAR MÓDULO CORRIGIDA <<<
     @staticmethod
-    def finalizar_modulo(usuario_id, modulo_id, nota_final=100):
-        """Marca um módulo como concluído para o usuário."""
+    def finalizar_modulo(usuario_id, modulo_id, nota_final):
+        """Marca um módulo como concluído para o usuário, salvando a nota_final real."""
         progresso = Progresso.query.filter_by(
             usuario_id=usuario_id,
             modulo_id=modulo_id
         ).first()
-        
-        # === CORREÇÃO: Forçar nota final para 100 (preenchimento da barra) ===
-        NOTA_PARA_PROGRESSO_COMPLETO = 100
 
         if not progresso:
             progresso = Progresso(
                 usuario_id=usuario_id,
                 modulo_id=modulo_id,
                 status="concluido",
-                # Garante que a nota final seja 100 para preenchimento da barra
-                nota_final=NOTA_PARA_PROGRESSO_COMPLETO,
+                nota_final=nota_final,
                 data_inicio=datetime.utcnow(),
                 data_conclusao=datetime.utcnow()
             )
             db.session.add(progresso)
         else:
             progresso.status = "concluido"
-            # Garante que a nota final seja 100 para preenchimento da barra
-            progresso.nota_final = NOTA_PARA_PROGRESSO_COMPLETO
+            progresso.nota_final = nota_final
+
             if not progresso.data_inicio:
                 progresso.data_inicio = datetime.utcnow()
+
             progresso.data_conclusao = datetime.utcnow()
 
         db.session.commit()
