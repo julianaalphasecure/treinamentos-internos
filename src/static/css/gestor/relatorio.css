@@ -1,4 +1,3 @@
-/* GERAL */
 * {
   margin: 0;
   padding: 0;
@@ -60,9 +59,9 @@ body {
 
 
 .feedback-central-container {
-  flex: 1; /* Ocupa o restante do espaço */
-  max-width: 800px; /* Limita a largura do formulário */
-  margin: 0 auto; /* Centraliza no eixo X */
+  flex: 1; 
+  max-width: 800px; 
+  margin: 0 auto; 
   padding: 2rem;
 }
 
@@ -78,7 +77,6 @@ body {
   margin-bottom: 2rem;
 }
 
-/* CAIXA DE ENVIO DE FEEDBACK */
 .caixa-feedback-envio {
   background: #fff;
   border-radius: 12px;
@@ -86,7 +84,6 @@ body {
   box-shadow: 0 6px 20px rgba(0,0,0,0.1);
 }
 
-/* ESTILOS DE FORMULÁRIO */
 #feedback-form {
   display: flex;
   flex-direction: column;
@@ -107,7 +104,7 @@ body {
   min-height: 250px;
 }
 
-/* CAMPO DE PESQUISA (Autocomplete) */
+
 .campo-pesquisa-colaborador {
   position: relative;
 }
@@ -120,7 +117,6 @@ body {
 }
 
 
-/* RESULTADOS DA PESQUISA */
 .search-results {
   position: absolute;
   top: 100%; 
@@ -152,7 +148,6 @@ body {
     font-weight: bold;
 }
 
-/* AÇÕES DO FORMULÁRIO */
 .form-actions {
   display: flex;
   justify-content: flex-end;
@@ -175,7 +170,7 @@ body {
   cursor: pointer;
   font-weight: bold;
   transition: background-color 0.3s;
-  background: #2f6ce5; /* Azul */
+  background: #2f6ce5; 
   color: #fff;
 }
 
@@ -188,14 +183,9 @@ body {
   cursor: not-allowed;
 }
 
-/* GERAL E SIDEBAR (MANTIDOS) */
-/* ... */
-
-
-
 .feedback-central-container {
 flex: 1; 
-max-width: 1200px; /* Aumentado para acomodar as duas colunas */
+max-width: 1000px; 
 margin: 0 auto; 
 padding: 2rem;
 }
@@ -212,24 +202,23 @@ color: #666;
 margin-bottom: 2rem;
 }
 
-/* NOVO: WRAPPER FLEX PARA O CONTEÚDO */
+
 .feedback-content-flex {
     display: flex;
     gap: 30px; 
-    align-items: flex-start; /* Alinha o conteúdo ao topo */
+    align-items: flex-start; 
 }
 
 .coluna-form-original {
-    /* Ocupa a maior parte do espaço, mantendo a largura do formulário grande */
     flex: 0 0 60%; 
     max-width: 700px;
 }
 
 .coluna-historico-lateral {
-    flex: 1; /* Ocupa o restante (cerca de 40%) */
+    flex: 1; 
 }
 
-/* CAIXA DE ENVIO DE FEEDBACK (MANTIDO) */
+
 .caixa-feedback-envio {
 background: #fff;
 border-radius: 12px;
@@ -237,10 +226,10 @@ padding: 2rem;
 box-shadow: 0 6px 20px rgba(0,0,0,0.1);
 }
 
-/* TÍTULO DISCRETO PARA O HISTÓRICO */
+
 .historico-titulo-lateral {
     font-size: 1.1rem;
-    color: #666; /* Cor mais discreta */
+    color: #666; 
     margin-bottom: 1rem;
     border-bottom: 1px solid #ddd;
     padding-bottom: 5px;
@@ -248,15 +237,15 @@ box-shadow: 0 6px 20px rgba(0,0,0,0.1);
 }
 
 
-/* ESTILOS PARA A NOVA COLUNA DE HISTÓRICO */
+
 .historico-feedbacks-list {
     display: flex;
     flex-direction: column;
-    gap: 10px; /* Reduzi o espaçamento para ser mais compacto */
+    gap: 10px; 
     padding: 10px;
     background: #fff;
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05); /* Sombra mais suave */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);  
     min-height: 400px; 
     max-height: 80vh;
     overflow-y: auto;
@@ -264,10 +253,10 @@ box-shadow: 0 6px 20px rgba(0,0,0,0.1);
 
 .feedback-card {
     background: #f8f9fa;
-    border-left: 3px solid #f88a15; /* Destaque laranja */
-    padding: 10px 15px; /* Padding reduzido */
+    border-left: 3px solid #f88a15; 
+    padding: 10px 15px; 
     border-radius: 6px;
-    box-shadow: none; /* Removendo sombras para um visual mais limpo */
+    box-shadow: none; 
 }
 
 .feedback-card:hover {
@@ -276,9 +265,9 @@ box-shadow: 0 6px 20px rgba(0,0,0,0.1);
 }
 
 .feedback-card h4 {
-    color: #333; /* Título mais neutro */
+    color: #333; 
     margin-bottom: 2px;
-    font-size: 1rem; /* Tamanho reduzido */
+    font-size: 1rem; 
 }
 
 .feedback-card p {
