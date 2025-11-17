@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from src.services.colaborador.feedback_service import FeedbackService
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from src.models.usuario import Usuario
 
 colab_feedback_bp = Blueprint("colab_feedback_bp", __name__, url_prefix="/colaborador/feedback")
 
@@ -61,3 +62,38 @@ def deletar_feedback(feedback_id):
     if feedback:
         return jsonify({"message": "Feedback deletado com sucesso"}), 200
     return jsonify({"error": "Feedback não encontrado"}), 404
+
+# 🔹 LISTAR GESTORES PARA O AUTOCOMPLETE
+@colab_feedback_bp.route("/gestores", methods=["GET"])
+@jwt_required()
+def listar_gestores():
+    gestores = Usuario.query.filter_by(tipo_acesso="gestor").all()
+
+    return jsonify([
+        {"id": g.id, "nome": g.nome}
+        for g in gestores
+    ]), 200
+
+
+# 🔹 ENVIAR FEEDBACK DO COLABORADOR PARA UM GESTOR
+@colab_feedback_bp.route("/enviar", methods=["POST"])
+@jwt_required()
+def enviar_feedback():
+    colaborador_id = get_jwt_identity()
+    data = request.get_json()
+
+    gestor_id = data.get("gestor_id")
+    mensagem = data.get("mensagem")
+    assunto = data.get("assunto")
+
+    if not gestor_id or not mensagem:
+        return jsonify({"error": "Gestor e mensagem são obrigatórios"}), 400
+
+    novo_feedback = {
+        "gestor_id": gestor_id,
+        "colaborador_id": colaborador_id,
+        "mensagem": f"[{assunto}] {mensagem}"
+    }
+
+    feedback = FeedbackService.create_feedback(novo_feedback)
+    return jsonify(feedback.to_dict()), 201
