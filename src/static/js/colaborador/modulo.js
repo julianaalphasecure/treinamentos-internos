@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // ================== MOSTRA NOME ==================
     userNameElement.textContent = `Olá, ${usuarioColaborador.nome}`;
 
-    // ================== CARROSSEL E PESQUISA (Mantido) ==================
+    // ================== CARROSSEL E PESQUISA ==================
     const wrapper = document.querySelector(".modules-wrapper");
     const prevBtn = document.querySelector(".carousel-btn.prev");
     const nextBtn = document.querySelector(".carousel-btn.next");
@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         currentSlide = 0;
         updateCarousel();
         
-        // Chamada inicial da função de progresso após renderizar a estrutura dos módulos
+     
         carregarProgresso(); 
     }
 
@@ -77,8 +77,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         renderModules();
     });
     
-    // ================== CARREGAR PROGRESSO (AGORA INTERNO E CENTRALIZADO) ==================
-    // Mantendo no window para compatibilidade caso outro script precise chamá-lo
+    // ================== CARREGAR PROGRESSO  ==================
+
     window.carregarProgresso = async function carregarProgresso() {
         const TOKEN = localStorage.getItem("token_colaborador"); 
         
@@ -108,24 +108,26 @@ document.addEventListener("DOMContentLoaded", async () => {
             const modulosAPI = data.modulos || [];
             const statsAPI = data.stats || { concluidos: 0, nao_iniciados: 9 }; 
 
-            // ATUALIZA CONTADORES
+        
             const statCards = document.querySelectorAll(".stat-card p.stat-value");
             if (statCards.length >= 2) {
                 statCards[0].textContent = statsAPI.concluidos; 
                 statCards[1].textContent = statsAPI.nao_iniciados; 
             } 
 
-            // ATUALIZA BARRAS E BOTÕES
+         
             const cards = document.querySelectorAll(".module-card");
             cards.forEach((card) => {
                 const bar = card.querySelector(".progress-bar-inner");
-                // Localiza o botão dentro do card. Se for 'a', ajuste o seletor.
                 const button = card.querySelector("button") || card.querySelector("a"); 
                 
                 if (!bar || !button) return; 
 
-                const moduloId = parseInt(card.dataset.id); 
-                const moduloAPI = modulosAPI.find(m => m.modulo_id === moduloId);
+       
+// ...
+            const moduloId = parseInt(card.dataset.id); 
+            const moduloAPI = modulosAPI.find(m => String(m.modulo_id) === String(moduloId)); 
+// ...
 
                 if (moduloAPI) {
                     let percent = moduloAPI.percent || 0; 
@@ -134,7 +136,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                         percent = 100;
                         card.classList.add("concluido");
                         
-                        // MUDAR PARA REFAZER
+                 
                         button.textContent = "Refazer"; 
                         button.classList.add("btn-refazer"); 
                         button.classList.remove("btn-acessar");
@@ -142,7 +144,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     } else {
                         card.classList.remove("concluido");
                         
-                        // MUDAR PARA ACESSAR
+                       
                         button.textContent = "Acessar";
                         button.classList.remove("btn-refazer");
                         button.classList.add("btn-acessar");
@@ -161,7 +163,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             
         } catch (error) {
             console.error("Erro ao carregar progresso:", error);
-            // Redirecionamento se for erro de autenticação/token
             if (error.message.includes("Não autorizado")) {
                 localStorage.removeItem("token_colaborador");
                 localStorage.removeItem("usuario_colaborador");
@@ -169,27 +170,29 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
         }
     }
-    // =======================================================================
+   
 
 
-    // ================== FINALIZAR MÓDULO (Correto) ==================
-    async function finalizarModulo(moduloId, nota = 100) {
-        try {
-            const response = await fetch(`http://127.0.0.1:5000/colaborador/progresso/finalizar/${usuarioId}/${moduloId}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`
-                },
-                body: JSON.stringify({ nota_final: nota })
-            });
+ 
+
+async function finalizarModulo(moduloId, nota = 100) {
+    try {
+        const response = await fetch(`http://127.0.0.1:5000/colaborador/progresso/finalizar/${moduloId}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({ nota_final: nota })
+        });
+// ...
 
             if (!response.ok) throw new Error("Erro ao finalizar módulo");
 
-            // >>> CHAMADA CRÍTICA: RECARREGA A TELA APÓS SUCESSO <<<
+        
             await carregarProgresso();
             
-            // Feedback visual
+            
             if (window.showToast) {
                 window.showToast(`Módulo ${moduloId} finalizado com sucesso!`);
             }
@@ -202,27 +205,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    // LIGAÇÃO DO EVENTO DE FINALIZAÇÃO (Ponto que deve ser adaptado)
-    // Se o seu botão de finalizar módulo estiver na página de módulo:
+
     document.querySelectorAll(".module-card button, .module-card a").forEach(element => {
-        // Usa uma função de escuta para todos os botões/links nos cartões
         element.addEventListener("click", (e) => {
             const card = e.target.closest(".module-card");
             const moduloId = parseInt(card.dataset.id);
 
-            // Verifique se este é o botão/evento que DEVE DISPARAR A FINALIZAÇÃO.
-            // Se o botão for "Acessar", ele deve levar para a página do módulo, não finalizar.
-            // Se for um botão/link "Finalizar Teste" dentro da página do módulo, 
-            // este trecho de código DEVE ESTAR LÁ, e não no dashboard (modulo.js).
             
-            // SE VOCÊ CLICAR AQUI NO DASHBOARD PARA TESTAR A FINALIZAÇÃO:
-            if (moduloId === 2 && (e.target.textContent === "Finalizar" || e.target.textContent === "Acessar")) {
-                 // **USE ISTO APENAS PARA TESTE RÁPIDO NO DASHBOARD!**
-                 // A lógica correta de finalização DEVE estar na página de quiz/teste.
-                 // Vamos simular a finalização com nota 100 para o módulo 2.
-                 finalizarModulo(moduloId, 100);
-                 e.preventDefault(); // Impede o clique de ir para outro link (Acessar)
-            }
+            
+           
         });
     });
 
