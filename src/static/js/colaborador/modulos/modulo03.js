@@ -24,14 +24,14 @@ function updateCarousel() {
     saveModuleSlideProgress(moduleId, currentIndex); 
 }
 
-// ================== FUNÇÃO SALVAR PROGRESSO LOCAL (posição do slide) ==================
+// ================== FUNÇÃO SALVAR PROGRESSO LOCAL ==================
 function saveModuleSlideProgress(moduleId, lastSlideIndex) {
     const progress = JSON.parse(localStorage.getItem("moduleProgress") || "{}");
     progress[moduleId] = lastSlideIndex;
     localStorage.setItem("moduleProgress", JSON.stringify(progress));
 }
 
-// ================== CARREGA PROGRESSO LOCAL (posição do slide) ==================
+// ================== CARREGA PROGRESSO LOCAL ==================
 function loadModuleProgress(moduleId) {
     const progress = JSON.parse(localStorage.getItem("moduleProgress") || "{}");
     return progress[moduleId] || 0;
@@ -130,17 +130,17 @@ function closeResultOverlay() {
     overlayCard.classList.remove('pop-in'); 
 }
 
-// Fechar clicando fora do card
+
 overlay.addEventListener('click', (e) => {
     if (e.target === overlay) closeResultOverlay();
 });
 
-// ESC para fechar
+
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && overlay.style.display === 'flex') closeResultOverlay();
 });
 
-// ================== HANDLER DE ENVIO (Com lógica de 80% e API) ==================
+// ================== HANDLER DE ENVIO  ==================
 document.getElementById('submit-exercises').addEventListener('click', () => {
     clearInterval(timerInterval);
 
@@ -153,7 +153,7 @@ document.getElementById('submit-exercises').addEventListener('click', () => {
     const totalQuestions = exSlides.length;
     const percent = Math.round((score / totalQuestions) * 100);
 
-    // Reset classes e botões
+    
     overlayCard.classList.remove('success', 'fail');
     btnRefazer.style.display = 'none';
     btnProximo.style.display = 'none';
@@ -200,7 +200,7 @@ document.getElementById('submit-exercises').addEventListener('click', () => {
             totalTime = 30 * 60;
             document.getElementById('timer').textContent = 'Tempo restante: 30:00';
             
-            // Limpa as respostas do quiz para refazer
+            
             document.querySelectorAll('input[type="radio"]:checked').forEach(radio => radio.checked = false);
             document.querySelectorAll('.options label').forEach(label => label.classList.remove('selected'));
         };

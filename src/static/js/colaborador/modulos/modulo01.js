@@ -37,23 +37,15 @@ function loadModuleProgress(moduleId) {
     return progress[moduleId] || 0;
 }
 
+
+
+
 // ================== NOVO: COMUNICAÇÃO COM A API DE PROGRESSO (FLASK) ==================
 async function finalizarModuloAPI(moduloId, notaFinal) {
-    if (!USUARIO_ID) {
-        console.error("ID do usuário não encontrado.");
-        alert("Erro: Usuário não autenticado. Faça login novamente.");
-        return;
-    }
-    
    
-    if (!TOKEN) {
-        console.error("Token de autenticação ausente.");
-        alert("Erro: Token de autenticação ausente. Faça login novamente.");
-        return;
-    }
 
     try {
-        const response = await fetch(`http://127.0.0.1:5000/colaborador/progresso/finalizar/${USUARIO_ID}/${moduloId}`, {
+        const response = await fetch(`http://127.0.0.1:5000/colaborador/progresso/finalizar/${moduloId}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -129,17 +121,17 @@ function closeResultOverlay() {
     overlayCard.classList.remove('pop-in'); 
 }
 
-// Fechar clicando fora do card
+
 overlay.addEventListener('click', (e) => {
     if (e.target === overlay) closeResultOverlay();
 });
 
-// ESC para fechar
+
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && overlay.style.display === 'flex') closeResultOverlay();
 });
 
-// ================== HANDLER DE ENVIO (Com lógica de 80% e API) ==================
+// ================== HANDLER DE ENVIO ==================
 document.getElementById('submit-exercises').addEventListener('click', () => {
     clearInterval(timerInterval);
 
@@ -178,7 +170,7 @@ document.getElementById('submit-exercises').addEventListener('click', () => {
         btnRefazer.onclick = () => {
             closeResultOverlay();
             
-            // Lógica completa de refazer
+          
             currentIndex = 0;
             updateCarousel();
             exercisesSection.style.display = 'none';
@@ -199,7 +191,7 @@ document.getElementById('submit-exercises').addEventListener('click', () => {
             totalTime = 30 * 60;
             document.getElementById('timer').textContent = 'Tempo restante: 30:00';
             
-            // Limpa as respostas do quiz para refazer
+           
             document.querySelectorAll('input[type="radio"]:checked').forEach(radio => radio.checked = false);
             document.querySelectorAll('.options label').forEach(label => label.classList.remove('selected'));
         };

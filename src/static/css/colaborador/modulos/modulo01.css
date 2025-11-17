@@ -103,7 +103,6 @@ body.dark-mode .modules-slide:not(.dark-slide) {
   display: none; 
 } 
 
-/* Modo noturno - exercícios */ 
 body.dark-mode .exercises { 
   background: #2c2c2c; 
   color: #f0f0f0; 
@@ -165,7 +164,6 @@ body.dark-mode .btn-submit:hover {
   border: 2px solid #1e3c72; 
 } 
 
-/* Botão modo noturno */ 
 #dark-mode-btn { 
   position: absolute; 
   top: 50%; 
@@ -284,7 +282,6 @@ body.dark-mode #dark-mode-btn {
   transform: scale(1.1); 
 } 
 
-/* Ajuste de tamanho dos exercícios */
 .exercises {
     width: 95%;           
     max-width: 1200px;    
@@ -385,7 +382,6 @@ body.dark-mode #dark-mode-btn {
   background: #f08944; 
 } 
 
-/* Timer original */ 
 #timer { 
   text-align: center; 
   font-size: 18px; 
@@ -393,7 +389,6 @@ body.dark-mode #dark-mode-btn {
   margin-bottom: 15px; 
 } 
 
-/* Barra de progresso das questões */ 
 .exercise-progress { 
   width: 100%; 
   height: 10px; 
@@ -410,7 +405,6 @@ body.dark-mode #dark-mode-btn {
   transition: width 0.4s ease-in-out; 
 } 
 
-/* Footer */ 
 .footer { 
   background: #f8f8f8; 
   color: #666; 
@@ -443,9 +437,7 @@ body.dark-mode #dark-mode-btn {
   font-size: 13px; 
 } 
 
-/* ======================
-   Overlay de Resultado Final
-   ====================== */
+
 #result-overlay {
   display: none;
   position: fixed;
@@ -491,7 +483,6 @@ body.dark-mode #dark-mode-btn {
   margin-bottom: 25px;
 }
 
-/* Overlay de resultado - botões */
 .result-actions {
   display: flex;
   justify-content: center;
@@ -510,7 +501,6 @@ body.dark-mode #dark-mode-btn {
   transition: all 0.3s ease;
 }
 
-/* Botão primário */
 .result-actions .btn-submit {
   background: #eb7f0c;
   color: #fff;
@@ -520,7 +510,6 @@ body.dark-mode #dark-mode-btn {
   background: #f08944;
 }
 
-/* Botão secundário */
 .result-actions .btn-secondary {
   background: #ccc;
   color: #333;
@@ -530,7 +519,7 @@ body.dark-mode #dark-mode-btn {
   background: #bbb;
 }
 
-/* Dark Mode */
+
 body.dark-mode .result-actions .btn-submit {
   background: #eb7f0c;
   color: #fff;
@@ -549,13 +538,13 @@ body.dark-mode .result-actions .btn-secondary:hover {
   background: #777;
 }
 
-/* Ocultar/mostrar com base no resultado */
+
 .result-actions .btn-refazer {
-  display: none; /* será mostrado se fail */
+  display: none; 
 }
 
 .result-actions .btn-proximo {
-  display: none; /* será mostrado se success */
+  display: none; 
 }
 
 .result-card.success .btn-proximo {
@@ -566,7 +555,6 @@ body.dark-mode .result-actions .btn-secondary:hover {
   display: inline-block;
 }
 
-/* Dark Mode Overlay */
 body.dark-mode #result-overlay {
   background: rgba(0, 0, 0, 0.9);
 }

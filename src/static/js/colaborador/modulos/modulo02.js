@@ -6,7 +6,7 @@ let currentIndex = 0;
 let moduleLocked = false;
 let isFullScreen = false;
 let darkMode = false;
-const moduleId = 2; // ID CORRETO DO MÓDULO
+const moduleId = 2; 
 const totalSlides = slidesNormal.length;
 
 const USUARIO_ID = JSON.parse(localStorage.getItem("usuario_colaborador"))?.id; 
@@ -23,30 +23,30 @@ function updateCarousel() {
     saveModuleSlideProgress(moduleId, currentIndex); 
 }
 
-// ================== FUNÇÃO SALVAR PROGRESSO LOCAL (posição do slide) ==================
+// ================== FUNÇÃO SALVAR PROGRESSO LOCAL  ==================
 function saveModuleSlideProgress(moduleId, lastSlideIndex) {
     const progress = JSON.parse(localStorage.getItem("moduleProgress") || "{}");
     progress[moduleId] = lastSlideIndex;
     localStorage.setItem("moduleProgress", JSON.stringify(progress));
 }
 
-// ================== CARREGA PROGRESSO LOCAL (posição do slide) ==================
+// ================== CARREGA PROGRESSO LOCAL  ==================
 function loadModuleProgress(moduleId) {
     const progress = JSON.parse(localStorage.getItem("moduleProgress") || "{}");
     return progress[moduleId] || 0;
 }
 
 
-// ================== FUNÇÃO FINALIZAR MÓDULO (REQUISIÇÃO API) ==================
+// ================== FUNÇÃO FINALIZAR MÓDULO  ==================
 async function finalizarModuloAPI(moduloId, notaFinal) {
     if (!USUARIO_ID || !TOKEN) {
-        console.error("Usuário ou Token não encontrado.");
-        alert("Erro de autenticação. Faça login novamente.");
+       
         return { success: false };
     }
 
     try {
-        const response = await fetch(`http://127.0.0.1:5000/colaborador/progresso/finalizar/${USUARIO_ID}/${moduloId}`, {
+        
+        const response = await fetch(`http://127.0.0.1:5000/colaborador/progresso/finalizar/${moduloId}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -54,15 +54,21 @@ async function finalizarModuloAPI(moduloId, notaFinal) {
             },
             body: JSON.stringify({ nota_final: notaFinal })
         });
+        
 
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({ error: "Erro desconhecido ou falha na comunicação" }));
             throw new Error(`Erro ${response.status} ao finalizar módulo: ${errorData.error || response.statusText}`);
         }
 
-        console.log(`Módulo ${moduloId} finalizado com nota ${notaFinal}%.`);
+        console.log(`Módulo ${moduloId} finalizado com nota ${notaFinal}%. Redirecionando...`);
         
-        // >>> RETORNA SUCESSO. O REDIRECIONAMENTO É FEITO NO EVENTO DE CLIQUE DO BOTÃO 'Ver Meu Progresso'.
+
+        setTimeout(() => {
+            window.location.href = '/src/templates/colaborador/modulo.html';
+        }, 1500);
+       
+
         return { success: true }; 
 
     } catch (error) {
@@ -133,21 +139,21 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && overlay.style.display === 'flex') closeResultOverlay();
 });
 
-// ================== HANDLER DE ENVIO (Com lógica de 80% e API) ==================
+// ================== HANDLER DE ENVIO ==================
 document.getElementById('submit-exercises').addEventListener('click', async () => {
     clearInterval(timerInterval);
 
     let score = 0;
     exSlides.forEach(slide => {
         const selected = slide.querySelector('input[type="radio"]:checked');
-        // Usa o data-answer do slide para verificar a resposta correta
+      
         if (selected && selected.value === slide.dataset.answer) score++; 
     });
 
     const totalQuestions = exSlides.length;
     const percent = Math.round((score / totalQuestions) * 100);
 
-    // Reset classes e botões
+ 
     overlayCard.classList.remove('success', 'fail');
     btnRefazer.style.display = 'none';
     btnProximo.style.display = 'none';
@@ -160,21 +166,18 @@ document.getElementById('submit-exercises').addEventListener('click', async () =
         btnProximo.style.display = 'inline-block';
         btnProximo.textContent = 'Ver Meu Progresso';
         
-        // CHAMA A API E ESPERA O RESULTADO
-        const apiResult = await finalizarModuloAPI(moduleId, percent);
+
+
+    const apiResult = await finalizarModuloAPI(moduleId, percent);
         
-        // Se a API foi bem-sucedida, ativa o redirecionamento
-        if (apiResult.success) {
-             btnProximo.onclick = () => {
-                closeResultOverlay();
-                // >>> REDIRECIONA APENAS AGORA, APÓS A CONFIRMAÇÃO DO USUÁRIO <<<
-                window.location.href = '/src/templates/colaborador/modulo.html';
-            };
-        } else {
-             // Se a API falhou, permite refazer
-             btnRefazer.style.display = 'inline-block';
-             btnRefazer.textContent = 'Tentar Novamente (Erro na API)';
-        }
+    if (apiResult.success) {
+    btnProximo.onclick = () => {
+        closeResultOverlay();
+       
+    };
+} 
+
+    
         
     } else {
         overlayCard.classList.add('fail');
@@ -185,7 +188,7 @@ document.getElementById('submit-exercises').addEventListener('click', async () =
         btnRefazer.onclick = () => {
             closeResultOverlay();
             
-            // Lógica de refazer (mantida)
+         
             currentIndex = 0;
             updateCarousel();
             exercisesSection.style.display = 'none';
@@ -206,7 +209,6 @@ document.getElementById('submit-exercises').addEventListener('click', async () =
             totalTime = 30 * 60;
             document.getElementById('timer').textContent = 'Tempo restante: 30:00';
             
-            // Limpa as respostas do quiz para refazer
             document.querySelectorAll('input[type="radio"]:checked').forEach(radio => radio.checked = false);
             document.querySelectorAll('.options label').forEach(label => label.classList.remove('selected'));
         };
@@ -310,7 +312,6 @@ function startTimer() {
 
         if (totalTime < 0) {
             clearInterval(timerInterval);
-            // Simula o clique no botão de envio (submit) para processar as respostas se o tempo acabar
             document.getElementById('submit-exercises').click(); 
         }
     }, 1000);
@@ -330,12 +331,11 @@ function createThumbnails(slides) {
     thumbnailsContainer.innerHTML = '';
     slides.forEach((slide, idx) => {
         const thumb = document.createElement('img');
-        // Você deve garantir que a URL da miniatura aqui está correta:
         const firstImage = slide.querySelector('img');
         if (firstImage) {
             thumb.src = firstImage.src; 
         } else {
-             // Caso não haja imagem no slide, use um placeholder
+            
              thumb.src = 'placeholder.png'; 
         }
 
