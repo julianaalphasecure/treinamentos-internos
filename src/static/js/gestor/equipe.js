@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     const usuarioGestor = JSON.parse(localStorage.getItem("usuario_gestor"));
     const token = localStorage.getItem("token_gestor");
-    const baseURL = "http://127.0.0.1:5000/colaborador"; // baseURL para chamadas de API
+    const baseURL = "http://127.0.0.1:5000/colaborador"; 
 
     if (!usuarioGestor || !usuarioGestor.id) {
         alert("Sessão expirada ou usuário não identificado.");
@@ -14,24 +14,22 @@ document.addEventListener("DOMContentLoaded", () => {
         headerNome.textContent = `Olá, ${usuarioGestor.nome}`;
     }
 
-    // ==========================================================
-    // >>> 1. NOVA FUNÇÃO: CARREGAR PROGRESSO DO COLABORADOR (COM NOTA) <<<
-    // ==========================================================
+   
     async function carregarProgressoColaborador(colaboradorId, colaboradorNome) {
-        const modal = document.getElementById('modal-progresso'); // O Modal em si
-        const detalhes = document.getElementById('detalhes-progresso'); // O conteúdo dentro do modal
+        const modal = document.getElementById('modal-progresso'); 
+        const detalhes = document.getElementById('detalhes-progresso'); 
 
         if (!modal || !detalhes) {
             console.error("Estrutura do modal (#modal-progresso ou #detalhes-progresso) ausente no HTML.");
             return;
         }
 
-        // Exibe o modal e mensagem de carregamento
+      
         detalhes.innerHTML = `<h3>Progresso de ${colaboradorNome}</h3><p>Carregando...</p>`;
         modal.style.display = 'flex'; 
 
         try {
-            // Chama a nova rota protegida do gestor
+         
             const url = `${baseURL}/progresso/gestor/colaborador/${colaboradorId}`;
             const res = await fetch(url, {
                 method: "GET",
@@ -49,21 +47,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const dadosProgresso = await res.json();
             
-            // Renderiza os módulos
+            
             let htmlModulos = '';
             dadosProgresso.modulos.forEach(modulo => {
                 const statusClass = modulo.status === 'concluido' ? 'concluido' : modulo.status === 'em_andamento' ? 'em-andamento' : 'nao-iniciado';
                 
-                // >>> IMPLEMENTAÇÃO DA NOTA AQUI <<<
+              
                 let notaTexto = '';
-                // Assume que a nota (de 0 a 10) está no campo `modulo.nota_final` retornado pela API.
-                // Verifica se está concluído e se a nota é um número antes de exibir.
+                
                 if (modulo.status === 'concluido' && typeof modulo.nota_final === 'number') {
-                    // toFixed(1) garante uma casa decimal (ex: 8.0)
+                   
                     notaTexto = ` - Nota ${modulo.nota_final.toFixed(1)}`; 
                 }
                 
-                // Estrutura de progresso baseada no progresso.js original
+             
                 htmlModulos += `
                     <div class="modulo ${statusClass}">
                         <span>${modulo.nome}</span>
@@ -75,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 `;
             });
 
-            // Preenche o conteúdo do modal com os dados
+          
             detalhes.innerHTML = `
                 <h3>Progresso de ${colaboradorNome}</h3>
                 <div class="estatisticas">
@@ -93,11 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
             detalhes.innerHTML = `<h3>Progresso de ${colaboradorNome}</h3><p>Erro de conexão com a API.</p>`;
         }
     }
-    // ==========================================================
-    
-    // ==========================================================
-    // >>> 2. FUNÇÃO carregarEquipe (MODIFICADA) <<<
-    // ==========================================================
+  
     async function carregarEquipe() {
         try {
             const res = await fetch(`${baseURL}/`, {
@@ -123,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const card = document.createElement("div");
                 card.classList.add("card-colaborador");
 
-                // Armazena ID e Nome para usar no clique
+               
                 card.dataset.colaboradorId = colaborador.id; 
                 card.dataset.colaboradorNome = colaborador.nome; 
                 card.style.cursor = 'pointer'; 
@@ -144,7 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 lista.appendChild(card);
                 
-                // Adiciona o Event Listener de Clique
+              
                 card.addEventListener('click', () => {
                     const id = card.dataset.colaboradorId;
                     const nome = card.dataset.colaboradorNome;
@@ -158,21 +151,17 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // ==========================================================
-    // >>> 3. INICIA E RODA carregarEquipe <<<
-    // ==========================================================
+  
     carregarEquipe();
     setInterval(() => {
         carregarEquipe();
-        // heartbeat(); // Mantenha sua função heartbeat se for externa
+
     }, 10000);
 
-    // ==========================================================
-    // >>> 4. LÓGICA DO MODAL (Fechar ao clicar fora) <<<
-    // ==========================================================
+
     const modalProgresso = document.getElementById('modal-progresso');
     if (modalProgresso) {
-        // Fecha ao clicar fora do conteúdo
+      
         modalProgresso.addEventListener('click', (e) => {
             if (e.target === modalProgresso) {
                 modalProgresso.style.display = 'none';
@@ -180,15 +169,14 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // O restante do código (Filtros, Pesquisa, Botão Ver Tudo) permanece inalterado.
-    // ...
+    
     const filtroStatus = document.getElementById("filtro-status");
     if (filtroStatus) {
         filtroStatus.addEventListener("change", (e) => {
             const valor = e.target.value.toLowerCase();
             const cards = document.querySelectorAll(".card-colaborador");
             cards.forEach((card) => {
-                // ... (lógica de filtro) ...
+                
             });
         });
     }
@@ -199,7 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const termo = e.target.value.toLowerCase();
             const cards = document.querySelectorAll(".card-colaborador");
             cards.forEach((card) => {
-                // ... (lógica de pesquisa) ...
+              
             });
         });
     }
