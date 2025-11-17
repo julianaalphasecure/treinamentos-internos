@@ -21,7 +21,7 @@ let isSearchDropdownOpen = false;
 
 // ================== Funções de Utilitário ==================
 
-// Função para buscar a lista de colaboradores
+
 async function fetchColaboradores() {
 
     try {
@@ -84,9 +84,9 @@ function handleSelectColaborador(event) {
     const selectedItem = event.target;
 
 
-    colaboradorSelecionado = {
-        id: selectedItem.dataset.id,
-        nome: selectedItem.dataset.nome
+    colaboradorSelecionado = {
+        id: selectedItem.dataset.id,
+        nome: selectedItem.dataset.nome
  };
 
 
@@ -94,118 +94,111 @@ colaboradorSearchInput.value = selectedItem.dataset.nome;
 colaboradorDestinoId.value = selectedItem.dataset.id;
 
 
-    searchResultsDiv.innerHTML = '';
-    isSearchDropdownOpen = false;
+    searchResultsDiv.innerHTML = '';
+    isSearchDropdownOpen = false;
 
 
-    btnEnviarFeedback.disabled = false;
+    btnEnviarFeedback.disabled = false;
 }
 
-// Listener para digitação no campo de pesquisa
+
 colaboradorSearchInput.addEventListener('input', (e) => {
-    // Força desabilitar o botão se o texto for alterado antes da seleção
-    btnEnviarFeedback.disabled = true;
-    colaboradorDestinoId.value = '';
-    colaboradorSelecionado = null;
-    
-    renderSearchResults(e.target.value.trim());
+    btnEnviarFeedback.disabled = true;
+    colaboradorDestinoId.value = '';
+    colaboradorSelecionado = null;
+
+    renderSearchResults(e.target.value.trim());
 });
 
-// Fecha o dropdown ao clicar fora
+
 document.addEventListener('click', (e) => {
-    if (!feedbackForm.contains(e.target) && isSearchDropdownOpen) {
-        searchResultsDiv.innerHTML = '';
-        isSearchDropdownOpen = false;
-    }
+    if (!feedbackForm.contains(e.target) && isSearchDropdownOpen) {
+        searchResultsDiv.innerHTML = '';
+        isSearchDropdownOpen = false;
+    }
 });
 
 
 // ================== AÇÃO DE ENVIO DE FEEDBACK ==================
 
 feedbackForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
+    e.preventDefault();
 
-    const gestorId = JSON.parse(localStorage.getItem("usuario_gestor"))?.id; 
-    
-    // Validação final de quem está enviando e para quem
-    if (!gestorId || !colaboradorSelecionado?.id) {
-        alert("Erro: Selecione um colaborador válido e faça login como gestor.");
-        return;
-    }
-    
-    const dadosFeedback = {
-        colaborador_id: parseInt(colaboradorSelecionado.id),
-        gestor_id: gestorId,
-        mensagem: feedbackMensagem.value.trim(),
-        tipo: feedbackTitulo.value.trim() || null // O título/assunto
-    };
+    const gestorId = JSON.parse(localStorage.getItem("usuario_gestor"))?.id; 
+    if (!gestorId || !colaboradorSelecionado?.id) {
+       alert("Erro: Selecione um colaborador válido e faça login como gestor.");
+       return;
+    }
 
-    if (dadosFeedback.mensagem.length === 0) {
-        alert("A mensagem de feedback não pode estar vazia.");
-        return;
-    }
-    
-    btnEnviarFeedback.disabled = true; 
-    btnEnviarFeedback.textContent = "Enviando...";
-    feedbackStatusMessage.textContent = 'Processando...';
+    const dadosFeedback = {
+        colaborador_id: parseInt(colaboradorSelecionado.id),
+        gestor_id: gestorId,
+        mensagem: feedbackMensagem.value.trim(),
+        tipo: feedbackTitulo.value.trim() || null // O título/assunto
+    };
 
-    try {
-        const res = await fetch(baseURLFeedback, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}` 
-            },
-            body: JSON.stringify(dadosFeedback)
-        });
+    if (dadosFeedback.mensagem.length === 0) {
+        alert("A mensagem de feedback não pode estar vazia.");
+        return;
+    }
 
-        const data = await res.json();
+    btnEnviarFeedback.disabled = true; 
+    btnEnviarFeedback.textContent = "Enviando...";
+    feedbackStatusMessage.textContent = 'Processando...';
 
-        if (res.ok) {
-            feedbackStatusMessage.textContent = `Feedback para ${colaboradorSelecionado.nome} enviado com sucesso!`;
-            
-            // Limpar formulário e seleção (para forçar nova pesquisa)
-            feedbackTitulo.value = "";
-            feedbackMensagem.value = "";
-            colaboradorSearchInput.value = "";
-            colaboradorDestinoId.value = "";
-            colaboradorSelecionado = null;
-            btnEnviarFeedback.disabled = true; // Desabilita até que um novo seja selecionado
+    try {
+        const res = await fetch(baseURLFeedback, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}` 
+            },
+            body: JSON.stringify(dadosFeedback)
+        });
 
-        } else {
-            feedbackStatusMessage.textContent = "Falha no envio!";
-            alert("Erro ao enviar feedback: " + (data.error || "Erro desconhecido"));
-        }
-    } catch (err) {
-        feedbackStatusMessage.textContent = "Erro de Conexão!";
-        console.error("Erro ao enviar feedback:", err);
-        alert("Erro de conexão. Veja o console.");
-    } finally {
-        btnEnviarFeedback.textContent = "Enviar Feedback";
-        // Mantém desabilitado se não houver colaborador selecionado
-        if (colaboradorSelecionado) {
-             btnEnviarFeedback.disabled = false;
-        }
-        setTimeout(() => feedbackStatusMessage.textContent = '', 5000); // Limpa a mensagem após 5s
-    }
+    const data = await res.json();
+
+    if (res.ok) {
+        feedbackStatusMessage.textContent = `Feedback para ${colaboradorSelecionado.nome} enviado com sucesso!`;
+ 
+        feedbackTitulo.value = "";
+        feedbackMensagem.value = "";
+        colaboradorSearchInput.value = "";
+        colaboradorDestinoId.value = "";
+        colaboradorSelecionado = null;
+            btnEnviarFeedback.disabled = true; 
+
+        } else {
+            feedbackStatusMessage.textContent = "Falha no envio!";
+            alert("Erro ao enviar feedback: " + (data.error || "Erro desconhecido"));
+        }
+    } catch (err) {
+        feedbackStatusMessage.textContent = "Erro de Conexão!";
+        console.error("Erro ao enviar feedback:", err);
+        alert("Erro de conexão. Veja o console.");
+    } finally {
+        btnEnviarFeedback.textContent = "Enviar Feedback";
+        if (colaboradorSelecionado) {
+            btnEnviarFeedback.disabled = false;
+        }
+        setTimeout(() => feedbackStatusMessage.textContent = '', 5000); // Limpa a mensagem após 5s
+    }
 });
 
 
 // ================== Inicializar ==================
 document.addEventListener("DOMContentLoaded", async () => {
-    // VERIFICAÇÃO DE LOGIN
+// VERIFICAÇÃO DE LOGIN
     if (!token || !localStorage.getItem("usuario_gestor")) {
         console.error("Token de autenticação ausente. Redirecionando.");
         window.location.href = "/src/templates/auth/login.html"; 
         return;
     }
 
-    await fetchColaboradores();
-    
-    // Exibir o nome do gestor (se o elemento existir)
-    const usuario = JSON.parse(localStorage.getItem("usuario_gestor")) || {};
-    const headerNome = document.getElementById("user-name");
-    if (headerNome) {
-         headerNome.textContent = `Olá, ${usuario.nome || ""}`;
-    }
+    await fetchColaboradores();
+    const usuario = JSON.parse(localStorage.getItem("usuario_gestor")) || {};
+    const headerNome = document.getElementById("user-name");
+    if (headerNome) {
+        headerNome.textContent = `Olá, ${usuario.nome || ""}`;
+    }
 });
