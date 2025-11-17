@@ -4,16 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Meu Progresso - Feedback</title>
+
   <link rel="stylesheet" href="/src/static/css/colaborador/feedback.css">
+  <link rel="stylesheet" href="/src/static/css/global.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="shortcut icon" href="/src/static/img/logo header.png" type="image/x-icon">
-  <link rel="stylesheet" href="/src/static/css/global.css">
-
-
 </head>
+
 <body>
+
   <div class="main-container">
 
+  
     <aside class="sidebar">
       <nav>
         <ul>
@@ -24,30 +26,74 @@
       </nav>
     </aside>
 
+
     <div class="container">
+
+     
       <div class="main-content">
         <h2>Feedbacks Recebidos</h2>
         <p>Mensagens e orientações da sua gestão</p>
 
         <div class="feedback-list" id="feedbackList">
-          <!-- Cards de feedback serão carregados via JS -->
+     
         </div>
 
         <button class="view-all-btn" id="viewAllBtn">Visualizar todos</button>
       </div>
+
+  
+      <div class="send-feedback-box">
+        <h3>Enviar Mensagem</h3>
+
+        <form id="sendFeedbackForm">
+
+   
+  <label for="destinatario">Enviar para</label>
+  <input 
+    type="text" 
+    id="destinatario" 
+    placeholder="Digite o nome do gestor..." 
+    autocomplete="on"
+    required>
+
+
+<ul id="autocompleteList" class="autocomplete-list"></ul>
+
+          <label for="assunto">Assunto</label>
+          <select id="assunto" required>
+            <option value="">Selecione um assunto...</option>
+            <option value="duvida-modulo">Dúvida sobre um módulo</option>
+            <option value="erro-modulo">Erro em Módulo de Treinamento</option>
+            <option value="reportar-bug">Reportar Bug</option>
+            <option value="elogio">Elogio</option>
+            <option value="reclamacao">Reclamação</option>
+            <option value="outro">Outro</option>
+          </select>
+
+          <label for="mensagem">Mensagem</label>
+          <textarea id="mensagem" rows="6" placeholder="Digite sua dúvida, feedback ou observação..." required></textarea>
+
+          <button type="submit" class="send-btn">Enviar</button>
+        </form>
+
+        <p id="sendStatus" class="status-msg"></p>
+      </div>
+
     </div>
   </div>
-   <footer class="footer">
+
+  <footer class="footer">
     <hr class="footer-separator">
     <div class="footer-links">
-        <a href="#">Política de Privacidade</a> | 
-        <a href="#">Termos de Uso</a> | 
-        <a href="#">Suporte</a>
+      <a href="#">Política de Privacidade</a> |
+      <a href="#">Termos de Uso</a> |
+      <a href="#">Suporte</a>
     </div>
     <p class="footer-copy">&copy; 2025 Alpha Secure. Todos os direitos reservados.</p>
   </footer>
 
   <script src="/src/static/js/colaborador/feedback.js"></script>
   <script src="/src/static/js/global.js"></script>
+
 </body>
 </html>
