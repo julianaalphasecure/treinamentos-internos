@@ -6,8 +6,9 @@ let currentIndex = 0;
 let moduleLocked = false;
 let isFullScreen = false;
 let darkMode = false;
-const moduleId = 2; 
+const moduleId = 2;
 const totalSlides = slidesNormal.length;
+
 
 const USUARIO_ID = JSON.parse(localStorage.getItem("usuario_colaborador"))?.id; 
 const TOKEN = localStorage.getItem("token_colaborador"); 
@@ -23,29 +24,27 @@ function updateCarousel() {
     saveModuleSlideProgress(moduleId, currentIndex); 
 }
 
-// ================== FUNÇÃO SALVAR PROGRESSO LOCAL  ==================
+// ================== FUNÇÃO SALVAR PROGRESSO LOCAL (posição do slide) ==================
 function saveModuleSlideProgress(moduleId, lastSlideIndex) {
     const progress = JSON.parse(localStorage.getItem("moduleProgress") || "{}");
     progress[moduleId] = lastSlideIndex;
     localStorage.setItem("moduleProgress", JSON.stringify(progress));
 }
 
-// ================== CARREGA PROGRESSO LOCAL  ==================
+// ================== CARREGA PROGRESSO LOCAL (posição do slide) ==================
 function loadModuleProgress(moduleId) {
     const progress = JSON.parse(localStorage.getItem("moduleProgress") || "{}");
     return progress[moduleId] || 0;
 }
 
 
-// ================== FUNÇÃO FINALIZAR MÓDULO  ==================
+
+
+// ================== NOVO: COMUNICAÇÃO COM A API DE PROGRESSO (FLASK) ==================
 async function finalizarModuloAPI(moduloId, notaFinal) {
-    if (!USUARIO_ID || !TOKEN) {
-       
-        return { success: false };
-    }
+   
 
     try {
-        
         const response = await fetch(`http://127.0.0.1:5000/colaborador/progresso/finalizar/${moduloId}`, {
             method: "POST",
             headers: {
@@ -54,7 +53,6 @@ async function finalizarModuloAPI(moduloId, notaFinal) {
             },
             body: JSON.stringify({ nota_final: notaFinal })
         });
-        
 
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({ error: "Erro desconhecido ou falha na comunicação" }));
@@ -62,19 +60,13 @@ async function finalizarModuloAPI(moduloId, notaFinal) {
         }
 
         console.log(`Módulo ${moduloId} finalizado com nota ${notaFinal}%. Redirecionando...`);
-        
-
         setTimeout(() => {
             window.location.href = '/src/templates/colaborador/modulo.html';
         }, 1500);
-       
-
-        return { success: true }; 
 
     } catch (error) {
         console.error("Erro na API de finalização:", error);
         alert(`Erro ao registrar conclusão do módulo: ${error.message}`);
-        return { success: false };
     }
 }
 
@@ -129,31 +121,30 @@ function closeResultOverlay() {
     overlayCard.classList.remove('pop-in'); 
 }
 
-// Fechar clicando fora do card
+
 overlay.addEventListener('click', (e) => {
     if (e.target === overlay) closeResultOverlay();
 });
 
-// ESC para fechar
+
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && overlay.style.display === 'flex') closeResultOverlay();
 });
 
 // ================== HANDLER DE ENVIO ==================
-document.getElementById('submit-exercises').addEventListener('click', async () => {
+document.getElementById('submit-exercises').addEventListener('click', () => {
     clearInterval(timerInterval);
 
     let score = 0;
     exSlides.forEach(slide => {
         const selected = slide.querySelector('input[type="radio"]:checked');
-      
-        if (selected && selected.value === slide.dataset.answer) score++; 
+        if (selected && selected.value === slide.dataset.answer) score++;
     });
 
     const totalQuestions = exSlides.length;
     const percent = Math.round((score / totalQuestions) * 100);
 
- 
+    // Reset classes e botões
     overlayCard.classList.remove('success', 'fail');
     btnRefazer.style.display = 'none';
     btnProximo.style.display = 'none';
@@ -166,29 +157,20 @@ document.getElementById('submit-exercises').addEventListener('click', async () =
         btnProximo.style.display = 'inline-block';
         btnProximo.textContent = 'Ver Meu Progresso';
         
-
-
-    const apiResult = await finalizarModuloAPI(moduleId, percent);
-        
-    if (apiResult.success) {
-    btnProximo.onclick = () => {
-        closeResultOverlay();
-       
-    };
-} 
-
-    
+        // CHAMA A API PARA FINALIZAR O MÓDULO NO BACKEND
+        btnProximo.onclick = () => {
+            closeResultOverlay();
+            finalizarModuloAPI(moduleId, percent);
+        };
         
     } else {
         overlayCard.classList.add('fail');
         title.textContent = `❌ Nota insuficiente. Você precisa de ${REQUISITO_APROVACAO}%.`;
         btnRefazer.style.display = 'inline-block';
-        btnRefazer.textContent = 'Refazer módulo';
-        
         btnRefazer.onclick = () => {
             closeResultOverlay();
             
-         
+          
             currentIndex = 0;
             updateCarousel();
             exercisesSection.style.display = 'none';
@@ -209,6 +191,7 @@ document.getElementById('submit-exercises').addEventListener('click', async () =
             totalTime = 30 * 60;
             document.getElementById('timer').textContent = 'Tempo restante: 30:00';
             
+           
             document.querySelectorAll('input[type="radio"]:checked').forEach(radio => radio.checked = false);
             document.querySelectorAll('.options label').forEach(label => label.classList.remove('selected'));
         };
@@ -312,7 +295,8 @@ function startTimer() {
 
         if (totalTime < 0) {
             clearInterval(timerInterval);
-            document.getElementById('submit-exercises').click(); 
+            alert('Tempo esgotado! Você precisa refazer o módulo.');
+            location.reload();
         }
     }, 1000);
 }
@@ -320,8 +304,8 @@ function startTimer() {
 // ================== DOWNLOAD ==================
 document.getElementById('download-btn').addEventListener('click', () => {
     const link = document.createElement('a');
-    link.href = '/src/static/pdf/modulo02.pdf';
-    link.download = 'Modulo02_Conteudo.pdf';
+    link.href = '/src/static/pdf/modulo01.pdf';
+    link.download = 'Modulo01_Conteudo.pdf';
     link.click();
 });
 
@@ -331,14 +315,7 @@ function createThumbnails(slides) {
     thumbnailsContainer.innerHTML = '';
     slides.forEach((slide, idx) => {
         const thumb = document.createElement('img');
-        const firstImage = slide.querySelector('img');
-        if (firstImage) {
-            thumb.src = firstImage.src; 
-        } else {
-            
-             thumb.src = 'placeholder.png'; 
-        }
-
+        thumb.src = slide.querySelector('img').src;
         if (idx === 0) thumb.classList.add('active');
 
         thumb.addEventListener('click', () => {
