@@ -82,76 +82,132 @@ h2 {
      margin-left: 50px; 
   }
 
+/* ============================
+   NOVO DESIGN DOS FEEDBACKS
+============================ */
+
 .feedback-list {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    padding-right: 20px;
+
+    /* ==================================== */
+    /* NOVAS PROPRIEDADES PARA O SCROLL */
+    /* ==================================== */
+    max-height: 500px; /* Define a altura máxima. Ajuste este valor conforme a necessidade do seu layout. */
+    overflow-y: auto; /* Habilita o scroll vertical quando o conteúdo exceder 500px */
+    padding-right: 10px; /* Garante que a barra de scroll não se sobreponha ao conteúdo */
 }
 
+/* Opcional: Estilo para a barra de scroll (melhora a aparência no Chrome/Edge/Safari) */
+.feedback-list::-webkit-scrollbar {
+    width: 6px;
+    background-color: #f1f1f1;
+}
+
+.feedback-list::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #f88a15; /* Cor primária */
+}
+
+/* Cartão principal */
 .feedback-card {
-  background: #fff;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  transition: transform 0.2s;
-  margin-left: 50px; 
+    position: relative;
+    background: #fff;
+    /* Antes: padding: 25px 25px 25px 35px; */
+    padding: 15px 20px 15px 25px; /* Novo padding menor */
+    border-radius: 14px; /* Raio menor */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* Sombra mais suave */
+    transition: all 0.25s ease;
+    border-left: 5px solid #f88a15; /* Borda um pouco mais fina */
 }
 
-.feedback-card.read {
-  opacity: 0.6;
-}
 
 .feedback-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
 }
 
+/* Quando já lido */
+.feedback-card.read {
+  opacity: 0.55;
+  filter: grayscale(20%);
+}
+
+/* Cabeçalho */
 .feedback-header {
-  display: flex;
-  justify-content: space-between;
-  font-size: 14px;
-  margin-bottom: 10px;
-  color: #555;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px; /* Reduzir margem */
+    font-size: 14px; /* Ajustar tamanho */
 }
 
 .feedback-type {
-  font-weight: bold;
-  color: #ff6600;
+    font-weight: 700;
+    color: #333; /* Usar cor de texto padrão */
+    font-size: 14px; /* Fonte um pouco menor */
+    display: flex;
+    align-items: center;
+    gap: 0; /* Remover gap */
 }
 
+.feedback-type::before {
+    content: ""; /* REMOVIDA A ESTRELA */
+}
+
+/* Mensagem */
 .feedback-message {
-  margin-bottom: 10px;
-  line-height: 1.5;
+  color: #444;
+  font-size: 15px;
+  line-height: 1.55;
+  margin-bottom: 15px;
 }
 
+/* Botão "Marcar como lido" */
 .mark-read-btn {
-  background-color: #ff6600;
+  background: #f88a15;
   color: #fff;
   border: none;
-  padding: 8px 12px;
-  border-radius: 6px;
+  padding: 9px 18px;
+  border-radius: 10px;
   cursor: pointer;
-  
+  font-weight: bold;
+  transition: 0.25s;
 }
 
 .mark-read-btn:hover {
-  background-color: #e55a00;
+  background: #e07810;
+  transform: scale(1.05);
 }
 
+.mark-read-btn:disabled {
+  background-color: #ccc;
+  cursor: default;
+  transform: none;
+}
+
+/* Botão ver todos */
 .view-all-btn {
   margin-top: 20px;
-  background-color: #f0c68c;
+  background: #ffe2c0;
   border: none;
-  padding: 10px 20px;
+  padding: 12px 22px;
   border-radius: 12px;
   cursor: pointer;
   font-weight: bold;
   margin-left: 45px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: 0.25s;
 }
 
 .view-all-btn:hover {
-  background-color: #e0b06b;
+  background: #ffd3a1;
+  transform: translateY(-3px);
 }
+
 
 .feedback-list p {
   text-align: center;

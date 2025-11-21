@@ -550,11 +550,11 @@ body.dark-mode .result-actions .btn-secondary:hover {
 
 /* Ocultar/mostrar com base no resultado */
 .result-actions .btn-refazer {
-  display: none; 
+  display: none; /* será mostrado se fail */
 }
 
 .result-actions .btn-proximo {
-  display: none; 
+  display: none; /* será mostrado se success */
 }
 
 .result-card.success .btn-proximo {
@@ -565,7 +565,7 @@ body.dark-mode .result-actions .btn-secondary:hover {
   display: inline-block;
 }
 
-
+/* Dark Mode Overlay */
 body.dark-mode #result-overlay {
   background: rgba(0, 0, 0, 0.9);
 }

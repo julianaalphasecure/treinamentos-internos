@@ -30,8 +30,7 @@ def create_app():
     # 1. DEFINIÇÃO DO OBJETO 'app'
     app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
     
-    # 2. CORS
-    CORS(app, resources={r"/*": {"origins": "*", "allow_headers": ["Content-Type", "Authorization"]}})
+    CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True, methods=["GET","POST","PUT","DELETE","OPTIONS"])
 
     # ===== Configurações Flask =====
     app.config["SECRET_KEY"] = SECRET_KEY.strip() 
@@ -86,6 +85,7 @@ def create_app():
     app.register_blueprint(equipe_bp, url_prefix="/gestor/equipe")
     app.register_blueprint(gestor_feedback_bp, url_prefix="/gestor/feedback")
     app.register_blueprint(relatorio_bp, url_prefix="/gestor/relatorio")
+
 
    
     with app.app_context():

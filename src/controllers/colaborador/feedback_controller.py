@@ -3,79 +3,66 @@ from src.services.colaborador.feedback_service import FeedbackService
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from src.models.usuario import Usuario
 
-colab_feedback_bp = Blueprint("colab_feedback_bp", __name__, url_prefix="/colaborador/feedback")
+colab_feedback_bp = Blueprint("colab_feedback_bp", __name__)
 
-@colab_feedback_bp.route("/meus-feedbacks", methods=["GET"])
-@jwt_required() # Protege a rota
+
+# ======================================================
+# 1. LISTAR FEEDBACKS DO COLABORADOR (APENAS feedbacks)
+# ======================================================
+@colab_feedback_bp.route("/", methods=["GET"])
+@jwt_required()
 def listar_feedbacks_colaborador():
-    """Rota para listar feedbacks DESTE colaborador."""
-    # Extrai o ID do usuário logado do token JWT
-    colaborador_id = get_jwt_identity() 
-    
-    # 🚨 LINHA DE DEBUG ADICIONADA:
-    print(f"\n--- DEBUG (BUSCA): Colaborador logado buscando feedback com ID: {colaborador_id} ---\n") 
-    
+    colaborador_id = get_jwt_identity()
+
     feedbacks = FeedbackService.get_feedbacks_by_colaborador(colaborador_id)
     return jsonify([f.to_dict() for f in feedbacks]), 200
 
-# ROTA PARA MARCAR COMO LIDO
+
+# ======================================================
+# 4. MARCAR FEEDBACK COMO LIDO
+# ======================================================
 @colab_feedback_bp.route("/marcar-lido/<int:feedback_id>", methods=["PUT"])
 @jwt_required()
 def marcar_feedback_lido(feedback_id):
-    feedback = FeedbackService.marcar_como_lido(feedback_id)
-    if feedback:
-        return jsonify({"message": "Feedback marcado como lido", "lido": feedback.lido}), 200
-    return jsonify({"error": "Feedback não encontrado"}), 404
-
-
-@colab_feedback_bp.route("/", methods=["POST"])
-def criar_feedback():
-    data = request.get_json()
-    # ATENÇÃO: Esta rota / é a rota PÚBLICA do Colaborador. A criação DEVE ser protegida no /gestor/relatorio/
-    feedback = FeedbackService.create_feedback(data)
-    return jsonify(feedback.to_dict()), 201
-
-@colab_feedback_bp.route("/", methods=["GET"])
-def listar_feedbacks():
-    feedbacks = FeedbackService.get_all_feedbacks()
-    return jsonify([f.to_dict() for f in feedbacks]), 200
-
-@colab_feedback_bp.route("/<int:feedback_id>", methods=["GET"])
-def obter_feedback(feedback_id):
+    colaborador_id = get_jwt_identity()
     feedback = FeedbackService.get_feedback_by_id(feedback_id)
-    if feedback:
-        return jsonify(feedback.to_dict()), 200
-    return jsonify({"error": "Feedback não encontrado"}), 404
+
+    if not feedback:
+        return jsonify({"error": "Feedback não encontrado"}), 404
 
 
-@colab_feedback_bp.route("/<int:feedback_id>", methods=["PUT"])
-def atualizar_feedback(feedback_id):
-    data = request.get_json()
-    feedback = FeedbackService.update_feedback(feedback_id, data)
-    if feedback:
-        return jsonify({"message": "Feedback atualizado com sucesso", "feedback": feedback.to_dict()}), 200
-    return jsonify({"error": "Feedback não encontrado"}), 404
+    if int(feedback.colaborador_id) != int(colaborador_id):
+        return jsonify({
+            "error": "Você não tem permissão para marcar este feedback",
+            "jwt_id": colaborador_id,
+            "feedback_id": feedback.colaborador_id
+        }), 403
 
-@colab_feedback_bp.route("/<int:feedback_id>", methods=["DELETE"])
-def deletar_feedback(feedback_id):
-    feedback = FeedbackService.delete_feedback(feedback_id)
-    if feedback:
-        return jsonify({"message": "Feedback deletado com sucesso"}), 200
-    return jsonify({"error": "Feedback não encontrado"}), 404
+    updated = FeedbackService.marcar_como_lido(feedback_id)
+    return jsonify({"message": "Feedback marcado como lido"}), 200
 
-# 🔹 LISTAR GESTORES PARA O AUTOCOMPLETE
+
+# ======================================================
+# 5. LISTAR GESTORES (para enviar dúvidas)
+# ======================================================
 @colab_feedback_bp.route("/gestores", methods=["GET"])
 @jwt_required()
 def listar_gestores():
-    gestores = Usuario.query.filter_by(tipo_acesso="gestor").all()
+    nome = (request.args.get("nome") or "").strip()
 
-    return jsonify([
-        {"id": g.id, "nome": g.nome}
-        for g in gestores
-    ]), 200
+    query = Usuario.query.filter_by(tipo_acesso="gestor")
+
+    if nome:
+        query = query.filter(Usuario.nome.ilike(f"%{nome}%"))
+
+    gestores = query.limit(50).all()
+
+    return jsonify([{"id": g.id, "nome": g.nome} for g in gestores]), 200
 
 
-# 🔹 ENVIAR FEEDBACK DO COLABORADOR PARA UM GESTOR
+# ======================================================
+# 6. ENVIAR DÚVIDA DO COLABORADOR PARA UM GESTOR
+# ======================================================
 @colab_feedback_bp.route("/enviar", methods=["POST"])
 @jwt_required()
 def enviar_feedback():
@@ -92,8 +79,19 @@ def enviar_feedback():
     novo_feedback = {
         "gestor_id": gestor_id,
         "colaborador_id": colaborador_id,
-        "mensagem": f"[{assunto}] {mensagem}"
+        "mensagem": f"[duvida-modulo] [{assunto}] {mensagem}"
     }
 
     feedback = FeedbackService.create_feedback(novo_feedback)
     return jsonify(feedback.to_dict()), 201
+
+# ======================================================
+# ROTA CORRETA QUE O SEU FRONT-END USA: /meus-feedbacks
+# ======================================================
+@colab_feedback_bp.route("/meus-feedbacks", methods=["GET"])
+@jwt_required()
+def meus_feedbacks():
+    colaborador_id = get_jwt_identity()
+
+    feedbacks = FeedbackService.get_feedbacks_para_colaborador(colaborador_id)
+    return jsonify([f.to_dict() for f in feedbacks]), 200

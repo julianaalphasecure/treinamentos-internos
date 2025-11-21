@@ -1,4 +1,3 @@
-# models/usuario_notificacao.py
 from src.config.database import db
 
 class UsuarioNotificacao(db.Model):

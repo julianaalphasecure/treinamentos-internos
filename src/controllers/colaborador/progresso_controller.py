@@ -46,7 +46,8 @@ def progresso_frontend():
                 "nome": nome_modulo,
                 "percent": percent_progresso, # Usando o progresso de 0-100
                 "status": p.status,
-                "nota_final": float(p.nota_final) if p.nota_final is not None else None # Opcional: manter nota
+                "nota_final": float(p.nota_final) if p.nota_final is not None else None, # Opcional: manter nota
+                "tentativas": p.tentativas
             }
 
         modulos = list(modulos_dict.values())
@@ -105,7 +106,8 @@ def progresso_colaborador_gestor(colaborador_id):
                 "nome": nome_modulo,
                 "percent": percent_progresso,
                 "status": p.status,
-                "nota_final": nota_obtida
+                "nota_final": nota_obtida,
+                "tentativas": p.tentativas
             }
 
         modulos = list(modulos_dict.values())

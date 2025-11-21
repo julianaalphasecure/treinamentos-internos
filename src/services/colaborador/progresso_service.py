@@ -57,6 +57,7 @@ class ProgressoService:
                 usuario_id=usuario_id,
                 modulo_id=modulo.id
             ).first()
+
             if not existente:
                 novo = Progresso(
                     usuario_id=usuario_id,
@@ -65,35 +66,41 @@ class ProgressoService:
                     nota_final=0
                 )
                 db.session.add(novo)
+
         db.session.commit()
 
     # >>> FUNÇÃO FINALIZAR MÓDULO CORRIGIDA <<<
+
     @staticmethod
     def finalizar_modulo(usuario_id, modulo_id, nota_final):
-        """Marca um módulo como concluído para o usuário, salvando a nota_final real."""
         progresso = Progresso.query.filter_by(
             usuario_id=usuario_id,
             modulo_id=modulo_id
         ).first()
 
+        # Se não existe progresso, cria com tentativas = 1
         if not progresso:
             progresso = Progresso(
                 usuario_id=usuario_id,
                 modulo_id=modulo_id,
-                status="concluido",
                 nota_final=nota_final,
+                status="em_andamento",
                 data_inicio=datetime.utcnow(),
-                data_conclusao=datetime.utcnow()
+                tentativas=1
             )
             db.session.add(progresso)
+
         else:
-            progresso.status = "concluido"
+            progresso.tentativas += 1
             progresso.nota_final = nota_final
 
-            if not progresso.data_inicio:
-                progresso.data_inicio = datetime.utcnow()
-
+        # Se atingiu a nota, conclui
+        if nota_final >= 80:
+            progresso.status = "concluido"
             progresso.data_conclusao = datetime.utcnow()
+        else:
+            progresso.status = "em_andamento"
+            progresso.data_conclusao = None
 
         db.session.commit()
         return progresso

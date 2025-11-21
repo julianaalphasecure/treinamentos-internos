@@ -13,6 +13,8 @@ class Progresso(db.Model):
         nullable=False
     )
     nota_final = db.Column(db.Numeric(5, 2), nullable=True)
+    tentativas = db.Column(db.Integer, default=1, nullable=False)
+
     data_inicio = db.Column(db.DateTime, nullable=True)
     data_conclusao = db.Column(db.DateTime, nullable=True)
 
@@ -28,6 +30,7 @@ class Progresso(db.Model):
             "modulo_id": self.modulo_id,
             "status": self.status,
             "nota_final": float(self.nota_final) if self.nota_final is not None else None,
+            "tentativas": self.tentativas,
             "data_inicio": self.data_inicio,
             "data_conclusao": self.data_conclusao
         }

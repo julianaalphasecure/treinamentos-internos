@@ -1,4 +1,5 @@
-// VARIÁVEIS DO DOM
+// /src/static/js/gestor/relatorio.js
+// DOM
 const colaboradorSearchInput = document.getElementById("colaborador-search");
 const colaboradorDestinoId = document.getElementById("colaborador-destino-id");
 const searchResultsDiv = document.getElementById("search-results");
@@ -8,108 +9,68 @@ const feedbackForm = document.getElementById("feedback-form");
 const btnEnviarFeedback = document.getElementById("btn-enviar-feedback");
 const feedbackStatusMessage = document.getElementById("feedback-status-message");
 
-// VARIÁVEIS DA API
-const baseURLColaborador = "http://127.0.0.1:5000/colaborador"; 
-const baseURLFeedback = "http://127.0.0.1:5000/gestor/relatorio/";
-const token = localStorage.getItem("token_gestor");
+const recebidosContainer = document.getElementById("historico-feedbacks");
+const btnRefreshRecebidos = document.getElementById("btn-refresh-recebidos");
+const recebidosStatus = document.getElementById("recebidos-status");
+const badgeNaoLidos = document.getElementById("badge-nao-lidos");
 
+// ROTAS
+const BASE = "http://127.0.0.1:5000";
+const baseURLColaborador = `${BASE}/colaborador`;
+const baseURLFeedback = `${BASE}/gestor/relatorio`;
+const recebidosURL = `${BASE}/gestor/relatorio/recebidos`;
+const marcarLidoURL = `${BASE}/gestor/relatorio/marcar-lido`;
+const naoLidosURL = `${BASE}/gestor/relatorio/nao-lidos/contagem`;
+
+const token = localStorage.getItem("token_gestor");
+function authHeaders() { return { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" }; }
 
 let todosColaboradores = [];
-let colaboradorSelecionado = null; 
+let colaboradorSelecionado = null;
 let isSearchDropdownOpen = false;
 
-
-// ================== Funções de Utilitário ==================
-
-
 async function fetchColaboradores() {
-
     try {
-        const res = await fetch(`${baseURLColaborador}/`, { 
-            method: "GET",
-            headers: { "Authorization": `Bearer ${token}` }
-        });
-        
-    if (!res.ok) {
-                
-        console.error("Erro ao carregar colaboradores:", res.status);
-        alert(`Erro ${res.status} ao carregar lista de colaboradores. Verifique o servidor.`);
-        return [];
+        const res = await fetch(`${baseURLColaborador}/`, { method: "GET", headers: authHeaders() });
+        if (!res.ok) { alert(`Erro ${res.status} ao carregar lista de colaboradores.`); return []; }
+        todosColaboradores = await res.json();
+        return todosColaboradores;
+    } catch (err) { console.error("Erro ao buscar colaboradores:", err); alert("Erro de conexão."); return []; }
 }
-todosColaboradores = await res.json();
-return todosColaboradores;
-} catch (err) {
-    console.error("Erro de conexão ao buscar colaboradores:", err);
-    alert("Erro de conexão. Servidor desligado?");
-        return [];
-    }
-}
-
-// ================== Lógica de Autocomplete ==================
 
 function renderSearchResults(query) {
-
-    if (query.length < 2) { 
-        searchResultsDiv.innerHTML = '';
-        isSearchDropdownOpen = false;
-        return;
-}
- 
-
-const filteredResults = todosColaboradores.filter(colab => 
-colab.nome.toLowerCase().includes(query.toLowerCase())
-);
-
-searchResultsDiv.innerHTML = '';
-
-    if (filteredResults.length > 0) {
-    filteredResults.forEach(colab => {
-    const resultItem = document.createElement('div');
-    resultItem.textContent = `${colab.nome} (ID: ${colab.id})`;
-    resultItem.dataset.id = colab.id;
-    resultItem.dataset.nome = colab.nome;
-    resultItem.addEventListener('click', handleSelectColaborador);
-    searchResultsDiv.appendChild(resultItem);
-});
-isSearchDropdownOpen = true;
-} else {
-    const noResultItem = document.createElement('div');
-    noResultItem.textContent = 'Nenhum colaborador encontrado.';
-    searchResultsDiv.appendChild(noResultItem);
+    if (!query || query.length < 2) { searchResultsDiv.innerHTML = ''; isSearchDropdownOpen = false; return; }
+    const filtered = todosColaboradores.filter(c => c.nome.toLowerCase().includes(query.toLowerCase()));
+    searchResultsDiv.innerHTML = '';
+    if (filtered.length === 0) { searchResultsDiv.innerHTML = '<div class="no-result-item">Nenhum colaborador encontrado.</div>'; isSearchDropdownOpen = true; return; }
+    filtered.forEach(colab => {
+        const item = document.createElement('div');
+        item.textContent = `${colab.nome} (ID: ${colab.id})`;
+        item.dataset.id = colab.id;
+        item.dataset.nome = colab.nome;
+        item.classList.add('search-result-item');
+        item.addEventListener('click', handleSelectColaborador);
+        searchResultsDiv.appendChild(item);
+    });
     isSearchDropdownOpen = true;
-    }
 }
 
 function handleSelectColaborador(event) {
-    const selectedItem = event.target;
-
-
-    colaboradorSelecionado = {
-        id: selectedItem.dataset.id,
-        nome: selectedItem.dataset.nome
- };
-
-
-colaboradorSearchInput.value = selectedItem.dataset.nome;
-colaboradorDestinoId.value = selectedItem.dataset.id;
-
-
+    const el = event.currentTarget;
+    colaboradorSelecionado = { id: el.dataset.id, nome: el.dataset.nome };
+    colaboradorSearchInput.value = colaboradorSelecionado.nome;
+    colaboradorDestinoId.value = colaboradorSelecionado.id;
     searchResultsDiv.innerHTML = '';
     isSearchDropdownOpen = false;
-
-
     btnEnviarFeedback.disabled = false;
 }
-
 
 colaboradorSearchInput.addEventListener('input', (e) => {
     btnEnviarFeedback.disabled = true;
     colaboradorDestinoId.value = '';
     colaboradorSelecionado = null;
-
     renderSearchResults(e.target.value.trim());
 });
-
 
 document.addEventListener('click', (e) => {
     if (!feedbackForm.contains(e.target) && isSearchDropdownOpen) {
@@ -118,87 +79,135 @@ document.addEventListener('click', (e) => {
     }
 });
 
-
-// ================== AÇÃO DE ENVIO DE FEEDBACK ==================
-
+// ENVIAR FEEDBACK (GESTOR -> COLABORADOR) -> backend marca como [FEEDBACK]
 feedbackForm.addEventListener("submit", async (e) => {
     e.preventDefault();
+    const gestorId = JSON.parse(localStorage.getItem("usuario_gestor"))?.id;
+    if (!gestorId || !colaboradorSelecionado?.id) { alert("Selecione um colaborador e faça login como gestor."); return; }
+    const dados = { colaborador_id: parseInt(colaboradorSelecionado.id), mensagem: feedbackMensagem.value.trim() };
+    if (!dados.mensagem) { alert("A mensagem não pode ser vazia."); return; }
 
-    const gestorId = JSON.parse(localStorage.getItem("usuario_gestor"))?.id; 
-    if (!gestorId || !colaboradorSelecionado?.id) {
-       alert("Erro: Selecione um colaborador válido e faça login como gestor.");
-       return;
-    }
-
-    const dadosFeedback = {
-        colaborador_id: parseInt(colaboradorSelecionado.id),
-        gestor_id: gestorId,
-        mensagem: feedbackMensagem.value.trim(),
-        tipo: feedbackTitulo.value.trim() || null // O título/assunto
-    };
-
-    if (dadosFeedback.mensagem.length === 0) {
-        alert("A mensagem de feedback não pode estar vazia.");
-        return;
-    }
-
-    btnEnviarFeedback.disabled = true; 
-    btnEnviarFeedback.textContent = "Enviando...";
-    feedbackStatusMessage.textContent = 'Processando...';
-
+    btnEnviarFeedback.disabled = true; btnEnviarFeedback.textContent = "Enviando...";
     try {
-        const res = await fetch(baseURLFeedback, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}` 
-            },
-            body: JSON.stringify(dadosFeedback)
-        });
-
-    const data = await res.json();
-
-    if (res.ok) {
-        feedbackStatusMessage.textContent = `Feedback para ${colaboradorSelecionado.nome} enviado com sucesso!`;
- 
-        feedbackTitulo.value = "";
-        feedbackMensagem.value = "";
-        colaboradorSearchInput.value = "";
-        colaboradorDestinoId.value = "";
-        colaboradorSelecionado = null;
-            btnEnviarFeedback.disabled = true; 
-
+        const res = await fetch(baseURLFeedback, { method: "POST", headers: authHeaders(), body: JSON.stringify(dados) });
+        const data = await res.json();
+        if (res.ok) {
+            feedbackStatusMessage.textContent = `Feedback para ${colaboradorSelecionado.nome} enviado com sucesso!`;
+            feedbackStatusMessage.style.color = "green";
+            feedbackTitulo.value = ""; feedbackMensagem.value = ""; colaboradorSearchInput.value = ""; colaboradorDestinoId.value = ""; colaboradorSelecionado = null;
+            btnEnviarFeedback.disabled = true;
+            carregarFeedbacksRecebidos();
+            carregarContagemNaoLidos();
         } else {
-            feedbackStatusMessage.textContent = "Falha no envio!";
+            feedbackStatusMessage.textContent = "Falha no envio!"; feedbackStatusMessage.style.color = "red";
             alert("Erro ao enviar feedback: " + (data.error || "Erro desconhecido"));
         }
     } catch (err) {
-        feedbackStatusMessage.textContent = "Erro de Conexão!";
-        console.error("Erro ao enviar feedback:", err);
-        alert("Erro de conexão. Veja o console.");
+        console.error("Erro:", err); feedbackStatusMessage.textContent = "Erro de Conexão!"; feedbackStatusMessage.style.color = "red";
     } finally {
         btnEnviarFeedback.textContent = "Enviar Feedback";
-        if (colaboradorSelecionado) {
-            btnEnviarFeedback.disabled = false;
-        }
-        setTimeout(() => feedbackStatusMessage.textContent = '', 5000); // Limpa a mensagem após 5s
+        setTimeout(() => feedbackStatusMessage.textContent = '', 4000);
     }
 });
 
+async function carregarFeedbacksRecebidos() {
+    if (!token) { 
+        if (recebidosContainer) recebidosContainer.innerHTML = '<p>Não autenticado.</p>'; 
+        return; 
+    }
+    if (recebidosStatus) recebidosStatus.textContent = 'Carregando...';
+    try {
+        const res = await fetch(recebidosURL, { method: "GET", headers: { "Authorization": `Bearer ${token}` } });
+        if (!res.ok) { 
+            recebidosContainer.innerHTML = `<p>Erro ${res.status}</p>`; 
+            if (recebidosStatus) recebidosStatus.textContent = ''; 
+            return; 
+        }
+        const data = await res.json();
+        recebidosContainer.innerHTML = '';
 
-// ================== Inicializar ==================
+        if (!Array.isArray(data) || data.length === 0) {
+            recebidosContainer.innerHTML = '<p style="padding:10px;color:#777;">Nenhuma dúvida recebida.</p>';
+            if (recebidosStatus) recebidosStatus.textContent = '';
+            return;
+        }
+
+        data.forEach(fb => {
+            const card = document.createElement('div');
+            card.className = 'feedback-card';
+            card.dataset.id = fb.id;
+
+            // Formata a data apenas com dia/mês/ano
+            let dateStr = '';
+            try { 
+                const d = new Date(fb.data_feedback);
+                dateStr = `${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getFullYear()}`;
+            } catch(e){ dateStr = fb.data_feedback; }
+
+            // Limpa o título de prefixos repetitivos
+            let titulo = fb.assunto?.replace(/\[.*?\]/g, '').trim() || 'Dúvida';
+
+            card.innerHTML = `
+                <h4>${titulo}</h4>
+                <p>${fb.mensagem}</p>
+                <div class="meta-info" style="display:flex; justify-content:space-between; align-items:center;">
+                    <small style="color:#888">De: ${fb.colaborador_nome || 'Colaborador'} • ${dateStr}</small>
+                    <div>
+                        <button class="btn-mark-read" ${fb.lido ? 'disabled' : ''}>
+                            ${fb.lido ? 'Lida' : 'Marcar como lida'}
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            const markBtn = card.querySelector('.btn-mark-read');
+            markBtn.addEventListener('click', async () => {
+                try {
+                    const r = await fetch(`${marcarLidoURL}/${fb.id}`, { method: "PUT", headers: { "Authorization": `Bearer ${token}` } });
+                    if (r.ok) { 
+                        markBtn.disabled = true; 
+                        markBtn.textContent = 'Lida'; 
+                        markBtn.style.background = '#999'; 
+                        carregarContagemNaoLidos(); 
+                    }
+                    else { 
+                        const err = await r.json(); 
+                        alert(err.error || `Erro ${r.status}`); 
+                    }
+                } catch (err) { console.error("Erro ao marcar lido:", err); }
+            });
+
+            recebidosContainer.appendChild(card);
+        });
+
+        if (recebidosStatus) recebidosStatus.textContent = `Total: ${data.length}`;
+
+    } catch (err) {
+        console.error("Erro ao carregar recebidos:", err);
+        recebidosContainer.innerHTML = '<p>Erro ao carregar.</p>';
+        if (recebidosStatus) recebidosStatus.textContent = '';
+    }
+}
+
+
+// BADGE não-lidos
+async function carregarContagemNaoLidos() {
+    if (!token || !badgeNaoLidos) return;
+    try {
+        const res = await fetch(naoLidosURL, { method: "GET", headers: { "Authorization": `Bearer ${token}` } });
+        if (!res.ok) return;
+        const data = await res.json();
+        const qtd = data.nao_lidos || 0;
+        if (qtd > 0) { badgeNaoLidos.style.display = 'inline-block'; badgeNaoLidos.textContent = qtd; }
+        else { badgeNaoLidos.style.display = 'none'; }
+    } catch (err) { console.error("Erro ao carregar contagem não lidos:", err); }
+}
+
+if (btnRefreshRecebidos) btnRefreshRecebidos.addEventListener('click', () => { carregarFeedbacksRecebidos(); carregarContagemNaoLidos(); });
+
 document.addEventListener("DOMContentLoaded", async () => {
-// VERIFICAÇÃO DE LOGIN
-    if (!token || !localStorage.getItem("usuario_gestor")) {
-        console.error("Token de autenticação ausente. Redirecionando.");
-        window.location.href = "/src/templates/auth/login.html"; 
-        return;
-    }
-
+    if (!token || !localStorage.getItem("usuario_gestor")) { window.location.href = "/src/templates/auth/login.html"; return; }
     await fetchColaboradores();
-    const usuario = JSON.parse(localStorage.getItem("usuario_gestor")) || {};
-    const headerNome = document.getElementById("user-name");
-    if (headerNome) {
-        headerNome.textContent = `Olá, ${usuario.nome || ""}`;
-    }
+    carregarFeedbacksRecebidos();
+    carregarContagemNaoLidos();
 });

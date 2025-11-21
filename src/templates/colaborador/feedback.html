@@ -48,16 +48,12 @@
         <form id="sendFeedbackForm">
 
    
-  <label for="destinatario">Enviar para</label>
-  <input 
-    type="text" 
-    id="destinatario" 
-    placeholder="Digite o nome do gestor..." 
-    autocomplete="on"
-    required>
+ <label for="destinatario">Enviar para</label>
+<input type="text" id="destinatario" placeholder="Digite o nome do gestor..." autocomplete="off" required>
+<input type="hidden" id="destinatario_id" value=""> <!-- <-- ESSENCIAL -->
 
-
-<ul id="autocompleteList" class="autocomplete-list"></ul>
+<!-- container onde aparecem as sugestões -->
+<div id="autocomplete-gestores" class="autocomplete-list"></div>
 
           <label for="assunto">Assunto</label>
           <select id="assunto" required>

@@ -2,15 +2,30 @@ const feedbackList = document.getElementById('feedbackList');
 const viewAllBtn = document.getElementById('viewAllBtn');
 
 
-const baseURL = "http://127.0.0.1:5000/colaborador/feedback";
-const baseUsersURL = "http://127.0.0.1:5000/usuarios";
+// Rota CERTA para mostrar APENAS feedbacks do colaborador
+const baseURL = "http://127.0.0.1:5000/colaborador/feedback/meus-feedbacks";
+
+// Rota CERTA para enviar dúvidas
+const enviarURL = "http://127.0.0.1:5000/colaborador/feedback/enviar";
+
+const gestoresURL = "http://127.0.0.1:5000/colaborador/feedback/gestores";
+
 
 // ================== AUTOCOMPLETE – Buscar Gestores ==================
 async function loadGestores(query) {
     if (!query || query.length < 1) return [];
 
+    const TOKEN = localStorage.getItem("token_colaborador");
+
     try {
-        const response = await fetch(`${baseUsersURL}/gestores?nome=${query}`);
+        const response = await fetch(`${gestoresURL}?nome=${query}`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${TOKEN}`,
+                "Content-Type": "application/json"
+            }
+        });
+
         if (!response.ok) return [];
 
         return await response.json();
@@ -65,12 +80,11 @@ function formatDate(datetime) {
     return date.toLocaleDateString('pt-BR', {
         day: '2-digit',
         month: '2-digit',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
+        year: 'numeric' // <-- Removido 'hour' e 'minute'
+        // 'hour': '2-digit',
+        // 'minute': '2-digit'
     });
 }
-
 // ================== Carregar Feedbacks ==================
 async function loadFeedbacks() {
     const TOKEN = localStorage.getItem("token_colaborador"); 
@@ -81,7 +95,7 @@ async function loadFeedbacks() {
     }
 
     try {
-        const response = await fetch(`${baseURL}/meus-feedbacks`, {
+        const response = await fetch(baseURL, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${TOKEN}`,
@@ -98,7 +112,11 @@ async function loadFeedbacks() {
             throw new Error(`Erro ${response.status}.`);
         }
 
-        const data = await response.json();
+        let data = await response.json();
+
+// garante que só mensagens de gestores aparecem
+data = data.filter(fb => fb.mensagem.startsWith("[FEEDBACK]"));
+
         feedbackList.innerHTML = '';
 
         if (data.length === 0) {
@@ -115,7 +133,8 @@ async function loadFeedbacks() {
             card.classList.add(fb.lido ? 'read' : 'unread');
 
             const gestorNome = fb.gestor_nome || `ID ${fb.gestor_id}`;
-            const tipo = fb.tipo || 'Feedback';
+            const tipo = "Feedback";
+
 
             card.innerHTML = `
                 <div class="feedback-header">
@@ -147,10 +166,12 @@ feedbackList.addEventListener('click', async (e) => {
         const TOKEN = localStorage.getItem("token_colaborador");
 
         try {
-            const response = await fetch(`${baseURL}/marcar-lido/${feedbackId}`, {
-                method: 'PUT',
-                headers: { 'Authorization': `Bearer ${TOKEN}` }
-            });
+            const response = await fetch(`http://127.0.0.1:5000/colaborador/feedback/marcar-lido/${feedbackId}`,
+            {
+            method: 'PUT',
+            headers: { 'Authorization': `Bearer ${TOKEN}` }
+});
+
 
             if (!response.ok) throw new Error("Erro ao marcar como lido.");
 
@@ -167,17 +188,21 @@ feedbackList.addEventListener('click', async (e) => {
 
 // ================== Enviar Feedback ==================
 const form = document.getElementById("sendFeedbackForm");
+
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const TOKEN = localStorage.getItem("token_colaborador");
     const colaborador = JSON.parse(localStorage.getItem("usuario_colaborador"));
 
+    const mensagemInput = document.getElementById("mensagem");
+    const assuntoInput = document.getElementById("assunto");
+
     const data = {
         gestor_id: destinatarioHidden.value,
         colaborador_id: colaborador.id,
-        assunto: document.getElementById("assunto").value,
-        mensagem: document.getElementById("mensagem").value
+        assunto: assuntoInput.value.trim(),
+        mensagem: "[DUVIDA] " + mensagemInput.value.trim()
     };
 
     if (!data.gestor_id) {
@@ -185,8 +210,13 @@ form.addEventListener("submit", async (e) => {
         return;
     }
 
+    if (!mensagemInput.value.trim()) {
+        showToast("Digite uma mensagem antes de enviar!");
+        return;
+    }
+
     try {
-        const response = await fetch(`${baseURL}/enviar`, {
+        const response = await fetch(enviarURL, {
             method: "POST",
             headers: {
                 "Authorization": `Bearer ${TOKEN}`,
@@ -202,9 +232,14 @@ form.addEventListener("submit", async (e) => {
             return;
         }
 
-        showToast("Mensagem enviada com sucesso!");
-        form.reset();
-        destinatarioHidden.value = "";
+        // ⚡ GARANTE QUE APARECE O TOAST
+        showToast("Dúvida enviada com sucesso!");
+
+        // ⚡ Aguarda um tick para renderizar o toast antes de limpar
+        setTimeout(() => {
+            mensagemInput.value = "";
+            assuntoInput.value = "";
+        }, 50);
 
     } catch (err) {
         console.error("Erro ao enviar feedback:", err);
@@ -226,3 +261,43 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.setAttribute("data-theme", savedTheme);
     document.body.setAttribute("data-font", savedFont);
 });
+
+// ================== TOAST NOTIFICATION (ANIMADO) ==================
+function showToast(message) {
+    let toast = document.getElementById("toast-notification");
+
+    // Criar caso não exista
+    if (!toast) {
+        toast = document.createElement("div");
+        toast.id = "toast-notification";
+        toast.style.position = "fixed";
+        toast.style.bottom = "-60px"; 
+        toast.style.right = "20px";
+        toast.style.background = "#28a745";  // Verde sucesso
+        toast.style.color = "#fff";
+        toast.style.padding = "14px 20px";
+        toast.style.borderRadius = "10px";
+        toast.style.fontSize = "15px";
+        toast.style.fontWeight = "500";
+        toast.style.zIndex = "9999";
+        toast.style.opacity = "0";
+        toast.style.boxShadow = "0 4px 12px rgba(0,0,0,0.25)";
+        toast.style.transition = "all 0.4s ease";
+        toast.style.pointerEvents = "none"; // não bloqueia clique no site
+        document.body.appendChild(toast);
+    }
+
+    toast.textContent = message;
+
+    // ANIMAÇÃO DE ENTRADA
+    setTimeout(() => {
+        toast.style.opacity = "1";
+        toast.style.bottom = "20px";
+    }, 10);
+
+    // ANIMAÇÃO DE SAÍDA
+    setTimeout(() => {
+        toast.style.opacity = "0";
+        toast.style.bottom = "-60px";
+    }, 2500);
+}

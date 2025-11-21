@@ -36,15 +36,14 @@ form.addEventListener("submit", async (e) => {
             return;
         }
 
-        // NOVO BLOCO DE LÓGICA: Salva o token e o usuário na chave correta
+
         if (usuario.tipo_acesso === "colaborador") {
-            // Salva o token para colaborador
             localStorage.setItem("token_colaborador", tokenJWT); 
             localStorage.setItem("usuario_colaborador", JSON.stringify(usuario));
             window.location.href = "/src/templates/colaborador/modulo.html"; 
 
         } else if (usuario.tipo_acesso === "gestor") {
-            // Salva o token para gestor
+    
             localStorage.setItem("token_gestor", tokenJWT); 
             localStorage.setItem("usuario_gestor", JSON.stringify(usuario));
             window.location.href = "/src/templates/gestor/equipe.html";

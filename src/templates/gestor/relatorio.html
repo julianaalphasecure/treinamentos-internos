@@ -1,53 +1,81 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Feedback - Página Gestor</title>
     <link rel="stylesheet" href="/src/static/css/gestor/relatorio.css">
     <link rel="shortcut icon" href="/src/static/img/logo header.png" type="image/x-icon">
 </head>
 <body>
-    
+
 <div class="main-container">
 
     <aside class="sidebar">
         <nav>
             <ul>
                 <li><a href="/src/templates/gestor/equipe.html">Equipe</a></li>
-                <li><a href="#" class="active">Feedback</a></li>
+                <li>
+                    <a href="#" class="active">
+                        Feedback
+                        <!-- badge de não-lidos -->
+                        <span id="badge-nao-lidos" class="notif-badge" style="display:none">0</span>
+                    </a>
+                </li>
                 <li><a href="/src/templates/auth/login.html">Sair</a></li>
             </ul>
         </nav>
     </aside>
-    
+
     <div class="feedback-central-container">
         <h2>Área de feedback</h2>
-        <p class="subtitulo">Pesquise o colaborador e envie feedback direcionado.</p>
+        <p class="subtitulo">Pesquise o colaborador e envie feedback direcionado. À direita aparecem as dúvidas enviadas pelos colaboradores.</p>
 
-        <div class="caixa-feedback-envio">
-            <form id="feedback-form">
-                
-                <div class="campo-pesquisa-colaborador">
-                    <label for="colaborador-search">Enviar para:</label>
-                    <input type="text" id="colaborador-search" placeholder="Digite o nome do colaborador..." required>
-                    <input type="hidden" id="colaborador-destino-id" value=""> 
-                    <div id="search-results" class="search-results">
+        <!-- layout em duas colunas: envio | histórico recebido -->
+        <div class="feedback-content-flex">
+
+            <!-- coluna esquerda: formulário de envio -->
+            <div class="coluna-form-original">
+                <div class="caixa-feedback-envio">
+                    <form id="feedback-form">
+
+                        <div class="campo-pesquisa-colaborador">
+                            <label for="colaborador-search">Enviar para:</label>
+                            <input type="text" id="colaborador-search" placeholder="Digite o nome do colaborador..." autocomplete="off" required>
+                            <input type="hidden" id="colaborador-destino-id" value="">
+                            <div id="search-results" class="search-results"></div>
                         </div>
+
+                        <input type="text" id="feedback-titulo" placeholder="Título do Feedback (Opcional)" maxlength="100">
+
+                        <textarea id="feedback-mensagem" placeholder="Digite sua mensagem de feedback detalhada aqui..." rows="8" required></textarea>
+
+                        <div class="form-actions">
+                            <span id="feedback-status-message"></span>
+                            <button type="submit" id="btn-enviar-feedback" class="btn-enviar-feedback" disabled>Enviar Feedback</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- coluna direita: histórico de dúvidas recebidas -->
+            <div class="coluna-historico-lateral">
+                <div class="historico-header">
+                    <h3 class="historico-titulo-lateral">Dúvidas recebidas</h3>
+                    <div style="display:flex; gap:8px; align-items:center;">
+                        <button id="btn-refresh-recebidos" class="btn-enviar-feedback" style="background:#f88a15; padding:6px 10px; font-size:0.9rem;">Atualizar</button>
+                        <span id="recebidos-status" style="font-size:0.9rem; color:#666; margin-left:8px;"></span>
+                    </div>
                 </div>
 
-                <input type="text" id="feedback-titulo" placeholder="Título do Feedback (Opcional)" maxlength="100">
-
-                <textarea id="feedback-mensagem" placeholder="Digite sua mensagem de feedback detalhada aqui..." rows="12" required></textarea>
-
-                <div class="form-actions">
-                    <span id="feedback-status-message"></span>
-                    <button type="submit" id="btn-enviar-feedback" class="btn-enviar-feedback" disabled>Enviar Feedback</button>
+                <div id="historico-feedbacks" class="historico-feedbacks-list">
+                    <!-- cards de feedbacks recebidos serão inseridos aqui -->
+                    <p id="recebidos-empty" style="color:#777; padding:10px;">Carregando...</p>
                 </div>
-            </form>
+            </div>
+
         </div>
-        
-        </div>
+    </div>
 </div>
 
 <script src="/src/static/js/gestor/relatorio.js"></script>

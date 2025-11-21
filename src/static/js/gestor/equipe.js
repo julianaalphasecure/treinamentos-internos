@@ -61,15 +61,39 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
                 
              
-                htmlModulos += `
-                    <div class="modulo ${statusClass}">
-                        <span>${modulo.nome}</span>
-                        <div class="barra">
-                            <div class="preenchimento" style="width:${modulo.percent}%"></div>
-                        </div>
-                        <span class="nota">${modulo.status.replace('_', ' ')}${notaTexto} (${modulo.percent}%)</span>
-                    </div>
-                `;
+                
+let tentativasTexto = "";
+const t = modulo.tentativas ?? 1;
+
+// Mostrar tentativas apenas se o módulo não estiver concluído com sucesso
+if (modulo.status !== 'concluido' || (modulo.nota_final && modulo.nota_final < 80)) {
+    if (t <= 1) {
+        tentativasTexto = `<span class="tentativas">Tentativas: 1 (não refez)</span>`;
+    } else {
+        tentativasTexto = `<span class="tentativas">Refeito ${t - 1} vez(es)</span>`;
+    }
+} else {
+    tentativasTexto = `<span class="tentativas">Concluído</span>`;
+}
+
+
+
+htmlModulos += `
+    <div class="modulo ${statusClass}">
+        <span>${modulo.nome}</span>
+
+        <div class="barra">
+            <div class="preenchimento" style="width:${modulo.percent}%"></div>
+        </div>
+
+        <span class="nota">
+            ${modulo.status.replace('_', ' ')} ${notaTexto} (${modulo.percent}%)
+        </span>
+
+        ${tentativasTexto}
+    </div>
+`;
+
             });
 
           
@@ -181,16 +205,26 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    const searchInput = document.querySelector(".search-bar input");
-    if (searchInput) {
-        searchInput.addEventListener("input", (e) => {
-            const termo = e.target.value.toLowerCase();
-            const cards = document.querySelectorAll(".card-colaborador");
-            cards.forEach((card) => {
-              
-            });
+  const searchInput = document.querySelector(".search-bar input");
+if (searchInput) {
+    searchInput.addEventListener("input", (e) => {
+        const termo = e.target.value.toLowerCase();
+        const cards = document.querySelectorAll(".card-colaborador");
+
+        cards.forEach((card) => {
+            const nome = card.querySelector(".dados p strong")?.textContent.toLowerCase() || "";
+            const re = card.querySelector(".dados p:nth-child(2)")?.textContent.toLowerCase() || "";
+
+            if (nome.includes(termo) || re.includes(termo)) {
+                card.style.display = "flex";
+            } else {
+                card.style.display = "none";
+            }
         });
-    }
+    });
+}
+
+
 
     const btnVerTudo = document.getElementById("btn-ver-tudo");
     if (btnVerTudo) {
