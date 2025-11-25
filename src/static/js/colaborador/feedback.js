@@ -248,7 +248,10 @@ form.addEventListener("submit", async (e) => {
 });
 
 // ================== Botão "Ver Todos" ==================
-viewAllBtn.addEventListener('click', loadFeedbacks);
+if (viewAllBtn) {
+    viewAllBtn.addEventListener('click', loadFeedbacks);
+}
+
 
 // ================== Carrega ao iniciar ==================
 loadFeedbacks();

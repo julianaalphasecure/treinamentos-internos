@@ -38,11 +38,13 @@ class Feedback(db.Model):
 
     def to_dict(self):
         return {
-            "id": self.id,
-            "gestor_id": self.gestor_id,
-            "gestor_nome": self.gestor.nome if self.gestor else None,
-            "colaborador_id": self.colaborador_id,
-            "mensagem": self.mensagem,
-            "data_feedback": self.data_feedback,
-            "lido": self.lido
-        }
+        "id": self.id,
+        "gestor_id": self.gestor_id,
+        "gestor_nome": self.gestor.nome if self.gestor else None,
+        "colaborador_id": self.colaborador_id,
+        "colaborador_nome": self.colaborador.nome if self.colaborador else None,
+        "mensagem": self.mensagem,
+        "data_feedback": self.data_feedback.isoformat() if self.data_feedback else None,
+        "lido": self.lido
+    }
+

@@ -79,7 +79,7 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// ENVIAR FEEDBACK (GESTOR -> COLABORADOR) -> backend marca como [FEEDBACK]
+// ENVIAR FEEDBACK (GESTOR -> COLABORADOR)
 feedbackForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const gestorId = JSON.parse(localStorage.getItem("usuario_gestor"))?.id;
@@ -115,20 +115,23 @@ async function carregarFeedbacksRecebidos() {
         if (recebidosContainer) recebidosContainer.innerHTML = '<p>Não autenticado.</p>'; 
         return; 
     }
-    if (recebidosStatus) recebidosStatus.textContent = 'Carregando...';
+    recebidosStatus.textContent = 'Carregando...';
+
     try {
         const res = await fetch(recebidosURL, { method: "GET", headers: { "Authorization": `Bearer ${token}` } });
+
         if (!res.ok) { 
             recebidosContainer.innerHTML = `<p>Erro ${res.status}</p>`; 
-            if (recebidosStatus) recebidosStatus.textContent = ''; 
+            recebidosStatus.textContent = '';
             return; 
         }
+
         const data = await res.json();
         recebidosContainer.innerHTML = '';
 
         if (!Array.isArray(data) || data.length === 0) {
             recebidosContainer.innerHTML = '<p style="padding:10px;color:#777;">Nenhuma dúvida recebida.</p>';
-            if (recebidosStatus) recebidosStatus.textContent = '';
+            recebidosStatus.textContent = '';
             return;
         }
 
@@ -137,19 +140,31 @@ async function carregarFeedbacksRecebidos() {
             card.className = 'feedback-card';
             card.dataset.id = fb.id;
 
-            // Formata a data apenas com dia/mês/ano
+            // ====== DATA ======
             let dateStr = '';
             try { 
                 const d = new Date(fb.data_feedback);
                 dateStr = `${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getFullYear()}`;
             } catch(e){ dateStr = fb.data_feedback; }
 
-            // Limpa o título de prefixos repetitivos
-            let titulo = fb.assunto?.replace(/\[.*?\]/g, '').trim() || 'Dúvida';
+            // ====== EXTRAIR TIPO ======
+            const raw = fb.mensagem || "";
+            const tags = (raw.match(/\[(.*?)\]/g) || []).map(t => t.replace(/\[|\]/g, '').toLowerCase());
+
+            let tipo = "Dúvida";
+            for (const t of tags) {
+                if (t !== "duvida" && t !== "duvida-modulo") {
+                    tipo = t.charAt(0).toUpperCase() + t.slice(1);
+                    break;
+                }
+            }
+
+            // ====== MENSAGEM LIMPA ======
+            const mensagemLimpa = raw.replace(/\[[^\]]*\]/g, '').trim();
 
             card.innerHTML = `
-                <h4>${titulo}</h4>
-                <p>${fb.mensagem}</p>
+                <h4>${tipo}</h4>
+                <p>${mensagemLimpa}</p>
                 <div class="meta-info" style="display:flex; justify-content:space-between; align-items:center;">
                     <small style="color:#888">De: ${fb.colaborador_nome || 'Colaborador'} • ${dateStr}</small>
                     <div>
@@ -160,19 +175,19 @@ async function carregarFeedbacksRecebidos() {
                 </div>
             `;
 
+            // Botão marcar como lido
             const markBtn = card.querySelector('.btn-mark-read');
             markBtn.addEventListener('click', async () => {
                 try {
                     const r = await fetch(`${marcarLidoURL}/${fb.id}`, { method: "PUT", headers: { "Authorization": `Bearer ${token}` } });
                     if (r.ok) { 
-                        markBtn.disabled = true; 
-                        markBtn.textContent = 'Lida'; 
-                        markBtn.style.background = '#999'; 
-                        carregarContagemNaoLidos(); 
-                    }
-                    else { 
-                        const err = await r.json(); 
-                        alert(err.error || `Erro ${r.status}`); 
+                        markBtn.disabled = true;
+                        markBtn.textContent = 'Lida';
+                        markBtn.style.background = '#999';
+                        carregarContagemNaoLidos();
+                    } else {
+                        const err = await r.json();
+                        alert(err.error || `Erro ${r.status}`);
                     }
                 } catch (err) { console.error("Erro ao marcar lido:", err); }
             });
@@ -180,15 +195,14 @@ async function carregarFeedbacksRecebidos() {
             recebidosContainer.appendChild(card);
         });
 
-        if (recebidosStatus) recebidosStatus.textContent = `Total: ${data.length}`;
+        recebidosStatus.textContent = `Total: ${data.length}`;
 
     } catch (err) {
         console.error("Erro ao carregar recebidos:", err);
         recebidosContainer.innerHTML = '<p>Erro ao carregar.</p>';
-        if (recebidosStatus) recebidosStatus.textContent = '';
+        recebidosStatus.textContent = '';
     }
 }
-
 
 // BADGE não-lidos
 async function carregarContagemNaoLidos() {
@@ -203,10 +217,16 @@ async function carregarContagemNaoLidos() {
     } catch (err) { console.error("Erro ao carregar contagem não lidos:", err); }
 }
 
-if (btnRefreshRecebidos) btnRefreshRecebidos.addEventListener('click', () => { carregarFeedbacksRecebidos(); carregarContagemNaoLidos(); });
+if (btnRefreshRecebidos) btnRefreshRecebidos.addEventListener('click', () => { 
+    carregarFeedbacksRecebidos(); 
+    carregarContagemNaoLidos(); 
+});
 
 document.addEventListener("DOMContentLoaded", async () => {
-    if (!token || !localStorage.getItem("usuario_gestor")) { window.location.href = "/src/templates/auth/login.html"; return; }
+    if (!token || !localStorage.getItem("usuario_gestor")) { 
+        window.location.href = "/src/templates/auth/login.html"; 
+        return; 
+    }
     await fetchColaboradores();
     carregarFeedbacksRecebidos();
     carregarContagemNaoLidos();
