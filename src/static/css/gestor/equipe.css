@@ -176,15 +176,12 @@ body {
 
 
 
-/* =====================================================
-   SEARCH BAR
-===================================================== */
 .search-bar {
     display: flex;
     align-items: center;
     justify-content: center;
     background: #fff;
-    padding: 18px 20px;
+    padding: 25px 22px;
     border-radius: 50px;
     box-shadow: 0 6px 12px rgba(0,0,0,0.07);
     margin: 0 auto 25px;
@@ -205,10 +202,6 @@ body {
 }
 
 
-
-/* =====================================================
-   CARDS DE COLABORADORES
-===================================================== */
 .lista-equipe {
     display: flex;
     flex-direction: column;
@@ -265,9 +258,7 @@ body {
 
 
 
-/* =====================================================
-   FILTROS / FOOTER
-===================================================== */
+
 .footer-filtros {
     margin-top: 20px;
     display: flex;
@@ -297,9 +288,6 @@ body {
 
 
 
-/* =====================================================
-   MODAL DE PROGRESSO
-===================================================== */
 #modal-progresso {
     display: none;
     position: fixed;
@@ -347,9 +335,6 @@ body {
 
 
 
-/* =====================================================
-   PROGRESSO: ESTATÍSTICAS E BARRAS
-===================================================== */
 .estatisticas {
     display: flex;
     justify-content: space-around;
@@ -365,9 +350,7 @@ body {
     font-size: 1.1em;
 }
 
-/* =====================================================
-   DETALHES DOS MÓDULOS (PARTE QUE ABRE)
-===================================================== */
+
 
 /* Cada módulo como um card moderno */
 .progresso-modulos .modulo {
@@ -468,12 +451,61 @@ body {
     font-weight: 700;
 }
 
+/* Verde - concluído */
+.status-concluido {
+    display: inline-block;
+    padding: 4px 10px;
+    background-color: #28a745; /* verde */
+    color: white;
+    font-weight: bold;
+    border-radius: 6px;
+    font-size: 12px;
+}
+
+/* Amarelo - em andamento */
+.status-andamento {
+    display: inline-block;
+    padding: 4px 10px;
+    background-color: #ffc107; /* amarelo */
+    color: #000;
+    font-weight: bold;
+    border-radius: 6px;
+    font-size: 12px;
+}
+
+/* Vermelho - tentativas */
+.tentativas {
+    display: inline-block;
+    padding: 4px 10px;
+    background-color: #dc3545; /* vermelho */
+    color: white;
+    font-weight: bold;
+    border-radius: 6px;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+/* Cinza - não iniciado */
+.status-nao-iniciado {
+    display: inline-block;
+    padding: 4px 10px;
+    background-color: #6c757d; /* cinza */
+    color: white;
+    font-weight: bold;
+    border-radius: 6px;
+    font-size: 12px;
+}
+.linha-tentativas {
+    margin-top: 6px;  /* espaço entre a nota e os badges */
+}
+
+.tentativas,
+.status-final {
+    display: inline-block;
+    margin-top: 4px;  /* pequeno espaço extra nos badges */
+}
 
 
-
-/* =====================================================
-   BOTÃO DE FECHAR
-===================================================== */
 .btn-fechar-modal {
     float: right;
     margin-top: 20px;

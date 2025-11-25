@@ -61,22 +61,30 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
                 
              
-                
+            
 let tentativasTexto = "";
-const t = modulo.tentativas ?? 1;
+const t = modulo.tentativas ?? 0;
 
-// Mostrar tentativas apenas se o módulo não estiver concluído com sucesso
-if (modulo.status !== 'concluido' || (modulo.nota_final && modulo.nota_final < 80)) {
-    if (t <= 1) {
-        tentativasTexto = `<span class="tentativas">Tentativas: 1 (não refez)</span>`;
-    } else {
-        tentativasTexto = `<span class="tentativas">Refeito ${t - 1} vez(es)</span>`;
-    }
-} else {
-    tentativasTexto = `<span class="tentativas">Concluído</span>`;
+// Nunca fez
+if (t === 0) {
+    tentativasTexto = `
+        <span class="status-nao-iniciado">Não iniciado</span>
+    `;
 }
+// Fez 1+ vez
+else {
+    tentativasTexto = `
+        <div class="linha-tentativas">
+            <span class="status-final ${
+                modulo.status === 'concluido' ? 'status-concluido' : 'status-andamento'
+            }">
+                ${modulo.status === 'concluido' ? 'Concluído' : 'Em andamento'}
+            </span><br>
 
-
+            <span class="tentativas">Tentativas: ${t}</span>
+        </div>
+    `;
+}
 
 htmlModulos += `
     <div class="modulo ${statusClass}">
@@ -87,12 +95,14 @@ htmlModulos += `
         </div>
 
         <span class="nota">
-            ${modulo.status.replace('_', ' ')} ${notaTexto} (${modulo.percent}%)
+    Nota: ${modulo.nota_final ? (modulo.nota_final / 10) : 0} (${modulo.percent}%)
         </span>
+
 
         ${tentativasTexto}
     </div>
 `;
+
 
             });
 
@@ -226,8 +236,4 @@ if (searchInput) {
 
 
 
-    const btnVerTudo = document.getElementById("btn-ver-tudo");
-    if (btnVerTudo) {
-        btnVerTudo.addEventListener("click", carregarEquipe);
-    }
 });
