@@ -352,34 +352,3 @@ html, body {
   }
 }
 
-/* ===== FOOTER ===== */
-.footer {
-  background-color: #f8f8f8;
-  color: #666;
-  text-align: center;
-  padding: 30px 20px;
-  margin-top: 60px;
-  font-size: 14px;
-  line-height: 1.8;
-}
-
-.footer-separator {
-  border: none;
-  border-top: 1px solid #ddd;
-  margin-bottom: 15px;
-}
-
-.footer-links a {
-  color: #666;
-  text-decoration: none;
-  margin: 0 5px;
-  transition: color 0.2s;
-}
-
-.footer-links a:hover {
-  color: #E28E44;
-}
-
-.footer-copy {
-  margin-top: 10px;
-}

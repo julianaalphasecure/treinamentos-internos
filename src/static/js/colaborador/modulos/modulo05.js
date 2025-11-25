@@ -1,3 +1,6 @@
+const prevExerciseBtn = document.querySelector('.prev-exercise');
+const nextExerciseBtn = document.querySelector('.next-exercise');
+
 // ================== VARIÁVEIS PRINCIPAIS ==================
 let slidesNormal = document.querySelectorAll('.modules-slide:not(.dark-slide)');
 let slidesDark = document.querySelectorAll('.dark-slide');
@@ -20,9 +23,39 @@ function updateCarousel() {
     updateProgressBar();
     updateThumbnails();
     updateProgressText();
+    updateArrows(); // 🔥 agora controla habilitar/desabilitar setas
     
     saveModuleSlideProgress(moduleId, currentIndex); 
 }
+
+
+
+function updateArrows() {
+    const slides = darkMode ? slidesDark : slidesNormal;
+
+    // Desabilita seta esquerda no primeiro slide
+    if (currentIndex === 0) {
+        prevBtn.style.opacity = "0.4";
+        prevBtn.style.pointerEvents = "none";
+        prevBtn.style.cursor = "not-allowed";
+    } else {
+        prevBtn.style.opacity = "1";
+        prevBtn.style.pointerEvents = "auto";
+        prevBtn.style.cursor = "pointer";
+    }
+
+    // Desabilita seta direita no último slide
+    if (currentIndex === slides.length - 1) {
+        nextBtn.style.opacity = "0.4";
+        nextBtn.style.pointerEvents = "none";
+        nextBtn.style.cursor = "not-allowed";
+    } else {
+        nextBtn.style.opacity = "1";
+        nextBtn.style.pointerEvents = "auto";
+        nextBtn.style.cursor = "pointer";
+    }
+}
+
 
 // ================== FUNÇÃO SALVAR PROGRESSO LOCAL (posição do slide) ==================
 function saveModuleSlideProgress(moduleId, lastSlideIndex) {
@@ -168,33 +201,37 @@ document.getElementById('submit-exercises').addEventListener('click', () => {
         title.textContent = `❌ Nota insuficiente. Você precisa de ${REQUISITO_APROVACAO}%.`;
         btnRefazer.style.display = 'inline-block';
         btnRefazer.onclick = () => {
-            closeResultOverlay();
-            
-          
-            currentIndex = 0;
-            updateCarousel();
-            exercisesSection.style.display = 'none';
-            moduleLocked = false;
-            nextBtn.style.opacity = '1';
-            prevBtn.style.opacity = '1';
-            nextBtn.style.cursor = 'pointer';
-            prevBtn.style.cursor = 'pointer';
-            document.querySelectorAll('.thumbnails img').forEach(img => {
-                img.style.pointerEvents = 'auto';
-                img.style.opacity = '1';
-                img.style.filter = 'none';
-            });
-            document.removeEventListener('keydown', lockArrows);
-            exIndex = 0;
-            updateExerciseCarousel();
-            clearInterval(timerInterval);
-            totalTime = 30 * 60;
-            document.getElementById('timer').textContent = 'Tempo restante: 30:00';
-            
-           
-            document.querySelectorAll('input[type="radio"]:checked').forEach(radio => radio.checked = false);
-            document.querySelectorAll('.options label').forEach(label => label.classList.remove('selected'));
-        };
+
+    // 🔥 REGISTRA A TENTATIVA NO BACKEND
+    finalizarModuloAPI(moduleId, 0); // Envia nota 0 para contar tentativa
+
+    closeResultOverlay();
+    currentIndex = 0;
+    updateCarousel();
+    exercisesSection.style.display = 'none';
+    moduleLocked = false;
+    nextBtn.style.opacity = '1';
+    prevBtn.style.opacity = '1';
+    nextBtn.style.cursor = 'pointer';
+    prevBtn.style.cursor = 'pointer';
+
+    document.querySelectorAll('.thumbnails img').forEach(img => {
+        img.style.pointerEvents = 'auto';
+        img.style.opacity = '1';
+        img.style.filter = 'none';
+    });
+
+    document.removeEventListener('keydown', lockArrows);
+    exIndex = 0;
+    updateExerciseCarousel();
+    clearInterval(timerInterval);
+    totalTime = 30 * 60;
+    document.getElementById('timer').textContent = 'Tempo restante: 30:00';
+
+    document.querySelectorAll('input[type="radio"]:checked').forEach(radio => radio.checked = false);
+    document.querySelectorAll('.options label').forEach(label => label.classList.remove('selected'));
+};
+
     }
 
     openResultOverlay();
@@ -263,11 +300,17 @@ let exIndex = 0;
 
 function updateExerciseCarousel() {
     exWrapper.style.transform = `translateX(-${exIndex * 100}%)`;
+
     const percent = ((exIndex + 1) / exSlides.length) * 100;
     document.querySelector('.exercise-progress-fill').style.width = percent + '%';
+
     const btnSubmit = document.getElementById('submit-exercises');
     btnSubmit.style.display = exIndex === exSlides.length - 1 ? 'block' : 'none';
+
+    // 🔥 Atualiza as setas sempre que muda o exercício
+    updateExerciseArrows();
 }
+
 
 document.querySelector('.next-exercise').addEventListener('click', () => {
     if (exIndex < exSlides.length - 1) exIndex++;
@@ -278,6 +321,35 @@ document.querySelector('.prev-exercise').addEventListener('click', () => {
     if (exIndex > 0) exIndex--;
     updateExerciseCarousel();
 });
+
+
+function updateExerciseArrows() {
+    const total = exSlides.length;
+
+    // Seta ESQUERDA (voltar exercício)
+    if (exIndex === 0) {
+        prevExerciseBtn.style.opacity = "0.4";
+        prevExerciseBtn.style.pointerEvents = "none";
+        prevExerciseBtn.style.cursor = "not-allowed";
+    } else {
+        prevExerciseBtn.style.opacity = "1";
+        prevExerciseBtn.style.pointerEvents = "auto";
+        prevExerciseBtn.style.cursor = "pointer";
+    }
+
+    // Seta DIREITA (avançar exercício)
+    if (exIndex === total - 1) {
+        nextExerciseBtn.style.opacity = "0.4";
+        nextExerciseBtn.style.pointerEvents = "none";
+        nextExerciseBtn.style.cursor = "not-allowed";
+    } else {
+        nextExerciseBtn.style.opacity = "1";
+        nextExerciseBtn.style.pointerEvents = "auto";
+        nextExerciseBtn.style.cursor = "pointer";
+    }
+}
+
+
 
 // ================== TIMER ==================
 let timerInterval;
@@ -304,8 +376,8 @@ function startTimer() {
 // ================== DOWNLOAD ==================
 document.getElementById('download-btn').addEventListener('click', () => {
     const link = document.createElement('a');
-    link.href = '/src/static/pdf/modulo01.pdf';
-    link.download = 'Modulo01_Conteudo.pdf';
+    link.href = '/src/static/pdf/modulo05.pdf';
+    link.download = 'Modulo05_Conteudo.pdf';
     link.click();
 });
 

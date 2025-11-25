@@ -1,15 +1,37 @@
 document.addEventListener("DOMContentLoaded", async () => {
+
+    // ================== BLOQUEAR BOTÃO VOLTAR ==================
+    history.pushState(null, null, location.href);
+    window.onpopstate = function () {
+        history.go(1);
+    };
+
+    // ================== LOGOUT SEGURO ==================
+    const btnLogout = document.getElementById("btn-logout");
+    if (btnLogout) {
+        btnLogout.addEventListener("click", (e) => {
+            e.preventDefault();
+
+            // Remove dados
+            localStorage.removeItem("token_colaborador");
+            localStorage.removeItem("usuario_colaborador");
+
+            // Redireciona sem permitir voltar
+            window.location.replace("/src/templates/auth/login.html");
+        });
+    }
+
+    // ================== VERIFICA LOGIN ==================
     const userNameElement = document.getElementById("user-name");
     const usuarioColaborador = JSON.parse(localStorage.getItem("usuario_colaborador"));
     const token = localStorage.getItem("token_colaborador");
     const usuarioId = usuarioColaborador?.id;
 
-    // ================== VERIFICA LOGIN ==================
     if (!usuarioColaborador || !usuarioId) {
         userNameElement.textContent = "Olá, Usuário";
         console.warn("Colaborador não identificado, redirecionando para login.");
         setTimeout(() => {
-            window.location.href = "/src/templates/auth/login.html";
+            window.location.replace("/src/templates/auth/login.html");
         }, 1500);
         return;
     }
@@ -43,9 +65,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
         currentSlide = 0;
         updateCarousel();
-        
-     
-        carregarProgresso(); 
+        carregarProgresso();
     }
 
     function updateCarousel() {
@@ -76,123 +96,102 @@ document.addEventListener("DOMContentLoaded", async () => {
         filteredModules = allModules.filter(mod => mod.html.toLowerCase().includes(query));
         renderModules();
     });
-    
-    // ================== CARREGAR PROGRESSO  ==================
 
+    // ================== CARREGAR PROGRESSO ==================
     window.carregarProgresso = async function carregarProgresso() {
-        const TOKEN = localStorage.getItem("token_colaborador"); 
-        
+        const TOKEN = localStorage.getItem("token_colaborador");
+
         if (!TOKEN) {
-            console.error("Token de autenticação ausente. Por favor, faça login.");
-            return; 
+            console.error("Token ausente.");
+            return;
         }
 
         try {
             const response = await fetch(`http://127.0.0.1:5000/colaborador/progresso/frontend`, {
                 method: "GET",
                 headers: {
-                    "Authorization": `Bearer ${TOKEN}`, 
+                    "Authorization": `Bearer ${TOKEN}`,
                     "Content-Type": "application/json"
                 }
-            }); 
+            });
 
             if (response.status === 401 || response.status === 403) {
-                alert("Sessão expirada ou Token inválido. Por favor, faça login novamente."); 
-                throw new Error("Não autorizado. Token inválido ou expirado.");
+                alert("Sessão expirada. Faça login novamente.");
+                throw new Error("Não autorizado.");
             }
-            if (!response.ok) {
-                throw new Error(`Erro ${response.status} ao buscar progresso.`);
-            }
-            
+
+            if (!response.ok) throw new Error(`Erro ${response.status}`);
+
             const data = await response.json();
             const modulosAPI = data.modulos || [];
-            const statsAPI = data.stats || { concluidos: 0, nao_iniciados: 9 }; 
+            const statsAPI = data.stats || { concluidos: 0, nao_iniciados: 9 };
 
-        
             const statCards = document.querySelectorAll(".stat-card p.stat-value");
             if (statCards.length >= 2) {
-                statCards[0].textContent = statsAPI.concluidos; 
-                statCards[1].textContent = statsAPI.nao_iniciados; 
-            } 
+                statCards[0].textContent = statsAPI.concluidos;
+                statCards[1].textContent = statsAPI.nao_iniciados;
+            }
 
-         
             const cards = document.querySelectorAll(".module-card");
             cards.forEach((card) => {
                 const bar = card.querySelector(".progress-bar-inner");
-                const button = card.querySelector("button") || card.querySelector("a"); 
-                
-                if (!bar || !button) return; 
+                const button = card.querySelector("button") || card.querySelector("a");
+                if (!bar || !button) return;
 
-       
-// ...
-            const moduloId = parseInt(card.dataset.id); 
-            const moduloAPI = modulosAPI.find(m => String(m.modulo_id) === String(moduloId)); 
-// ...
+                const moduloId = parseInt(card.dataset.id);
+                const moduloAPI = modulosAPI.find(m => String(m.modulo_id) === String(moduloId));
 
                 if (moduloAPI) {
-                    let percent = moduloAPI.percent || 0; 
-                    
+                    let percent = moduloAPI.percent || 0;
+
                     if (moduloAPI.status === "concluido") {
                         percent = 100;
                         card.classList.add("concluido");
-                        
-                 
-                        button.textContent = "Refazer"; 
-                        button.classList.add("btn-refazer"); 
+
+                        button.textContent = "Refazer";
+                        button.classList.add("btn-refazer");
                         button.classList.remove("btn-acessar");
-                        
+
                     } else {
                         card.classList.remove("concluido");
-                        
-                       
+
                         button.textContent = "Acessar";
                         button.classList.remove("btn-refazer");
                         button.classList.add("btn-acessar");
-                        
-                        if (percent > 100) percent = 100;
                     }
-                    
+
                     bar.style.width = `${percent}%`;
                 } else {
                     bar.style.width = "0%";
-                    button.textContent = "Acessar";
-                    button.classList.remove("btn-refazer");
-                    button.classList.add("btn-acessar");
                 }
             });
-            
+
         } catch (error) {
             console.error("Erro ao carregar progresso:", error);
+
             if (error.message.includes("Não autorizado")) {
                 localStorage.removeItem("token_colaborador");
                 localStorage.removeItem("usuario_colaborador");
-                setTimeout(() => window.location.href = "/src/templates/auth/login.html", 1000);
+                window.location.replace("/src/templates/auth/login.html");
             }
         }
-    }
-   
+    };
 
-
- 
-
-async function finalizarModulo(moduloId, nota = 100) {
-    try {
-        const response = await fetch(`http://127.0.0.1:5000/colaborador/progresso/finalizar/${moduloId}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify({ nota_final: nota })
-        });
-// ...
+    // ================== FINALIZAR MÓDULO ==================
+    async function finalizarModulo(moduloId, nota = 100) {
+        try {
+            const response = await fetch(`http://127.0.0.1:5000/colaborador/progresso/finalizar/${moduloId}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({ nota_final: nota })
+            });
 
             if (!response.ok) throw new Error("Erro ao finalizar módulo");
-
-        
             await carregarProgresso();
-            
-            
+
             if (window.showToast) {
                 window.showToast(`Módulo ${moduloId} finalizado com sucesso!`);
             }
@@ -200,22 +199,10 @@ async function finalizarModulo(moduloId, nota = 100) {
         } catch (err) {
             console.error("Erro ao finalizar módulo:", err);
             if (window.showToast) {
-                window.showToast("Erro ao finalizar módulo. Verifique se o módulo está sendo enviado corretamente.");
+                window.showToast("Erro ao finalizar módulo.");
             }
         }
     }
-
-
-    document.querySelectorAll(".module-card button, .module-card a").forEach(element => {
-        element.addEventListener("click", (e) => {
-            const card = e.target.closest(".module-card");
-            const moduloId = parseInt(card.dataset.id);
-
-            
-            
-           
-        });
-    });
 
     // ================== INICIALIZA ==================
     renderModules();

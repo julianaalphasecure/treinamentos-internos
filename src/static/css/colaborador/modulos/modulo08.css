@@ -75,8 +75,8 @@ body {
   background: white; 
   border-radius: 20px; 
   box-shadow: 0 6px 15px rgba(0,0,0,0.1); 
-  width: 90%; 
-  max-width: 1200px; 
+  width: 85%; 
+  max-width: 1000px; 
   display: flex; 
   justify-content: center; 
   align-items: center; 
@@ -89,7 +89,7 @@ body {
   object-fit: contain; 
   display: block; 
   border-radius: 12px; 
-} 
+}  
 
 .dark-slide { 
   display: none; 
@@ -409,42 +409,7 @@ body.dark-mode #dark-mode-btn {
   transition: width 0.4s ease-in-out; 
 } 
 
-/* Footer */ 
-.footer { 
-  background: #f8f8f8; 
-  color: #666; 
-  text-align: center; 
-  padding: 30px 20px; 
-  margin-top: 60px; 
-  font-size: 14px; 
-  line-height: 1.8; 
-} 
 
-.footer-separator { 
-  border: none; 
-  border-top: 1px solid #ddd; 
-  margin-bottom: 15px; 
-} 
-
-.footer-links a { 
-  color: #666; 
-  text-decoration: none; 
-  margin: 0 5px; 
-  transition: color 0.2s; 
-} 
-
-.footer-links a:hover { 
-  color: #E28E44; 
-} 
-
-.footer-copy { 
-  margin-top: 10px; 
-  font-size: 13px; 
-} 
-
-/* ======================
-   Overlay de Resultado Final
-   ====================== */
 #result-overlay {
   display: none;
   position: fixed;

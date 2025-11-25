@@ -1,7 +1,29 @@
+function detectModuleId() {
+   
+    const bodyAttr = document.body.getAttribute('data-module-id');
+    if (bodyAttr && /^\d+$/.test(bodyAttr)) return Number(bodyAttr);
+
+    
+    const url = window.location.href;
+    
+    let m = url.match(/modul?o[_\-]?0*([1-9]\d?)/i);
+    if (m && m[1]) return Number(m[1]);
+
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('module')) return Number(params.get('module'));
+    if (params.get('id')) return Number(params.get('id'));
+
+    // fallback
+    return 1;
+}
+
+const moduleId = detectModuleId(); // agora definido dinamicamente
+
+// ================== VARIÁVEIS PRINCIPAIS ==================
 const prevExerciseBtn = document.querySelector('.prev-exercise');
 const nextExerciseBtn = document.querySelector('.next-exercise');
 
-// ================== VARIÁVEIS PRINCIPAIS ==================
+// ================== VARIÁVEIS DO CARROSSEL E DO MÓDULO ==================
 let slidesNormal = document.querySelectorAll('.modules-slide:not(.dark-slide)');
 let slidesDark = document.querySelectorAll('.dark-slide');
 const wrapper = document.querySelector('.modules-wrapper');
@@ -9,13 +31,16 @@ let currentIndex = 0;
 let moduleLocked = false;
 let isFullScreen = false;
 let darkMode = false;
-const moduleId = 7;
 const totalSlides = slidesNormal.length;
 
+const USUARIO_ID = JSON.parse(localStorage.getItem("usuario_colaborador"))?.id;
+const TOKEN = localStorage.getItem("token_colaborador");
+const REQUISITO_APROVACAO = 80;
 
-const USUARIO_ID = JSON.parse(localStorage.getItem("usuario_colaborador"))?.id; 
-const TOKEN = localStorage.getItem("token_colaborador"); 
-const REQUISITO_APROVACAO = 80; 
+// ================== CHAVES LOCAIS POR MÓDULO (ANTI-COLA) ==================
+const EX_KEY_ANDAMENTO = `mod${moduleId}_ex_andamento`;
+const EX_KEY_FINALIZADO = `mod${moduleId}_ex_finalizado`;
+const EX_KEY_RESET = `mod${moduleId}_ex_reset`;
 
 // ================== FUNÇÃO ATUALIZA CARROSSEL ==================
 function updateCarousel() {
@@ -23,17 +48,13 @@ function updateCarousel() {
     updateProgressBar();
     updateThumbnails();
     updateProgressText();
-    updateArrows(); // 🔥 agora controla habilitar/desabilitar setas
-    
-    saveModuleSlideProgress(moduleId, currentIndex); 
+    updateArrows();
+    saveModuleSlideProgress(moduleId, currentIndex);
 }
-
-
 
 function updateArrows() {
     const slides = darkMode ? slidesDark : slidesNormal;
 
-    // Desabilita seta esquerda no primeiro slide
     if (currentIndex === 0) {
         prevBtn.style.opacity = "0.4";
         prevBtn.style.pointerEvents = "none";
@@ -44,7 +65,6 @@ function updateArrows() {
         prevBtn.style.cursor = "pointer";
     }
 
-    // Desabilita seta direita no último slide
     if (currentIndex === slides.length - 1) {
         nextBtn.style.opacity = "0.4";
         nextBtn.style.pointerEvents = "none";
@@ -57,32 +77,24 @@ function updateArrows() {
 }
 
 
-// ================== FUNÇÃO SALVAR PROGRESSO LOCAL (posição do slide) ==================
-function saveModuleSlideProgress(moduleId, lastSlideIndex) {
+function saveModuleSlideProgress(moduleIdLocal, lastSlideIndex) {
     const progress = JSON.parse(localStorage.getItem("moduleProgress") || "{}");
-    progress[moduleId] = lastSlideIndex;
+    progress[moduleIdLocal] = lastSlideIndex;
     localStorage.setItem("moduleProgress", JSON.stringify(progress));
 }
 
-// ================== CARREGA PROGRESSO LOCAL (posição do slide) ==================
-function loadModuleProgress(moduleId) {
+function loadModuleProgress(moduleIdLocal) {
     const progress = JSON.parse(localStorage.getItem("moduleProgress") || "{}");
-    return progress[moduleId] || 0;
+    return progress[moduleIdLocal] || 0;
 }
 
-
-
-
-// ================== NOVO: COMUNICAÇÃO COM A API DE PROGRESSO (FLASK) ==================
-async function finalizarModuloAPI(moduloId, notaFinal) {
-   
-
+async function finalizarModuloAPI(moduloIdLocal, notaFinal) {
     try {
-        const response = await fetch(`http://127.0.0.1:5000/colaborador/progresso/finalizar/${moduloId}`, {
+        const response = await fetch(`http://127.0.0.1:5000/colaborador/progresso/finalizar/${moduloIdLocal}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${TOKEN}` 
+                "Authorization": `Bearer ${TOKEN}`
             },
             body: JSON.stringify({ nota_final: notaFinal })
         });
@@ -92,7 +104,7 @@ async function finalizarModuloAPI(moduloId, notaFinal) {
             throw new Error(`Erro ${response.status} ao finalizar módulo: ${errorData.error || response.statusText}`);
         }
 
-        console.log(`Módulo ${moduloId} finalizado com nota ${notaFinal}%. Redirecionando...`);
+        console.log(`Módulo ${moduloIdLocal} finalizado com nota ${notaFinal}%. Redirecionando...`);
         setTimeout(() => {
             window.location.href = '/src/templates/colaborador/modulo.html';
         }, 1500);
@@ -103,8 +115,7 @@ async function finalizarModuloAPI(moduloId, notaFinal) {
     }
 }
 
-
-// ================== CONTROLES DE EXERCÍCIOS ==================
+// ================== CONTROLES DE EXERCÍCIOS (UI) ==================
 document.querySelectorAll('.options label').forEach(label => {
     label.addEventListener('click', () => {
         const group = label.parentElement.querySelectorAll('label');
@@ -132,7 +143,6 @@ overlay.innerHTML = `
 `;
 document.body.appendChild(overlay);
 
-
 const overlayCard = overlay.querySelector('.result-card');
 const title = overlay.querySelector('.result-title');
 const scoreText = overlay.querySelector('#overlay-score');
@@ -151,18 +161,33 @@ function closeResultOverlay() {
     overlay.setAttribute('aria-hidden', 'true');
     document.documentElement.style.overflow = '';
     document.body.style.overflow = '';
-    overlayCard.classList.remove('pop-in'); 
+    overlayCard.classList.remove('pop-in');
 }
-
 
 overlay.addEventListener('click', (e) => {
     if (e.target === overlay) closeResultOverlay();
 });
 
-
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && overlay.style.display === 'flex') closeResultOverlay();
 });
+
+// ================== HELPERS DO ANTI-COLA ==================
+function marcarFinalizadoLocal() {
+    localStorage.setItem(EX_KEY_FINALIZADO, "true");
+    localStorage.removeItem(EX_KEY_ANDAMENTO);
+    localStorage.removeItem(EX_KEY_RESET);
+}
+
+function marcarAndamentoLocal() {
+    localStorage.setItem(EX_KEY_ANDAMENTO, "true");
+    localStorage.removeItem(EX_KEY_FINALIZADO);
+    localStorage.removeItem(EX_KEY_RESET);
+}
+
+function marcarResetLocal() {
+    localStorage.setItem(EX_KEY_RESET, "true");
+}
 
 // ================== HANDLER DE ENVIO ==================
 document.getElementById('submit-exercises').addEventListener('click', () => {
@@ -189,55 +214,58 @@ document.getElementById('submit-exercises').addEventListener('click', () => {
         title.textContent = `✅ Parabéns! Módulo concluído com ${percent}%.`;
         btnProximo.style.display = 'inline-block';
         btnProximo.textContent = 'Ver Meu Progresso';
-        
-        // CHAMA A API PARA FINALIZAR O MÓDULO NO BACKEND
+
+        // MARCA LOCALMENTE COMO FINALIZADO (antes de chamar API)
         btnProximo.onclick = () => {
+            marcarFinalizadoLocal();
             closeResultOverlay();
             finalizarModuloAPI(moduleId, percent);
         };
-        
+
     } else {
         overlayCard.classList.add('fail');
         title.textContent = `❌ Nota insuficiente. Você precisa de ${REQUISITO_APROVACAO}%.`;
         btnRefazer.style.display = 'inline-block';
         btnRefazer.onclick = () => {
+            // REGISTRA A TENTATIVA NO BACKEND
+            finalizarModuloAPI(moduleId, 0); // Envia nota 0 para contar tentativa
 
-    // 🔥 REGISTRA A TENTATIVA NO BACKEND
-    finalizarModuloAPI(moduleId, 0); // Envia nota 0 para contar tentativa
+            // Limpa o estado local do exercício atual (usuário vai refazer)
+            localStorage.removeItem(EX_KEY_ANDAMENTO);
+            localStorage.removeItem(EX_KEY_RESET);
+            // NÃO removemos EX_KEY_FINALIZADO aqui pois não estava finalizado
 
-    closeResultOverlay();
-    currentIndex = 0;
-    updateCarousel();
-    exercisesSection.style.display = 'none';
-    moduleLocked = false;
-    nextBtn.style.opacity = '1';
-    prevBtn.style.opacity = '1';
-    nextBtn.style.cursor = 'pointer';
-    prevBtn.style.cursor = 'pointer';
+            closeResultOverlay();
+            currentIndex = 0;
+            updateCarousel();
+            exercisesSection.style.display = 'none';
+            moduleLocked = false;
+            nextBtn.style.opacity = '1';
+            prevBtn.style.opacity = '1';
+            nextBtn.style.cursor = 'pointer';
+            prevBtn.style.cursor = 'pointer';
 
-    document.querySelectorAll('.thumbnails img').forEach(img => {
-        img.style.pointerEvents = 'auto';
-        img.style.opacity = '1';
-        img.style.filter = 'none';
-    });
+            document.querySelectorAll('.thumbnails img').forEach(img => {
+                img.style.pointerEvents = 'auto';
+                img.style.opacity = '1';
+                img.style.filter = 'none';
+            });
 
-    document.removeEventListener('keydown', lockArrows);
-    exIndex = 0;
-    updateExerciseCarousel();
-    clearInterval(timerInterval);
-    totalTime = 30 * 60;
-    document.getElementById('timer').textContent = 'Tempo restante: 30:00';
+            document.removeEventListener('keydown', lockArrows);
+            exIndex = 0;
+            updateExerciseCarousel();
+            clearInterval(timerInterval);
+            totalTime = 30 * 60;
+            document.getElementById('timer').textContent = 'Tempo restante: 30:00';
 
-    document.querySelectorAll('input[type="radio"]:checked').forEach(radio => radio.checked = false);
-    document.querySelectorAll('.options label').forEach(label => label.classList.remove('selected'));
-};
-
+            document.querySelectorAll('input[type="radio"]:checked').forEach(radio => radio.checked = false);
+            document.querySelectorAll('.options label').forEach(label => label.classList.remove('selected'));
+        };
     }
 
     openResultOverlay();
-    overlayCard.classList.add('pop-in'); 
+    overlayCard.classList.add('pop-in');
 });
-
 
 // ================== CONTROLES DO CARROSSEL PRINCIPAL ==================
 document.querySelector('.next').addEventListener('click', () => {
@@ -264,6 +292,9 @@ const prevBtn = document.querySelector('.prev');
 
 btnFinalizar.forEach(btn => {
     btn.addEventListener('click', () => {
+        // marca que o usuário iniciou o exercício (ANTI-COLA)
+        marcarAndamentoLocal();
+
         exercisesSection.style.display = 'block';
         moduleLocked = true;
 
@@ -307,10 +338,8 @@ function updateExerciseCarousel() {
     const btnSubmit = document.getElementById('submit-exercises');
     btnSubmit.style.display = exIndex === exSlides.length - 1 ? 'block' : 'none';
 
-    // 🔥 Atualiza as setas sempre que muda o exercício
     updateExerciseArrows();
 }
-
 
 document.querySelector('.next-exercise').addEventListener('click', () => {
     if (exIndex < exSlides.length - 1) exIndex++;
@@ -322,11 +351,9 @@ document.querySelector('.prev-exercise').addEventListener('click', () => {
     updateExerciseCarousel();
 });
 
-
 function updateExerciseArrows() {
     const total = exSlides.length;
 
-    // Seta ESQUERDA (voltar exercício)
     if (exIndex === 0) {
         prevExerciseBtn.style.opacity = "0.4";
         prevExerciseBtn.style.pointerEvents = "none";
@@ -337,7 +364,6 @@ function updateExerciseArrows() {
         prevExerciseBtn.style.cursor = "pointer";
     }
 
-    // Seta DIREITA (avançar exercício)
     if (exIndex === total - 1) {
         nextExerciseBtn.style.opacity = "0.4";
         nextExerciseBtn.style.pointerEvents = "none";
@@ -348,8 +374,6 @@ function updateExerciseArrows() {
         nextExerciseBtn.style.cursor = "pointer";
     }
 }
-
-
 
 // ================== TIMER ==================
 let timerInterval;
@@ -375,9 +399,11 @@ function startTimer() {
 
 // ================== DOWNLOAD ==================
 document.getElementById('download-btn').addEventListener('click', () => {
+    // Se ainda não finalizou, marcar reset quando perder foco/abrir PDF
+    // (marcação já é feita por visibilitychange/blur)
     const link = document.createElement('a');
-    link.href = '/src/static/pdf/modulo07.pdf';
-    link.download = 'Modulo07_Conteudo.pdf';
+    link.href = `/src/static/pdf/modulo${String(moduleId).padStart(2,'0')}.pdf`;
+    link.download = `Modulo${String(moduleId).padStart(2,'0')}_Conteudo.pdf`;
     link.click();
 });
 
@@ -387,7 +413,9 @@ function createThumbnails(slides) {
     thumbnailsContainer.innerHTML = '';
     slides.forEach((slide, idx) => {
         const thumb = document.createElement('img');
-        thumb.src = slide.querySelector('img').src;
+        // proteja caso slide não tenha img
+        const imgEl = slide.querySelector('img');
+        thumb.src = imgEl ? imgEl.src : '';
         if (idx === 0) thumb.classList.add('active');
 
         thumb.addEventListener('click', () => {
@@ -417,7 +445,7 @@ createThumbnails(slidesNormal);
 const progressText = document.getElementById('progress-text');
 function updateProgressText() {
     const slides = darkMode ? slidesDark : slidesNormal;
-    progressText.textContent = `Slide ${currentIndex + 1} de ${slides.length}`;
+    if (progressText) progressText.textContent = `Slide ${currentIndex + 1} de ${slides.length}`;
 }
 
 const progressBarContainer = document.createElement('div');
@@ -425,12 +453,16 @@ progressBarContainer.classList.add('progress-bar');
 const progressBarFill = document.createElement('div');
 progressBarFill.classList.add('progress-bar-fill');
 progressBarContainer.appendChild(progressBarFill);
-document.querySelector('.modules').insertBefore(progressBarContainer, document.querySelector('.modules-carousel'));
+const modulesEl = document.querySelector('.modules');
+const modulesCarouselEl = document.querySelector('.modules-carousel');
+if (modulesEl && modulesCarouselEl) {
+    modulesEl.insertBefore(progressBarContainer, modulesCarouselEl);
+}
 
 function updateProgressBar() {
     const slides = darkMode ? slidesDark : slidesNormal;
     const percent = ((currentIndex + 1) / slides.length) * 100;
-    progressBarFill.style.width = `${percent}%`;
+    if (progressBarFill) progressBarFill.style.width = `${percent}%`;
 }
 updateProgressBar();
 
@@ -452,7 +484,9 @@ function toggleDarkMode() {
 }
 
 const darkModeBtn = document.getElementById('dark-mode-btn');
-darkModeBtn.addEventListener('click', toggleDarkMode);
+if (darkModeBtn) {
+    darkModeBtn.addEventListener('click', toggleDarkMode);
+}
 document.addEventListener('keydown', e => {
     if (e.key.toLowerCase() === 'm') toggleDarkMode();
 });
@@ -461,13 +495,82 @@ document.addEventListener('keydown', e => {
 document.addEventListener('keydown', e => {
     if (e.key === 'ArrowRight') document.querySelector('.next').click();
     if (e.key === 'ArrowLeft') document.querySelector('.prev').click();
-    if (e.key.toLowerCase() === 'f') document.getElementById('fullscreen-btn').click();
-    if (e.key.toLowerCase() === 'd') document.getElementById('download-btn').click();
+    if (e.key.toLowerCase() === 'f') {
+        const fsBtn = document.getElementById('fullscreen-btn');
+        if (fsBtn) fsBtn.click();
+    }
+    if (e.key.toLowerCase() === 'd') {
+        const dlBtn = document.getElementById('download-btn');
+        if (dlBtn) dlBtn.click();
+    }
 });
 
 // ================== CARREGA PROGRESSO AO ABRIR ==================
 window.addEventListener('DOMContentLoaded', () => {
     currentIndex = loadModuleProgress(moduleId);
     updateCarousel();
-    updateExerciseCarousel(); 
+    updateExerciseCarousel();
 });
+
+// ================== ANTI-COLA: DETECTA SAÍDA E VOLTA ==================
+
+// 1) visibilitychange (trocar de aba / minimizar em alguns navegadores)
+document.addEventListener("visibilitychange", () => {
+    const andamento = localStorage.getItem(EX_KEY_ANDAMENTO);
+    const finalizado = localStorage.getItem(EX_KEY_FINALIZADO);
+
+    if (document.hidden && andamento === "true" && finalizado !== "true") {
+        // marca para reset quando voltar
+        marcarResetLocal();
+    }
+});
+
+// 2) blur (perda de foco da janela)
+window.addEventListener("blur", () => {
+    const andamento = localStorage.getItem(EX_KEY_ANDAMENTO);
+    const finalizado = localStorage.getItem(EX_KEY_FINALIZADO);
+
+    if (andamento === "true" && finalizado !== "true") {
+        marcarResetLocal();
+    }
+});
+
+// 3) beforeunload — opcional, para casos de fechar/refresh — marca reset
+window.addEventListener("beforeunload", (e) => {
+    const andamento = localStorage.getItem(EX_KEY_ANDAMENTO);
+    const finalizado = localStorage.getItem(EX_KEY_FINALIZADO);
+
+    if (andamento === "true" && finalizado !== "true") {
+        
+        localStorage.setItem(EX_KEY_RESET, "true");
+    }
+});
+
+window.addEventListener("focus", () => {
+    const precisaResetar = localStorage.getItem(EX_KEY_RESET);
+
+    if (precisaResetar === "true") {
+        localStorage.removeItem(EX_KEY_RESET);
+        localStorage.removeItem(EX_KEY_ANDAMENTO);
+
+  
+        exIndex = 0;
+        updateExerciseCarousel();
+
+        document.querySelectorAll('input[type="radio"]:checked')
+            .forEach(radio => (radio.checked = false));
+
+        document.querySelectorAll('.options label')
+            .forEach(label => label.classList.remove('selected'));
+
+    
+        try {
+            alert("Você saiu da tela durante o exercício. O exercício foi reiniciado.");
+        } catch (err) {
+            console.log("Voltou e reiniciou módulo (alert falhou).");
+        }
+
+        location.reload();
+    }
+});
+
