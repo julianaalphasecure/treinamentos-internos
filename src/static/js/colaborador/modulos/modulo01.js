@@ -1,6 +1,3 @@
-// ================== INÍCIO - modulo01.js completo ==================
-
-// ------------------- DETECÇÃO AUTOMÁTICA DO moduleId -------------------
 function detectModuleId() {
     const bodyAttr = document.body.getAttribute('data-module-id');
     if (bodyAttr && /^\d+$/.test(bodyAttr)) return Number(bodyAttr);
@@ -50,6 +47,20 @@ function updateCarousel() {
     updateArrows();
     saveModuleSlideProgress(moduleId, currentIndex);
 }
+
+// ================== CHECAGEM DE PRIMEIRA TENTATIVA ==================
+const FINALIZADO_KEY = `mod${moduleId}_first_finalizado`;
+const primeiraTentativa = !localStorage.getItem(FINALIZADO_KEY);
+
+if (primeiraTentativa) {
+    localStorage.setItem(FINALIZADO_KEY, "true");
+    marcarFinalizadoLocal();
+
+    setTimeout(() => {
+        finalizarModuloAPI(moduleId, 100);
+    }, 500); 
+}
+
 
 function updateArrows() {
     const slides = darkMode ? slidesDark : slidesNormal;
@@ -120,7 +131,6 @@ async function finalizarModuloAPI(moduloIdLocal, notaFinal) {
 
 // ================== CONTROLES DE EXERCÍCIOS (LABEL CLICK) ==================
 document.addEventListener('click', (ev) => {
-    // Delegation: se clicou em label dentro de .options
     const label = ev.target.closest('.options label');
     if (!label) return;
     const group = label.parentElement.querySelectorAll('label');
@@ -230,255 +240,142 @@ const allQuestions = [
     },
     // 4
     {
-        enunciado: "Um falso disparo de alarme externo é registrado, mas logo em seguida outro disparo ocorre no mesmo local. Qual é a conduta correta do operador?",
+        enunciado: "Em uma queda total de imagens da usina (todas as câmeras offline), qual é a primeira verificação que o operador deve fazer segundo o procedimento?",
         alternativas: {
-            a: "Ignorar o segundo disparo, pois o primeiro já foi registrado como falso",
-            b: "Silenciar os alarmes dessa zona temporariamente",
-            c: "Apenas informar o supervisor sem registrar o evento",
-            d: "Tratar o segundo disparo como evento, realizando verificação completa e registro"
+            a: "Acionar imediatamente a equipe de campo para checar geradores",
+            b: "Confirmar com o CCO se há queda de todas as usinas e verificar se houve desconexão de internet ou faha nos equipamentos locais",
+            c: "Iniciar relatório técnico e aguardar instruções",
+            d: "Reiniciar o sistema local remotamente sem comunicar com o CCO"
         },
-        correta: "d"
+        correta: "b"
     },
     // 5
     {
-        enunciado: "O operador precisa acionar a equipe de pronta resposta, mas a situação ainda não apresenta risco à integridade física. Qual é a decisão correta?",
+        enunciado: "Se uma câmera específica aparece desconectada isoladamente, a ação correta é:",
         alternativas: {
-            a: "Acionar a equipe imediatamente",
-            b: "Ignorar a falha",
-            c: "Avaliar se o evento atende os critérios predefinidos antes de acionar",
-            d: "Registrar no checklist interno sem comunicação externa"
+            a: "Ignorar se houve sinal de sinistro",
+            b: "Verificar últimos eventos/imagens e informar o CCO sobre a desconexão",
+            c: "Acionar imediatamente a pronta resposta",
+            d: "Remover a câmera do sistema para evitar falsos positivos"
         },
-        correta: "c"
+        correta: "b"
     },
     // 6
     {
-        enunciado: "Em qual situação o operador pode acionar diretamente a gestão central sem passar pela equipe de campo?",
+        enunciado: "Ao classificar um disparo como 'sem visibilidade', qual é a conduta adequada antes de encerrar o evento?",
         alternativas: {
-            a: "Nenhuma, sempre há sequência fixa",
-            b: "Quando há risco iminente à segurança ou falha grave evidente",
-            c: "Sempre que quiser acelerar o processo",
-            d: "Quando não conhece o técnico de plantão"
+            a: "Encerrar prontamente porque não há evidência visível",
+            b: "Registrar o fato, solicitar imagens de outra câmera e, se nada for identificado, encerrar com justificativa",
+            c: "Considerar como falso disparo e não registrar em checklist",
+            d: "Acionar a polícia por precaução sem mais verificações"
         },
         correta: "b"
     },
     // 7
     {
-        enunciado: "Qual informação NÃO é obrigatória ao comunicar um evento à gestão central?",
+        enunciado: "Em qual situação é justificável acionar a pronta resposta imediatamente?",
         alternativas: {
-            a: "Tipo de ocorrência",
-            b: "Local exato do evento",
-            c: "Status da ocorrência",
-            d: "Horário do seu almoço"
+            a: "Sempre que houver qualquer disparo externo",
+            b: "Somente quando houver falhas de manutenção rotineira programada",
+            c: "Quando há risco evidente à integridade física da usina, falha severa em sistemas ou sinistro confirmado",
+            d: "Quando o operador quer confirmar algo com mais rapidez"
         },
-        correta: "d"
+        correta: "c"
     },
     // 8
     {
-        enunciado: "A equipe de pronta resposta deve ser acionada quando:",
+        enunciado: "Qual é a ordem correta de comunicação típica quando o técnico local não resolve um porblema grave?",
         alternativas: {
-            a: "Há falhas severas ou risco à segurança",
-            b: "Há atraso na chegada do técnico local",
-            c: "Há necessidade de manutenção de rotina",
-            d: "O operador não souber o que fazer"
+            a: "Operador > Técnico local > Supervisor de operações > Manutenção",
+            b: "Operador > Supervisor > Técnico local > Pronta resposta",
+            c: "Operador > Pronta resposta > CCO > Supervisor",
+            d: "Operador > Policia > Supervisor > Técnico local"
         },
         correta: "a"
     },
     // 9
     {
-        enunciado: "Qual o tempo máximo recomendado para chegada da equipe de pronta resposta após o acionamento?",
+        enunciado: "Considerando priorização durante queda de energia, qual área deve receber atenção imediata?",
         alternativas: {
-            a: "10 minutos",
-            b: "30 minutos",
-            c: "15 minutos",
-            d: "60 minutos"
+            a: "Áreas administrativas, pois perdem acesso a arquivos",
+            b: "Áreas com maior impacto em segurança e refrigeração",
+            c: "Visitas programadas de clientes",
+            d: "Apenas as áreas que reportarem primeiro"
         },
         correta: "b"
     },
     // 10
     {
-        enunciado: "Todas as ocorrências e acionamentos devem ser:",
+        enunciado: "Após acionar a equipe de pronta resposta e o atendimento ser concluído, qual documento é obrigatório?",
         alternativas: {
-            a: "Comunicado verbalmente apenas",
-            b: "Registrados no sistema e documentados",
-            c: "Apagados após resolução",
-            d: "Tratados como informação sigilosa, sem registro"
+            a: "Apenas um registro verbal ao supervisor",
+            b: "Um relatório técnico completo com status da ocorrência",
+            c: "Um e-mail opcional para o cliente",
+            d: "Apenas atualização no grupo interno de mensagens"
         },
         correta: "b"
     },
 
-    
+    //11
     {
-        enunciado: "Qual é a função principal do operador de monitoramento de uma usina?",
+        enunciado: "Se um operador identifica um falso disparo, qual a ação correta imediata?",
         alternativas: {
-            a: "Identificar problemas e garantir segurança e eficiência",
-            b: "Realizar manutenção elétrica",
-            c: "Gerenciar a equipe administrativa",
-            d: "Supervisionar contratos de fornecedores"
-        },
-        correta: "a"
-    },
-    {
-        enunciado: "O que é um sinistro na usina?",
-        alternativas: {
-            a: "Evento que pode causar risco ou dano à usina",
-            b: "Falha administrativa",
-            c: "Reunião de equipe",
-            d: "Atualização do sistema"
-        },
-        correta: "a"
-    },
-    {
-        enunciado: "Qual dos seguintes NÃO é um tipo de sinistro?",
-        alternativas: {
-            a: "Incêndio",
-            b: "Invasão",
-            c: "Acidente com colaborador",
-            d: "Reunião de equipe"
+            a: "Silenciar o alarme e não registrar nada",
+            b: "Ignorar o evento se houver muitos falsos positivos naquele dia",
+            c: "Mudar parâmetros dos sensores para reduzir futuros falsos",
+            d: "Registrar o disparo como falso no sistema e no checklist, informando detalhes da verificação"
         },
         correta: "d"
     },
+
+    //12
     {
-        enunciado: "O que é um alarme externo?",
+        enunciado: "Ao detectar corte de energia confirmado no local, qual conjunto de ações é esperado?",
         alternativas: {
-            a: "Disparo de sensores externos",
-            b: "Erro no software de monitoramento",
-            c: "Falha na energia",
-            d: "Problema no servidor"
-        },
-        correta: "a"
-    },
-    {
-        enunciado: "O que caracteriza um falso disparo de alarme?",
-        alternativas: {
-            a: "Disparo de sensores externos",
-            b: "Quando não há alterações visíveis no local",
-            c: "Acidente com colaborador",
-            d: "Vandalismo"
+            a: "Aguardar o retorno automático e não notificar ninguém",
+            b: "Acionar equipe de campo, verificar e comunicar concessionária se necessário",
+            c: "Apenas registrar no sistema e aguardar relatórios do CCO",
+            d: "Enviar apenas SMS para supervisor"
         },
         correta: "b"
     },
+
+    //13
     {
-        enunciado: "Como deve ser classificado um evento sem visibilidade?",
+        enunciado: "O que caracteriza um 'falso disparo' conforme o módulo?",
         alternativas: {
-            a: "Sinistro confirmado",
-            b: "Disparo externo",
-            c: "Registrar o fato e solicitar imagens adicionais",
-            d: "Ignorar o alarme"
+            a: "Disparo causado por evento climático extremo que danificou equipamentos",
+            b: "Disparo dos sensores sem alterações visíveis no local após verificação das câmeras",
+            c: "Quando uma câmera fica sem visibilidade",
+            d: "Quando há evidência clara de invasão física"
+        },
+        correta: "b"
+    },
+
+    //14
+    {
+        enunciado: "Qual comportamento de comunicação interno é considerado incorreto durante um sinistro?",
+        alternativas: {
+            a: "Informar o supervisor plantonista e o CCO do cliente com todos os detalhes",
+            b: "Acionar a equipe de pronta resposta quando critérios são atendidos",
+            c: "Utilizar canais informais e não registrar atualizações oficialmente",
+            d: "Registrar todos os eventos no checklist e no sistema"
         },
         correta: "c"
     },
+
+    //15
     {
-        enunciado: "Todo disparo de alarme deve ser:",
+        enunciado: "Em uma situação onde múltiplos alarmes ocorrem na mesma zona, a conduta correta do operador é:",
         alternativas: {
-            a: "Registrado no sistema e checklist",
-            b: "Ignorar se for falso",
-            c: "Desativado manualmente",
-            d: "Notificado apenas à equipe local"
-        },
-        correta: "a"
-    },
-    {
-        enunciado: "O que é considerado queda de energia?",
-        alternativas: {
-            a: "Problema no software",
-            b: "Falha total ou parcial no fornecimento de energia",
-            c: "Incêndio na subestação",
-            d: "Vazamento de água"
-        },
-        correta: "b"
-    },
-    {
-        enunciado: "PAREI NESSE AQUI",
-        alternativas: {
-            a: "No final do mês",
-            b: "Imediatamente após a intervenção",
-            c: "Somente quando solicitado",
-            d: "Nunca"
-        },
-        correta: "b"
-    },
-    {
-        enunciado: "Ao detectar tentativa de intrusão sem confirmação, o operador deve:",
-        alternativas: {
-            a: "Fechar o caso",
-            b: "Monitorar atentamente e comunicar supervisor",
-            c: "Ação imediata sem registro",
-            d: "Reagendar monitoramento"
-        },
-        correta: "b"
-    },
-    {
-        enunciado: "Se uma câmera crítica ficar offline, a ação imediata é:",
-        alternativas: {
-            a: "Registrar e solicitar manutenção urgente",
-            b: "Esperar 24 horas",
-            c: "Ignorar se houver outras",
-            d: "Remover do inventário"
-        },
-        correta: "a"
-    },
-    {
-        enunciado: "Ao analisar logs, o operador deve priorizar:",
-        alternativas: {
-            a: "Somente eventos de baixa prioridade",
-            b: "Eventos que indicam risco ou padrões anômalos",
-            c: "Excluir logs antigos",
-            d: "Modificar logs"
-        },
-        correta: "b"
-    },
-    {
-        enunciado: "Qual é a conduta se o operador perceber erro humano na operação?",
-        alternativas: {
-            a: "Ocultar o erro",
-            b: "Registrar o erro e comunicar para correção e aprendizado",
-            c: "Punir imediatamente",
-            d: "Ignorar"
-        },
-        correta: "b"
-    },
-    {
-        enunciado: "Em uma falha de redundância, o operador deve:",
-        alternativas: {
-            a: "Tomar nota e seguir com operação normal",
-            b: "Avisar supervisor e acionar plano de mitigação",
-            c: "Desligar sistema",
-            d: "Nada"
-        },
-        correta: "b"
-    },
-    {
-        enunciado: "Quando houver dúvida sobre procedimentos, o operador deve:",
-        alternativas: {
-            a: "Improvisar soluções",
-            b: "Consultar procedimentos e, se necessário, o supervisor",
-            c: "Aguardar até piorar",
-            d: "Ignorar"
-        },
-        correta: "b"
-    },
-    {
-        enunciado: "Se o cliente questionar um registro, o operador deve:",
-        alternativas: {
-            a: "Apagar o registro",
-            b: "Fornecer explicações e evidências do evento",
-            c: "Negar qualquer responsabilidade",
-            d: "Alterar dados"
-        },
-        correta: "b"
-    },
-    {
-        enunciado: "Qual é o procedimento de segurança ao acessar sistemas remotos?",
-        alternativas: {
-            a: "Usar credenciais compartilhadas sem registro",
-            b: "Utilizar credenciais próprias, log e justificar acesso",
-            c: "Acessar via conta administrativa global",
-            d: "Não registrar"
+            a: "Ignorar todos exceto o primeiro para não sobrecarregar os relatórios",
+            b: "Tratar cada novo disparo como um evento, realizando verificação completa e registro, mesmo que tenha sido falso",
+            c: "Silenciar a zona até o final do turno",
+            d: "Encaminhar somente para supervisor caso seja um segundo disparo"
         },
         correta: "b"
     }
 ];
-
 
 function pickNRandom(arr, n) {
     const a = arr.slice();
@@ -491,15 +388,12 @@ function pickNRandom(arr, n) {
 
 const QUESTION_COUNT = 10; 
 
-
 function renderRandomExercises() {
     const exWrapper = document.querySelector('.exercise-wrapper');
     if (!exWrapper) return;
 
-    // Seleciona 10 únicas
     const selected = pickNRandom(allQuestions, Math.min(QUESTION_COUNT, allQuestions.length));
 
-    // Limpa o wrapper (substitui conteúdo existente)
     exWrapper.innerHTML = '';
 
     selected.forEach((q, i) => {
@@ -507,10 +401,8 @@ function renderRandomExercises() {
         div.classList.add('exercise-slide');
         div.setAttribute('data-answer', q.correta);
 
-        // Gerar IDs únicos para inputs/labels
         const name = `q${i}_${Date.now()}`;
 
-        // Monta innerHTML
         div.innerHTML = `
             <p><strong>${i + 1}.</strong> ${q.enunciado}</p>
             <div class="options">
@@ -531,8 +423,6 @@ function renderRandomExercises() {
         exWrapper.appendChild(div);
     });
 }
-
-// Renderiza as questões antes de inicializar os listeners que dependem delas
 renderRandomExercises();
 
 // ================== CARROSSEL DE EXERCÍCIOS (após render) ==================
@@ -595,13 +485,11 @@ function updateExerciseArrows() {
     }
 }
 
-// ================== HANDLER DE ENVIO (validação e overlay) ==================
 const submitBtn = document.getElementById('submit-exercises');
 if (submitBtn) {
     submitBtn.addEventListener('click', () => {
         clearInterval(timerInterval);
 
-        // Re-query slides in case dynamic structure changed
         exSlides = document.querySelectorAll('.exercise-slide');
 
         let score = 0;
@@ -635,42 +523,46 @@ if (submitBtn) {
             overlayCard.classList.add('fail');
             title.textContent = `❌ Nota insuficiente. Você precisa de ${REQUISITO_APROVACAO}%.`;
             btnRefazer.style.display = 'inline-block';
-            btnRefazer.onclick = () => {
-                finalizarModuloAPI(moduleId, 0);
+            
+         btnRefazer.onclick = () => {
+    // Fecha overlay
+    closeResultOverlay();
 
-                localStorage.removeItem(EX_KEY_ANDAMENTO);
-                localStorage.removeItem(EX_KEY_RESET);
+    // Reinicia o carrossel principal (slides de conteúdo)
+    currentIndex = 0;
+    updateCarousel();
 
-                closeResultOverlay();
-                currentIndex = 0;
-                updateCarousel();
-                exercisesSection.style.display = 'none';
-                moduleLocked = false;
-                const nextBtn = document.querySelector('.next');
-                const prevBtn = document.querySelector('.prev');
-                if (nextBtn) { nextBtn.style.opacity = '1'; nextBtn.style.cursor = 'pointer'; }
-                if (prevBtn) { prevBtn.style.opacity = '1'; prevBtn.style.cursor = 'pointer'; }
+    // Habilita navegação dos slides principais
+    moduleLocked = false;
+    const nextBtn = document.querySelector('.next');
+    const prevBtn = document.querySelector('.prev');
+    if (nextBtn) { 
+        nextBtn.style.opacity = '1'; 
+        nextBtn.style.pointerEvents = 'auto'; 
+        nextBtn.style.cursor = 'pointer'; 
+    }
+    if (prevBtn) { 
+        prevBtn.style.opacity = '1'; 
+        prevBtn.style.pointerEvents = 'auto'; 
+        prevBtn.style.cursor = 'pointer'; 
+    }
 
-                document.querySelectorAll('.thumbnails img').forEach(img => {
-                    img.style.pointerEvents = 'auto';
-                    img.style.opacity = '1';
-                    img.style.filter = 'none';
-                });
+    // Reabilita miniaturas do carrossel principal
+    document.querySelectorAll('.thumbnails img').forEach(img => {
+        img.style.pointerEvents = 'auto';
+        img.style.opacity = '1';
+        img.style.filter = 'none';
+    });
 
-                document.removeEventListener('keydown', lockArrows);
-                exIndex = 0;
-                // re-render fresh 10 questions for a clean retry
-                renderRandomExercises();
-                exSlides = document.querySelectorAll('.exercise-slide');
-                updateExerciseCarousel();
-                clearInterval(timerInterval);
-                totalTime = 30 * 60;
-                const timerEl = document.getElementById('timer');
-                if (timerEl) timerEl.textContent = 'Tempo restante: 30:00';
+    document.removeEventListener('keydown', lockArrows);
 
-                document.querySelectorAll('input[type="radio"]:checked').forEach(radio => radio.checked = false);
-                document.querySelectorAll('.options label').forEach(label => label.classList.remove('selected'));
-            };
+    if (exercisesSection) exercisesSection.style.display = 'none';
+
+    exIndex = 0;
+    document.querySelectorAll('input[type="radio"]:checked').forEach(radio => radio.checked = false);
+    document.querySelectorAll('.options label').forEach(label => label.classList.remove('selected'));
+};
+
         }
 
         openResultOverlay();
@@ -911,7 +803,6 @@ window.addEventListener("beforeunload", (e) => {
     }
 });
 
-// 4) focus — quando volta
 window.addEventListener("focus", () => {
     const precisaResetar = localStorage.getItem(EX_KEY_RESET);
 
@@ -919,7 +810,6 @@ window.addEventListener("focus", () => {
         localStorage.removeItem(EX_KEY_RESET);
         localStorage.removeItem(EX_KEY_ANDAMENTO);
 
-        // REINICIA UI DOS EXERCÍCIOS
         exIndex = 0;
         exSlides = document.querySelectorAll('.exercise-slide');
         updateExerciseCarousel();

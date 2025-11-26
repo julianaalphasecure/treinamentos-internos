@@ -1,7 +1,24 @@
+function detectModuleId() {
+    const bodyAttr = document.body.getAttribute('data-module-id');
+    if (bodyAttr && /^\d+$/.test(bodyAttr)) return Number(bodyAttr);
+
+    const url = window.location.href;
+    let m = url.match(/modul?o[_\-]?0*([1-9]\d?)/i);
+    if (m && m[1]) return Number(m[1]);
+
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('module')) return Number(params.get('module'));
+    if (params.get('id')) return Number(params.get('id'));
+
+    return 1;
+}
+const moduleId = detectModuleId();
+
+// ================== VARIÁVEIS PRINCIPAIS ==================
 const prevExerciseBtn = document.querySelector('.prev-exercise');
 const nextExerciseBtn = document.querySelector('.next-exercise');
 
-// ================== VARIÁVEIS PRINCIPAIS ==================
+// ================== VARIÁVEIS DO CARROSSEL E DO MÓDULO ==================
 let slidesNormal = document.querySelectorAll('.modules-slide:not(.dark-slide)');
 let slidesDark = document.querySelectorAll('.dark-slide');
 const wrapper = document.querySelector('.modules-wrapper');
@@ -9,31 +26,48 @@ let currentIndex = 0;
 let moduleLocked = false;
 let isFullScreen = false;
 let darkMode = false;
-const moduleId = 5;
 const totalSlides = slidesNormal.length;
 
+const USUARIO_ID = JSON.parse(localStorage.getItem("usuario_colaborador"))?.id;
+const TOKEN = localStorage.getItem("token_colaborador");
+const REQUISITO_APROVACAO = 80;
 
-const USUARIO_ID = JSON.parse(localStorage.getItem("usuario_colaborador"))?.id; 
-const TOKEN = localStorage.getItem("token_colaborador"); 
-const REQUISITO_APROVACAO = 80; 
+// ================== CHAVES LOCAIS POR MÓDULO (ANTI-COLA) ==================
+const EX_KEY_ANDAMENTO = `mod${moduleId}_ex_andamento`;
+const EX_KEY_FINALIZADO = `mod${moduleId}_ex_finalizado`;
+const EX_KEY_RESET = `mod${moduleId}_ex_reset`;
 
-// ================== FUNÇÃO ATUALIZA CARROSSEL ==================
+// ================== FUNÇÕES DE CARROSSEL (slides) ==================
 function updateCarousel() {
+    if (!wrapper) return;
     wrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
     updateProgressBar();
     updateThumbnails();
     updateProgressText();
-    updateArrows(); // 🔥 agora controla habilitar/desabilitar setas
-    
-    saveModuleSlideProgress(moduleId, currentIndex); 
+    updateArrows();
+    saveModuleSlideProgress(moduleId, currentIndex);
 }
 
+// ================== CHECAGEM DE PRIMEIRA TENTATIVA ==================
+const FINALIZADO_KEY = `mod${moduleId}_first_finalizado`;
+const primeiraTentativa = !localStorage.getItem(FINALIZADO_KEY);
+
+if (primeiraTentativa) {
+    localStorage.setItem(FINALIZADO_KEY, "true");
+    marcarFinalizadoLocal();
+
+    setTimeout(() => {
+        finalizarModuloAPI(moduleId, 100);
+    }, 500); 
+}
 
 
 function updateArrows() {
     const slides = darkMode ? slidesDark : slidesNormal;
+    const prevBtn = document.querySelector('.prev');
+    const nextBtn = document.querySelector('.next');
+    if (!prevBtn || !nextBtn) return;
 
-    // Desabilita seta esquerda no primeiro slide
     if (currentIndex === 0) {
         prevBtn.style.opacity = "0.4";
         prevBtn.style.pointerEvents = "none";
@@ -44,7 +78,6 @@ function updateArrows() {
         prevBtn.style.cursor = "pointer";
     }
 
-    // Desabilita seta direita no último slide
     if (currentIndex === slides.length - 1) {
         nextBtn.style.opacity = "0.4";
         nextBtn.style.pointerEvents = "none";
@@ -56,33 +89,26 @@ function updateArrows() {
     }
 }
 
-
-// ================== FUNÇÃO SALVAR PROGRESSO LOCAL (posição do slide) ==================
-function saveModuleSlideProgress(moduleId, lastSlideIndex) {
+// ================== SALVAR / CARREGAR PROGRESSO ==================
+function saveModuleSlideProgress(moduleIdLocal, lastSlideIndex) {
     const progress = JSON.parse(localStorage.getItem("moduleProgress") || "{}");
-    progress[moduleId] = lastSlideIndex;
+    progress[moduleIdLocal] = lastSlideIndex;
     localStorage.setItem("moduleProgress", JSON.stringify(progress));
 }
 
-// ================== CARREGA PROGRESSO LOCAL (posição do slide) ==================
-function loadModuleProgress(moduleId) {
+function loadModuleProgress(moduleIdLocal) {
     const progress = JSON.parse(localStorage.getItem("moduleProgress") || "{}");
-    return progress[moduleId] || 0;
+    return progress[moduleIdLocal] || 0;
 }
 
-
-
-
-// ================== NOVO: COMUNICAÇÃO COM A API DE PROGRESSO (FLASK) ==================
-async function finalizarModuloAPI(moduloId, notaFinal) {
-   
-
+// ================== API FINALIZAR ==================
+async function finalizarModuloAPI(moduloIdLocal, notaFinal) {
     try {
-        const response = await fetch(`http://127.0.0.1:5000/colaborador/progresso/finalizar/${moduloId}`, {
+        const response = await fetch(`http://127.0.0.1:5000/colaborador/progresso/finalizar/${moduloIdLocal}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${TOKEN}` 
+                "Authorization": `Bearer ${TOKEN}`
             },
             body: JSON.stringify({ nota_final: notaFinal })
         });
@@ -92,7 +118,7 @@ async function finalizarModuloAPI(moduloId, notaFinal) {
             throw new Error(`Erro ${response.status} ao finalizar módulo: ${errorData.error || response.statusText}`);
         }
 
-        console.log(`Módulo ${moduloId} finalizado com nota ${notaFinal}%. Redirecionando...`);
+        console.log(`Módulo ${moduloIdLocal} finalizado com nota ${notaFinal}%. Redirecionando...`);
         setTimeout(() => {
             window.location.href = '/src/templates/colaborador/modulo.html';
         }, 1500);
@@ -103,16 +129,15 @@ async function finalizarModuloAPI(moduloId, notaFinal) {
     }
 }
 
-
-// ================== CONTROLES DE EXERCÍCIOS ==================
-document.querySelectorAll('.options label').forEach(label => {
-    label.addEventListener('click', () => {
-        const group = label.parentElement.querySelectorAll('label');
-        group.forEach(l => l.classList.remove('selected'));
-        label.classList.add('selected');
-        const radio = document.getElementById(label.getAttribute('for'));
-        if (radio) radio.checked = true;
-    });
+// ================== CONTROLES DE EXERCÍCIOS (LABEL CLICK) ==================
+document.addEventListener('click', (ev) => {
+    const label = ev.target.closest('.options label');
+    if (!label) return;
+    const group = label.parentElement.querySelectorAll('label');
+    group.forEach(l => l.classList.remove('selected'));
+    label.classList.add('selected');
+    const radio = document.getElementById(label.getAttribute('for'));
+    if (radio) radio.checked = true;
 });
 
 // ----------------- OVERLAY RESULTADO -----------------
@@ -132,7 +157,6 @@ overlay.innerHTML = `
 `;
 document.body.appendChild(overlay);
 
-
 const overlayCard = overlay.querySelector('.result-card');
 const title = overlay.querySelector('.result-title');
 const scoreText = overlay.querySelector('#overlay-score');
@@ -151,70 +175,379 @@ function closeResultOverlay() {
     overlay.setAttribute('aria-hidden', 'true');
     document.documentElement.style.overflow = '';
     document.body.style.overflow = '';
-    overlayCard.classList.remove('pop-in'); 
+    overlayCard.classList.remove('pop-in');
 }
-
 
 overlay.addEventListener('click', (e) => {
     if (e.target === overlay) closeResultOverlay();
 });
 
-
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && overlay.style.display === 'flex') closeResultOverlay();
 });
 
-// ================== HANDLER DE ENVIO ==================
-document.getElementById('submit-exercises').addEventListener('click', () => {
-    clearInterval(timerInterval);
+// ================== HELPERS DO ANTI-COLA ==================
+function marcarFinalizadoLocal() {
+    localStorage.setItem(EX_KEY_FINALIZADO, "true");
+    localStorage.removeItem(EX_KEY_ANDAMENTO);
+    localStorage.removeItem(EX_KEY_RESET);
+}
 
-    let score = 0;
-    exSlides.forEach(slide => {
-        const selected = slide.querySelector('input[type="radio"]:checked');
-        if (selected && selected.value === slide.dataset.answer) score++;
+function marcarAndamentoLocal() {
+    localStorage.setItem(EX_KEY_ANDAMENTO, "true");
+    localStorage.removeItem(EX_KEY_FINALIZADO);
+    localStorage.removeItem(EX_KEY_RESET);
+}
+
+function marcarResetLocal() {
+    localStorage.setItem(EX_KEY_RESET, "true");
+}
+
+
+const allQuestions = [
+    // 1
+    {
+        enunciado: "O evento teste de reporte periódico indica que:",
+        alternativas: {
+            a: "A central falhou em enviar o sinal e requer ação imediata do operador",
+            b: "O sistema está comunicando corretamente e não requer intervenção do operador",
+            c: "O operador deve validar manualmente o funcionamento do alarme",
+            d: "O sistema está passando por oscilação e deve ser reiniciado"
+        },
+        correta: "b"
+    },
+    // 2
+    {
+        enunciado: "A falha de auto teste ocorre quando:",
+        alternativas: {
+            a: "O operador não confirma o teste dentro do tempo limite",
+            b: "O sistema detecta movimentação suspeita sem alarme ativo",
+            c: "O teste periódico esperado não foi recebido pela central de alarme",
+            d: "O usuário tenta armar o alarme sem autorização"
+        },
+        correta: "c"
+    },
+    // 3
+    {
+        enunciado: " Sobre o tempo de espera de 5 minutos na falha de comunicação, o objetivo é:",
+        alternativas: {
+            a: "Dar tempo para a viatura chegar ao local",
+            b: "Evitar deslocamentos desnecessários por oscilações momentâneas",
+            c: "Permitir que o operador compare o evento com o histórico da unidade",
+            d: "Aguardar atualização automática do status do usuário"
+        },
+        correta: "b"
+    },
+    // 4
+    {
+        enunciado: "Após uma falha de comunicação, o operador deve acessar o sistema GPRS para verificar:",
+        alternativas: {
+            a: "Se os sensores internos foram disparados",
+            b: "Se o horário da última comunicação é coerente com o horário do evento",
+            c: "Se o usuário responsável está habilitado para armar a loja",
+            d: "Se o botão de pânico está ativo no sistema"
+        },
+        correta: "b"
+    },
+    // 5
+    {
+        enunciado: "Se o horário da última comunicação no GPRS for inferior ao do evento, o operador deve:",
+        alternativas: {
+            a: "Encerrar o evento automaticamente",
+            b: "Encaminhar imediatamente uma viatura",
+            c: "Acessar o CFTV para confirmar o status da unidade",
+            d: "Desconsiderar o evento e aguardar novo teste"
+        },
+        correta: "c"
+    },
+    // 6
+    {
+        enunciado: "O evento armado pelo usuário exige:",
+        alternativas: {
+            a: "Acionamento de viatura para confirmar a integridade externa",
+            b: "Ligação para validar se o usuário estava autorizado",
+            c: "Fechamento automático, sem tratativa manual",
+            d: "Acesso imediato ao CFTV"
+        },
+        correta: "c"
+    },
+    // 7
+    {
+        enunciado: "No evento desarmado pelo usuário, o operador deve:",
+        alternativas: {
+            a: "Confirmar a identidade do usuário por telefone",
+            b: "Verificar se o desarme ocorreu no horário programado",
+            c: "Encerrar automaticamente, sem intervenção manual",
+            d: "Aguardar um novo evento antes de agir"
+        },
+        correta: "c"
+    },
+    // 8
+    {
+        enunciado: "Em disparos de alarme com a unidade aberta ou setor 24h, o operador deve:",
+        alternativas: {
+            a: "Encaminhar viatura imediatamente",
+            b: "Ligar para o local e realizar senha/contrassenha",
+            c: "Acessar CFTV apenas se houver falha de comunicação",
+            d: "Notificar diretamente a chefia antes de qualquer ação"
+        },
+        correta: "b"
+    },
+    // 9
+    {
+        enunciado: "Em unidade fechada com CFTV online, ao ocorrer um disparo o operador deve:",
+        alternativas: {
+            a: "Realizar senha/contrassenha",
+            b: "Encaminhar viatura automaticamente",
+            c: "Verificar as câmeras e confirmar ausência de problemas",
+            d: "Notificar a chefia antes de tomar qualquer decisão"
+        },
+        correta: "c"
+    },
+    // 10
+    {
+        enunciado: "Em unidade fechada com CFTV off-line durante disparo, o operador deve:",
+        alternativas: {
+            a: "Solicitar ao cliente que reative manualmente o sistema",
+            b: "Deslocar viatura imediatamente para o local",
+            c: "Aguardar reconexão do sistema antes de agir",
+            d: "Ligar para validar a identidade do usuário"
+        },
+        correta: "b"
+    },
+
+    //11
+    {
+        enunciado: "Sobre disparo de pânico, qual afirmação é correta?",
+        alternativas: {
+            a: "Pode ocorrer com a unidade aberta ou fechada, sem distinção",
+            b: "Em caso de resposta suspeita na ligação, aciona-se apenas a viatura",
+            c: "Se acionado com a loja fechada, trata-se de falha técnica",
+            d: "A etapa de acesso ao CFTV é opcional"
+        },
+        correta: "c"
+    },
+
+    //12
+    {
+        enunciado: "Ao receber um disparo de pânico com resposta suspeita no procedimento de senha, o operador deve:",
+        alternativas: {
+            a: "Encerrar o evento aguardando retorno da loja",
+            b: "Acionar viatura e o 190 imediatamente",
+            c: "Enviar e-mail ao cliente informando a inconsistência",
+            d: "Considerar como disparo falso e registrar"
+        },
+        correta: "b"
+    },
+
+    //13
+    {
+        enunciado: "O evento “Não Armado” exige que o operador:",
+        alternativas: {
+            a: "Envie viatura para confirmar o motivo do não armamento",
+            b: "Registre apenas se houver movimentação suspeita no CFTV",
+            c: "Ligue para o local e registre o horário informado para ativação",
+            d: "Aguarde o próximo ciclo de ativação antes de intervir"
+        },
+        correta: "c"
+    },
+
+    //14
+    {
+        enunciado: "O evento “Desarme fora do horário” indica:",
+        alternativas: {
+            a: "Problema técnico no painel da central",
+            b: "Falha de comunicação entre usuário e sistema",
+            c: "Que o alarme foi desativado em horário não previsto",
+            d: "Que a loja não armou o sistema corretamente"
+        },
+        correta: "c"
+    },
+
+    //15
+    {
+        enunciado: "Em caso de desarme fora do horário sem contato com o local ou com contrassenha errada, o procedimento correto é:",
+        alternativas: {
+            a: "Aguardar 5 minutos e tentar novo contato",
+            b: "Encaminhar viatura para verificação",
+            c: "Ajustar o horário de ativação manualmente no sistema",
+            d: "Registrar e encerrar o evento"
+        },
+        correta: "b"
+    }
+];
+
+function pickNRandom(arr, n) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a.slice(0, n);
+}
+
+const QUESTION_COUNT = 10; 
+
+function renderRandomExercises() {
+    const exWrapper = document.querySelector('.exercise-wrapper');
+    if (!exWrapper) return;
+
+    const selected = pickNRandom(allQuestions, Math.min(QUESTION_COUNT, allQuestions.length));
+
+    exWrapper.innerHTML = '';
+
+    selected.forEach((q, i) => {
+        const div = document.createElement('div');
+        div.classList.add('exercise-slide');
+        div.setAttribute('data-answer', q.correta);
+
+        const name = `q${i}_${Date.now()}`;
+
+        div.innerHTML = `
+            <p><strong>${i + 1}.</strong> ${q.enunciado}</p>
+            <div class="options">
+                <input type="radio" id="${name}a" name="${name}" value="a">
+                <label for="${name}a">${q.alternativas.a}</label>
+
+                <input type="radio" id="${name}b" name="${name}" value="b">
+                <label for="${name}b">${q.alternativas.b}</label>
+
+                <input type="radio" id="${name}c" name="${name}" value="c">
+                <label for="${name}c">${q.alternativas.c}</label>
+
+                <input type="radio" id="${name}d" name="${name}" value="d">
+                <label for="${name}d">${q.alternativas.d}</label>
+            </div>
+        `;
+
+        exWrapper.appendChild(div);
     });
+}
+renderRandomExercises();
 
-    const totalQuestions = exSlides.length;
-    const percent = Math.round((score / totalQuestions) * 100);
+// ================== CARROSSEL DE EXERCÍCIOS (após render) ==================
+const exWrapper = document.querySelector('.exercise-wrapper');
+let exSlides = document.querySelectorAll('.exercise-slide');
+let exIndex = 0;
 
-    // Reset classes e botões
-    overlayCard.classList.remove('success', 'fail');
-    btnRefazer.style.display = 'none';
-    btnProximo.style.display = 'none';
+function updateExerciseCarousel() {
+    if (!exWrapper) return;
+    exWrapper.style.transform = `translateX(-${exIndex * 100}%)`;
 
-    scoreText.textContent = `Você acertou ${percent}% (${score} de ${totalQuestions})`;
+    const percent = ((exIndex + 1) / exSlides.length) * 100;
+    const fill = document.querySelector('.exercise-progress-fill');
+    if (fill) fill.style.width = percent + '%';
 
-    if (percent >= REQUISITO_APROVACAO) {
-        overlayCard.classList.add('success');
-        title.textContent = `✅ Parabéns! Módulo concluído com ${percent}%.`;
-        btnProximo.style.display = 'inline-block';
-        btnProximo.textContent = 'Ver Meu Progresso';
-        
-        // CHAMA A API PARA FINALIZAR O MÓDULO NO BACKEND
-        btnProximo.onclick = () => {
-            closeResultOverlay();
-            finalizarModuloAPI(moduleId, percent);
-        };
-        
+    const btnSubmit = document.getElementById('submit-exercises');
+    if (btnSubmit) btnSubmit.style.display = exIndex === exSlides.length - 1 ? 'block' : 'none';
+
+    updateExerciseArrows();
+}
+
+const nextExBtnEl = document.querySelector('.next-exercise');
+const prevExBtnEl = document.querySelector('.prev-exercise');
+
+if (nextExBtnEl) {
+    nextExBtnEl.addEventListener('click', () => {
+        if (exIndex < exSlides.length - 1) exIndex++;
+        updateExerciseCarousel();
+    });
+}
+if (prevExBtnEl) {
+    prevExBtnEl.addEventListener('click', () => {
+        if (exIndex > 0) exIndex--;
+        updateExerciseCarousel();
+    });
+}
+
+function updateExerciseArrows() {
+    const total = exSlides.length;
+    if (!prevExerciseBtn || !nextExerciseBtn) return;
+
+    if (exIndex === 0) {
+        prevExerciseBtn.style.opacity = "0.4";
+        prevExerciseBtn.style.pointerEvents = "none";
+        prevExerciseBtn.style.cursor = "not-allowed";
     } else {
-        overlayCard.classList.add('fail');
-        title.textContent = `❌ Nota insuficiente. Você precisa de ${REQUISITO_APROVACAO}%.`;
-        btnRefazer.style.display = 'inline-block';
-        btnRefazer.onclick = () => {
+        prevExerciseBtn.style.opacity = "1";
+        prevExerciseBtn.style.pointerEvents = "auto";
+        prevExerciseBtn.style.cursor = "pointer";
+    }
 
-    // 🔥 REGISTRA A TENTATIVA NO BACKEND
-    finalizarModuloAPI(moduleId, 0); // Envia nota 0 para contar tentativa
+    if (exIndex === total - 1) {
+        nextExerciseBtn.style.opacity = "0.4";
+        nextExerciseBtn.style.pointerEvents = "none";
+        nextExerciseBtn.style.cursor = "not-allowed";
+    } else {
+        nextExerciseBtn.style.opacity = "1";
+        nextExerciseBtn.style.pointerEvents = "auto";
+        nextExerciseBtn.style.cursor = "pointer";
+    }
+}
 
+const submitBtn = document.getElementById('submit-exercises');
+if (submitBtn) {
+    submitBtn.addEventListener('click', () => {
+        clearInterval(timerInterval);
+
+        exSlides = document.querySelectorAll('.exercise-slide');
+
+        let score = 0;
+        exSlides.forEach(slide => {
+            const selected = slide.querySelector('input[type="radio"]:checked');
+            if (selected && selected.value === slide.dataset.answer) score++;
+        });
+
+        const totalQuestions = exSlides.length;
+        const percent = Math.round((score / totalQuestions) * 100);
+
+        overlayCard.classList.remove('success', 'fail');
+        btnRefazer.style.display = 'none';
+        btnProximo.style.display = 'none';
+
+        scoreText.textContent = `Você acertou ${percent}% (${score} de ${totalQuestions})`;
+
+        if (percent >= REQUISITO_APROVACAO) {
+            overlayCard.classList.add('success');
+            title.textContent = `✅ Parabéns! Módulo concluído com ${percent}%.`;
+            btnProximo.style.display = 'inline-block';
+            btnProximo.textContent = 'Ver Meu Progresso';
+
+            btnProximo.onclick = () => {
+                marcarFinalizadoLocal();
+                closeResultOverlay();
+                finalizarModuloAPI(moduleId, percent);
+            };
+
+        } else {
+            overlayCard.classList.add('fail');
+            title.textContent = `❌ Nota insuficiente. Você precisa de ${REQUISITO_APROVACAO}%.`;
+            btnRefazer.style.display = 'inline-block';
+            
+         btnRefazer.onclick = () => {
+    // Fecha overlay
     closeResultOverlay();
+
+    // Reinicia o carrossel principal (slides de conteúdo)
     currentIndex = 0;
     updateCarousel();
-    exercisesSection.style.display = 'none';
-    moduleLocked = false;
-    nextBtn.style.opacity = '1';
-    prevBtn.style.opacity = '1';
-    nextBtn.style.cursor = 'pointer';
-    prevBtn.style.cursor = 'pointer';
 
+    // Habilita navegação dos slides principais
+    moduleLocked = false;
+    const nextBtn = document.querySelector('.next');
+    const prevBtn = document.querySelector('.prev');
+    if (nextBtn) { 
+        nextBtn.style.opacity = '1'; 
+        nextBtn.style.pointerEvents = 'auto'; 
+        nextBtn.style.cursor = 'pointer'; 
+    }
+    if (prevBtn) { 
+        prevBtn.style.opacity = '1'; 
+        prevBtn.style.pointerEvents = 'auto'; 
+        prevBtn.style.cursor = 'pointer'; 
+    }
+
+    // Reabilita miniaturas do carrossel principal
     document.querySelectorAll('.thumbnails img').forEach(img => {
         img.style.pointerEvents = 'auto';
         img.style.opacity = '1';
@@ -222,33 +555,33 @@ document.getElementById('submit-exercises').addEventListener('click', () => {
     });
 
     document.removeEventListener('keydown', lockArrows);
-    exIndex = 0;
-    updateExerciseCarousel();
-    clearInterval(timerInterval);
-    totalTime = 30 * 60;
-    document.getElementById('timer').textContent = 'Tempo restante: 30:00';
 
+    if (exercisesSection) exercisesSection.style.display = 'none';
+
+    exIndex = 0;
     document.querySelectorAll('input[type="radio"]:checked').forEach(radio => radio.checked = false);
     document.querySelectorAll('.options label').forEach(label => label.classList.remove('selected'));
 };
 
-    }
+        }
 
-    openResultOverlay();
-    overlayCard.classList.add('pop-in'); 
-});
-
+        openResultOverlay();
+        overlayCard.classList.add('pop-in');
+    });
+}
 
 // ================== CONTROLES DO CARROSSEL PRINCIPAL ==================
-document.querySelector('.next').addEventListener('click', () => {
+const nextMain = document.querySelector('.next');
+const prevMain = document.querySelector('.prev');
+
+if (nextMain) nextMain.addEventListener('click', () => {
     const slides = darkMode ? slidesDark : slidesNormal;
     if (!moduleLocked || isFullScreen) {
         if (currentIndex < slides.length - 1) currentIndex++;
         updateCarousel();
     }
 });
-
-document.querySelector('.prev').addEventListener('click', () => {
+if (prevMain) prevMain.addEventListener('click', () => {
     const slides = darkMode ? slidesDark : slidesNormal;
     if (!moduleLocked || isFullScreen) {
         if (currentIndex > 0) currentIndex--;
@@ -264,13 +597,13 @@ const prevBtn = document.querySelector('.prev');
 
 btnFinalizar.forEach(btn => {
     btn.addEventListener('click', () => {
-        exercisesSection.style.display = 'block';
+        marcarAndamentoLocal();
+
+        if (exercisesSection) exercisesSection.style.display = 'block';
         moduleLocked = true;
 
-        nextBtn.style.opacity = '0.4';
-        prevBtn.style.opacity = '0.4';
-        nextBtn.style.cursor = 'not-allowed';
-        prevBtn.style.cursor = 'not-allowed';
+        if (nextBtn) { nextBtn.style.opacity = '0.4'; nextBtn.style.cursor = 'not-allowed'; }
+        if (prevBtn) { prevBtn.style.opacity = '0.4'; prevBtn.style.cursor = 'not-allowed'; }
 
         document.querySelectorAll('.thumbnails img').forEach(img => {
             img.style.pointerEvents = 'none';
@@ -280,7 +613,7 @@ btnFinalizar.forEach(btn => {
 
         document.addEventListener('keydown', lockArrows);
 
-        window.scrollTo({ top: exercisesSection.offsetTop - 20, behavior: 'smooth' });
+        if (exercisesSection) window.scrollTo({ top: exercisesSection.offsetTop - 20, behavior: 'smooth' });
         startTimer();
         localStorage.removeItem('currentModuleSlide');
     });
@@ -293,64 +626,6 @@ function lockArrows(e) {
     }
 }
 
-// ================== CARROSSEL DE EXERCÍCIOS ==================
-const exWrapper = document.querySelector('.exercise-wrapper');
-const exSlides = document.querySelectorAll('.exercise-slide');
-let exIndex = 0;
-
-function updateExerciseCarousel() {
-    exWrapper.style.transform = `translateX(-${exIndex * 100}%)`;
-
-    const percent = ((exIndex + 1) / exSlides.length) * 100;
-    document.querySelector('.exercise-progress-fill').style.width = percent + '%';
-
-    const btnSubmit = document.getElementById('submit-exercises');
-    btnSubmit.style.display = exIndex === exSlides.length - 1 ? 'block' : 'none';
-
-    // 🔥 Atualiza as setas sempre que muda o exercício
-    updateExerciseArrows();
-}
-
-
-document.querySelector('.next-exercise').addEventListener('click', () => {
-    if (exIndex < exSlides.length - 1) exIndex++;
-    updateExerciseCarousel();
-});
-
-document.querySelector('.prev-exercise').addEventListener('click', () => {
-    if (exIndex > 0) exIndex--;
-    updateExerciseCarousel();
-});
-
-
-function updateExerciseArrows() {
-    const total = exSlides.length;
-
-    // Seta ESQUERDA (voltar exercício)
-    if (exIndex === 0) {
-        prevExerciseBtn.style.opacity = "0.4";
-        prevExerciseBtn.style.pointerEvents = "none";
-        prevExerciseBtn.style.cursor = "not-allowed";
-    } else {
-        prevExerciseBtn.style.opacity = "1";
-        prevExerciseBtn.style.pointerEvents = "auto";
-        prevExerciseBtn.style.cursor = "pointer";
-    }
-
-    // Seta DIREITA (avançar exercício)
-    if (exIndex === total - 1) {
-        nextExerciseBtn.style.opacity = "0.4";
-        nextExerciseBtn.style.pointerEvents = "none";
-        nextExerciseBtn.style.cursor = "not-allowed";
-    } else {
-        nextExerciseBtn.style.opacity = "1";
-        nextExerciseBtn.style.pointerEvents = "auto";
-        nextExerciseBtn.style.cursor = "pointer";
-    }
-}
-
-
-
 // ================== TIMER ==================
 let timerInterval;
 let totalTime = 30 * 60;
@@ -362,7 +637,7 @@ function startTimer() {
     timerInterval = setInterval(() => {
         let minutes = Math.floor(totalTime / 60);
         let seconds = totalTime % 60;
-        timerDisplay.textContent = `Tempo restante: ${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+        if (timerDisplay) timerDisplay.textContent = `Tempo restante: ${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
         totalTime--;
 
         if (totalTime < 0) {
@@ -374,20 +649,25 @@ function startTimer() {
 }
 
 // ================== DOWNLOAD ==================
-document.getElementById('download-btn').addEventListener('click', () => {
-    const link = document.createElement('a');
-    link.href = '/src/static/pdf/modulo05.pdf';
-    link.download = 'Modulo05_Conteudo.pdf';
-    link.click();
-});
+const downloadBtn = document.getElementById('download-btn');
+if (downloadBtn) {
+    downloadBtn.addEventListener('click', () => {
+        const link = document.createElement('a');
+        link.href = `/src/static/pdf/modulo${String(moduleId).padStart(2,'0')}.pdf`;
+        link.download = `Modulo${String(moduleId).padStart(2,'0')}_Conteudo.pdf`;
+        link.click();
+    });
+}
 
 // ================== MINIATURAS ==================
 const thumbnailsContainer = document.querySelector('.thumbnails');
 function createThumbnails(slides) {
+    if (!thumbnailsContainer) return;
     thumbnailsContainer.innerHTML = '';
     slides.forEach((slide, idx) => {
         const thumb = document.createElement('img');
-        thumb.src = slide.querySelector('img').src;
+        const imgEl = slide.querySelector('img');
+        thumb.src = imgEl ? imgEl.src : '';
         if (idx === 0) thumb.classList.add('active');
 
         thumb.addEventListener('click', () => {
@@ -411,13 +691,13 @@ function updateThumbnails() {
     thumbs.forEach((t, i) => t.classList.toggle('active', i === currentIndex));
 }
 
-createThumbnails(slidesNormal);
+createThumbnails(Array.from(slidesNormal));
 
-// ================== PROGRESSO ==================
+// ================== PROGRESSO (main slides) ==================
 const progressText = document.getElementById('progress-text');
 function updateProgressText() {
     const slides = darkMode ? slidesDark : slidesNormal;
-    progressText.textContent = `Slide ${currentIndex + 1} de ${slides.length}`;
+    if (progressText) progressText.textContent = `Slide ${currentIndex + 1} de ${slides.length}`;
 }
 
 const progressBarContainer = document.createElement('div');
@@ -425,12 +705,16 @@ progressBarContainer.classList.add('progress-bar');
 const progressBarFill = document.createElement('div');
 progressBarFill.classList.add('progress-bar-fill');
 progressBarContainer.appendChild(progressBarFill);
-document.querySelector('.modules').insertBefore(progressBarContainer, document.querySelector('.modules-carousel'));
+const modulesEl = document.querySelector('.modules');
+const modulesCarouselEl = document.querySelector('.modules-carousel');
+if (modulesEl && modulesCarouselEl) {
+    modulesEl.insertBefore(progressBarContainer, modulesCarouselEl);
+}
 
 function updateProgressBar() {
     const slides = darkMode ? slidesDark : slidesNormal;
     const percent = ((currentIndex + 1) / slides.length) * 100;
-    progressBarFill.style.width = `${percent}%`;
+    if (progressBarFill) progressBarFill.style.width = `${percent}%`;
 }
 updateProgressBar();
 
@@ -447,27 +731,102 @@ function toggleDarkMode() {
 
     if (currentIndex >= currentSlides.length) currentIndex = currentSlides.length - 1;
 
-    createThumbnails(currentSlides);
+    createThumbnails(Array.from(currentSlides));
     updateCarousel();
 }
 
 const darkModeBtn = document.getElementById('dark-mode-btn');
-darkModeBtn.addEventListener('click', toggleDarkMode);
+if (darkModeBtn) {
+    darkModeBtn.addEventListener('click', toggleDarkMode);
+}
 document.addEventListener('keydown', e => {
     if (e.key.toLowerCase() === 'm') toggleDarkMode();
 });
 
 // ================== TECLAS DE ATALHO ==================
 document.addEventListener('keydown', e => {
-    if (e.key === 'ArrowRight') document.querySelector('.next').click();
-    if (e.key === 'ArrowLeft') document.querySelector('.prev').click();
-    if (e.key.toLowerCase() === 'f') document.getElementById('fullscreen-btn').click();
-    if (e.key.toLowerCase() === 'd') document.getElementById('download-btn').click();
+    if (e.key === 'ArrowRight') {
+        const nextEl = document.querySelector('.next');
+        if (nextEl) nextEl.click();
+    }
+    if (e.key === 'ArrowLeft') {
+        const prevEl = document.querySelector('.prev');
+        if (prevEl) prevEl.click();
+    }
+    if (e.key.toLowerCase() === 'f') {
+        const fsBtn = document.getElementById('fullscreen-btn');
+        if (fsBtn) fsBtn.click();
+    }
+    if (e.key.toLowerCase() === 'd') {
+        const dlBtn = document.getElementById('download-btn');
+        if (dlBtn) dlBtn.click();
+    }
 });
 
 // ================== CARREGA PROGRESSO AO ABRIR ==================
 window.addEventListener('DOMContentLoaded', () => {
     currentIndex = loadModuleProgress(moduleId);
     updateCarousel();
-    updateExerciseCarousel(); 
+    // re-query slides in case render changed
+    exSlides = document.querySelectorAll('.exercise-slide');
+    updateExerciseCarousel();
 });
+
+// ================== ANTI-COLA: DETECTA SAÍDA E VOLTA ==================
+// 1) visibilitychange
+document.addEventListener("visibilitychange", () => {
+    const andamento = localStorage.getItem(EX_KEY_ANDAMENTO);
+    const finalizado = localStorage.getItem(EX_KEY_FINALIZADO);
+
+    if (document.hidden && andamento === "true" && finalizado !== "true") {
+        marcarResetLocal();
+    }
+});
+
+// 2) blur
+window.addEventListener("blur", () => {
+    const andamento = localStorage.getItem(EX_KEY_ANDAMENTO);
+    const finalizado = localStorage.getItem(EX_KEY_FINALIZADO);
+
+    if (andamento === "true" && finalizado !== "true") {
+        marcarResetLocal();
+    }
+});
+
+// 3) beforeunload
+window.addEventListener("beforeunload", (e) => {
+    const andamento = localStorage.getItem(EX_KEY_ANDAMENTO);
+    const finalizado = localStorage.getItem(EX_KEY_FINALIZADO);
+
+    if (andamento === "true" && finalizado !== "true") {
+        localStorage.setItem(EX_KEY_RESET, "true");
+    }
+});
+
+window.addEventListener("focus", () => {
+    const precisaResetar = localStorage.getItem(EX_KEY_RESET);
+
+    if (precisaResetar === "true") {
+        localStorage.removeItem(EX_KEY_RESET);
+        localStorage.removeItem(EX_KEY_ANDAMENTO);
+
+        exIndex = 0;
+        exSlides = document.querySelectorAll('.exercise-slide');
+        updateExerciseCarousel();
+
+        document.querySelectorAll('input[type="radio"]:checked')
+            .forEach(radio => (radio.checked = false));
+
+        document.querySelectorAll('.options label')
+            .forEach(label => label.classList.remove('selected'));
+
+        try {
+            alert("Você saiu da tela durante o exercício, refaça novamente!");
+        } catch (err) {
+            console.log("Voltou e reiniciou módulo (alert falhou).");
+        }
+
+        location.reload();
+    }
+});
+
