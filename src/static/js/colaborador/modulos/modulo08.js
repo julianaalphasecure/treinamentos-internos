@@ -207,170 +207,170 @@ function marcarResetLocal() {
 const allQuestions = [
     // 1
     {
-        enunciado: "Durante uma inspeção noturna, um alarme dispara, mas a câmera principal está sem visibilidade e as câmeras secundárias também não mostram nada. Qual é a conduta correta do operador?",
+        enunciado: "Sobre a ativação automática do Hall de Atendimento, qual afirmação está correta?",
         alternativas: {
-            a: "Silenciar o alarme e registrar como falso disparo no final do turno",
-            b: "Registrar como 'sem visibilidade', solicitar imagens de outras câmeras e, se nada for identificado, encerrar com justificativa",
-            c: "Acionar imediatamente a Polícia Militar por precaução",
-            d: "Ignorar o alarme, pois nenhuma evidência foi capturada"
+            a: "O desarme ocorre sempre às 07h30, conforme GESEC",
+            b: "O arme automático ocorre às 21h00 e o desarme às 06h30",
+            c: "O arme é às 22h15 e o desarme às 06h00, conforme parâmetros GESEC",
+            d: "O arme depende do gerente e nunca é automático"
         },
-        correta: "b"
+        correta: "c"
     },
     // 2
     {
-        enunciado: "Se um sinistro é confirmado, mas o operador não consegue contato imediato com o supervisor plantonista, qual é a ação correta?",
+        enunciado: "A tesouraria só pode ser desarmada fora horário automático sob qual condição?",
         alternativas: {
-            a: "Registrar o evento e aguardar o supervisor retornar",
-            b: "Acionar o CCO do cliente com todos os detalhes, enquanto tenta contato com o supervisor",
-            c: "Ignorar o acionamento da Polícia Militar até falar com o supervisor",
-            d: "Silenciar o alarme temporariamente e relatar posteriormente"
+            a: "Solicitação via e-mail GESEC com 24h",
+            b: "Presença da polícia e do gerente, apenas em caso de sinistro",
+            c: "Liberação do CFTV sem anomalias",
+            d: "Autorização do vigilante e do operador da central"
         },
         correta: "b"
     },
     // 3
     {
-        enunciado: "Durante uma queda de energia total, o operador identifica que apenas uma subestação local está funcionando. O procedimento correto é:",
+        enunciado: "Ativação automática da agência e retaguarda ocorre às 21h00. O gerente pode ativar manualmente antes desse horário quando:",
         alternativas: {
-            a: "Priorizar a restauração dessa subestação antes de verificar outras áreas críticas",
-            b: "Confirmar com o CCO, realizar verificação remota e comunicar concessionárias se necessário",
-            c: "Acionar apenas a equipe de campo, ignorando o CCO",
-            d: "Registrar e aguardar a energia voltar automaticamente"
+            a: "A internet estiver estável",
+            b: "A tesouraria estiver desarmada",
+            c: "Estiver encerrando expediente antecipado",
+            d: "O CSIB solicitar"
         },
-        correta: "b"
+        correta: "a"
     },
     // 4
     {
-        enunciado: "Um falso disparo de alarme externo é registrado, mas logo em seguida outro disparo ocorre no mesmo local. Qual é a conduta correta do operador?",
+        enunciado: "Sobre entrada/saída de PCD, qual é a sequência correta?",
         alternativas: {
-            a: "Ignorar o segundo disparo, pois o primeiro já foi registrado como falso",
-            b: "Silenciar os alarmes dessa zona temporariamente",
-            c: "Apenas informar o supervisor sem registrar o evento",
-            d: "Tratar o segundo disparo como evento, realizando verificação completa e registro"
-        },
-        correta: "d"
-    },
-    // 5
-    {
-        enunciado: "O operador precisa acionar a equipe de pronta resposta, mas a situação ainda não apresenta risco à integridade física. Qual é a decisão correta?",
-        alternativas: {
-            a: "Acionar a equipe imediatamente",
-            b: "Ignorar a falha",
-            c: "Avaliar se o evento atende os critérios predefinidos antes de acionar",
-            d: "Registrar no checklist interno sem comunicação externa"
+            a: "Gerente libera > vigilante aciona detector > libera porta",
+            b: "PCD entra pela porta principal > gerente libera biometria",
+            c: "Entrada pela porta especial > vigilante aciona colaborador com detector > gerente libera via Smart Acess",
+            d: "PCD utiliza tag especial > vigilante observa via CFTV"
         },
         correta: "c"
     },
+    // 5
+    {
+        enunciado: "Durante o fechamento da agência, qual é o procedimento obrigatório?",
+        alternativas: {
+            a: "Fechar portões e acionar retaguarda automaticamente",
+            b: "Repetir o procedimento de abertura da porta e ativar ambientes via Smart Alarm",
+            c: "Desligar sistemas e informar o GESEC",
+            d: "Encerrar manualmente no aplicativo Smart Acess"
+        },
+        correta: "d"
+    },
     // 6
     {
-        enunciado: "Em qual situação o operador pode acionar diretamente a gestão central sem passar pela equipe de campo?",
+        enunciado: "No caso de queda de energia fora do expediente, o operador deve:",
         alternativas: {
-            a: "Nenhuma, sempre há sequência fixa",
-            b: "Quando há risco iminente à segurança ou falha grave evidente",
-            c: "Sempre que quiser acelerar o processo",
-            d: "Quando não conhece o técnico de plantão"
+            a: "Acionar imediatamente a polícia",
+            b: "Acionar o gerente da agência",
+            c: "Aguardar 10 minutos e seguir matriz de acionamento",
+            d: "Encerrar pela falta de risco operacional"
         },
         correta: "b"
     },
     // 7
     {
-        enunciado: "Qual informação NÃO é obrigatória ao comunicar um evento à gestão central?",
+        enunciado: "O gerente só pode entrar fora do expediente mediante:",
         alternativas: {
-            a: "Tipo de ocorrência",
-            b: "Local exato do evento",
-            c: "Status da ocorrência",
-            d: "Horário do seu almoço"
-        },
-        correta: "d"
-    },
-    // 8
-    {
-        enunciado: "A equipe de pronta resposta deve ser acionada quando:",
-        alternativas: {
-            a: "Há falhas severas ou risco à segurança",
-            b: "Há atraso na chegada do técnico local",
-            c: "Há necessidade de manutenção de rotina",
-            d: "O operador não souber o que fazer"
+            a: "Comunicação ao vigilante local",
+            b: "Solicitação ao CSIB com 12h",
+            c: "Autorização do GESEC com 24h de antecedência",
+            d: "Análise prévia via CFTV"
         },
         correta: "a"
     },
+    // 8
+    {
+        enunciado: "Senha de coação implica obrigatoriamente em:",
+        alternativas: {
+            a: "Contato exclusivo com GESEC",
+            b: "Acionamento da polícia, superintendente, coordernador e gerente GESEC",
+            c: "Acionamento apenas da PM e superintendente",
+            d: "Encerramento automático após verificação via CFTV"
+        },
+        correta: "c"
+    },
     // 9
     {
-        enunciado: "Qual o tempo máximo recomendado para chegada da equipe de pronta resposta após o acionamento?",
+        enunciado: "Quando o gerente está acompanhado por terceiros na entrada:",
         alternativas: {
-            a: "10 minutos",
-            b: "30 minutos",
-            c: "15 minutos",
-            d: "60 minutos"
+            a: "O acesso é liberado mediante identificação completa",
+            b: "O acesso é parcial até a clausura",
+            c: "O acesso não deve ser liberado e a cadeia GESEC/GERED deve ser avisada",
+            d: "Liberar somente com senha de coação"
         },
-        correta: "b"
+        correta: "d"
     },
     // 10
     {
-        enunciado: "Todas as ocorrências e acionamentos devem ser:",
+        enunciado: "Em caso de serviços de terceiros fora do expediente:",
         alternativas: {
-            a: "Comunicado verbalmente apenas",
-            b: "Registrados no sistema e documentados",
-            c: "Apagados após resolução",
-            d: "Tratados como informação sigilosa, sem registro"
+            a: "A solicitação deve ser feita com antecedência mínima de 24h ao GESEC",
+            b: "O operador pode liberar desde que verifique o CFTV",
+            c: "O vigilante local autoriza e encaminha",
+            d: "Basta registrar no cherwell"
         },
-        correta: "b"
+        correta: "a"
     },
 
     //11
     {
-        enunciado: "Qual é a função principal do operador de monitoramento de uma usina?",
+        enunciado: "Na falha total de energia sem alarme e sem CFTV, o procedimento correto é:",
         alternativas: {
-            a: "Identificar problemas e garantir segurança e eficiência",
-            b: "Realizar manutenção elétrica",
-            c: "Gerenciar a equipe administrativa",
-            d: "Supervisionar contratos de fornecedores"
+            a: "Aguardar no local até o gerente chegar",
+            b: "Buscar local seguro até chegada do vigilante",
+            c: "Acionar GESEC e aguardar",
+            d: "Encerrar a ocorrência se a rede celular estiver ativa"
         },
-        correta: "a"
+        correta: "c"
     },
 
     //12
     {
-        enunciado: "O que é um sinistro na usina?",
+        enunciado: "Em caso de polícia indisponível durante um evento crítico:",
         alternativas: {
-            a: "Evento que pode causar risco ou dano à usina",
-            b: "Falha administrativa",
-            c: "Reunião de equipe",
-            d: "Atualização do sistema"
+            a: "O gerente deve ir até a agência",
+            b: "A equipe deve aguardar o PM liberar deslocamento",
+            c: "O gerente não deve ser deslocado, acompanhar via CFTV + relatório",
+            d: "Liberar a agência manualmente"
         },
-        correta: "a"
+        correta: "b"
     },
 
     //13
     {
-        enunciado: "Qual dos seguintes NÃO é um tipo de sinistro?",
+        enunciado: "Em caso de moradores de rua no hall, o operador deve:",
         alternativas: {
-            a: "Incêndio",
-            b: "Invasão",
-            c: "Acidente com colaborador",
-            d: "Reunião de equipe"
+            a: "Solicitar apoio do gerente",
+            b: "Acionar PM imediatamente",
+            c: "Ativar sirene > abrir haçç > usar GN curto > acionar polícia se persistir",
+            d: "Acionar a retaguarda para remoção"
         },
         correta: "d"
     },
 
     //14
     {
-        enunciado: "O que é um alarme externo?",
+        enunciado: "Sobre disparos acidentais, qual é o procedimento correto?",
         alternativas: {
-            a: "Disparo de sensores externos",
-            b: "Erro no software de monitoramento",
-            c: "Falha na energia",
-            d: "Problema no servidor"
+            a: "Encerrar sem registro",
+            b: "Apenas registrar no SIGMA",
+            c: "Abrir OS imediata para GN e para sensores encaminhar manutenção",
+            d: "Aguardar confirmação do gerente"
         },
-        correta: "a"
+        correta: "c"
     },
 
     //15
     {
-        enunciado: "O que caracteriza um falso disparo de alarme?",
+        enunciado: "Entrada no cofre fora do horário:",
         alternativas: {
-            a: "Disparo de sensores externos",
-            b: "Quando não há alterações visíveis no local",
-            c: "Acidente com colaborador",
+            a: "Permitida com senha especial do gerente",
+            b: "Pode ser autorizada pelo operador caso o CFTV esteja limpo",
+            c: "Permitida somente com vistoria policial e comunicação completa ao GESEC",
             d: "Vandalismo"
         },
         correta: "b"

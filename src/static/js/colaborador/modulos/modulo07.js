@@ -207,173 +207,173 @@ function marcarResetLocal() {
 const allQuestions = [
     // 1
     {
-        enunciado: "Durante uma inspeção noturna, um alarme dispara, mas a câmera principal está sem visibilidade e as câmeras secundárias também não mostram nada. Qual é a conduta correta do operador?",
+        enunciado: "Sobre o fluxo de atendimento, qual é a ordem correta de tentativas de contato com o morador?",
         alternativas: {
-            a: "Silenciar o alarme e registrar como falso disparo no final do turno",
-            b: "Registrar como 'sem visibilidade', solicitar imagens de outras câmeras e, se nada for identificado, encerrar com justificativa",
-            c: "Acionar imediatamente a Polícia Militar por precaução",
-            d: "Ignorar o alarme, pois nenhuma evidência foi capturada"
+            a: "WhatsApp > Telefone > Interfone",
+            b: "Telefone > WhatsApp > Interfone",
+            c: "Interfone > Telefone > WhatsApp",
+            d: "Interfone > WhatsApp > Telefone"
         },
-        correta: "b"
+        correta: "c"
     },
     // 2
     {
-        enunciado: "Se um sinistro é confirmado, mas o operador não consegue contato imediato com o supervisor plantonista, qual é a ação correta?",
+        enunciado: "Em condomínio residencial, quando a entrada é solicitada via interfone, qual é o procedimento obrigatório?",
         alternativas: {
-            a: "Registrar o evento e aguardar o supervisor retornar",
-            b: "Acionar o CCO do cliente com todos os detalhes, enquanto tenta contato com o supervisor",
-            c: "Ignorar o acionamento da Polícia Militar até falar com o supervisor",
-            d: "Silenciar o alarme temporariamente e relatar posteriormente"
+            a: "Confirmar nome completo + número do apartamento para validação no sistema",
+            b: "Solicitar apenas o primeiro nome e liberar",
+            c: "Perguntar somente o número do apartamento",
+            d: "Solicitar documento antes de qualquer contato"
         },
-        correta: "b"
+        correta: "a"
     },
     // 3
     {
-        enunciado: "Durante uma queda de energia total, o operador identifica que apenas uma subestação local está funcionando. O procedimento correto é:",
+        enunciado: "Em situação de sáida de moradores, a liberação deve ser imediata, exceto em qual caso?",
         alternativas: {
-            a: "Priorizar a restauração dessa subestação antes de verificar outras áreas críticas",
-            b: "Confirmar com o CCO, realizar verificação remota e comunicar concessionárias se necessário",
-            c: "Acionar apenas a equipe de campo, ignorando o CCO",
-            d: "Registrar e aguardar a energia voltar automaticamente"
+            a: "Prestadores de serviço acompanhando moradores",
+            b: "Crianças desacompanhadas",
+            c: "Visitantes cadastrados previamente",
+            d: "Funcionários domésticos durante horário permitido"
         },
         correta: "b"
     },
     // 4
     {
-        enunciado: "Um falso disparo de alarme externo é registrado, mas logo em seguida outro disparo ocorre no mesmo local. Qual é a conduta correta do operador?",
+        enunciado: "Em qual cenário funcionários domésticos devem ter liberação parcial até a clausura antes do aviso ao morador?",
         alternativas: {
-            a: "Ignorar o segundo disparo, pois o primeiro já foi registrado como falso",
-            b: "Silenciar os alarmes dessa zona temporariamente",
-            c: "Apenas informar o supervisor sem registrar o evento",
-            d: "Tratar o segundo disparo como evento, realizando verificação completa e registro"
-        },
-        correta: "d"
-    },
-    // 5
-    {
-        enunciado: "O operador precisa acionar a equipe de pronta resposta, mas a situação ainda não apresenta risco à integridade física. Qual é a decisão correta?",
-        alternativas: {
-            a: "Acionar a equipe imediatamente",
-            b: "Ignorar a falha",
-            c: "Avaliar se o evento atende os critérios predefinidos antes de acionar",
-            d: "Registrar no checklist interno sem comunicação externa"
+            a: "Liberação direta",
+            b: "Liberação em dias/horários específicos",
+            c: "Liberação com aviso",
+            d: "Sem liberação"
         },
         correta: "c"
     },
-    // 6
+    // 5
     {
-        enunciado: "Em qual situação o operador pode acionar diretamente a gestão central sem passar pela equipe de campo?",
+        enunciado: "Sobre entregadores, qual afirmação está correta de acordo com o POP?",
         alternativas: {
-            a: "Nenhuma, sempre há sequência fixa",
-            b: "Quando há risco iminente à segurança ou falha grave evidente",
-            c: "Sempre que quiser acelerar o processo",
-            d: "Quando não conhece o técnico de plantão"
-        },
-        correta: "b"
-    },
-    // 7
-    {
-        enunciado: "Qual informação NÃO é obrigatória ao comunicar um evento à gestão central?",
-        alternativas: {
-            a: "Tipo de ocorrência",
-            b: "Local exato do evento",
-            c: "Status da ocorrência",
-            d: "Horário do seu almoço"
+            a: "Todos os entregadores podem subir sem autorização se apresentarem documento",
+            b: "Entregadores de grande porte devem seguir pela garagem com liberaçao do síndico",
+            c: "Pequeno porte deve ser direcionado ao passa-volumes sempre, sem contato com morador",
+            d: "Entregadores de grande porte só entram se o morador liberar e acompanhar"
         },
         correta: "d"
     },
+    // 6
+    {
+        enunciado: "Para prestadores de serviço do condomínio, qual é o procedimento correto?",
+        alternativas: {
+            a: "Liberação imediata com registro de documento",
+            b: "Liberação apenas com autorização do morador",
+            c: "Consulta ao síndico/zelador e acompanhamento do serviço até o fim",
+            d: "Autorização obrigatória pelo sistema Situator"
+        },
+        correta: "c"
+    },
+    // 7
+    {
+        enunciado: "Em condomínio comercial, qual falha exige abertura de OS. SOmente se o equipamento tiver sido adquirido com a Alpha e estiver na garantia?",
+        alternativas: {
+            a: "Queda de energia",
+            b: "Falha na biometria",
+            c: "Queda de internet",
+            d: "Interfone sem sinal"
+        },
+        correta: "b"
+    },
     // 8
     {
-        enunciado: "A equipe de pronta resposta deve ser acionada quando:",
+        enunciado: "No atendimento a visitantes em condomínio comercial, quando o visitante é barrado?",
         alternativas: {
-            a: "Há falhas severas ou risco à segurança",
-            b: "Há atraso na chegada do técnico local",
-            c: "Há necessidade de manutenção de rotina",
-            d: "O operador não souber o que fazer"
+            a: "Sempre que não estiver pré-cadastrado",
+            b: "Quando o responsável não atender após 3 tentativas",
+            c: "Após tentativas frustada de contato + ausência de autorização",
+            d: "Quando não apresnetar documento oficial"
         },
-        correta: "a"
+        correta: "c"
     },
     // 9
     {
-        enunciado: "Qual o tempo máximo recomendado para chegada da equipe de pronta resposta após o acionamento?",
+        enunciado: "Qual sistema deve ser consultadp na aba 'anotações' para regras internas de cada condomínio?",
         alternativas: {
-            a: "10 minutos",
-            b: "30 minutos",
-            c: "15 minutos",
-            d: "60 minutos"
+            a: "Situator",
+            b: "Unis",
+            c: "My Village",
+            d: "Sigma"
         },
-        correta: "b"
+        correta: "c"
     },
     // 10
     {
-        enunciado: "Todas as ocorrências e acionamentos devem ser:",
+        enunciado: "Em contingência, quando há queda total do sistema, qual é o procedimento após acionar TI?",
         alternativas: {
-            a: "Comunicado verbalmente apenas",
-            b: "Registrados no sistema e documentados",
-            c: "Apagados após resolução",
-            d: "Tratados como informação sigilosa, sem registro"
+            a: "Acionar polícia e notificar moradores",
+            b: "Acionar síndico e solicitar porteiro físico imediatamente",
+            c: "Se necessário, deslocamento físico até a central",
+            d: "Encerrar ocorrências até normalização"
         },
-        correta: "b"
+        correta: "c"
     },
 
     //11
     {
-        enunciado: "Qual é a função principal do operador de monitoramento de uma usina?",
+        enunciado: "Em caso de disparo de coação com presença de terceiros ou suspeito, qual deve ser a ação?",
         alternativas: {
-            a: "Identificar problemas e garantir segurança e eficiência",
-            b: "Realizar manutenção elétrica",
-            c: "Gerenciar a equipe administrativa",
-            d: "Supervisionar contratos de fornecedores"
+            a: "Contatar o morador imediatamente",
+            b: "Tentar confirmação via WhatsApp",
+            c: "Não fazer contato: acionar pronta resposta + polícia",
+            d: "Apenas verificar no CFTV e aguardar nova imagem"
         },
-        correta: "a"
+        correta: "c"
     },
 
     //12
     {
-        enunciado: "O que é um sinistro na usina?",
+        enunciado: "Sobre reclamações de barulho, qual situação exige acionar a polícia + síndico?",
         alternativas: {
-            a: "Evento que pode causar risco ou dano à usina",
-            b: "Falha administrativa",
-            c: "Reunião de equipe",
-            d: "Atualização do sistema"
+            a: "Barulho alto",
+            b: "Festa fora do horário permitido",
+            c: "Barulho suspeito interpretador como pedido de socorro",
+            d: "Reclamação anônima de condômino"
         },
-        correta: "a"
+        correta: "c"
     },
 
     //13
     {
-        enunciado: "Qual dos seguintes NÃO é um tipo de sinistro?",
+        enunciado: "No disparo de alarme se sensor, quando o evento deve ser encerrado sem acionar forças externas?",
         alternativas: {
-            a: "Incêndio",
-            b: "Invasão",
-            c: "Acidente com colaborador",
-            d: "Reunião de equipe"
+            a: "Quando há pessoas no local, mas sem autorização",
+            b: "Sempre que não houver anomalias no CFTV",
+            c: "Quando o sensor dispara suas vezes seguidas",
+            d: "Quando o síndico não atender"
         },
-        correta: "d"
+        correta: "b"
     },
 
     //14
     {
-        enunciado: "O que é um alarme externo?",
+        enunciado: "Sobre falha de comunicação via GPRS, qual condição permite o encerramento do evento?",
         alternativas: {
-            a: "Disparo de sensores externos",
-            b: "Erro no software de monitoramento",
-            c: "Falha na energia",
-            d: "Problema no servidor"
+            a: "Quando o sensor está em manutenção",
+            b: "Quando a última comunicação foi posterior ao horário do evento",
+            c: "Quando existe queda de energia relatada pelo morador",
+            d: "Sempre que o sistema reiniciar sozinho"
         },
-        correta: "a"
+        correta: "b"
     },
 
     //15
     {
-        enunciado: "O que caracteriza um falso disparo de alarme?",
+        enunciado: "Qual ação é exigida ao operador quando a porta corte-fogo aparece aberta no CFTV sem evidência de incêndio?",
         alternativas: {
-            a: "Disparo de sensores externos",
-            b: "Quando não há alterações visíveis no local",
-            c: "Acidente com colaborador",
-            d: "Vandalismo"
+            a: "Acionar bombeiros imediatamente",
+            b: "Registrar ocorrência no SIGMA e liberar",
+            c: "Acionar o zelador e solicitar fechamento da porta",
+            d: "Acionar a PM para vistoria"
         },
-        correta: "b"
+        correta: "c"
     }
 ];
 

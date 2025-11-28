@@ -207,173 +207,173 @@ function marcarResetLocal() {
 const allQuestions = [
     // 1
     {
-        enunciado: "Durante uma inspeção noturna, um alarme dispara, mas a câmera principal está sem visibilidade e as câmeras secundárias também não mostram nada. Qual é a conduta correta do operador?",
+        enunciado: "Sobre o papel do operador de monitoramento, qual opção representa uma falha crítica?",
         alternativas: {
-            a: "Silenciar o alarme e registrar como falso disparo no final do turno",
-            b: "Registrar como 'sem visibilidade', solicitar imagens de outras câmeras e, se nada for identificado, encerrar com justificativa",
-            c: "Acionar imediatamente a Polícia Militar por precaução",
-            d: "Ignorar o alarme, pois nenhuma evidência foi capturada"
-        },
-        correta: "b"
-    },
-    // 2
-    {
-        enunciado: "Se um sinistro é confirmado, mas o operador não consegue contato imediato com o supervisor plantonista, qual é a ação correta?",
-        alternativas: {
-            a: "Registrar o evento e aguardar o supervisor retornar",
-            b: "Acionar o CCO do cliente com todos os detalhes, enquanto tenta contato com o supervisor",
-            c: "Ignorar o acionamento da Polícia Militar até falar com o supervisor",
-            d: "Silenciar o alarme temporariamente e relatar posteriormente"
-        },
-        correta: "b"
-    },
-    // 3
-    {
-        enunciado: "Durante uma queda de energia total, o operador identifica que apenas uma subestação local está funcionando. O procedimento correto é:",
-        alternativas: {
-            a: "Priorizar a restauração dessa subestação antes de verificar outras áreas críticas",
-            b: "Confirmar com o CCO, realizar verificação remota e comunicar concessionárias se necessário",
-            c: "Acionar apenas a equipe de campo, ignorando o CCO",
-            d: "Registrar e aguardar a energia voltar automaticamente"
-        },
-        correta: "b"
-    },
-    // 4
-    {
-        enunciado: "Um falso disparo de alarme externo é registrado, mas logo em seguida outro disparo ocorre no mesmo local. Qual é a conduta correta do operador?",
-        alternativas: {
-            a: "Ignorar o segundo disparo, pois o primeiro já foi registrado como falso",
-            b: "Silenciar os alarmes dessa zona temporariamente",
-            c: "Apenas informar o supervisor sem registrar o evento",
-            d: "Tratar o segundo disparo como evento, realizando verificação completa e registro"
-        },
-        correta: "d"
-    },
-    // 5
-    {
-        enunciado: "O operador precisa acionar a equipe de pronta resposta, mas a situação ainda não apresenta risco à integridade física. Qual é a decisão correta?",
-        alternativas: {
-            a: "Acionar a equipe imediatamente",
-            b: "Ignorar a falha",
-            c: "Avaliar se o evento atende os critérios predefinidos antes de acionar",
-            d: "Registrar no checklist interno sem comunicação externa"
+            a: "Identificar um sinistro, acionar imediatamente a polícia e registrar a ocorrência",
+            b: "Verificar um alarme sem visibilidade e solicitar imagens adicionais",
+            c: "Detectar uma ocorrência anormal e aguardar nova atualização antes de comunicar",
+            d: "Registrar um falso disparo após validar imagens"
         },
         correta: "c"
     },
-    // 6
+    // 2
     {
-        enunciado: "Em qual situação o operador pode acionar diretamente a gestão central sem passar pela equipe de campo?",
+        enunciado: "Em um disparo de alarme sem visibilidade, qual ação é obrigatória?",
         alternativas: {
-            a: "Nenhuma, sempre há sequência fixa",
-            b: "Quando há risco iminente à segurança ou falha grave evidente",
-            c: "Sempre que quiser acelerar o processo",
-            d: "Quando não conhece o técnico de plantão"
+            a: "Tratar como falso disparo",
+            b: "Encerrar imediatamente para evitar retrabalho",
+            c: "Solicitar imagens complementares e registrar o evento",
+            d: "Acionar policia automaticamente"
+        },
+        correta: "c"
+    },
+    // 3
+    {
+        enunciado: "Queda parcial de energia se caracteriza por:",
+        alternativas: {
+            a: "Todo o sistema off-line simultaneamente",
+            b: "Perda total de comunicação e alarmes",
+            c: "Falha apenas de alguns setores ou câmeras específicas",
+            d: "Desarme automátido do sistema para proteção"
+        },
+        correta: "c"
+    },
+    // 4
+    {
+        enunciado: "Em uma falha de comunicação confirmada, qual prioridade é correta?",
+        alternativas: {
+            a: "Primeiramente acionar manutenção externa",
+            b: "Registrar e aguardar retorno espontâneo do sistema",
+            c: "Avaliar o impacto em sistemas críticos como acesso e alarmes",
+            d: "Reiniciar todos os equipamentos remotamente"
+        },
+        correta: "c"
+    },
+    // 5
+    {
+        enunciado: "A pronta resposta deve ser ativada quando:",
+        alternativas: {
+            a: "Há qualquer chamado de suporte técnico",
+            b: "Um evento grave coloca em risco patrimônio ou pessoas",
+            c: "Sempre que uma ronda detectar presença suspeita",
+            d: "O supervisor solicitar, mesmo sem sinistro"
         },
         correta: "b"
+    },
+    // 6
+    {
+        enunciado: "Em usinas, o monitoramento exige principalmente:",
+        alternativas: {
+            a: "Atendimento prioritário em horário comercial",
+            b: "Rondas eventuais, apenas mediante alarme",
+            c: "Monitoramento contínuo e registro formal de qualquer ocorrência",
+            d: "Abertura e fechamento manual dos setores"
+        },
+        correta: "c"
     },
     // 7
     {
-        enunciado: "Qual informação NÃO é obrigatória ao comunicar um evento à gestão central?",
+        enunciado: "Em leilões de veículos, qual item é obrigatório?",
         alternativas: {
-            a: "Tipo de ocorrência",
-            b: "Local exato do evento",
-            c: "Status da ocorrência",
-            d: "Horário do seu almoço"
+            a: "Solicitar gravações sem autorização do cliente",
+            b: "Registrar apenas movimentação críticas",
+            c: "Seguir contatos primários e secundários para checagens",
+            d: "Priorizar apenas alarmes externos"
         },
-        correta: "d"
+        correta: "c"
     },
     // 8
     {
-        enunciado: "A equipe de pronta resposta deve ser acionada quando:",
+        enunciado: "Em portaria remota, qual situação exige contingência imediata?",
         alternativas: {
-            a: "Há falhas severas ou risco à segurança",
-            b: "Há atraso na chegada do técnico local",
-            c: "Há necessidade de manutenção de rotina",
-            d: "O operador não souber o que fazer"
+            a: "Entrada de visitante com agendamento",
+            b: "Queda de CFTV ou interfone",
+            c: "Entrega sem autorização",
+            d: "Liberação de prestador cadastrado"
         },
-        correta: "a"
+        correta: "b"
     },
     // 9
     {
-        enunciado: "Qual o tempo máximo recomendado para chegada da equipe de pronta resposta após o acionamento?",
+        enunciado: "No BASA, qual situação exige acionamento completo da cadeia?",
         alternativas: {
-            a: "10 minutos",
-            b: "30 minutos",
-            c: "15 minutos",
-            d: "60 minutos"
+            a: "Entrada de funcionário no horário",
+            b: "Fechamento automático do hall",
+            c: "Coação ou acesso indevido ao gerente",
+            d: "Armado automático da tesouraria"
         },
-        correta: "b"
+        correta: "c"
     },
     // 10
     {
-        enunciado: "Todas as ocorrências e acionamentos devem ser:",
+        enunciado: "O teste de reporte periódico representa:",
         alternativas: {
-            a: "Comunicado verbalmente apenas",
-            b: "Registrados no sistema e documentados",
-            c: "Apagados após resolução",
-            d: "Tratados como informação sigilosa, sem registro"
+            a: "Evento crítico que requer ação imediata",
+            b: "Falha de comunicação total",
+            c: "Evento automático sem necessidade de intervenção",
+            d: "Sinistro confirmado"
         },
-        correta: "b"
+        correta: "c"
     },
 
     //11
     {
-        enunciado: "Qual é a função principal do operador de monitoramento de uma usina?",
+        enunciado: "Tamper ou bateria baixa devem ser tratados como:",
         alternativas: {
-            a: "Identificar problemas e garantir segurança e eficiência",
-            b: "Realizar manutenção elétrica",
-            c: "Gerenciar a equipe administrativa",
-            d: "Supervisionar contratos de fornecedores"
+            a: "Sinistro graves que exigem polícia",
+            b: "Falhas de rotina ignoráveis",
+            c: "Alertas de manutenção que exigem registro e encaminhamento",
+            d: "Abertura imediata de cofre"
         },
-        correta: "a"
+        correta: "c"
     },
 
     //12
     {
-        enunciado: "O que é um sinistro na usina?",
+        enunciado: "Rondas devem ser registradas no sistema porque:",
         alternativas: {
-            a: "Evento que pode causar risco ou dano à usina",
-            b: "Falha administrativa",
-            c: "Reunião de equipe",
-            d: "Atualização do sistema"
+            a: "Não possuem impacto operacional",
+            b: "Substituem alarmes e sensores",
+            c: "São parte essencial da preservação e restreabilidade",
+            d: "Só são usadas em auditorias internas"
         },
-        correta: "a"
+        correta: "c"
     },
 
     //13
     {
-        enunciado: "Qual dos seguintes NÃO é um tipo de sinistro?",
+        enunciado: "Nas usinas, o principal foco das rondas noturnas é:",
         alternativas: {
-            a: "Incêndio",
-            b: "Invasão",
-            c: "Acidente com colaborador",
-            d: "Reunião de equipe"
+            a: "Confirmar funcionamento de GN",
+            b: "Verificar presença de moradores no local",
+            c: "Identificar movimentações suspeitas e falhas operacionais",
+            d: "Testar todos os alarmes manualmente"
         },
-        correta: "d"
+        correta: "c"
     },
 
     //14
     {
-        enunciado: "O que é um alarme externo?",
+        enunciado: "Sobre comunicação e registro, qual é a prática correta?",
         alternativas: {
-            a: "Disparo de sensores externos",
-            b: "Erro no software de monitoramento",
-            c: "Falha na energia",
-            d: "Problema no servidor"
+            a: "Registrar apenas eventos com acionamento externo",
+            b: "Atualizar relatórios somente ao final do expediente",
+            c: "Registrar todas as ocorrências, com horários e ações adotadas",
+            d: "Registrar apenas alarmes confirmados"
         },
-        correta: "a"
+        correta: "c"
     },
 
     //15
     {
-        enunciado: "O que caracteriza um falso disparo de alarme?",
+        enunciado: "Quando há não armado fora do horário, o operador deve:",
         alternativas: {
-            a: "Disparo de sensores externos",
-            b: "Quando não há alterações visíveis no local",
-            c: "Acidente com colaborador",
-            d: "Vandalismo"
+            a: "Tratar como evento irrelevante",
+            b: "Aguardar atualização automática",
+            c: "Entrar em contato com o local, verificar motivo e registrar",
+            d: "Encerrar sem registro para evitar duplicidade"
         },
-        correta: "b"
+        correta: "c"
     }
 ];
 

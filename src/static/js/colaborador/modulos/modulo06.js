@@ -207,171 +207,171 @@ function marcarResetLocal() {
 const allQuestions = [
     // 1
     {
-        enunciado: "Durante uma inspeção noturna, um alarme dispara, mas a câmera principal está sem visibilidade e as câmeras secundárias também não mostram nada. Qual é a conduta correta do operador?",
+        enunciado: "Durante um disparo no monitoramento kit anti-arrastão, qual é o critério que determina o acionamento imediato da Polícia Militar?",
         alternativas: {
-            a: "Silenciar o alarme e registrar como falso disparo no final do turno",
-            b: "Registrar como 'sem visibilidade', solicitar imagens de outras câmeras e, se nada for identificado, encerrar com justificativa",
-            c: "Acionar imediatamente a Polícia Militar por precaução",
-            d: "Ignorar o alarme, pois nenhuma evidência foi capturada"
+            a: "Falha de autoteste simultânea com abertura de porta",
+            b: "Não confirmação da senha e contrassenha após verificação da câmera",
+            c: "Ausência do vigilante na guarita",
+            d: "Queda de nergia seguida de tamper"
         },
         correta: "b"
     },
     // 2
     {
-        enunciado: "Se um sinistro é confirmado, mas o operador não consegue contato imediato com o supervisor plantonista, qual é a ação correta?",
+        enunciado: "Em um evento de Falha de Autoteste, qual é o procedimento correto após verificar as imagens e identificar possível queda de energia/internet?",
         alternativas: {
-            a: "Registrar o evento e aguardar o supervisor retornar",
-            b: "Acionar o CCO do cliente com todos os detalhes, enquanto tenta contato com o supervisor",
-            c: "Ignorar o acionamento da Polícia Militar até falar com o supervisor",
-            d: "Silenciar o alarme temporariamente e relatar posteriormente"
-        },
-        correta: "b"
-    },
-    // 3
-    {
-        enunciado: "Durante uma queda de energia total, o operador identifica que apenas uma subestação local está funcionando. O procedimento correto é:",
-        alternativas: {
-            a: "Priorizar a restauração dessa subestação antes de verificar outras áreas críticas",
-            b: "Confirmar com o CCO, realizar verificação remota e comunicar concessionárias se necessário",
-            c: "Acionar apenas a equipe de campo, ignorando o CCO",
-            d: "Registrar e aguardar a energia voltar automaticamente"
-        },
-        correta: "b"
-    },
-    // 4
-    {
-        enunciado: "Um falso disparo de alarme externo é registrado, mas logo em seguida outro disparo ocorre no mesmo local. Qual é a conduta correta do operador?",
-        alternativas: {
-            a: "Ignorar o segundo disparo, pois o primeiro já foi registrado como falso",
-            b: "Silenciar os alarmes dessa zona temporariamente",
-            c: "Apenas informar o supervisor sem registrar o evento",
-            d: "Tratar o segundo disparo como evento, realizando verificação completa e registro"
-        },
-        correta: "d"
-    },
-    // 5
-    {
-        enunciado: "O operador precisa acionar a equipe de pronta resposta, mas a situação ainda não apresenta risco à integridade física. Qual é a decisão correta?",
-        alternativas: {
-            a: "Acionar a equipe imediatamente",
-            b: "Ignorar a falha",
-            c: "Avaliar se o evento atende os critérios predefinidos antes de acionar",
-            d: "Registrar no checklist interno sem comunicação externa"
+            a: "Encerrar o evento imediatamente para evitar duplicidade",
+            b: "Acionar a Polícia Militar antes de qualquer contato",
+            c: "Aguardar 10 minutos para descartar oscilações",
+            d: "Enviar pronta resposta automaticamente"
         },
         correta: "c"
     },
-    // 6
+    // 3
     {
-        enunciado: "Em qual situação o operador pode acionar diretamente a gestão central sem passar pela equipe de campo?",
+        enunciado: "No monitoramento de CFTV, quando uma anormalidade é detectada, qual é a sequência correta de tratativa?",
         alternativas: {
-            a: "Nenhuma, sempre há sequência fixa",
-            b: "Quando há risco iminente à segurança ou falha grave evidente",
-            c: "Sempre que quiser acelerar o processo",
-            d: "Quando não conhece o técnico de plantão"
+            a: "Contato direto > Supervisor > Cliente",
+            b: "Verificação no local > Abertura de OS > Relatório",
+            c: "Contato imediato + senha e contrassenha, se negativo, acionar PM",
+            d: "Acionamento de supervisor antes da tentativa de contato"
+        },
+        correta: "c"
+    },
+    // 4
+    {
+        enunciado: "Em um monitoramento de alarme com CFTV, quando é necessária vistoria interna, quem pode ser solicitado para acompanhar além da pronta resposta?",
+        alternativas: {
+            a: "Apenas o supervisor",
+            b: "Cliente, policial e síndico",
+            c: "Cliente, agente de pronta resposta e Polícia Militar",
+            d: "Apenas o cliente e zelador"
+        },
+        correta: "c"
+    },
+    // 5
+    {
+        enunciado: "Sobre o sensor IVP (infravermelho passivo), qual característica reduz falsos disparos?",
+        alternativas: {
+            a: "Feixe direcionado para varredura horizontal completa",
+            b: "Feixe de 90° que capta movimento abaixo de nível de instalação",
+            c: "Necessidade de dupla interrupção do feixe",
+            d: "Uso exclusivo em áreas externas"
         },
         correta: "b"
+    },
+    // 6
+    {
+        enunciado: "O que caracteriza a ronda como recurso de segurança?",
+        alternativas: {
+            a: "Somente ocorrências geradas por disparos de alarme",
+            b: "Verificação ondemand por solicitação do síndico",
+            c: "Verificação sem disparo, por necessidade ou evento externo",
+            d: "Apenas vistorias programadas pela equipe técnica"
+        },
+        correta: "c"
     },
     // 7
     {
-        enunciado: "Qual informação NÃO é obrigatória ao comunicar um evento à gestão central?",
+        enunciado: "Ao detectar desvio de conduta de um colaborador no CFTV, qual é a ação NÃO prevista no POP?",
         alternativas: {
-            a: "Tipo de ocorrência",
-            b: "Local exato do evento",
-            c: "Status da ocorrência",
-            d: "Horário do seu almoço"
+            a: "Contato com o colaborador",
+            b: "Geração de relatório no SIGMA",
+            c: "Acionamento da Polícia Militar",
+            d: "Registro do desvio como ocorrência interna"
         },
-        correta: "d"
+        correta: "c"
     },
     // 8
     {
-        enunciado: "A equipe de pronta resposta deve ser acionada quando:",
+        enunciado: "Em monitoramento de alarme sem CFTV, qual é a cronologia correta de acionamento quando senha/contrassenha nao são confirmadas?",
         alternativas: {
-            a: "Há falhas severas ou risco à segurança",
-            b: "Há atraso na chegada do técnico local",
-            c: "Há necessidade de manutenção de rotina",
-            d: "O operador não souber o que fazer"
+            a: "Cliente > PM > Supervisor",
+            b: "Supervisor > Pronta resposta > PM",
+            c: "PM > Supervisor > Cliente",
+            d: "Supervisor > Cliente > PM"
         },
-        correta: "a"
+        correta: "c"
     },
     // 9
     {
-        enunciado: "Qual o tempo máximo recomendado para chegada da equipe de pronta resposta após o acionamento?",
+        enunciado: "Qual situação não caracteriza um exemplo de sinistro na abertura de porta?",
         alternativas: {
-            a: "10 minutos",
-            b: "30 minutos",
-            c: "15 minutos",
-            d: "60 minutos"
+            a: "Porta aberta apenas para recepção de encomendas",
+            b: "Pessoas não autorizadas na guarita",
+            c: "Zelador permanecendo longos períodos dentro da guarita",
+            d: "Supervisor autorizando entrada por telefone"
         },
-        correta: "b"
+        correta: "d"
     },
     // 10
     {
-        enunciado: "Todas as ocorrências e acionamentos devem ser:",
+        enunciado: "No evento desarme fora do horário, qual é a ação específica exigida?",
         alternativas: {
-            a: "Comunicado verbalmente apenas",
-            b: "Registrados no sistema e documentados",
-            c: "Apagados após resolução",
-            d: "Tratados como informação sigilosa, sem registro"
+            a: "Abertura obrigatória de OS",
+            b: "Contato com colaborador ou responsável direto",
+            c: "Envio de pronta resposta automático",
+            d: "Encerramento imediato se o colaborador responder"
         },
         correta: "b"
     },
 
     //11
     {
-        enunciado: "Qual é a função principal do operador de monitoramento de uma usina?",
+        enunciado: "O evento não armado ocorre quando:",
         alternativas: {
-            a: "Identificar problemas e garantir segurança e eficiência",
-            b: "Realizar manutenção elétrica",
-            c: "Gerenciar a equipe administrativa",
-            d: "Supervisionar contratos de fornecedores"
+            a: "O alarme é desarmado antes do horário programado",
+            b: "Há falha na transmissão do teste periódico",
+            c: "O alarme não é ativado no horário definido",
+            d: "Um sensor permanece inoperante por mais de 10 minutos"
         },
-        correta: "a"
+        correta: "c"
     },
 
     //12
     {
-        enunciado: "O que é um sinistro na usina?",
+        enunciado: "Sobre disparos de pânico, qual afirmação está correta?",
         alternativas: {
-            a: "Evento que pode causar risco ou dano à usina",
-            b: "Falha administrativa",
-            c: "Reunião de equipe",
-            d: "Atualização do sistema"
+            a: "Em teste, nunca deve haver contato com o condomínio",
+            b: "Se negativo (senha/contrassenha), apenas registra no SIGMA",
+            c: "Se negativo, é obrigatório enviar pronta resposta + 190",
+            d: "Se positivo, acionar supervisor e cliente"
         },
-        correta: "a"
+        correta: "c"
     },
 
     //13
     {
-        enunciado: "Qual dos seguintes NÃO é um tipo de sinistro?",
+        enunciado: "Em caso de Tamper, qual ação é considerada correta segundo o POP?",
         alternativas: {
-            a: "Incêndio",
-            b: "Invasão",
-            c: "Acidente com colaborador",
-            d: "Reunião de equipe"
+            a: "Solicitar que o cliente reinicie a central",
+            b: "Aguardar 10 minutos e repetir o teste",
+            c: "Envio de técnico ou abertura de OS",
+            d: "Apenas contato no local com senha e contrassenha"
         },
-        correta: "d"
+        correta: "c"
     },
 
     //14
     {
-        enunciado: "O que é um alarme externo?",
+        enunciado: "Sobre queda de energia, quando é necessário enviar agente ao local?",
         alternativas: {
-            a: "Disparo de sensores externos",
-            b: "Erro no software de monitoramento",
-            c: "Falha na energia",
-            d: "Problema no servidor"
+            a: "Sempre que for horário noturno",
+            b: "Se não houver normalização após acompanhamento",
+            c: "Sempre que houver tamper simultâneo",
+            d: "Após 10 minutos sem receber imagens da guarita"
         },
-        correta: "a"
+        correta: "b"
     },
 
     //15
     {
-        enunciado: "O que caracteriza um falso disparo de alarme?",
+        enunciado: "Qula ação é obrigatória em qualquer envio de pronta resposta?",
         alternativas: {
-            a: "Disparo de sensores externos",
-            b: "Quando não há alterações visíveis no local",
-            c: "Acidente com colaborador",
-            d: "Vandalismo"
+            a: "Geração de relatório manual em papel",
+            b: "Registro no SIGMA contendo ordem de deslocamento, chegada e situação",
+            c: "Acionamento automático da PM",
+            d: "Abertura de OS e registro em planilha paralela"
         },
         correta: "b"
     }
