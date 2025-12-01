@@ -70,6 +70,8 @@ class ProgressoService:
 
         db.session.commit()
 
+        
+
     # >>> FUNÇÃO FINALIZAR MÓDULO CORRIGIDA <<<
     @staticmethod
     def finalizar_modulo(usuario_id, modulo_id, nota_final):
