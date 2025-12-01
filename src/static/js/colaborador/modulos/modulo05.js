@@ -1,8 +1,11 @@
 function detectModuleId() {
+   
     const bodyAttr = document.body.getAttribute('data-module-id');
     if (bodyAttr && /^\d+$/.test(bodyAttr)) return Number(bodyAttr);
 
+    
     const url = window.location.href;
+    
     let m = url.match(/modul?o[_\-]?0*([1-9]\d?)/i);
     if (m && m[1]) return Number(m[1]);
 
@@ -10,9 +13,11 @@ function detectModuleId() {
     if (params.get('module')) return Number(params.get('module'));
     if (params.get('id')) return Number(params.get('id'));
 
+    // fallback
     return 1;
 }
-const moduleId = detectModuleId();
+
+const moduleId = detectModuleId(); // agora definido dinamicamente
 
 // ================== VARIÁVEIS PRINCIPAIS ==================
 const prevExerciseBtn = document.querySelector('.prev-exercise');
@@ -37,173 +42,9 @@ const EX_KEY_ANDAMENTO = `mod${moduleId}_ex_andamento`;
 const EX_KEY_FINALIZADO = `mod${moduleId}_ex_finalizado`;
 const EX_KEY_RESET = `mod${moduleId}_ex_reset`;
 
-// ================== FUNÇÕES DE CARROSSEL (slides) ==================
-function updateCarousel() {
-    if (!wrapper) return;
-    wrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
-    updateProgressBar();
-    updateThumbnails();
-    updateProgressText();
-    updateArrows();
-    saveModuleSlideProgress(moduleId, currentIndex);
-}
-
-// ================== CHECAGEM DE PRIMEIRA TENTATIVA ==================
-const FINALIZADO_KEY = `mod${moduleId}_first_finalizado`;
-const primeiraTentativa = !localStorage.getItem(FINALIZADO_KEY);
-
-if (primeiraTentativa) {
-    localStorage.setItem(FINALIZADO_KEY, "true");
-    marcarFinalizadoLocal();
-
-    setTimeout(() => {
-        finalizarModuloAPI(moduleId, 100);
-    }, 500); 
-}
 
 
-function updateArrows() {
-    const slides = darkMode ? slidesDark : slidesNormal;
-    const prevBtn = document.querySelector('.prev');
-    const nextBtn = document.querySelector('.next');
-    if (!prevBtn || !nextBtn) return;
-
-    if (currentIndex === 0) {
-        prevBtn.style.opacity = "0.4";
-        prevBtn.style.pointerEvents = "none";
-        prevBtn.style.cursor = "not-allowed";
-    } else {
-        prevBtn.style.opacity = "1";
-        prevBtn.style.pointerEvents = "auto";
-        prevBtn.style.cursor = "pointer";
-    }
-
-    if (currentIndex === slides.length - 1) {
-        nextBtn.style.opacity = "0.4";
-        nextBtn.style.pointerEvents = "none";
-        nextBtn.style.cursor = "not-allowed";
-    } else {
-        nextBtn.style.opacity = "1";
-        nextBtn.style.pointerEvents = "auto";
-        nextBtn.style.cursor = "pointer";
-    }
-}
-
-// ================== SALVAR / CARREGAR PROGRESSO ==================
-function saveModuleSlideProgress(moduleIdLocal, lastSlideIndex) {
-    const progress = JSON.parse(localStorage.getItem("moduleProgress") || "{}");
-    progress[moduleIdLocal] = lastSlideIndex;
-    localStorage.setItem("moduleProgress", JSON.stringify(progress));
-}
-
-function loadModuleProgress(moduleIdLocal) {
-    const progress = JSON.parse(localStorage.getItem("moduleProgress") || "{}");
-    return progress[moduleIdLocal] || 0;
-}
-
-// ================== API FINALIZAR ==================
-async function finalizarModuloAPI(moduloIdLocal, notaFinal) {
-    try {
-        const response = await fetch(`http://127.0.0.1:5000/colaborador/progresso/finalizar/${moduloIdLocal}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${TOKEN}`
-            },
-            body: JSON.stringify({ nota_final: notaFinal })
-        });
-
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({ error: "Erro desconhecido ou falha na comunicação" }));
-            throw new Error(`Erro ${response.status} ao finalizar módulo: ${errorData.error || response.statusText}`);
-        }
-
-        console.log(`Módulo ${moduloIdLocal} finalizado com nota ${notaFinal}%. Redirecionando...`);
-        setTimeout(() => {
-            window.location.href = '/src/templates/colaborador/modulo.html';
-        }, 1500);
-
-    } catch (error) {
-        console.error("Erro na API de finalização:", error);
-        alert(`Erro ao registrar conclusão do módulo: ${error.message}`);
-    }
-}
-
-// ================== CONTROLES DE EXERCÍCIOS (LABEL CLICK) ==================
-document.addEventListener('click', (ev) => {
-    const label = ev.target.closest('.options label');
-    if (!label) return;
-    const group = label.parentElement.querySelectorAll('label');
-    group.forEach(l => l.classList.remove('selected'));
-    label.classList.add('selected');
-    const radio = document.getElementById(label.getAttribute('for'));
-    if (radio) radio.checked = true;
-});
-
-// ----------------- OVERLAY RESULTADO -----------------
-const overlay = document.createElement('div');
-overlay.id = 'result-overlay';
-overlay.setAttribute('role', 'dialog');
-overlay.setAttribute('aria-hidden', 'true');
-overlay.innerHTML = `
-    <div class="result-card" role="document">
-        <h2 class="result-title"></h2>
-        <p class="result-score" id="overlay-score"></p>
-        <div class="result-actions">
-            <button class="btn-submit btn-refazer">Refazer módulo</button>
-            <button class="btn-submit btn-proximo">Ver Meu Progresso</button> 
-        </div>
-    </div>
-`;
-document.body.appendChild(overlay);
-
-const overlayCard = overlay.querySelector('.result-card');
-const title = overlay.querySelector('.result-title');
-const scoreText = overlay.querySelector('#overlay-score');
-const btnRefazer = overlay.querySelector('.btn-refazer');
-const btnProximo = overlay.querySelector('.btn-proximo');
-
-function openResultOverlay() {
-    overlay.style.display = 'flex';
-    overlay.setAttribute('aria-hidden', 'false');
-    document.documentElement.style.overflow = 'hidden';
-    document.body.style.overflow = 'hidden';
-}
-
-function closeResultOverlay() {
-    overlay.style.display = 'none';
-    overlay.setAttribute('aria-hidden', 'true');
-    document.documentElement.style.overflow = '';
-    document.body.style.overflow = '';
-    overlayCard.classList.remove('pop-in');
-}
-
-overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) closeResultOverlay();
-});
-
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && overlay.style.display === 'flex') closeResultOverlay();
-});
-
-// ================== HELPERS DO ANTI-COLA ==================
-function marcarFinalizadoLocal() {
-    localStorage.setItem(EX_KEY_FINALIZADO, "true");
-    localStorage.removeItem(EX_KEY_ANDAMENTO);
-    localStorage.removeItem(EX_KEY_RESET);
-}
-
-function marcarAndamentoLocal() {
-    localStorage.setItem(EX_KEY_ANDAMENTO, "true");
-    localStorage.removeItem(EX_KEY_FINALIZADO);
-    localStorage.removeItem(EX_KEY_RESET);
-}
-
-function marcarResetLocal() {
-    localStorage.setItem(EX_KEY_RESET, "true");
-}
-
-
+// ================== BANCO DE QUESTÕES ==================
 const allQuestions = [
     // 1
     {
@@ -377,6 +218,7 @@ const allQuestions = [
     }
 ];
 
+const QUESTION_COUNT = 10;
 function pickNRandom(arr, n) {
     const a = arr.slice();
     for (let i = a.length - 1; i > 0; i--) {
@@ -386,83 +228,342 @@ function pickNRandom(arr, n) {
     return a.slice(0, n);
 }
 
-const QUESTION_COUNT = 10; 
-
 function renderRandomExercises() {
     const exWrapper = document.querySelector('.exercise-wrapper');
     if (!exWrapper) return;
 
     const selected = pickNRandom(allQuestions, Math.min(QUESTION_COUNT, allQuestions.length));
-
     exWrapper.innerHTML = '';
-
     selected.forEach((q, i) => {
         const div = document.createElement('div');
         div.classList.add('exercise-slide');
         div.setAttribute('data-answer', q.correta);
-
         const name = `q${i}_${Date.now()}`;
-
         div.innerHTML = `
             <p><strong>${i + 1}.</strong> ${q.enunciado}</p>
             <div class="options">
-                <input type="radio" id="${name}a" name="${name}" value="a">
-                <label for="${name}a">${q.alternativas.a}</label>
-
-                <input type="radio" id="${name}b" name="${name}" value="b">
-                <label for="${name}b">${q.alternativas.b}</label>
-
-                <input type="radio" id="${name}c" name="${name}" value="c">
-                <label for="${name}c">${q.alternativas.c}</label>
-
-                <input type="radio" id="${name}d" name="${name}" value="d">
-                <label for="${name}d">${q.alternativas.d}</label>
-            </div>
-        `;
-
+                <input type="radio" id="${name}a" name="${name}" value="a"><label for="${name}a">${q.alternativas.a}</label>
+                <input type="radio" id="${name}b" name="${name}" value="b"><label for="${name}b">${q.alternativas.b}</label>
+                <input type="radio" id="${name}c" name="${name}" value="c"><label for="${name}c">${q.alternativas.c}</label>
+                <input type="radio" id="${name}d" name="${name}" value="d"><label for="${name}d">${q.alternativas.d}</label>
+            </div>`;
         exWrapper.appendChild(div);
     });
 }
 renderRandomExercises();
 
-// ================== CARROSSEL DE EXERCÍCIOS (após render) ==================
+
+// ================== FUNÇÃO ATUALIZA CARROSSEL ==================
+function updateCarousel() {
+    wrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
+    updateProgressBar();
+    updateThumbnails();
+    updateProgressText();
+    updateArrows();
+    saveModuleSlideProgress(moduleId, currentIndex);
+}
+
+function updateArrows() {
+    const slides = darkMode ? slidesDark : slidesNormal;
+
+    if (currentIndex === 0) {
+        prevBtn.style.opacity = "0.4";
+        prevBtn.style.pointerEvents = "none";
+        prevBtn.style.cursor = "not-allowed";
+    } else {
+        prevBtn.style.opacity = "1";
+        prevBtn.style.pointerEvents = "auto";
+        prevBtn.style.cursor = "pointer";
+    }
+
+    if (currentIndex === slides.length - 1) {
+        nextBtn.style.opacity = "0.4";
+        nextBtn.style.pointerEvents = "none";
+        nextBtn.style.cursor = "not-allowed";
+    } else {
+        nextBtn.style.opacity = "1";
+        nextBtn.style.pointerEvents = "auto";
+        nextBtn.style.cursor = "pointer";
+    }
+}
+
+
+function saveModuleSlideProgress(moduleIdLocal, lastSlideIndex) {
+    const progress = JSON.parse(localStorage.getItem("moduleProgress") || "{}");
+    progress[moduleIdLocal] = lastSlideIndex;
+    localStorage.setItem("moduleProgress", JSON.stringify(progress));
+}
+
+function loadModuleProgress(moduleIdLocal) {
+    const progress = JSON.parse(localStorage.getItem("moduleProgress") || "{}");
+    return progress[moduleIdLocal] || 0;
+}
+
+async function finalizarModuloAPI(moduloIdLocal, notaFinal) {
+    try {
+        const response = await fetch(`http://127.0.0.1:5000/colaborador/progresso/finalizar/${moduloIdLocal}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${TOKEN}`
+            },
+            body: JSON.stringify({ nota_final: notaFinal })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({ error: "Erro desconhecido ou falha na comunicação" }));
+            throw new Error(`Erro ${response.status} ao finalizar módulo: ${errorData.error || response.statusText}`);
+        }
+
+        console.log(`Módulo ${moduloIdLocal} finalizado com nota ${notaFinal}%. Redirecionando...`);
+        setTimeout(() => {
+            window.location.href = '/src/templates/colaborador/modulo.html';
+        }, 1500);
+
+    } catch (error) {
+        console.error("Erro na API de finalização:", error);
+        alert(`Erro ao registrar conclusão do módulo: ${error.message}`);
+    }
+}
+
+// ================== CONTROLES DE EXERCÍCIOS (UI) ==================
+document.querySelectorAll('.options label').forEach(label => {
+    label.addEventListener('click', () => {
+        const group = label.parentElement.querySelectorAll('label');
+        group.forEach(l => l.classList.remove('selected'));
+        label.classList.add('selected');
+        const radio = document.getElementById(label.getAttribute('for'));
+        if (radio) radio.checked = true;
+    });
+});
+
+// ----------------- OVERLAY RESULTADO -----------------
+const overlay = document.createElement('div');
+overlay.id = 'result-overlay';
+overlay.setAttribute('role', 'dialog');
+overlay.setAttribute('aria-hidden', 'true');
+overlay.innerHTML = `
+    <div class="result-card" role="document">
+        <h2 class="result-title"></h2>
+        <p class="result-score" id="overlay-score"></p>
+        <div class="result-actions">
+            <button class="btn-submit btn-refazer">Refazer módulo</button>
+            <button class="btn-submit btn-proximo">Ver Meu Progresso</button> 
+        </div>
+    </div>
+`;
+document.body.appendChild(overlay);
+
+const overlayCard = overlay.querySelector('.result-card');
+const title = overlay.querySelector('.result-title');
+const scoreText = overlay.querySelector('#overlay-score');
+const btnRefazer = overlay.querySelector('.btn-refazer');
+const btnProximo = overlay.querySelector('.btn-proximo');
+
+function openResultOverlay() {
+    overlay.style.display = 'flex';
+    overlay.setAttribute('aria-hidden', 'false');
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeResultOverlay() {
+    overlay.style.display = 'none';
+    overlay.setAttribute('aria-hidden', 'true');
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+    overlayCard.classList.remove('pop-in');
+}
+
+overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeResultOverlay();
+});
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && overlay.style.display === 'flex') closeResultOverlay();
+});
+
+// ================== HELPERS DO ANTI-COLA ==================
+function marcarFinalizadoLocal() {
+    localStorage.setItem(EX_KEY_FINALIZADO, "true");
+    localStorage.removeItem(EX_KEY_ANDAMENTO);
+    localStorage.removeItem(EX_KEY_RESET);
+}
+
+function marcarAndamentoLocal() {
+    localStorage.setItem(EX_KEY_ANDAMENTO, "true");
+    localStorage.removeItem(EX_KEY_FINALIZADO);
+    localStorage.removeItem(EX_KEY_RESET);
+}
+
+function marcarResetLocal() {
+    localStorage.setItem(EX_KEY_RESET, "true");
+}
+
+// ================== HANDLER DE ENVIO ==================
+document.getElementById('submit-exercises').addEventListener('click', () => {
+    clearInterval(timerInterval);
+
+    let score = 0;
+    exSlides.forEach(slide => {
+        const selected = slide.querySelector('input[type="radio"]:checked');
+        if (selected && selected.value === slide.dataset.answer) score++;
+    });
+
+    const totalQuestions = exSlides.length;
+    const percent = Math.round((score / totalQuestions) * 100);
+
+    // Reset classes e botões
+    overlayCard.classList.remove('success', 'fail');
+    btnRefazer.style.display = 'none';
+    btnProximo.style.display = 'none';
+
+    scoreText.textContent = `Você acertou ${percent}% (${score} de ${totalQuestions})`;
+
+    if (percent >= REQUISITO_APROVACAO) {
+        overlayCard.classList.add('success');
+        title.textContent = `✅ Parabéns! Módulo concluído com ${percent}%.`;
+        btnProximo.style.display = 'inline-block';
+        btnProximo.textContent = 'Ver Meu Progresso';
+
+        // MARCA LOCALMENTE COMO FINALIZADO (antes de chamar API)
+        btnProximo.onclick = () => {
+            marcarFinalizadoLocal();
+            closeResultOverlay();
+            finalizarModuloAPI(moduleId, percent);
+        };
+
+    } else {
+        overlayCard.classList.add('fail');
+        title.textContent = `❌ Nota insuficiente. Você precisa de ${REQUISITO_APROVACAO}%.`;
+        btnRefazer.style.display = 'inline-block';
+        btnRefazer.onclick = () => {
+            // REGISTRA A TENTATIVA NO BACKEND
+            finalizarModuloAPI(moduleId, 0); // Envia nota 0 para contar tentativa
+
+            // Limpa o estado local do exercício atual (usuário vai refazer)
+            localStorage.removeItem(EX_KEY_ANDAMENTO);
+            localStorage.removeItem(EX_KEY_RESET);
+            // NÃO removemos EX_KEY_FINALIZADO aqui pois não estava finalizado
+
+            closeResultOverlay();
+            currentIndex = 0;
+            updateCarousel();
+            exercisesSection.style.display = 'none';
+            moduleLocked = false;
+            nextBtn.style.opacity = '1';
+            prevBtn.style.opacity = '1';
+            nextBtn.style.cursor = 'pointer';
+            prevBtn.style.cursor = 'pointer';
+
+            document.querySelectorAll('.thumbnails img').forEach(img => {
+                img.style.pointerEvents = 'auto';
+                img.style.opacity = '1';
+                img.style.filter = 'none';
+            });
+
+            document.removeEventListener('keydown', lockArrows);
+            exIndex = 0;
+            updateExerciseCarousel();
+            clearInterval(timerInterval);
+            totalTime = 30 * 60;
+            document.getElementById('timer').textContent = 'Tempo restante: 30:00';
+
+            document.querySelectorAll('input[type="radio"]:checked').forEach(radio => radio.checked = false);
+            document.querySelectorAll('.options label').forEach(label => label.classList.remove('selected'));
+        };
+    }
+
+    openResultOverlay();
+    overlayCard.classList.add('pop-in');
+});
+
+// ================== CONTROLES DO CARROSSEL PRINCIPAL ==================
+document.querySelector('.next').addEventListener('click', () => {
+    const slides = darkMode ? slidesDark : slidesNormal;
+    if (!moduleLocked || isFullScreen) {
+        if (currentIndex < slides.length - 1) currentIndex++;
+        updateCarousel();
+    }
+});
+
+document.querySelector('.prev').addEventListener('click', () => {
+    const slides = darkMode ? slidesDark : slidesNormal;
+    if (!moduleLocked || isFullScreen) {
+        if (currentIndex > 0) currentIndex--;
+        updateCarousel();
+    }
+});
+
+// ================== BOTÃO FINALIZAR MÓDULO ==================
+const btnFinalizar = document.querySelectorAll('.btn-finalizar');
+const exercisesSection = document.querySelector('.exercises');
+const nextBtn = document.querySelector('.next');
+const prevBtn = document.querySelector('.prev');
+
+btnFinalizar.forEach(btn => {
+    btn.addEventListener('click', () => {
+        // marca que o usuário iniciou o exercício (ANTI-COLA)
+        marcarAndamentoLocal();
+
+        exercisesSection.style.display = 'block';
+        moduleLocked = true;
+
+        nextBtn.style.opacity = '0.4';
+        prevBtn.style.opacity = '0.4';
+        nextBtn.style.cursor = 'not-allowed';
+        prevBtn.style.cursor = 'not-allowed';
+
+        document.querySelectorAll('.thumbnails img').forEach(img => {
+            img.style.pointerEvents = 'none';
+            img.style.opacity = '0.4';
+            img.style.filter = 'blur(1px) grayscale(0.8)';
+        });
+
+        document.addEventListener('keydown', lockArrows);
+
+        window.scrollTo({ top: exercisesSection.offsetTop - 20, behavior: 'smooth' });
+        startTimer();
+        localStorage.removeItem('currentModuleSlide');
+    });
+});
+
+function lockArrows(e) {
+    if (moduleLocked && (e.key === 'ArrowRight' || e.key === 'ArrowLeft')) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+}
+
+// ================== CARROSSEL DE EXERCÍCIOS ==================
 const exWrapper = document.querySelector('.exercise-wrapper');
-let exSlides = document.querySelectorAll('.exercise-slide');
+const exSlides = document.querySelectorAll('.exercise-slide');
 let exIndex = 0;
 
 function updateExerciseCarousel() {
-    if (!exWrapper) return;
     exWrapper.style.transform = `translateX(-${exIndex * 100}%)`;
 
     const percent = ((exIndex + 1) / exSlides.length) * 100;
-    const fill = document.querySelector('.exercise-progress-fill');
-    if (fill) fill.style.width = percent + '%';
+    document.querySelector('.exercise-progress-fill').style.width = percent + '%';
 
     const btnSubmit = document.getElementById('submit-exercises');
-    if (btnSubmit) btnSubmit.style.display = exIndex === exSlides.length - 1 ? 'block' : 'none';
+    btnSubmit.style.display = exIndex === exSlides.length - 1 ? 'block' : 'none';
 
     updateExerciseArrows();
 }
 
-const nextExBtnEl = document.querySelector('.next-exercise');
-const prevExBtnEl = document.querySelector('.prev-exercise');
+document.querySelector('.next-exercise').addEventListener('click', () => {
+    if (exIndex < exSlides.length - 1) exIndex++;
+    updateExerciseCarousel();
+});
 
-if (nextExBtnEl) {
-    nextExBtnEl.addEventListener('click', () => {
-        if (exIndex < exSlides.length - 1) exIndex++;
-        updateExerciseCarousel();
-    });
-}
-if (prevExBtnEl) {
-    prevExBtnEl.addEventListener('click', () => {
-        if (exIndex > 0) exIndex--;
-        updateExerciseCarousel();
-    });
-}
+document.querySelector('.prev-exercise').addEventListener('click', () => {
+    if (exIndex > 0) exIndex--;
+    updateExerciseCarousel();
+});
 
 function updateExerciseArrows() {
     const total = exSlides.length;
-    if (!prevExerciseBtn || !nextExerciseBtn) return;
 
     if (exIndex === 0) {
         prevExerciseBtn.style.opacity = "0.4";
@@ -485,147 +586,6 @@ function updateExerciseArrows() {
     }
 }
 
-const submitBtn = document.getElementById('submit-exercises');
-if (submitBtn) {
-    submitBtn.addEventListener('click', () => {
-        clearInterval(timerInterval);
-
-        exSlides = document.querySelectorAll('.exercise-slide');
-
-        let score = 0;
-        exSlides.forEach(slide => {
-            const selected = slide.querySelector('input[type="radio"]:checked');
-            if (selected && selected.value === slide.dataset.answer) score++;
-        });
-
-        const totalQuestions = exSlides.length;
-        const percent = Math.round((score / totalQuestions) * 100);
-
-        overlayCard.classList.remove('success', 'fail');
-        btnRefazer.style.display = 'none';
-        btnProximo.style.display = 'none';
-
-        scoreText.textContent = `Você acertou ${percent}% (${score} de ${totalQuestions})`;
-
-        if (percent >= REQUISITO_APROVACAO) {
-            overlayCard.classList.add('success');
-            title.textContent = `✅ Parabéns! Módulo concluído com ${percent}%.`;
-            btnProximo.style.display = 'inline-block';
-            btnProximo.textContent = 'Ver Meu Progresso';
-
-            btnProximo.onclick = () => {
-                marcarFinalizadoLocal();
-                closeResultOverlay();
-                finalizarModuloAPI(moduleId, percent);
-            };
-
-        } else {
-            overlayCard.classList.add('fail');
-            title.textContent = `❌ Nota insuficiente. Você precisa de ${REQUISITO_APROVACAO}%.`;
-            btnRefazer.style.display = 'inline-block';
-            
-         btnRefazer.onclick = () => {
-    // Fecha overlay
-    closeResultOverlay();
-
-    // Reinicia o carrossel principal (slides de conteúdo)
-    currentIndex = 0;
-    updateCarousel();
-
-    // Habilita navegação dos slides principais
-    moduleLocked = false;
-    const nextBtn = document.querySelector('.next');
-    const prevBtn = document.querySelector('.prev');
-    if (nextBtn) { 
-        nextBtn.style.opacity = '1'; 
-        nextBtn.style.pointerEvents = 'auto'; 
-        nextBtn.style.cursor = 'pointer'; 
-    }
-    if (prevBtn) { 
-        prevBtn.style.opacity = '1'; 
-        prevBtn.style.pointerEvents = 'auto'; 
-        prevBtn.style.cursor = 'pointer'; 
-    }
-
-    // Reabilita miniaturas do carrossel principal
-    document.querySelectorAll('.thumbnails img').forEach(img => {
-        img.style.pointerEvents = 'auto';
-        img.style.opacity = '1';
-        img.style.filter = 'none';
-    });
-
-    document.removeEventListener('keydown', lockArrows);
-
-    if (exercisesSection) exercisesSection.style.display = 'none';
-
-    exIndex = 0;
-    document.querySelectorAll('input[type="radio"]:checked').forEach(radio => radio.checked = false);
-    document.querySelectorAll('.options label').forEach(label => label.classList.remove('selected'));
-};
-
-        }
-
-        openResultOverlay();
-        overlayCard.classList.add('pop-in');
-    });
-}
-
-// ================== CONTROLES DO CARROSSEL PRINCIPAL ==================
-const nextMain = document.querySelector('.next');
-const prevMain = document.querySelector('.prev');
-
-if (nextMain) nextMain.addEventListener('click', () => {
-    const slides = darkMode ? slidesDark : slidesNormal;
-    if (!moduleLocked || isFullScreen) {
-        if (currentIndex < slides.length - 1) currentIndex++;
-        updateCarousel();
-    }
-});
-if (prevMain) prevMain.addEventListener('click', () => {
-    const slides = darkMode ? slidesDark : slidesNormal;
-    if (!moduleLocked || isFullScreen) {
-        if (currentIndex > 0) currentIndex--;
-        updateCarousel();
-    }
-});
-
-// ================== BOTÃO FINALIZAR MÓDULO ==================
-const btnFinalizar = document.querySelectorAll('.btn-finalizar');
-const exercisesSection = document.querySelector('.exercises');
-const nextBtn = document.querySelector('.next');
-const prevBtn = document.querySelector('.prev');
-
-btnFinalizar.forEach(btn => {
-    btn.addEventListener('click', () => {
-        marcarAndamentoLocal();
-
-        if (exercisesSection) exercisesSection.style.display = 'block';
-        moduleLocked = true;
-
-        if (nextBtn) { nextBtn.style.opacity = '0.4'; nextBtn.style.cursor = 'not-allowed'; }
-        if (prevBtn) { prevBtn.style.opacity = '0.4'; prevBtn.style.cursor = 'not-allowed'; }
-
-        document.querySelectorAll('.thumbnails img').forEach(img => {
-            img.style.pointerEvents = 'none';
-            img.style.opacity = '0.4';
-            img.style.filter = 'blur(1px) grayscale(0.8)';
-        });
-
-        document.addEventListener('keydown', lockArrows);
-
-        if (exercisesSection) window.scrollTo({ top: exercisesSection.offsetTop - 20, behavior: 'smooth' });
-        startTimer();
-        localStorage.removeItem('currentModuleSlide');
-    });
-});
-
-function lockArrows(e) {
-    if (moduleLocked && (e.key === 'ArrowRight' || e.key === 'ArrowLeft')) {
-        e.preventDefault();
-        e.stopPropagation();
-    }
-}
-
 // ================== TIMER ==================
 let timerInterval;
 let totalTime = 30 * 60;
@@ -637,7 +597,7 @@ function startTimer() {
     timerInterval = setInterval(() => {
         let minutes = Math.floor(totalTime / 60);
         let seconds = totalTime % 60;
-        if (timerDisplay) timerDisplay.textContent = `Tempo restante: ${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+        timerDisplay.textContent = `Tempo restante: ${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
         totalTime--;
 
         if (totalTime < 0) {
@@ -649,23 +609,22 @@ function startTimer() {
 }
 
 // ================== DOWNLOAD ==================
-const downloadBtn = document.getElementById('download-btn');
-if (downloadBtn) {
-    downloadBtn.addEventListener('click', () => {
-        const link = document.createElement('a');
-        link.href = `/src/static/pdf/modulo${String(moduleId).padStart(2,'0')}.pdf`;
-        link.download = `Modulo${String(moduleId).padStart(2,'0')}_Conteudo.pdf`;
-        link.click();
-    });
-}
+document.getElementById('download-btn').addEventListener('click', () => {
+    // Se ainda não finalizou, marcar reset quando perder foco/abrir PDF
+    // (marcação já é feita por visibilitychange/blur)
+    const link = document.createElement('a');
+    link.href = `/src/static/pdf/modulo${String(moduleId).padStart(2,'0')}.pdf`;
+    link.download = `Modulo${String(moduleId).padStart(2,'0')}_Conteudo.pdf`;
+    link.click();
+});
 
 // ================== MINIATURAS ==================
 const thumbnailsContainer = document.querySelector('.thumbnails');
 function createThumbnails(slides) {
-    if (!thumbnailsContainer) return;
     thumbnailsContainer.innerHTML = '';
     slides.forEach((slide, idx) => {
         const thumb = document.createElement('img');
+        // proteja caso slide não tenha img
         const imgEl = slide.querySelector('img');
         thumb.src = imgEl ? imgEl.src : '';
         if (idx === 0) thumb.classList.add('active');
@@ -691,9 +650,9 @@ function updateThumbnails() {
     thumbs.forEach((t, i) => t.classList.toggle('active', i === currentIndex));
 }
 
-createThumbnails(Array.from(slidesNormal));
+createThumbnails(slidesNormal);
 
-// ================== PROGRESSO (main slides) ==================
+// ================== PROGRESSO ==================
 const progressText = document.getElementById('progress-text');
 function updateProgressText() {
     const slides = darkMode ? slidesDark : slidesNormal;
@@ -731,7 +690,7 @@ function toggleDarkMode() {
 
     if (currentIndex >= currentSlides.length) currentIndex = currentSlides.length - 1;
 
-    createThumbnails(Array.from(currentSlides));
+    createThumbnails(currentSlides);
     updateCarousel();
 }
 
@@ -745,14 +704,8 @@ document.addEventListener('keydown', e => {
 
 // ================== TECLAS DE ATALHO ==================
 document.addEventListener('keydown', e => {
-    if (e.key === 'ArrowRight') {
-        const nextEl = document.querySelector('.next');
-        if (nextEl) nextEl.click();
-    }
-    if (e.key === 'ArrowLeft') {
-        const prevEl = document.querySelector('.prev');
-        if (prevEl) prevEl.click();
-    }
+    if (e.key === 'ArrowRight') document.querySelector('.next').click();
+    if (e.key === 'ArrowLeft') document.querySelector('.prev').click();
     if (e.key.toLowerCase() === 'f') {
         const fsBtn = document.getElementById('fullscreen-btn');
         if (fsBtn) fsBtn.click();
@@ -767,23 +720,23 @@ document.addEventListener('keydown', e => {
 window.addEventListener('DOMContentLoaded', () => {
     currentIndex = loadModuleProgress(moduleId);
     updateCarousel();
-    // re-query slides in case render changed
-    exSlides = document.querySelectorAll('.exercise-slide');
     updateExerciseCarousel();
 });
 
 // ================== ANTI-COLA: DETECTA SAÍDA E VOLTA ==================
-// 1) visibilitychange
+
+// 1) visibilitychange (trocar de aba / minimizar em alguns navegadores)
 document.addEventListener("visibilitychange", () => {
     const andamento = localStorage.getItem(EX_KEY_ANDAMENTO);
     const finalizado = localStorage.getItem(EX_KEY_FINALIZADO);
 
     if (document.hidden && andamento === "true" && finalizado !== "true") {
+        // marca para reset quando voltar
         marcarResetLocal();
     }
 });
 
-// 2) blur
+// 2) blur (perda de foco da janela)
 window.addEventListener("blur", () => {
     const andamento = localStorage.getItem(EX_KEY_ANDAMENTO);
     const finalizado = localStorage.getItem(EX_KEY_FINALIZADO);
@@ -793,12 +746,13 @@ window.addEventListener("blur", () => {
     }
 });
 
-// 3) beforeunload
+// 3) beforeunload — opcional, para casos de fechar/refresh — marca reset
 window.addEventListener("beforeunload", (e) => {
     const andamento = localStorage.getItem(EX_KEY_ANDAMENTO);
     const finalizado = localStorage.getItem(EX_KEY_FINALIZADO);
 
     if (andamento === "true" && finalizado !== "true") {
+        
         localStorage.setItem(EX_KEY_RESET, "true");
     }
 });
@@ -810,8 +764,8 @@ window.addEventListener("focus", () => {
         localStorage.removeItem(EX_KEY_RESET);
         localStorage.removeItem(EX_KEY_ANDAMENTO);
 
+  
         exIndex = 0;
-        exSlides = document.querySelectorAll('.exercise-slide');
         updateExerciseCarousel();
 
         document.querySelectorAll('input[type="radio"]:checked')
@@ -820,8 +774,9 @@ window.addEventListener("focus", () => {
         document.querySelectorAll('.options label')
             .forEach(label => label.classList.remove('selected'));
 
+    
         try {
-            alert("Você saiu da tela durante o exercício, refaça novamente!");
+            alert("Você saiu da tela durante o exercício. O exercício foi reiniciado.");
         } catch (err) {
             console.log("Voltou e reiniciou módulo (alert falhou).");
         }
@@ -829,4 +784,5 @@ window.addEventListener("focus", () => {
         location.reload();
     }
 });
+
 

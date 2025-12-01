@@ -143,8 +143,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 if (moduloAPI) {
                     let percent = moduloAPI.percent || 0;
+                    
+                    // 🚨 CORREÇÃO TEMPORÁRIA: Anula o status 'concluido' se a percentagem for 0.
+                    let status = moduloAPI.status;
+                    if (status === "concluido" && percent === 0) {
+                        // Força o status para ser tratado como não concluído
+                        status = "nao_iniciado"; 
+                    }
 
-                    if (moduloAPI.status === "concluido") {
+                    if (status === "concluido") {
                         percent = 100;
                         card.classList.add("concluido");
 
