@@ -6,30 +6,31 @@ from src.models.usuario import Usuario
 colab_feedback_bp = Blueprint("colab_feedback_bp", __name__)
 
 
-# ======================================================
-# 1. LISTAR FEEDBACKS DO COLABORADOR (APENAS feedbacks)
-# ======================================================
+# ============================================================
+# 1. LISTAR FEEDBACKS (NÃO inclui dúvidas)
+# ============================================================
 @colab_feedback_bp.route("/", methods=["GET"])
 @jwt_required()
 def listar_feedbacks_colaborador():
     colaborador_id = get_jwt_identity()
-
-    feedbacks = FeedbackService.get_feedbacks_by_colaborador(colaborador_id)
+    feedbacks = FeedbackService.get_feedbacks_para_colaborador(colaborador_id)
     return jsonify([f.to_dict() for f in feedbacks]), 200
 
 
-# ======================================================
+# ============================================================
 # 4. MARCAR FEEDBACK COMO LIDO
-# ======================================================
+# (Corrigido: antes buscava lista, agora busca o item correto)
+# ============================================================
 @colab_feedback_bp.route("/marcar-lido/<int:feedback_id>", methods=["PUT"])
 @jwt_required()
 def marcar_feedback_lido(feedback_id):
     colaborador_id = get_jwt_identity()
+
+    # Buscar 1 feedback específico
     feedback = FeedbackService.get_feedback_by_id(feedback_id)
 
     if not feedback:
         return jsonify({"error": "Feedback não encontrado"}), 404
-
 
     if int(feedback.colaborador_id) != int(colaborador_id):
         return jsonify({
@@ -38,13 +39,13 @@ def marcar_feedback_lido(feedback_id):
             "feedback_id": feedback.colaborador_id
         }), 403
 
-    updated = FeedbackService.marcar_como_lido(feedback_id)
+    FeedbackService.marcar_como_lido(feedback_id)
     return jsonify({"message": "Feedback marcado como lido"}), 200
 
 
-# ======================================================
+# ============================================================
 # 5. LISTAR GESTORES (para enviar dúvidas)
-# ======================================================
+# ============================================================
 @colab_feedback_bp.route("/gestores", methods=["GET"])
 @jwt_required()
 def listar_gestores():
@@ -60,9 +61,9 @@ def listar_gestores():
     return jsonify([{"id": g.id, "nome": g.nome} for g in gestores]), 200
 
 
-# ======================================================
-# 6. ENVIAR DÚVIDA DO COLABORADOR PARA UM GESTOR
-# ======================================================
+# ============================================================
+# 6. COLABORADOR → ENVIAR DÚVIDA
+# ============================================================
 @colab_feedback_bp.route("/enviar", methods=["POST"])
 @jwt_required()
 def enviar_feedback():
@@ -85,13 +86,24 @@ def enviar_feedback():
     feedback = FeedbackService.create_feedback(novo_feedback)
     return jsonify(feedback.to_dict()), 201
 
-# ======================================================
-# ROTA CORRETA QUE O SEU FRONT-END USA: /meus-feedbacks
-# ======================================================
+
+# ============================================================
+# ROTA QUE O FRONT USA → /meus-feedbacks
+# ============================================================
 @colab_feedback_bp.route("/meus-feedbacks", methods=["GET"])
 @jwt_required()
 def meus_feedbacks():
     colaborador_id = get_jwt_identity()
-
     feedbacks = FeedbackService.get_feedbacks_para_colaborador(colaborador_id)
     return jsonify([f.to_dict() for f in feedbacks]), 200
+
+
+# ============================================================
+# 7. LISTAR DÚVIDAS + RESPOSTAS PRO COLABORADOR
+# ============================================================
+@colab_feedback_bp.route("/duvidas", methods=["GET"])
+@jwt_required()
+def listar_duvidas_colaborador():
+    colaborador_id = get_jwt_identity()
+    duvidas = FeedbackService.get_duvidas_enviadas_por_colaborador(colaborador_id)
+    return jsonify([d.to_dict() for d in duvidas]), 200

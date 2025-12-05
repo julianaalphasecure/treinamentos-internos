@@ -111,3 +111,46 @@ def deletar_relatorio(relatorio_id):
     if feedback:
         return jsonify({"message": "Feedback deletado com sucesso"}), 200
     return jsonify({"error": "Feedback não encontrado"}), 404
+
+# 7. GESTOR RESPONDE UMA DÚVIDA DO COLABORADOR
+# 7. GESTOR RESPONDE UMA DÚVIDA DO COLABORADOR
+@relatorio_bp.route("/responder/<int:feedback_id>", methods=["POST"])
+@jwt_required()
+def responder_duvida_colaborador(feedback_id):
+    gestor_id = get_jwt_identity()
+
+    # Buscar dúvida original
+    duvida = Feedback.query.get(feedback_id)
+    if not duvida:
+        return jsonify({"error": "Feedback não encontrado"}), 404
+
+    # Garantir que a dúvida pertence a este gestor
+    if int(duvida.gestor_id) != int(gestor_id):
+        return jsonify({"error": "Não autorizado"}), 403
+
+    data = request.get_json()
+    resposta = data.get("resposta")
+
+    if not resposta:
+        return jsonify({"error": "Resposta é obrigatória"}), 400
+
+    # ---- CRIAR NOVO FEEDBACK ENVIADO PARA O COLABORADOR ----
+    resposta_data = {
+        "mensagem": f"Resposta da sua dúvida:\n{resposta}",
+        "colaborador_id": duvida.colaborador_id,  # vai apenas para o colaborador correto
+        "gestor_id": gestor_id,
+        "lido": False
+    }
+
+    nova_resposta = FeedbackService.create_feedback(resposta_data)
+
+    # marcar a dúvida original como respondida
+    duvida.resposta = resposta
+    duvida.data_resposta = db.func.now()
+    db.session.commit()
+
+    return jsonify({
+        "message": "Respondido com sucesso",
+        "duvida": duvida.to_dict(),
+        "resposta_enviada": nova_resposta.to_dict()
+    }), 200

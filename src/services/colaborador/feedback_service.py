@@ -39,7 +39,28 @@ class FeedbackService:
         ).order_by(Feedback.data_feedback.desc()).all()
 
     # ===============================
-    # GESTOR → ENVIA FEEDBACK
+    # GESTOR → RESPONDE DÚVIDA
+    # ===============================
+    @staticmethod
+    def responder_duvida(feedback_original, resposta, gestor_id):
+        """
+        Cria um novo feedback como resposta à dúvida.
+        A resposta é enviada APENAS ao colaborador que enviou a dúvida.
+        """
+
+        novo_feedback = Feedback(
+            colaborador_id=feedback_original.colaborador_id,    # ← envia para o colaborador correto
+            gestor_id=gestor_id,                               # ← resposta veio de qual gestor
+            mensagem=resposta,                                 # ← sem prefixo
+            lido=False
+        )
+
+        db.session.add(novo_feedback)
+        db.session.commit()
+        return novo_feedback
+
+    # ===============================
+    # GESTOR → ENVIA FEEDBACK (genérico)
     # ===============================
     @staticmethod
     def create_feedback(data):

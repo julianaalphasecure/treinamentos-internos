@@ -87,3 +87,4 @@ class FeedbackService:
         feedback.lido = True
         db.session.commit()
         return feedback
+

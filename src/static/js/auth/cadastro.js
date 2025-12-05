@@ -1,13 +1,10 @@
-// Arquivo: /src/static/js/auth/cadastro.js
-
-// CRÍTICO 1: Mudar para o ID do formulário de cadastro
 const form = document.getElementById("cadastro-form");
-// CRÍTICO 2: Definir a URL correta da sua API Flask para o cadastro
+
 const baseURL = "http://localhost:5000/auth/cadastro"; 
-// ^^^ VERIFIQUE SE ESTA É A ROTA CORRETA NO SEU BACKEND ^^^
+
 
 form.addEventListener("submit", async (e) => {
-    // ✅ CRÍTICO 3: Previne o comportamento padrão do HTML (que causa o refresh)
+
     e.preventDefault(); 
     
     // Coleta dos dados do formulário

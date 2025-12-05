@@ -13,12 +13,14 @@ body {
 
 /* ===== LAYOUT PRINCIPAL ===== */
 .main-container {
-  display: flex;
-  margin: 30px 20px;
-  gap: 25px;
-  min-height: 100vh;
+    display: flex;
+    margin: 30px 0 30px 0; 
+    max-width: 1400px; 
+    padding: 0 20px 0 10px; 
+    
+    gap: 25px;
+    min-height: 100vh;
 }
-
 html, body {
   overflow-x: hidden !important; 
   overflow-y: auto; 
@@ -26,17 +28,20 @@ html, body {
 
 /* ===== SIDEBAR ===== */
 .sidebar {
-  width: 220px;
-  position: sticky;
-  top: 20px;
-  background: #fff;
-  border-radius: 20px;
-  padding: 50px 15px;
-  min-height: 700px;
-  box-shadow: 0 6px 14px rgba(0,0,0,0.12);
-  flex-shrink: 0;
+    width: 220px;
+    position: sticky;
+    top: 20px;
+    background: #fff;
+    
+    /* NOVO: Remove o arredondamento da borda esquerda para encostar no canto */
+    border-radius: 0 20px 20px 0; 
+    
+    padding: 50px 15px;
+    min-height: 700px;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+    flex-shrink: 0;
 }
-
+/* ===== LINKS SIDEBAR ===== */
 .sidebar ul li {
   margin-bottom: 20px;
 }
@@ -55,7 +60,7 @@ html, body {
 .sidebar ul li a:hover {
   background: #f88a15;
   color: black;
-  box-shadow: 0 5px 12px rgba(0,0,0,0.18);
+  box-shadow: 4px 4px 10px rgba(0,0,0,0.2);
 }
 
 .sidebar ul li a.active {
@@ -63,24 +68,33 @@ html, body {
   color: black;
   font-weight: bold;
   box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-  transform: translateX(15px);
+  transform: translateX(30px);
 }
 
-/* ===== CONTEÚDO PRINCIPAL ===== */
+/* CONTEÚDO PRINCIPAL (Dentro do .container) */
 .container {
-  display: flex;
-  gap: 30px;
-  flex: 1;
-  align-items: flex-start;
+    display: flex;
+    flex-direction: column;  
+    width: 100%;  
+    gap: 30px;
+    align-items: center; 
+    max-width: 1400px; 
+    
+    /* ADICIONE: Isso vai centralizar o bloco de conteúdo dentro do espaço restante */
+    margin: 0 auto; 
 }
 
-/* ===== ÁREA DE FEEDBACK ===== */
+/* ÁREA DE FEEDBACK (TOPO) */
 .main-content {
-  flex: 1;
-  padding: 40px;
-  background: #fff;
-  border-radius: 18px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.07);
+    width: 100%; 
+    max-width: 900px; 
+    margin: 0 auto; 
+    
+    flex: 1;
+    padding: 40px;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.07);
 }
 
 
@@ -174,12 +188,13 @@ html, body {
 
 /* ===== FORMULÁRIO DE ENVIO ===== */
 .send-feedback-box {
-  flex: 1;
-  max-width: none; /* libera largura */
-  background: #fff;
-  padding: 30px;
-  border-radius: 18px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.07);
+    flex: 0 0 40%; 
+    max-width: 40%;
+    min-height: 550px; 
+    background: #fff;
+    padding: 30px; 
+    border-radius: 18px; 
+    box-shadow: 0 8px 25px rgba(0,0,0,0.07); 
 }
 
 
@@ -210,7 +225,7 @@ html, body {
 }
 
 .send-feedback-box textarea {
-  min-height: 180px; /* área maior para digitar */
+  min-height: 180px; 
 }
 
 .send-feedback-box input:focus,
@@ -266,7 +281,7 @@ html, body {
 }
 
 .container {
-  align-items: stretch; /* deixa as caixas simétricas */
+  align-items: stretch; 
 }
 
 .main-content,
@@ -274,4 +289,191 @@ html, body {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+}
+
+
+/* ====================== BLOCO DE RESPOSTA DO GESTOR ======================= */
+
+.gestor-answer-box {
+    margin-top: 12px;
+    padding: 12px;
+    border-radius: 10px;
+    background: #eef6ff; 
+    border-left: 4px solid #2b7bff;
+}
+
+.gestor-answer-box.pending {
+    background: #fff3cd;
+    border-left: 4px solid #ffcc00;
+}
+
+.gestor-answer-title {
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 5px;
+    color: #1a3d7c;
+}
+
+.gestor-answer-box.pending .gestor-answer-title {
+    color: #8a6d3b;
+}
+
+.gestor-answer {
+    font-size: 14px;
+    line-height: 1.4;
+    color: #444;
+    white-space: pre-wrap;
+}
+
+.answer-date {
+    margin-top: 8px;
+    font-size: 12px;
+    color: #666;
+    text-align: right;
+}
+
+.feedback-card {
+    padding-bottom: 14px;
+}
+.sent-duvidas-box {
+    flex: 1; 
+    background: #fff;
+    padding: 30px; 
+    border-radius: 18px; 
+    box-shadow: 0 8px 25px rgba(0,0,0,0.07); 
+    min-height: 550px; 
+    display: flex;
+    flex-direction: column;
+}
+.duvida-chat-wrapper {
+    margin-bottom: 25px;
+    padding: 12px;
+    background: #fff;
+    border-radius: 10px;
+    border: 1px solid #e5e5e5;
+}
+
+.chat-msg {
+    max-width: 80%;
+    padding: 10px 14px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+}
+
+.chat-msg.usuario {
+    background: #e6f2ff;
+    margin-left: auto;
+    text-align: right;
+}
+
+.chat-msg.gestor {
+    background: #f5f5f5;
+    margin-right: auto;
+    text-align: left;
+}
+
+.chat-msg.pendente {
+    background: #fff8d1;
+    border-left: 4px solid #f0c400;
+}
+
+.chat-name {
+    font-size: 12px;
+    opacity: 0.7;
+    font-weight: 600;
+}
+
+.chat-divider {
+    border-bottom: 1px solid #ddd;
+    margin-top: 10px;
+}
+
+#duvidasList {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 10px;
+    flex-grow: 1; 
+    max-height: 480px; 
+    overflow-y: auto; 
+}
+
+/* PERGUNTA DO COLABORADOR */
+.chat-pergunta {
+    background: #DCF8C6;
+    color: #000;
+    padding: 10px 14px;
+    border-radius: 12px;
+    max-width: 80%;
+    align-self: flex-end;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* RESPOSTA DO GESTOR */
+.chat-resposta {
+    background: #FFF;
+    color: #000;
+    padding: 10px 14px;
+    border-radius: 12px;
+    max-width: 80%;
+    align-self: flex-start;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Aguardando resposta */
+.chat-aguardando {
+    background: #f0f0f0;
+    color: #666;
+    padding: 10px 14px;
+    border-radius: 12px;
+    max-width: 60%;
+    align-self: flex-start;
+    font-style: italic;
+    border: 1px dashed #ccc;
+}
+
+/* Data e hora */
+.chat-data {
+    display: block;
+    font-size: 11px;
+    color: #555;
+    margin-top: 5px;
+    text-align: right;
+}
+
+.bottom-sections-wrapper {
+    display: flex; 
+    gap: 30px; 
+    width: 100%; 
+    margin-top: 15px;
+    margin-bottom: 30px; 
+    
+    
+    max-width: 1200px; 
+    margin-left: auto;  
+    margin-right: auto;
+}
+
+
+.send-feedback-box {
+    flex: 0 0 40%; 
+    max-width: 40%;
+   
+}
+
+.sent-duvidas-box {
+    flex: 1; 
+    background: #fff;
+    padding: 30px; 
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.07); 
+    margin-top: 0;
+}
+
+
+.chat-container {
+    max-height: 450px; 
+    overflow-y: auto; 
+    padding-right: 10px;
 }

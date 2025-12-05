@@ -41,47 +41,51 @@
        
       </div>
 
-  
-      <div class="send-feedback-box">
+      
+
+ <div class="bottom-sections-wrapper">
+
+    <div class="send-feedback-box">
         <h3>Enviar Mensagem</h3>
 
         <form id="sendFeedbackForm">
+            <label for="destinatario">Enviar para</label>
+            <input type="text" id="destinatario" placeholder="Digite o nome do gestor..." autocomplete="off" required>
+            <input type="hidden" id="destinatario_id" value=""> 
 
-   
- <label for="destinatario">Enviar para</label>
-<input type="text" id="destinatario" placeholder="Digite o nome do gestor..." autocomplete="off" required>
-<input type="hidden" id="destinatario_id" value=""> <!-- <-- ESSENCIAL -->
+            <div id="autocomplete-gestores" class="autocomplete-list"></div>
 
-<!-- container onde aparecem as sugestões -->
-<div id="autocomplete-gestores" class="autocomplete-list"></div>
+            <label for="assunto">Assunto</label>
+            <select id="assunto" required>
+                <option value="">Selecione um assunto...</option>
+                <option value="duvida-modulo">Dúvida sobre um módulo</option>
+                <option value="erro-modulo">Erro em Módulo de Treinamento</option>
+                <option value="reportar-bug">Reportar Bug</option>
+                <option value="elogio">Elogio</option>
+                <option value="reclamacao">Reclamação</option>
+                <option value="outro">Outro</option>
+            </select>
 
-          <label for="assunto">Assunto</label>
-          <select id="assunto" required>
-            <option value="">Selecione um assunto...</option>
-            <option value="duvida-modulo">Dúvida sobre um módulo</option>
-            <option value="erro-modulo">Erro em Módulo de Treinamento</option>
-            <option value="reportar-bug">Reportar Bug</option>
-            <option value="elogio">Elogio</option>
-            <option value="reclamacao">Reclamação</option>
-            <option value="outro">Outro</option>
-          </select>
+            <label for="mensagem">Mensagem</label>
+            <textarea id="mensagem" rows="6" placeholder="Digite sua dúvida, feedback ou observação..." required></textarea>
 
-          <label for="mensagem">Mensagem</label>
-          <textarea id="mensagem" rows="6" placeholder="Digite sua dúvida, feedback ou observação..." required></textarea>
-
-          <button type="submit" class="send-btn">Enviar</button>
+            <button type="submit" class="send-btn">Enviar</button>
         </form>
 
         <p id="sendStatus" class="status-msg"></p>
-      </div>
-
     </div>
-  </div>
 
- 
 
-  <script src="/src/static/js/colaborador/feedback.js"></script>
-  <script src="/src/static/js/global.js"></script>
+    <div class="sent-duvidas-box">
+        <h3>Histórico de Conversas</h3>
+
+        <div id="duvidasList" class="chat-container">
+            </div>
+    </div>
+
+</div> </div> </div>  
+<script src="/src/static/js/colaborador/feedback.js"></script>
+<script src="/src/static/js/global.js"></script>
 
 </body>
 </html>

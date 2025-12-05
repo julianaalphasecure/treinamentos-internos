@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const usuarioGestor = JSON.parse(localStorage.getItem("usuario_gestor"));
-    const token = localStorage.getItem("token_gestor");
+    const usuarioGestor = JSON.parse(sessionStorage.getItem("usuario_gestor"));
+    const token = sessionStorage.getItem("token_gestor");
     const baseURL = "http://127.0.0.1:5000/colaborador"; 
 
     if (!usuarioGestor || !usuarioGestor.id) {

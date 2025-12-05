@@ -1,4 +1,3 @@
-// Arquivo: login.js (CORRIGIDO)
 const form = document.getElementById("login-form");
 
 form.addEventListener("submit", async (e) => {
@@ -20,7 +19,6 @@ form.addEventListener("submit", async (e) => {
         });
 
         const data = await res.json();
-        
         console.log("Resposta completa do servidor (data):", data);
 
         if (!res.ok) {
@@ -30,28 +28,32 @@ form.addEventListener("submit", async (e) => {
 
         const usuario = data.usuario;
         const tokenJWT = data.access_token;
-        
+
         if (!tokenJWT) {
-            console.warn("Atenção: Token JWT não recebido do servidor. Login falhou."); 
+            console.warn("Token JWT não recebido do servidor.");
             return;
         }
 
-
+    
         if (usuario.tipo_acesso === "colaborador") {
-            localStorage.setItem("token_colaborador", tokenJWT); 
-            localStorage.setItem("usuario_colaborador", JSON.stringify(usuario));
-            window.location.href = "/src/templates/colaborador/modulo.html"; 
+
+            sessionStorage.setItem("token_colaborador", tokenJWT);
+            sessionStorage.setItem("usuario_colaborador", JSON.stringify(usuario));
+
+            window.location.href = "/src/templates/colaborador/modulo.html";
 
         } else if (usuario.tipo_acesso === "gestor") {
-    
-            localStorage.setItem("token_gestor", tokenJWT); 
-            localStorage.setItem("usuario_gestor", JSON.stringify(usuario));
+
+            sessionStorage.setItem("token_gestor", tokenJWT);
+            sessionStorage.setItem("usuario_gestor", JSON.stringify(usuario));
+
             window.location.href = "/src/templates/gestor/equipe.html";
+
         } else {
             alert("Tipo de acesso desconhecido. Contate o administrador.");
         }
 
-        console.log(`Token recebido e salvo em localStorage. Chave: token_${usuario.tipo_acesso}`);
+        console.log(`Token salvo em sessionStorage: token_${usuario.tipo_acesso}`);
 
     } catch (err) {
         alert("Erro de conexão com o servidor");
