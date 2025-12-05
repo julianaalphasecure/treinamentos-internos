@@ -2,10 +2,8 @@ const feedbackList = document.getElementById('feedbackList');
 const viewAllBtn = document.getElementById('viewAllBtn');
 
 
-// Rota CERTA para mostrar APENAS feedbacks do colaborador
 const baseURL = "http://127.0.0.1:5000/colaborador/feedback/meus-feedbacks";
 
-// Rota CERTA para enviar dúvidas
 const enviarURL = "http://127.0.0.1:5000/colaborador/feedback/enviar";
 
 const gestoresURL = "http://127.0.0.1:5000/colaborador/feedback/gestores";
@@ -15,7 +13,7 @@ const gestoresURL = "http://127.0.0.1:5000/colaborador/feedback/gestores";
 async function loadGestores(query) {
     if (!query || query.length < 1) return [];
 
-    const TOKEN = localStorage.getItem("token_colaborador");
+    const TOKEN = sessionStorage.getItem("token_colaborador");
 
     try {
         const response = await fetch(`${gestoresURL}?nome=${query}`, {
@@ -87,7 +85,7 @@ function formatDate(datetime) {
 }
 // ================== Carregar Feedbacks ==================
 async function loadFeedbacks() {
-    const TOKEN = localStorage.getItem("token_colaborador"); 
+    const TOKEN = sessionStorage.getItem("token_colaborador"); 
 
     if (!TOKEN) {
         feedbackList.innerHTML = '<p>Erro de autenticação. Faça login novamente.</p>';
@@ -105,7 +103,7 @@ async function loadFeedbacks() {
 
         if (!response.ok) {
             if (response.status === 401 || response.status === 403) {
-                localStorage.removeItem("token_colaborador");
+                sessionStorage.removeItem("token_colaborador");
                 window.location.href = "/src/templates/auth/login.html";
                 return;
             }
@@ -121,7 +119,7 @@ data = data.filter(fb => fb.mensagem.startsWith("[FEEDBACK]"));
 
         if (data.length === 0) {
             feedbackList.innerHTML = '<p>Nenhum feedback recebido.</p>';
-            viewAllBtn.style.display = 'none';
+            if (viewAllBtn) viewAllBtn.style.display = 'none';
             return;
         }
 
@@ -157,13 +155,116 @@ data = data.filter(fb => fb.mensagem.startsWith("[FEEDBACK]"));
         feedbackList.innerHTML = `<p>Falha ao carregar feedbacks: ${err.message}</p>`;
     }
 }
+loadDuvidas();
+
+
+/* ============================================
+      CARREGAR DÚVIDAS ENVIADAS (CHAT)
+=============================================== */
+async function loadDuvidas() {
+    const TOKEN = sessionStorage.getItem("token_colaborador");
+    const duvidasBox = document.getElementById("duvidasList");
+
+    // =============================
+    // FUNÇÃO PARA NORMALIZAR E FORMATAR SÓ A DATA (AMERICA/SAO_PAULO)
+    // =============================
+    function formatDateToSaoPaulo(dateStr) {
+        if (!dateStr) return null;
+
+        // Normaliza "YYYY-MM-DD HH:MM:SS" -> "YYYY-MM-DDTHH:MM:SSZ"
+        if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(dateStr)) {
+            dateStr = dateStr.replace(" ", "T") + "Z";
+        }
+
+        // Normaliza "YYYY-MM-DDTHH:MM:SS" -> assume UTC se não houver timezone
+        if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/.test(dateStr)) {
+            dateStr = dateStr + "Z";
+        }
+
+        const d = new Date(dateStr);
+        if (isNaN(d.getTime())) return null;
+
+        // Tenta formatar usando timeZone de São Paulo
+        try {
+            return d.toLocaleDateString("pt-BR", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+                timeZone: "America/Sao_Paulo"
+            });
+        } catch (e) {
+            // Fallback: subtrai 3h (UTC-3) e retorna apenas a data local
+            const fallback = new Date(d.getTime() - 3 * 60 * 60 * 1000);
+            return fallback.toLocaleDateString("pt-BR", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric"
+            });
+        }
+    }
+
+    try {
+        const response = await fetch("http://127.0.0.1:5000/colaborador/feedback/duvidas", {
+            method: "GET",
+            headers: { "Authorization": `Bearer ${TOKEN}` }
+        });
+
+        let data = await response.json();
+
+        // Filtrar apenas dúvidas
+        data = data.filter(fb => fb.mensagem && fb.mensagem.startsWith("[duvida-modulo]"));
+
+        duvidasBox.innerHTML = "";
+
+        if (data.length === 0) {
+            duvidasBox.innerHTML = "<p>Nenhuma dúvida enviada ainda.</p>";
+            return;
+        }
+
+        data.forEach(fb => {
+            const perguntaOriginal = fb.mensagem ? fb.mensagem.replace(/\[.*?\]/g, "").trim() : "";
+
+            const dataEnvio = formatDateToSaoPaulo(fb.data_feedback) || "—";
+            const dataResposta = formatDateToSaoPaulo(fb.data_resposta) || "—";
+
+            const bloco = document.createElement("div");
+            bloco.classList.add("chat-item");
+
+            bloco.innerHTML = `
+                <div class="chat-pergunta">
+                    <p><strong>Você:</strong> ${perguntaOriginal}</p>
+                    <span class="chat-data">${dataEnvio}</span>
+                </div>
+
+                ${fb.resposta ? `
+                    <div class="chat-resposta">
+                        <p><strong>${fb.gestor_nome || 'Gestor'} respondeu:</strong> ${fb.resposta}</p>
+                        <span class="chat-data">${dataResposta}</span>
+                    </div>
+                ` : `
+                    <div class="chat-aguardando">
+                        <p><em>Aguardando resposta do gestor...</em></p>
+                    </div>
+                `}
+            `;
+
+            duvidasBox.appendChild(bloco);
+        });
+
+    } catch (err) {
+        console.error("Erro ao carregar dúvidas:", err);
+        duvidasBox.innerHTML = "<p>Erro ao carregar histórico.</p>";
+    }
+}
+
+
 
 // ================== Marcar Feedback como Lido ==================
 feedbackList.addEventListener('click', async (e) => {
     if (e.target.classList.contains('mark-read-btn') && !e.target.disabled) {
         const card = e.target.closest('.feedback-card');
         const feedbackId = card.dataset.id;
-        const TOKEN = localStorage.getItem("token_colaborador");
+        const TOKEN = sessionStorage.getItem("token_colaborador");
 
         try {
             const response = await fetch(`http://127.0.0.1:5000/colaborador/feedback/marcar-lido/${feedbackId}`,
@@ -192,17 +293,16 @@ const form = document.getElementById("sendFeedbackForm");
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const TOKEN = localStorage.getItem("token_colaborador");
-    const colaborador = JSON.parse(localStorage.getItem("usuario_colaborador"));
+    const TOKEN = sessionStorage.getItem("token_colaborador");
+    const colaborador = JSON.parse(sessionStorage.getItem("usuario_colaborador"));
 
     const mensagemInput = document.getElementById("mensagem");
     const assuntoInput = document.getElementById("assunto");
 
     const data = {
         gestor_id: destinatarioHidden.value,
-        colaborador_id: colaborador.id,
         assunto: assuntoInput.value.trim(),
-        mensagem: "[DUVIDA] " + mensagemInput.value.trim()
+        mensagem: "[duvida-modulo] " + mensagemInput.value.trim()
     };
 
     if (!data.gestor_id) {
@@ -232,13 +332,18 @@ form.addEventListener("submit", async (e) => {
             return;
         }
 
-        // ⚡ GARANTE QUE APARECE O TOAST
+        // GARANTE QUE APARECE O TOAST
         showToast("Dúvida enviada com sucesso!");
 
-        // ⚡ Aguarda um tick para renderizar o toast antes de limpar
+        // Aguarda um tick para renderizar o toast antes de limpar
         setTimeout(() => {
+            // Limpa todos os campos
             mensagemInput.value = "";
             assuntoInput.value = "";
+            destinatarioInput.value = "";
+            destinatarioHidden.value = "";
+            autocompleteBox.innerHTML = "";
+            autocompleteBox.style.display = "none";
         }, 50);
 
     } catch (err) {
@@ -246,6 +351,7 @@ form.addEventListener("submit", async (e) => {
         showToast("Erro inesperado.");
     }
 });
+
 
 // ================== Botão "Ver Todos" ==================
 if (viewAllBtn) {
@@ -258,8 +364,8 @@ loadFeedbacks();
 
 
 document.addEventListener("DOMContentLoaded", () => {
-    const savedTheme = localStorage.getItem("theme") || "claro";
-    const savedFont = localStorage.getItem("font-size") || "padrao";
+    const savedTheme = sessionStorage.getItem("theme") || "claro";
+    const savedFont = sessionStorage.getItem("font-size") || "padrao";
 
     document.body.setAttribute("data-theme", savedTheme);
     document.body.setAttribute("data-font", savedFont);
