@@ -13,8 +13,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             e.preventDefault();
 
             // Remove dados
-            localStorage.removeItem("token_colaborador");
-            localStorage.removeItem("usuario_colaborador");
+            sessionStorage.removeItem("token_colaborador");
+            sessionStorage.removeItem("usuario_colaborador");
 
             // Redireciona sem permitir voltar
             window.location.replace("/src/templates/auth/login.html");
@@ -23,8 +23,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // ================== VERIFICA LOGIN ==================
     const userNameElement = document.getElementById("user-name");
-    const usuarioColaborador = JSON.parse(localStorage.getItem("usuario_colaborador"));
-    const token = localStorage.getItem("token_colaborador");
+    const usuarioColaborador = JSON.parse(sessionStorage.getItem("usuario_colaborador"));
+    const token = sessionStorage.getItem("token_colaborador");
     const usuarioId = usuarioColaborador?.id;
 
     if (!usuarioColaborador || !usuarioId) {
@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // ================== CARREGAR PROGRESSO ==================
     window.carregarProgresso = async function carregarProgresso() {
-        const TOKEN = localStorage.getItem("token_colaborador");
+        const TOKEN = sessionStorage.getItem("token_colaborador");
 
         if (!TOKEN) {
             console.error("Token ausente.");
@@ -144,10 +144,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                 if (moduloAPI) {
                     let percent = moduloAPI.percent || 0;
                     
-                    // 🚨 CORREÇÃO TEMPORÁRIA: Anula o status 'concluido' se a percentagem for 0.
                     let status = moduloAPI.status;
                     if (status === "concluido" && percent === 0) {
-                        // Força o status para ser tratado como não concluído
                         status = "nao_iniciado"; 
                     }
 
@@ -177,8 +175,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             console.error("Erro ao carregar progresso:", error);
 
             if (error.message.includes("Não autorizado")) {
-                localStorage.removeItem("token_colaborador");
-                localStorage.removeItem("usuario_colaborador");
+                sessionStorage.removeItem("token_colaborador");
+                sessionStorage.removeItem("usuario_colaborador");
                 window.location.replace("/src/templates/auth/login.html");
             }
         }
