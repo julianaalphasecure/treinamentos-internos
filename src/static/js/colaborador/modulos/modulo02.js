@@ -59,7 +59,7 @@ const allQuestions = [
     },
     // 2
     {
-        enunciado: "A ausência de imagem em um disparo de alarme invaida o acionamento de apoio externo?",
+        enunciado: "A ausência de imagem em um disparo de alarme invalida o acionamento de apoio externo?",
         alternativas: {
             a: "Sim, sempre, pois a imagem é fundamental para caracterizar o sinistro",
             b: "Não, desde que haja indício relevante, mesmo sem imagem",
@@ -147,7 +147,7 @@ const allQuestions = [
     },
     // 10
     {
-        enunciado: "O plano de contigência deve ser ativado quando:",
+        enunciado: "O plano de contingência deve ser ativado quando:",
         alternativas: {
             a: "O operador estiver sozinho e sem suporte",
             b: "A gestão central estiver offline",

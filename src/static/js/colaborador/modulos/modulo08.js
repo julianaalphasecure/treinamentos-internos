@@ -59,7 +59,7 @@ const allQuestions = [
     },
     // 2
     {
-        enunciado: "A tesouraria só pode ser desarmada fora horário automático sob qual condição?",
+        enunciado: "A tesouraria só pode ser desarmada fora do horário automático sob qual condição?",
         alternativas: {
             a: "Solicitação via e-mail GESEC com 24h",
             b: "Presença da polícia e do gerente, apenas em caso de sinistro",
@@ -187,7 +187,7 @@ const allQuestions = [
         alternativas: {
             a: "Solicitar apoio do gerente",
             b: "Acionar PM imediatamente",
-            c: "Ativar sirene > abrir haçç > usar GN curto > acionar polícia se persistir",
+            c: "Ativar sirene > abrir hall > usar GN curto > acionar polícia se persistir",
             d: "Acionar a retaguarda para remoção"
         },
         correta: "d"

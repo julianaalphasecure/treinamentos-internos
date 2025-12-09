@@ -12,7 +12,6 @@ def obter_perfil(usuario_id):
         return jsonify({"error": "Usuário não encontrado"}), 404
 
     usuario_dict = usuario.to_dict()
-    # garante campos preenchidos
     usuario_dict["foto"] = usuario_dict.get("foto") or "/src/static/img/foto.png"
     usuario_dict["telefone"] = usuario_dict.get("telefone") or ""
     usuario_dict["departamento"] = usuario_dict.get("departamento") or ""

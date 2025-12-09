@@ -114,7 +114,7 @@ const allQuestions = [
     },
     // 7
     {
-        enunciado: "Em condomínio comercial, qual falha exige abertura de OS. SOmente se o equipamento tiver sido adquirido com a Alpha e estiver na garantia?",
+        enunciado: "Em condomínio comercial, qual falha exige abertura de OS. Somente se o equipamento tiver sido adquirido com a Alpha e estiver na garantia?",
         alternativas: {
             a: "Queda de energia",
             b: "Falha na biometria",
@@ -129,14 +129,14 @@ const allQuestions = [
         alternativas: {
             a: "Sempre que não estiver pré-cadastrado",
             b: "Quando o responsável não atender após 3 tentativas",
-            c: "Após tentativas frustada de contato + ausência de autorização",
-            d: "Quando não apresnetar documento oficial"
+            c: "Após tentativas frustrada de contato + ausência de autorização",
+            d: "Quando não apresentar documento oficial"
         },
         correta: "c"
     },
     // 9
     {
-        enunciado: "Qual sistema deve ser consultadp na aba 'anotações' para regras internas de cada condomínio?",
+        enunciado: "Qual sistema deve ser consultado na aba 'anotações' para regras internas de cada condomínio?",
         alternativas: {
             a: "Situator",
             b: "Unis",
@@ -175,7 +175,7 @@ const allQuestions = [
         alternativas: {
             a: "Barulho alto",
             b: "Festa fora do horário permitido",
-            c: "Barulho suspeito interpretador como pedido de socorro",
+            c: "Barulho suspeito interpretado como pedido de socorro",
             d: "Reclamação anônima de condômino"
         },
         correta: "c"
@@ -183,11 +183,11 @@ const allQuestions = [
 
     //13
     {
-        enunciado: "No disparo de alarme se sensor, quando o evento deve ser encerrado sem acionar forças externas?",
+        enunciado: "No disparo de alarme de sensor, quando o evento deve ser encerrado sem acionar forças externas?",
         alternativas: {
             a: "Quando há pessoas no local, mas sem autorização",
             b: "Sempre que não houver anomalias no CFTV",
-            c: "Quando o sensor dispara suas vezes seguidas",
+            c: "Quando o sensor dispara duas vezes seguidas",
             d: "Quando o síndico não atender"
         },
         correta: "b"
@@ -207,7 +207,7 @@ const allQuestions = [
 
     //15
     {
-        enunciado: "Qual ação é exigida ao operador quando a porta corte-fogo aparece aberta no CFTV sem evidência de incêndio?",
+        enunciado: "Qual ação é exigida ao operador quando a porta corta-fogo aparece aberta no CFTV sem evidência de incêndio?",
         alternativas: {
             a: "Acionar bombeiros imediatamente",
             b: "Registrar ocorrência no SIGMA e liberar",

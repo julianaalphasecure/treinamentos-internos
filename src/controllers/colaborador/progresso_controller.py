@@ -7,10 +7,7 @@ from src.services.colaborador.colaborador_service import ColaboradorService
 progresso_bp = Blueprint("progresso_bp", __name__, url_prefix="/colaborador/progresso")
 
 
-# ... (Rota progresso_frontend e progresso_colaborador_gestor permanecem inalteradas)
-# A rota /frontend e /gestor/colaborador/<int:colaborador_id> foram omitidas aqui
-# para focar na mudança, mas o seu código acima está correto para elas.
-# ...
+
 
 @progresso_bp.route("/frontend", methods=["GET"])
 @jwt_required()
@@ -32,19 +29,19 @@ def progresso_frontend():
         for p in progresso_list:
             nome_modulo = p.modulo.nome if p.modulo else f"Módulo {p.modulo_id}"
 
-            # >>> AJUSTE AQUI: Calcular o percentual de progresso (0, 50, 100)
+
             if p.status == 'concluido':
                 percent_progresso = 100.0
             elif p.status == 'em_andamento':
                 percent_progresso = 50.0 
             else:
                 percent_progresso = 0.0
-            # <<< Fim do Ajuste
+           
 
             modulos_dict[p.modulo_id] = {
                 "modulo_id": p.modulo_id,
                 "nome": nome_modulo,
-                "percent": percent_progresso, # Usando o progresso de 0-100
+                "percent": percent_progresso, 
                 "status": p.status,
                 "nota_final": float(p.nota_final) if p.nota_final is not None else None, # Opcional: manter nota
                 "tentativas": p.tentativas
@@ -71,9 +68,7 @@ def progresso_frontend():
         return jsonify({"error": "Erro interno ao processar progresso."}), 500
 
 
-# ====================================================================
-# >>> ROTA GESTOR AJUSTADA (Separa Percentual de Nota Final) <<<
-# ====================================================================
+
 @progresso_bp.route("/gestor/colaborador/<int:colaborador_id>", methods=["GET"])
 @jwt_required()
 def progresso_colaborador_gestor(colaborador_id):
@@ -90,7 +85,7 @@ def progresso_colaborador_gestor(colaborador_id):
         for p in progresso_list:
             nome_modulo = p.modulo.nome if p.modulo else f"Módulo {p.modulo_id}"
 
-            # 1. Percentual de progresso (0–100)
+           
             if p.status == 'concluido':
                 percent_progresso = 100.0
             elif p.status == 'em_andamento':
@@ -98,7 +93,7 @@ def progresso_colaborador_gestor(colaborador_id):
             else:
                 percent_progresso = 0.0
 
-            # 2. Nota real obtida (nota_final)
+          
             nota_obtida = float(p.nota_final) if p.nota_final is not None else None
 
             modulos_dict[p.modulo_id] = {
@@ -125,23 +120,14 @@ def progresso_colaborador_gestor(colaborador_id):
         return jsonify({"error": "Erro interno ao processar progresso do colaborador."}), 500
 
 
-# ====================================================================
-# >>> FINALIZAR MÓDULO (REFATORADA: Usuário pego do Token) <<<
-# ====================================================================
-# ROTA REFATORADA: Remove o usuario_id da URL
+
 @progresso_bp.route("/finalizar/<int:modulo_id>", methods=["POST"])
 @jwt_required()
 def finalizar_modulo(modulo_id):
     try:
         data = request.get_json() or {}
-
-        # 1. Obtém o ID do usuário diretamente do token (SEGURANÇA)
         usuario_id = int(get_jwt_identity())
-        
-        # 2. Lê a nota real (float)
         nota_final = float(data.get("nota_final", 0.0))
-
-        # 3. Finaliza módulo
         progresso = ProgressoService.finalizar_modulo(usuario_id, modulo_id, nota_final)
 
         return jsonify({

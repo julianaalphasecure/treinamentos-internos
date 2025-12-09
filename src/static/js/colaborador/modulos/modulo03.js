@@ -51,7 +51,7 @@ const allQuestions = [
         enunciado: "O que caracteriza um alarme de sinistro?",
         alternativas: {
             a: "Um aviso automático que ocorre apenas por falhas técnicas",
-            b: "Um alerta indicando situação crítica que exige respposta imediata",
+            b: "Um alerta indicando situação crítica que exige resposta imediata",
             c: "Um aviso usado apenas para acesso autorizado",
             d: "Um sinal exclusivo para manutenção preventiva"
         },
@@ -84,7 +84,7 @@ const allQuestions = [
         enunciado: "Um sinistro confirmado nas imagens exige:",
         alternativas: {
             a: "Acionamento imediato da equipe administrativa",
-            b: "Suspensão do registro do ocorrência",
+            b: "Suspensão do registro da ocorrência",
             c: "Seguir a cronologia de acionamento",
             d: "Reiniciar todas as câmeras"
         },
@@ -92,7 +92,7 @@ const allQuestions = [
     },
     // 5
     {
-        enunciado: "Um queda da usina é definida como :",
+        enunciado: "Uma queda da usina é definida como :",
         alternativas: {
             a: "Perda parcial de imagem em uma câmera",
             b: "Interrupção completa da operação, incluindo elétrica e comunicação",

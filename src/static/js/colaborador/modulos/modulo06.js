@@ -53,7 +53,7 @@ const allQuestions = [
             a: "Falha de autoteste simultânea com abertura de porta",
             b: "Não confirmação da senha e contrassenha após verificação da câmera",
             c: "Ausência do vigilante na guarita",
-            d: "Queda de nergia seguida de tamper"
+            d: "Queda de energia seguida de tamper"
         },
         correta: "b"
     },
@@ -125,7 +125,7 @@ const allQuestions = [
     },
     // 8
     {
-        enunciado: "Em monitoramento de alarme sem CFTV, qual é a cronologia correta de acionamento quando senha/contrassenha nao são confirmadas?",
+        enunciado: "Em monitoramento de alarme sem CFTV, qual é a cronologia correta de acionamento quando senha/contrassenha não são confirmadas?",
         alternativas: {
             a: "Cliente > PM > Supervisor",
             b: "Supervisor > Pronta resposta > PM",
@@ -207,7 +207,7 @@ const allQuestions = [
 
     //15
     {
-        enunciado: "Qula ação é obrigatória em qualquer envio de pronta resposta?",
+        enunciado: "Qual ação é obrigatória em qualquer envio de pronta resposta?",
         alternativas: {
             a: "Geração de relatório manual em papel",
             b: "Registro no SIGMA contendo ordem de deslocamento, chegada e situação",

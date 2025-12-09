@@ -6,9 +6,7 @@ from src.models.usuario import Usuario
 colab_feedback_bp = Blueprint("colab_feedback_bp", __name__)
 
 
-# ============================================================
-# 1. LISTAR FEEDBACKS (NÃO inclui dúvidas)
-# ============================================================
+# Lista feedback
 @colab_feedback_bp.route("/", methods=["GET"])
 @jwt_required()
 def listar_feedbacks_colaborador():
@@ -17,16 +15,13 @@ def listar_feedbacks_colaborador():
     return jsonify([f.to_dict() for f in feedbacks]), 200
 
 
-# ============================================================
-# 4. MARCAR FEEDBACK COMO LIDO
-# (Corrigido: antes buscava lista, agora busca o item correto)
-# ============================================================
+
+# Marca feedback como lido
 @colab_feedback_bp.route("/marcar-lido/<int:feedback_id>", methods=["PUT"])
 @jwt_required()
 def marcar_feedback_lido(feedback_id):
     colaborador_id = get_jwt_identity()
 
-    # Buscar 1 feedback específico
     feedback = FeedbackService.get_feedback_by_id(feedback_id)
 
     if not feedback:
@@ -43,9 +38,7 @@ def marcar_feedback_lido(feedback_id):
     return jsonify({"message": "Feedback marcado como lido"}), 200
 
 
-# ============================================================
-# 5. LISTAR GESTORES (para enviar dúvidas)
-# ============================================================
+# Lista gestores ( para enviar dúvida)
 @colab_feedback_bp.route("/gestores", methods=["GET"])
 @jwt_required()
 def listar_gestores():
@@ -61,9 +54,7 @@ def listar_gestores():
     return jsonify([{"id": g.id, "nome": g.nome} for g in gestores]), 200
 
 
-# ============================================================
-# 6. COLABORADOR → ENVIAR DÚVIDA
-# ============================================================
+# Colaborador envia dúvida
 @colab_feedback_bp.route("/enviar", methods=["POST"])
 @jwt_required()
 def enviar_feedback():
@@ -87,9 +78,7 @@ def enviar_feedback():
     return jsonify(feedback.to_dict()), 201
 
 
-# ============================================================
-# ROTA QUE O FRONT USA → /meus-feedbacks
-# ============================================================
+
 @colab_feedback_bp.route("/meus-feedbacks", methods=["GET"])
 @jwt_required()
 def meus_feedbacks():
@@ -98,9 +87,7 @@ def meus_feedbacks():
     return jsonify([f.to_dict() for f in feedbacks]), 200
 
 
-# ============================================================
-# 7. LISTAR DÚVIDAS + RESPOSTAS PRO COLABORADOR
-# ============================================================
+# Lista dúvidas + respostas
 @colab_feedback_bp.route("/duvidas", methods=["GET"])
 @jwt_required()
 def listar_duvidas_colaborador():

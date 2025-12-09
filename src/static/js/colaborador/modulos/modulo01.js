@@ -125,7 +125,7 @@ const allQuestions = [
     },
     // 8
     {
-        enunciado: "Qual é a ordem correta de comunicação típica quando o técnico local não resolve um porblema grave?",
+        enunciado: "Qual é a ordem correta de comunicação típica quando o técnico local não resolve um problema grave?",
         alternativas: {
             a: "Operador > Técnico local > Supervisor de operações > Manutenção",
             b: "Operador > Supervisor > Técnico local > Pronta resposta",

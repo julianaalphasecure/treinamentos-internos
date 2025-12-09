@@ -46,21 +46,141 @@ const EX_KEY_RESET = `mod${moduleId}_ex_reset`;
 
 // ================== BANCO DE QUESTÕES ==================
 const allQuestions = [
-    { enunciado: "O monitoramento do leilão é realizado utilizando:", alternativas: { a: "Sistema de rádio interno", b: "Software VMS (Sistema de gerenciamento de vídeo)", c: "Planilha eletrônica", d: "Aplicativo móvel de segurança" }, correta: "b" },
-    { enunciado: "O operador no monitoramento do leilão deve atuar de forma:", alternativas: { a: "Rápida e agressiva", b: "Discreta, precisa e responsável", c: "Comunicativa, exposta e organizada", d: "Exclusivamente técnica, sem comunicação" }, correta: "b" },
-    { enunciado: "Quem é o contato de checagem?", alternativas: { a: "O gestor administrativo da empresa", b: "O responsável por liberar gravações", c: "A pessoa que verifica atividades suspeitas na unidade", d: "O operador de suporte técnico" }, correta: "c" },
-    { enunciado: "Quando o operador deve ligar para o contato de checagem?", alternativas: { a: "Apenas durante o horário comercial", b: "Somente quando solicitado pela gestão", c: "Diante de movimentação suspeita, falha nas câmeras ou abertura fora do horário", d: "Apenas após consultar todos os responsáveis" }, correta: "c" },
-    { enunciado: "Os contatos de contigência são acionados quando:", alternativas: { a: "O contato de checagem autoriza", b: "A polícia faz a solicitação", c: "O operador não consegue acessar as imagens", d: "O contato principal não responde" }, correta: "d" },
-    { enunciado: "A ordem de acionamento da lista de contingência é:", alternativas: { a: "Polícia Militar > Checagem local > Responsáveis", b: "Responsável 2 > Checagem local > PM", c: "Checagem local > Polícia Militar > Responsável 1 > Responsável 2", d: "Contato de checagem > Responsavel 2 > Polícia > Responsável 1" }, correta: "c" },
-    { enunciado: "As áreas trancadas do pátio são utilizadas para:", alternativas: { a: "Armazenar caminhões cegonha", b: "Guardar as motos de maior valor", c: "Abrigo de funcionários", d: "Depósito de documentos" }, correta: "b" },
-    { enunciado: "Ao identificar abertura não autorizada de uma área trancada, o operador deve:", alternativas: { a: "Gravar um áudio avisando a equipe", b: "Ignorar e aguardar nova movimentação", c: "Acionar imediatamente o contato de checagem", d: "Aguardar o fechamento automático" }, correta: "c" },
-    { enunciado: "Na movimentação diária, o operador deve observar:", alternativas: { a: "Apenas entrada e saída de funcionários", b: "Somente caminhões cegonha", c: "Entrada e saída de veículos, presença de pessoas e operações no pátio", d: "Apenas acesso ao escritório administrativo" }, correta: "c" },
-    { enunciado: "Durante a queda das imagens, o operador deve:", alternativas: { a: "Reiniciar o VMS sem informar ninguém", b: "Notificar apenas o cliente", c: "Acionar suporte técnico e informar o gestor imediato", d: "Encerrar o turno até o sistema voltar" }, correta: "c" },
-    { enunciado: "Em uma situação em que uma área tranacada é aberta e a imagem da câmera correspondente cai simultaneamente, qual é o procedimento mais adequado segundo o protocolo do módulo?", alternativas: { a: "Registrar a queda e aguardar o restabelecimento automático das imagens para confirmar o motivo da abertura", b: "Acionar imediatamente o contato de checagem, registrar a abertura e somente depois acionar suporte técnico", c: "Primeiro acionar suporte técnico para restaurar a câmera, e só após confirmar se houve atividade suspeita", d: "Acionar diretamente a Polícia Militar, pois abertura com queda de câmera sempre caracteriza violação crítica" }, correta: "b" },
-    { enunciado: "Se durante o monitoramento o operador observar movimentação no pátio compatível com atividade autorizada, porém realizada fora do horário permitido e sem contato prévio, qual ação está de acordo com os procedimentos?", alternativas: { a: "Considerar a movimentação normal, pois pode ser atraso operacional da equipe local", b: "Acionar imediatamente o contato de contingência, pulando o contato de checagem por se tratar de atividade fora do horário", c: "Registrar apenas se houver evidência de dano ao patrimônio", d: "Acionar o contato de checagem para confirmar autorização, registrar o evento e aguardar instruções" }, correta: "d" },
-    { enunciado: "Durante uma queda parcial das imagens, o operador nota que apenas câmeras que cobrem áreas sensíveis ficaram offline. Qual é a interpretação e conduta mais coerente com os protocolos?", alternativas: { a: "Considerar falha técnica isolada e acionar apenas suporte técnico", b: "Tratar como possível ação direcionada, acionar suporte técnico, informar o gestor imediato e monitorar as demais áreas", c: "Recarregar o VMS e aguardar retorno, se persistir por mais de 10 minutos, registrar como ocorre^ncia menor", d: "Registrar queda geral do sistema, mesmo que somente parte dele esteja offline" }, correta: "b" },
-    { enunciado: "Sobre solicitações de gravação, qual situação representa violação direta do protocolo?", alternativas: { a: "Encaminhar a solicitação ao e-mail oficial dos responsáveis antes de resgatar as imagens", b: "Informar ao solicitante não autorizado que o pedido será encaminhado para análise", c: "Enviar as imagens diretamente ao solicitante se ele se identificar como funcionário do pátio, mesmo sem estar na lista", d: "Aguardar a autorização do cliente para iniciar qualquer etapa de resgate" }, correta: "c" },
-    { enunciado: "Caso algúem não autorizado solicite gravações, o operador deve:", alternativas: { a: "Enviar apenas trechos curtos como prova", b: "Atender para agilizar o processo", c: "Encaminhar a solicitação para o e-mail dos responsáveis", d: "Repassar o pedido ao contato de checagem" }, correta: "c" }
+
+    //01
+    { enunciado: "O monitoramento do leilão é realizado utilizando:", 
+    alternativas: { 
+        a: "Sistema de rádio interno", 
+        b: "Software VMS (Sistema de gerenciamento de vídeo)", 
+        c: "Planilha eletrônica", 
+        d: "Aplicativo móvel de segurança" }, 
+        correta: "b" },
+        
+    //02
+    { enunciado: "O operador no monitoramento do leilão deve atuar de forma:", 
+        alternativas: { 
+            a: "Rápida e agressiva", 
+            b: "Discreta, precisa e responsável", 
+            c: "Comunicativa, exposta e organizada", 
+            d: "Exclusivamente técnica, sem comunicação" }, 
+            correta: "b" },
+
+    //03
+    { enunciado: "Quem é o contato de checagem?", 
+        alternativas: { 
+            a: "O gestor administrativo da empresa", 
+            b: "O responsável por liberar gravações", 
+            c: "A pessoa que verifica atividades suspeitas na unidade", 
+            d: "O operador de suporte técnico" }, 
+            correta: "c" },
+            
+    //04
+    { enunciado: "Quando o operador deve ligar para o contato de checagem?", 
+        alternativas: { 
+            a: "Apenas durante o horário comercial", 
+            b: "Somente quando solicitado pela gestão", 
+            c: "Diante de movimentação suspeita, falha nas câmeras ou abertura fora do horário", 
+            d: "Apenas após consultar todos os responsáveis" }, 
+            correta: "c" },
+
+    //05
+    { enunciado: "Os contatos de contigência são acionados quando:", 
+        alternativas: { 
+            a: "O contato de checagem autoriza", 
+            b: "A polícia faz a solicitação", 
+            c: "O operador não consegue acessar as imagens", 
+            d: "O contato principal não responde" }, 
+            correta: "d" },
+
+    //06
+    { enunciado: "A ordem de acionamento da lista de contingência é:", 
+        alternativas: { 
+            a: "Polícia Militar > Checagem local > Responsáveis", 
+            b: "Responsável 2 > Checagem local > PM", 
+            c: "Checagem local > Polícia Militar > Responsável 1 > Responsável 2", 
+            d: "Contato de checagem > Responsavel 2 > Polícia > Responsável 1" }, 
+            correta: "c" },
+
+    //07        
+    { enunciado: "As áreas trancadas do pátio são utilizadas para:", 
+        alternativas: { 
+            a: "Armazenar caminhões cegonha", 
+            b: "Guardar as motos de maior valor", 
+            c: "Abrigo de funcionários", 
+            d: "Depósito de documentos" }, 
+            correta: "b" },
+
+    //08
+    { enunciado: "Ao identificar abertura não autorizada de uma área trancada, o operador deve:", 
+        alternativas: { 
+            a: "Gravar um áudio avisando a equipe", 
+            b: "Ignorar e aguardar nova movimentação", 
+            c: "Acionar imediatamente o contato de checagem", 
+            d: "Aguardar o fechamento automático" }, 
+            correta: "c" },
+
+    //09
+    { enunciado: "Na movimentação diária, o operador deve observar:", 
+        alternativas: { 
+            a: "Apenas entrada e saída de funcionários", 
+            b: "Somente caminhões cegonha", 
+            c: "Entrada e saída de veículos, presença de pessoas e operações no pátio", 
+            d: "Apenas acesso ao escritório administrativo" }, 
+            correta: "c" },
+
+    //10
+    { enunciado: "Durante a queda das imagens, o operador deve:", 
+        alternativas: { 
+            a: "Reiniciar o VMS sem informar ninguém", 
+            b: "Notificar apenas o cliente", 
+            c: "Acionar suporte técnico e informar o gestor imediato", 
+            d: "Encerrar o turno até o sistema voltar" }, 
+            correta: "c" },
+
+    //11
+    { enunciado: "Em uma situação em que uma área tranacada é aberta e a imagem da câmera correspondente cai simultaneamente, qual é o procedimento mais adequado segundo o protocolo do módulo?", 
+        alternativas: { 
+            a: "Registrar a queda e aguardar o restabelecimento automático das imagens para confirmar o motivo da abertura", 
+            b: "Acionar imediatamente o contato de checagem, registrar a abertura e somente depois acionar suporte técnico", 
+            c: "Primeiro acionar suporte técnico para restaurar a câmera, e só após confirmar se houve atividade suspeita", 
+            d: "Acionar diretamente a Polícia Militar, pois abertura com queda de câmera sempre caracteriza violação crítica" }, 
+            correta: "b" },
+
+    //12
+    { enunciado: "Se durante o monitoramento o operador observar movimentação no pátio compatível com atividade autorizada, porém realizada fora do horário permitido e sem contato prévio, qual ação está de acordo com os procedimentos?", 
+        alternativas: { 
+            a: "Considerar a movimentação normal, pois pode ser atraso operacional da equipe local", 
+            b: "Acionar imediatamente o contato de contingência, pulando o contato de checagem por se tratar de atividade fora do horário", 
+            c: "Registrar apenas se houver evidência de dano ao patrimônio", 
+            d: "Acionar o contato de checagem para confirmar autorização, registrar o evento e aguardar instruções" }, 
+            correta: "d" },
+
+    //13
+    { enunciado: "Durante uma queda parcial das imagens, o operador nota que apenas câmeras que cobrem áreas sensíveis ficaram offline. Qual é a interpretação e conduta mais coerente com os protocolos?", 
+        alternativas: { 
+            a: "Considerar falha técnica isolada e acionar apenas suporte técnico", 
+            b: "Tratar como possível ação direcionada, acionar suporte técnico, informar o gestor imediato e monitorar as demais áreas", 
+            c: "Recarregar o VMS e aguardar retorno, se persistir por mais de 10 minutos, registrar como ocorrência menor", 
+            d: "Registrar queda geral do sistema, mesmo que somente parte dele esteja offline" }, 
+            correta: "b" },
+
+    //14
+    { enunciado: "Sobre solicitações de gravação, qual situação representa violação direta do protocolo?", 
+        alternativas: { 
+            a: "Encaminhar a solicitação ao e-mail oficial dos responsáveis antes de resgatar as imagens", 
+            b: "Informar ao solicitante não autorizado que o pedido será encaminhado para análise", 
+            c: "Enviar as imagens diretamente ao solicitante se ele se identificar como funcionário do pátio, mesmo sem estar na lista", 
+            d: "Aguardar a autorização do cliente para iniciar qualquer etapa de resgate" }, 
+            correta: "c" },
+
+    //15
+    { enunciado: "Caso algúem não autorizado solicite gravações, o operador deve:", 
+        alternativas: { 
+            a: "Enviar apenas trechos curtos como prova", 
+            b: "Atender para agilizar o processo", 
+            c: "Encaminhar a solicitação para o e-mail dos responsáveis", 
+            d: "Repassar o pedido ao contato de checagem" }, 
+            correta: "c" }
 ];
 
 const QUESTION_COUNT = 10;
