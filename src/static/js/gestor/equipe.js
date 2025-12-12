@@ -63,45 +63,52 @@ document.addEventListener("DOMContentLoaded", () => {
              
             
 let tentativasTexto = "";
-const t = modulo.tentativas ?? 0;
+let tentativas = modulo.tentativas ?? 0;
 
-// Nunca fez
-if (t === 0) {
-    tentativasTexto = `
-        <span class="status-nao-iniciado">Não iniciado</span>
-    `;
+// Ajuste do status baseado no progresso
+let statusReal = "nao-iniciado";
+if (modulo.percent === 0) {
+    statusReal = "nao-iniciado";
+    tentativas = 0;
+} else if (modulo.percent < 50) {
+    statusReal = "em-andamento";
+} else {
+    statusReal = "concluido";
 }
-// Fez 1+ vez
-else {
+
+// Texto de tentativas / status
+if (tentativas === 0) {
+    tentativasTexto = `<span class="status-nao-iniciado">Não iniciado</span>`;
+} else {
     tentativasTexto = `
         <div class="linha-tentativas">
             <span class="status-final ${
-                modulo.status === 'concluido' ? 'status-concluido' : 'status-andamento'
+                statusReal === 'concluido' ? 'status-concluido' : 'status-andamento'
             }">
-                ${modulo.status === 'concluido' ? 'Concluído' : 'Em andamento'}
+                ${statusReal === 'concluido' ? 'Concluído' : 'Em andamento'}
             </span><br>
-
-            <span class="tentativas">Tentativas: ${t}</span>
+            <span class="tentativas">Tentativas: ${tentativas}</span>
         </div>
     `;
 }
 
+// Atualiza a classe do módulo com o status real
 htmlModulos += `
-    <div class="modulo ${statusClass}">
-        <span>${modulo.nome}</span>
+<div class="modulo ${statusReal}">
+    <span>${modulo.nome}</span>
 
-        <div class="barra">
-            <div class="preenchimento" style="width:${modulo.percent}%"></div>
-        </div>
-
-        <span class="nota">
-    Nota: ${modulo.nota_final ? (modulo.nota_final / 10) : 0} (${modulo.percent}%)
-        </span>
-
-
-        ${tentativasTexto}
+    <div class="barra">
+        <div class="preenchimento" style="width:${modulo.percent}%"></div>
     </div>
+
+    <span class="nota">
+        Nota: ${modulo.nota_final ? (modulo.nota_final / 10) : 0} (${modulo.percent}%)
+    </span>
+
+    ${tentativasTexto}
+</div>
 `;
+
 
 
             });
@@ -142,6 +149,8 @@ htmlModulos += `
             }
 
             const colaboradores = await res.json(); 
+
+            colaboradores.sort((a, b) => a.nome.localeCompare(b.nome));
             const lista = document.getElementById("lista-equipe");
             if (!lista) return;
             lista.innerHTML = "";

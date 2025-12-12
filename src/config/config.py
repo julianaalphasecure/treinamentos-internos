@@ -11,7 +11,7 @@ SECRET_KEY = os.getenv("SECRET_KEY", "chavesecreta")
 DB_HOST = os.getenv("DB_HOST", "localhost")
 DB_USER = os.getenv("DB_USER", "root")
 DB_PASSWORD = os.getenv("DB_PASSWORD", "")
-DB_NAME = os.getenv("DB_NAME", "plataforma_treinamento")
+DB_NAME = os.getenv("DB_NAME", "Treinamentos_internos")
 DB_PORT = os.getenv("DB_PORT", 3306)
 
 SQLALCHEMY_DATABASE_URI = (

@@ -37,7 +37,7 @@ const USUARIO_ID = JSON.parse(sessionStorage.getItem("usuario_colaborador"))?.id
 const TOKEN = sessionStorage.getItem("token_colaborador");
 const REQUISITO_APROVACAO = 80;
 
-// ================== CHAVES LOCAIS POR MÓDULO (ANTI-COLA) ==================
+// ================== CHAVES LOCAIS POR MÓDULO ==================
 const EX_KEY_ANDAMENTO = `mod${moduleId}_ex_andamento`;
 const EX_KEY_FINALIZADO = `mod${moduleId}_ex_finalizado`;
 const EX_KEY_RESET = `mod${moduleId}_ex_reset`;
