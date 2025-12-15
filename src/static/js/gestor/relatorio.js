@@ -1,5 +1,3 @@
-// /src/static/js/gestor/relatorio.js
-// DOM
 const colaboradorSearchInput = document.getElementById("colaborador-search");
 const colaboradorDestinoId = document.getElementById("colaborador-destino-id");
 const searchResultsDiv = document.getElementById("search-results");
@@ -13,7 +11,7 @@ const recebidosContainer = document.getElementById("historico-feedbacks");
 const recebidosStatus = document.getElementById("recebidos-status");
 const badgeNaoLidos = document.getElementById("badge-nao-lidos");
 
-// ROTAS
+
 const BASE = "http://127.0.0.1:5000";
 const baseURLColaborador = `${BASE}/colaborador`;
 const baseURLFeedback = `${BASE}/gestor/relatorio`;
@@ -28,9 +26,6 @@ let todosColaboradores = [];
 let colaboradorSelecionado = null;
 let isSearchDropdownOpen = false;
 
-/* =============================
-       BUSCA DE COLABORADORES
-============================= */
 
 async function fetchColaboradores() {
     try {
@@ -121,7 +116,6 @@ feedbackForm.addEventListener("submit", async (e) => {
             feedbackStatusMessage.textContent = `Feedback enviado!`;
             feedbackStatusMessage.style.color = "green";
 
-    // Limpa todos os campos do formulário
             feedbackMensagem.value = "";
             feedbackTitulo.value = "";
             colaboradorSearchInput.value = "";
@@ -129,7 +123,7 @@ feedbackForm.addEventListener("submit", async (e) => {
             colaboradorSelecionado = null;
             searchResultsDiv.innerHTML = "";
 
-            btnEnviarFeedback.disabled = true; // desabilita até selecionar outro colaborador
+            btnEnviarFeedback.disabled = true; 
 
     carregarFeedbacksRecebidos();
     carregarContagemNaoLidos();
@@ -192,10 +186,6 @@ function formatarData(dt) {
 
 
 
-/* =============================
-        RENDER CARD
-============================= */
-
 function renderCardDuvida(fb) {
     const card = document.createElement("div");
     card.className = "feedback-card";
@@ -220,13 +210,11 @@ function renderCardDuvida(fb) {
         </div>
     `;
 
-    // ❗ EVITA DUPLICAÇÃO: só um listener para abrir modal
     card.addEventListener("click", (e) => {
         if (e.target.classList.contains("btn-mark-read")) return;
         abrirModalDuvida(fb);
     });
 
-    // botão marcar como lido
     const markBtn = card.querySelector(".btn-mark-read");
     markBtn.addEventListener("click", async (e) => {
         e.stopPropagation();
@@ -250,10 +238,6 @@ function renderCardDuvida(fb) {
     recebidosContainer.appendChild(card);
 }
 
-
-/* =============================
-            MODAL
-============================= */
 
 const modal = document.getElementById("modal-duvida");
 const modalClose = document.getElementById("modal-close");
@@ -286,16 +270,13 @@ function abrirModalDuvida(fb) {
     btnEnviarResposta.style.display = "block";
     btnEnviarResposta.textContent = "Enviar resposta";
 
-    // Detectar se já foi respondido
     const respondido = fb.resposta && fb.resposta.trim() !== "";
 
     if (respondido) {
 
-        // Esconde campos de resposta
         textareaResposta.style.display = "none";
         btnEnviarResposta.style.display = "none";
 
-        // Formatação da data de resposta
         let dataResp = "—";
         if (fb.respondido_em) {
             const d = new Date(fb.respondido_em);
@@ -307,7 +288,6 @@ function abrirModalDuvida(fb) {
                 ("0" + d.getMinutes()).slice(-2);
         }
 
-        // Mostra bloco organizado com a resposta
         box.innerHTML =
             '<div style="background:#e8ffe8; padding:12px; border-radius:6px; border-left:5px solid #2ecc71;">' +
                 '<p style="margin-top:6px;"><strong>Resposta:</strong><br>' + fb.resposta + '</p>' +
@@ -321,11 +301,6 @@ function abrirModalDuvida(fb) {
 }
 
 
-
-
-// =============================
-//   FECHAR MODAL
-// =============================
 modalClose.addEventListener("click", () => modal.style.display = "none");
 modal.addEventListener("click", (e) => {
     if (e.target === modal) modal.style.display = "none";
@@ -336,9 +311,6 @@ modal.addEventListener("click", (e) => {
 modalClose.addEventListener("click", () => modal.style.display = "none");
 modal.addEventListener("click", (e) => { if (e.target === modal) modal.style.display = "none"; });
 
-/* =============================
-        ENVIAR RESPOSTA
-============================= */
 
 btnEnviarResposta.addEventListener("click", async () => {
     const resposta = textareaResposta.value.trim();
@@ -356,26 +328,20 @@ btnEnviarResposta.addEventListener("click", async () => {
 
         const data = await res.json();
 
-
-// ENCONTRA O FEEDBACK NA LISTA GLOBAL (recebidos)
 const card = document.querySelector(`[data-id="${modalFeedbackId}"]`);
 
 if (card) {
-    // garante que o objeto está atualizado
     const fbAtualizado = {
         ...data.feedback,   
         ...{ resposta }     
     };
     
-    // ---- substitui o objeto antigo na função abrirModal ----
     card.onclick = () => abrirModalDuvida(fbAtualizado);
 }
-// -------------------------------------------------------------------
+
 
 
 if (res.ok) {
-
-// Limpa e oculta campos
 textareaResposta.value = "";
 textareaResposta.style.display = "none";
 textareaResposta.disabled = true;
@@ -392,7 +358,7 @@ box.innerHTML =
 
 box.style.display = "block";
 
-// Atualiza card da lista
+
 const card = document.querySelector('[data-id="' + modalFeedbackId + '"]');
 if (card) {
     const btn = card.querySelector(".btn-mark-read");
@@ -419,9 +385,6 @@ carregarFeedbacksRecebidos();
 });
 
 
-/* =============================
-       BADGE NÃO LIDOS
-============================= */
 
 async function carregarContagemNaoLidos() {
     try {

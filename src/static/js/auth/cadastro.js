@@ -7,7 +7,6 @@ form.addEventListener("submit", async (e) => {
 
     e.preventDefault(); 
     
-    // Coleta dos dados do formulário
     const re = document.getElementById("re").value.trim();
     const nome = document.getElementById("nome").value.trim();
     const email = document.getElementById("email").value.trim();
@@ -15,7 +14,7 @@ form.addEventListener("submit", async (e) => {
     const tipoAcesso = document.getElementById("tipo_acesso").value;
 
     const feedbackDiv = document.getElementById("cadastro-feedback");
-    feedbackDiv.textContent = ''; // Limpa mensagens anteriores
+    feedbackDiv.textContent = ''; 
 
     if (!re || !nome || !email || !senha || !tipoAcesso) {
         alert("Preencha todos os campos obrigatórios.");
@@ -38,14 +37,12 @@ form.addEventListener("submit", async (e) => {
         const data = await res.json();
 
         if (!res.ok) {
-            // Falha no cadastro (ex: email já existe)
             feedbackDiv.style.color = 'red';
             feedbackDiv.textContent = data.error || "Erro ao tentar cadastrar usuário.";
             console.error("Erro de Cadastro:", data);
             return;
         }
 
-        // SUCESSO NO CADASTRO
         feedbackDiv.style.color = 'green';
         feedbackDiv.textContent = data.message || "Cadastro realizado com sucesso! Redirecionando para o login...";
 

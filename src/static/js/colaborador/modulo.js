@@ -1,27 +1,22 @@
 document.addEventListener("DOMContentLoaded", async () => {
-
-    // ================== BLOQUEAR BOTÃO VOLTAR ==================
     history.pushState(null, null, location.href);
     window.onpopstate = function () {
         history.go(1);
     };
 
-    // ================== LOGOUT SEGURO ==================
     const btnLogout = document.getElementById("btn-logout");
     if (btnLogout) {
         btnLogout.addEventListener("click", (e) => {
             e.preventDefault();
 
-            // Remove dados
             sessionStorage.removeItem("token_colaborador");
             sessionStorage.removeItem("usuario_colaborador");
 
-            // Redireciona sem permitir voltar
             window.location.replace("/src/templates/auth/login.html");
         });
     }
 
-    // ================== VERIFICA LOGIN ==================
+
     const userNameElement = document.getElementById("user-name");
     const usuarioColaborador = JSON.parse(sessionStorage.getItem("usuario_colaborador"));
     const token = sessionStorage.getItem("token_colaborador");
@@ -36,10 +31,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
     }
 
-    // ================== MOSTRA NOME ==================
     userNameElement.textContent = `Olá, ${usuarioColaborador.nome}`;
 
-    // ================== CARROSSEL E PESQUISA ==================
     const wrapper = document.querySelector(".modules-wrapper");
     const prevBtn = document.querySelector(".carousel-btn.prev");
     const nextBtn = document.querySelector(".carousel-btn.next");

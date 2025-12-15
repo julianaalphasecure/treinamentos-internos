@@ -64,8 +64,6 @@ document.addEventListener("DOMContentLoaded", () => {
             
 let tentativasTexto = "";
 let tentativas = modulo.tentativas ?? 0;
-
-// Ajuste do status baseado no progresso
 let statusReal = "nao-iniciado";
 if (modulo.percent === 0) {
     statusReal = "nao-iniciado";
@@ -76,7 +74,7 @@ if (modulo.percent === 0) {
     statusReal = "concluido";
 }
 
-// Texto de tentativas / status
+
 if (tentativas === 0) {
     tentativasTexto = `<span class="status-nao-iniciado">Não iniciado</span>`;
 } else {
@@ -92,7 +90,7 @@ if (tentativas === 0) {
     `;
 }
 
-// Atualiza a classe do módulo com o status real
+
 htmlModulos += `
 <div class="modulo ${statusReal}">
     <span>${modulo.nome}</span>

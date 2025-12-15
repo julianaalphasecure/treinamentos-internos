@@ -9,7 +9,7 @@ const enviarURL = "http://127.0.0.1:5000/colaborador/feedback/enviar";
 const gestoresURL = "http://127.0.0.1:5000/colaborador/feedback/gestores";
 
 
-// ================== AUTOCOMPLETE – Buscar Gestores ==================
+// ==================Buscar Gestores ==================
 async function loadGestores(query) {
     if (!query || query.length < 1) return [];
 
@@ -72,15 +72,13 @@ document.addEventListener("click", (e) => {
     }
 });
 
-// ================== Função: Formatar Data ==================
 function formatDate(datetime) {
     const date = new Date(datetime);
     return date.toLocaleDateString('pt-BR', {
         day: '2-digit',
         month: '2-digit',
-        year: 'numeric' // <-- Removido 'hour' e 'minute'
-        // 'hour': '2-digit',
-        // 'minute': '2-digit'
+        year: 'numeric' 
+
     });
 }
 // ================== Carregar Feedbacks ==================
@@ -112,7 +110,7 @@ async function loadFeedbacks() {
 
         let data = await response.json();
 
-// garante que só mensagens de gestores aparecem
+
 data = data.filter(fb => fb.mensagem.startsWith("[FEEDBACK]"));
 
         feedbackList.innerHTML = '';
@@ -158,25 +156,20 @@ data = data.filter(fb => fb.mensagem.startsWith("[FEEDBACK]"));
 loadDuvidas();
 
 
-/* ============================================
-      CARREGAR DÚVIDAS ENVIADAS (CHAT)
-=============================================== */
+
 async function loadDuvidas() {
     const TOKEN = sessionStorage.getItem("token_colaborador");
     const duvidasBox = document.getElementById("duvidasList");
 
-    // =============================
-    // FUNÇÃO PARA NORMALIZAR E FORMATAR SÓ A DATA (AMERICA/SAO_PAULO)
-    // =============================
+
     function formatDateToSaoPaulo(dateStr) {
         if (!dateStr) return null;
 
-        // Normaliza "YYYY-MM-DD HH:MM:SS" -> "YYYY-MM-DDTHH:MM:SSZ"
+
         if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(dateStr)) {
             dateStr = dateStr.replace(" ", "T") + "Z";
         }
 
-        // Normaliza "YYYY-MM-DDTHH:MM:SS" -> assume UTC se não houver timezone
         if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/.test(dateStr)) {
             dateStr = dateStr + "Z";
         }
@@ -184,7 +177,6 @@ async function loadDuvidas() {
         const d = new Date(dateStr);
         if (isNaN(d.getTime())) return null;
 
-        // Tenta formatar usando timeZone de São Paulo
         try {
             return d.toLocaleDateString("pt-BR", {
                 day: "2-digit",
@@ -193,7 +185,6 @@ async function loadDuvidas() {
                 timeZone: "America/Sao_Paulo"
             });
         } catch (e) {
-            // Fallback: subtrai 3h (UTC-3) e retorna apenas a data local
             const fallback = new Date(d.getTime() - 3 * 60 * 60 * 1000);
             return fallback.toLocaleDateString("pt-BR", {
                 day: "2-digit",
@@ -211,7 +202,6 @@ async function loadDuvidas() {
 
         let data = await response.json();
 
-        // Filtrar apenas dúvidas
         data = data.filter(fb => fb.mensagem && fb.mensagem.startsWith("[duvida-modulo]"));
 
         duvidasBox.innerHTML = "";
@@ -332,12 +322,9 @@ form.addEventListener("submit", async (e) => {
             return;
         }
 
-        // GARANTE QUE APARECE O TOAST
         showToast("Dúvida enviada com sucesso!");
 
-        // Aguarda um tick para renderizar o toast antes de limpar
         setTimeout(() => {
-            // Limpa todos os campos
             mensagemInput.value = "";
             assuntoInput.value = "";
             destinatarioInput.value = "";
@@ -371,18 +358,17 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.setAttribute("data-font", savedFont);
 });
 
-// ================== TOAST NOTIFICATION (ANIMADO) ==================
+
 function showToast(message) {
     let toast = document.getElementById("toast-notification");
 
-    // Criar caso não exista
     if (!toast) {
         toast = document.createElement("div");
         toast.id = "toast-notification";
         toast.style.position = "fixed";
         toast.style.bottom = "-60px"; 
         toast.style.right = "20px";
-        toast.style.background = "#28a745";  // Verde sucesso
+        toast.style.background = "#28a745";  
         toast.style.color = "#fff";
         toast.style.padding = "14px 20px";
         toast.style.borderRadius = "10px";
@@ -392,19 +378,19 @@ function showToast(message) {
         toast.style.opacity = "0";
         toast.style.boxShadow = "0 4px 12px rgba(0,0,0,0.25)";
         toast.style.transition = "all 0.4s ease";
-        toast.style.pointerEvents = "none"; // não bloqueia clique no site
+        toast.style.pointerEvents = "none"; 
         document.body.appendChild(toast);
     }
 
     toast.textContent = message;
 
-    // ANIMAÇÃO DE ENTRADA
+
     setTimeout(() => {
         toast.style.opacity = "1";
         toast.style.bottom = "20px";
     }, 10);
 
-    // ANIMAÇÃO DE SAÍDA
+
     setTimeout(() => {
         toast.style.opacity = "0";
         toast.style.bottom = "-60px";
