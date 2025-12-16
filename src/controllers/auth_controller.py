@@ -6,7 +6,7 @@ from src.services.auth_service import AuthService
 auth_bp = Blueprint("auth_bp", __name__, url_prefix="/auth")
 auth_service = AuthService()
 
-# --- Cadastro ---
+
 @auth_bp.route("/cadastro", methods=["POST"])
 def registrar():
     dados = request.get_json()
@@ -27,7 +27,7 @@ def registrar():
     else:
         return jsonify({"success": False, "error": erro or "Falha ao registrar usuário"}), 400
 
-# --- Login ---
+
 @auth_bp.route("/login", methods=["POST"])
 def login():
     data = request.get_json()
@@ -45,14 +45,14 @@ def login():
     if usuario.tipo_acesso.lower() == "colaborador":
         ColaboradorService.set_status(usuario.id, "online")
 
-    # 2. RETORNA O TOKEN E O OBJETO DO USUÁRIO
+
     return jsonify({
         "success": True, 
         "access_token": access_token, 
         "usuario": usuario.to_dict()
     }), 200
 
-# --- Logout ---
+
 @auth_bp.route("/logout", methods=["POST"])
 def logout():
     data = request.get_json()
@@ -64,7 +64,7 @@ def logout():
 
     return jsonify({"message": "Logout realizado com sucesso"}), 200
 
-# --- Formulário de cadastro/login (HTML) ---
+
 @auth_bp.route("/cadastro", methods=["GET"])
 def cadastro_form():
     return render_template("auth/cadastro.html")

@@ -4,14 +4,13 @@ from src.models.colaborador import Colaborador
 
 colaborador_bp = Blueprint("colaborador_bp", __name__)
 
-# ====== Listar todos colaboradores ======
+
 @colaborador_bp.route("/", methods=["GET"])
 def listar_colaboradores():
     colaboradores = ColaboradorService.get_all_colaboradores()
     return jsonify([c.to_dict() for c in colaboradores]), 200
 
 
-# ====== Obter status de um colaborador ======
 @colaborador_bp.route("/status/<int:colaborador_id>", methods=["GET"])
 def obter_status(colaborador_id):
     colaborador = Colaborador.query.get(colaborador_id)
@@ -25,7 +24,6 @@ def obter_status(colaborador_id):
     }), 200
 
 
-# ====== Atualizar status de um colaborador ======
 @colaborador_bp.route("/status/<int:colaborador_id>", methods=["PUT"])
 def atualizar_status(colaborador_id):
     data = request.get_json()
@@ -45,7 +43,6 @@ def atualizar_status(colaborador_id):
     }), 200
 
 
-# ====== Obter progresso do colaborador ======
 @colaborador_bp.route("/progresso/<int:colaborador_id>", methods=["GET"])
 def obter_progresso(colaborador_id):
     progresso = ColaboradorService.get_progresso(colaborador_id)

@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from src.services.colaborador.progresso_service import ProgressoService
 from src.services.colaborador.colaborador_service import ColaboradorService
-# from src.services.gestor.equipe_service import EquipeService  # Caso precise validar gestor
+
 
 progresso_bp = Blueprint("progresso_bp", __name__, url_prefix="/colaborador/progresso")
 
