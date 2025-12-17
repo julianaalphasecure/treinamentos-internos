@@ -1,19 +1,27 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Painel de Módulos</title>
-  <link rel="stylesheet" href="/src/static/css/colaborador/modulo.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="shortcut icon" href="/src/static/img/logo header.png" type="image/x-icon">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel de Módulos</title>
+
+<!-- CSS -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/colaborador/modulo.css') }}">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<!-- Favicon -->
+<link rel="shortcut icon" href="{{ url_for('static', filename='img/logo header.png') }}" type="image/x-icon">
 </head>
+
 <body>
 
 <header class="header">
   <div class="logo-box">
-    <img src="/src/static/img/logo_cadastre.png" alt="Logo Alpha Secure">
+    <img src="{{ url_for('static', filename='img/logo_cadastre.png') }}" alt="Logo Alpha Secure">
   </div>
+
   <div class="user-box">
     <span id="user-name">Olá,</span>
     <span class="user-role">Colaborador</span>
@@ -24,131 +32,132 @@
   <div class="info-cards">
     <div class="card">
       <p>Ser uma empresa referência por sua <br> excelência em segurança e serviços.</p>
-      <img src="/src/static/img/missao_icon.webp" alt="Missão">
+      <img src="{{ url_for('static', filename='img/missao_icon.webp') }}" alt="Missão">
     </div>
     <div class="card destaque">
-      <p>Disponibilizar ao mercado soluções em serviços agregando tecnologia, atendimentos personalizado e técnicas de trabalho.</p>
-      <img src="/src/static/img/visao_icons.webp" alt="Visão">
+      <p>Disponibilizar ao mercado soluções em serviços agregando tecnologia, atendimentos personalizados e técnicas de trabalho.</p>
+      <img src="{{ url_for('static', filename='img/visao_icons.webp') }}" alt="Visão">
     </div>
     <div class="card">
       <p>Transparência, responsabilidade, ética e eficiência, consolidando assim a relação com nossos parceiros comerciais e colaboradores.</p>
-      <img src="/src/static/img/valores_icon.webp" alt="Valores">
+      <img src="{{ url_for('static', filename='img/valores_icon.webp') }}" alt="Valores">
     </div>
   </div>
 </section>
 
 <div class="main-container">
-  <aside class="sidebar">
-    <nav>
-      <ul>
-        <li><a href="#" class="active">Módulos</a></li>
-        <li><a href="/src/templates/colaborador/feedback.html">Feedback</a></li>
-        <li><a href="/src/templates/auth/login.html" id="btn-logout">Sair</a></li>
-      </ul>
-    </nav>
-  </aside>
 
-  <main class="content">
-    <div class="search-bar">
-      <i class="fas fa-search"></i>
-      <input type="text" placeholder="Pesquisar módulos...">
-    </div>
+<aside class="sidebar">
+  <nav>
+    <ul>
+      <li><a href="#" class="active">Módulos</a></li>
+      <li><a href="{{ url_for('colab_feedback_bp.pagina_feedback') }}">Feedback</a></li>
+      <li><a href="{{ url_for('auth_bp.login_form') }}">Sair</a></li>
+    </ul>
+  </nav>
+</aside>
 
-    <section class="stats">
-      <div class="stat-card"><h3>Concluídos</h3><p class="stat-value">0</p></div>
-      <div class="stat-card"><h3>Não iniciados</h3><p class="stat-value">9</p></div>
-    </section>
+<main class="content">
+  <div class="search-bar">
+    <i class="fas fa-search"></i>
+    <input type="text" placeholder="Pesquisar módulos...">
+  </div>
 
-    <section class="modules">
-      <h2>Módulos Disponíveis</h2>
-      <div class="modules-carousel">
-        <div class="modules-wrapper">
+  <section class="stats">
+    <div class="stat-card"><h3>Concluídos</h3><p class="stat-value">0</p></div>
+    <div class="stat-card"><h3>Não iniciados</h3><p class="stat-value">9</p></div>
+  </section>
 
-          <!-- Slide 1 -->
-          <div class="modules-slide">
-            <div class="module-card" data-id="1">
-              <img src="/src/static/img/capaMod/capa modulo01.png" alt="Módulo 1" class="module-img">
-              <h3>Módulo 1 - Matrix Energia</h3>
-              <div class="progress-bar"><div class="progress-bar-inner"></div></div>
-              <a href="/src/templates/colaborador/modulos/modulo01.html"><button>Acessar</button></a>
-            </div>
+  <section class="modules">
+    <h2>Módulos Disponíveis</h2>
+    <div class="modules-carousel">
+      <div class="modules-wrapper">
 
-            <div class="module-card" data-id="2">
-              <img src="/src/static/img/capaMod/capa modulo02.png" alt="Módulo 2" class="module-img">
-              <h3>Módulo 2 - Athon Energia</h3>
-              <div class="progress-bar"><div class="progress-bar-inner"></div></div>
-              <a href="/src/templates/colaborador/modulos/modulo02.html"><button>Acessar</button></a>
-            </div>
-
-            <div class="module-card" data-id="3">
-              <img src="/src/static/img/capaMod/capa modulo03.png" alt="Módulo 3" class="module-img">
-              <h3>Módulo 3 - Inner Energia</h3>
-              <div class="progress-bar"><div class="progress-bar-inner"></div></div>
-              <a href="/src/templates/colaborador/modulos/modulo03.html"><button>Acessar</button></a>
-            </div>
-
-            <div class="module-card" data-id="4">
-              <img src="/src/static/img/capaMod/capa modulo04.png" alt="Módulo 4" class="module-img">
-              <h3>Módulo 4 - Sódre Santoro</h3>
-              <div class="progress-bar"><div class="progress-bar-inner"></div></div>
-              <a href="/src/templates/colaborador/modulos/modulo04.html"><button>Acessar</button></a>
-            </div>
+        <!-- Slide 1 -->
+        <div class="modules-slide">
+          <div class="module-card" data-id="1">
+            <img src="{{ url_for('static', filename='img/capaMod/capa modulo01.png') }}" alt="Módulo 1" class="module-img">
+            <h3>Módulo 1 - Matrix Energia</h3>
+            <div class="progress-bar"><div class="progress-bar-inner"></div></div>
+            <a href="{{ url_for('modulo_bp.modulo01') }}"><button>Acessar</button></a>
           </div>
 
-          <!-- Slide 2 -->
-          <div class="modules-slide">
-            <div class="module-card" data-id="5">
-              <img src="/src/static/img/capaMod/capa modulo05.png" alt="Módulo 5" class="module-img">
-              <h3>Módulo 5 - Comolatti</h3>
-              <div class="progress-bar"><div class="progress-bar-inner"></div></div>
-              <a href="/src/templates/colaborador/modulos/modulo05.html"><button>Acessar</button></a>
-            </div>
-
-            <div class="module-card" data-id="6">
-              <img src="/src/static/img/capaMod/capa modulo06.png" alt="Módulo 6" class="module-img">
-              <h3>Módulo 6 - Procedimento Operacional Padrão</h3>
-              <div class="progress-bar"><div class="progress-bar-inner"></div></div>
-              <a href="/src/templates/colaborador/modulos/modulo06.html"><button>Acessar</button></a>
-            </div>
-
-            <div class="module-card" data-id="7">
-              <img src="/src/static/img/capaMod/capa modulo07.png" alt="Módulo 7" class="module-img">
-              <h3>Módulo 7 - Portaria Remota</h3>
-              <div class="progress-bar"><div class="progress-bar-inner"></div></div>
-              <a href="/src/templates/colaborador/modulos/modulo07.html"><button>Acessar</button></a>
-            </div>
-
-            <div class="module-card" data-id="8">
-              <img src="/src/static/img/capaMod/capa modulo08 (1).png" alt="Módulo 8" class="module-img">
-              <h3>Módulo 8 - BASA (Banco Amazônia)</h3>
-              <div class="progress-bar"><div class="progress-bar-inner"></div></div>
-              <a href="/src/templates/colaborador/modulos/modulo08.html"><button>Acessar</button></a>
-            </div>
+          <div class="module-card" data-id="2">
+            <img src="{{ url_for('static', filename='img/capaMod/capa modulo02.png') }}" alt="Módulo 2" class="module-img">
+            <h3>Módulo 2 - Athon Energia</h3>
+            <div class="progress-bar"><div class="progress-bar-inner"></div></div>
+            <a href="{{ url_for('modulo_bp.modulo02') }}"><button>Acessar</button></a>
           </div>
 
-          <!-- Slide 3 -->
-          <div class="modules-slide">
-            <div class="module-card" data-id="9">
-              <img src="/src/static/img/capaMod/capa modulo09.png" alt="Módulo 9" class="module-img">
-              <h3>Módulo 9 - Revisão</h3>
-              <div class="progress-bar"><div class="progress-bar-inner"></div></div>
-              <a href="/src/templates/colaborador/modulos/modulo09.html"><button>Acessar</button></a>
-            </div>
+          <div class="module-card" data-id="3">
+            <img src="{{ url_for('static', filename='img/capaMod/capa modulo03.png') }}" alt="Módulo 3" class="module-img">
+            <h3>Módulo 3 - Inner Energia</h3>
+            <div class="progress-bar"><div class="progress-bar-inner"></div></div>
+            <a href="{{ url_for('modulo_bp.modulo03') }}"><button>Acessar</button></a>
+          </div>
+
+          <div class="module-card" data-id="4">
+            <img src="{{ url_for('static', filename='img/capaMod/capa modulo04.png') }}" alt="Módulo 4" class="module-img">
+            <h3>Módulo 4 - Sódre Santoro</h3>
+            <div class="progress-bar"><div class="progress-bar-inner"></div></div>
+            <a href="{{ url_for('modulo_bp.modulo04') }}"><button>Acessar</button></a>
           </div>
         </div>
 
-        <div class="carousel-controls">
-          <button class="carousel-btn prev"><i class="fas fa-chevron-left"></i></button>
-          <button class="carousel-btn next"><i class="fas fa-chevron-right"></i></button>
+        <!-- Slide 2 -->
+        <div class="modules-slide">
+          <div class="module-card" data-id="5">
+            <img src="{{ url_for('static', filename='img/capaMod/capa modulo05.png') }}" alt="Módulo 5" class="module-img">
+            <h3>Módulo 5 - Comolatti</h3>
+            <div class="progress-bar"><div class="progress-bar-inner"></div></div>
+            <a href="{{ url_for('modulo_bp.modulo05') }}"><button>Acessar</button></a>
+          </div>
+
+          <div class="module-card" data-id="6">
+            <img src="{{ url_for('static', filename='img/capaMod/capa modulo06.png') }}" alt="Módulo 6" class="module-img">
+            <h3>Módulo 6 - Procedimento Operacional Padrão</h3>
+            <div class="progress-bar"><div class="progress-bar-inner"></div></div>
+            <a href="{{ url_for('modulo_bp.modulo06') }}"><button>Acessar</button></a>
+          </div>
+
+          <div class="module-card" data-id="7">
+            <img src="{{ url_for('static', filename='img/capaMod/capa modulo07.png') }}" alt="Módulo 7" class="module-img">
+            <h3>Módulo 7 - Portaria Remota</h3>
+            <div class="progress-bar"><div class="progress-bar-inner"></div></div>
+            <a href="{{ url_for('modulo_bp.modulo07') }}"><button>Acessar</button></a>
+          </div>
+
+          <div class="module-card" data-id="8">
+            <img src="{{ url_for('static', filename='img/capaMod/capa modulo08 (1).png') }}" alt="Módulo 8" class="module-img">
+            <h3>Módulo 8 - BASA (Banco Amazônia)</h3>
+            <div class="progress-bar"><div class="progress-bar-inner"></div></div>
+            <a href="{{ url_for('modulo_bp.modulo08') }}"><button>Acessar</button></a>
+          </div>
         </div>
+
+        <!-- Slide 3 -->
+        <div class="modules-slide">
+          <div class="module-card" data-id="9">
+            <img src="{{ url_for('static', filename='img/capaMod/capa modulo09.png') }}" alt="Módulo 9" class="module-img">
+            <h3>Módulo 9 - Revisão</h3>
+            <div class="progress-bar"><div class="progress-bar-inner"></div></div>
+            <a href="{{ url_for('modulo_bp.modulo09') }}"><button>Acessar</button></a>
+          </div>
+        </div>
+
       </div>
-    </section>
-  </main>
+
+      <div class="carousel-controls">
+        <button class="carousel-btn prev"><i class="fas fa-chevron-left"></i></button>
+        <button class="carousel-btn next"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </div>
+  </section>
+
+</main>
 </div>
 
-
-
-<script src="/src/static/js/colaborador/modulo.js"></script>
+<script src="{{ url_for('static', filename='js/colaborador/modulo.js') }}"></script>
 
 </body>
 </html>
