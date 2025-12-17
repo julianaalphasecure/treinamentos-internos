@@ -4,9 +4,15 @@ from src.services.colaborador.feedback_service import FeedbackService
 from src.config.database import db
 from src.models.feedback import Feedback
 from sqlalchemy import func
+from flask import render_template
 
 
 relatorio_bp = Blueprint("relatorio_bp", __name__)
+
+
+@relatorio_bp.route("/pagina", methods=["GET"])
+def pagina_relatorio():
+    return render_template("gestor/relatorio.html")
 
 
 @relatorio_bp.route("", methods=["POST"])

@@ -40,14 +40,14 @@ form.addEventListener("submit", async (e) => {
             sessionStorage.setItem("token_colaborador", tokenJWT);
             sessionStorage.setItem("usuario_colaborador", JSON.stringify(usuario));
 
-            window.location.href = "/src/templates/colaborador/modulo.html";
+            window.location.href = "/colaborador/modulo/pagina";
 
         } else if (usuario.tipo_acesso === "gestor") {
 
             sessionStorage.setItem("token_gestor", tokenJWT);
             sessionStorage.setItem("usuario_gestor", JSON.stringify(usuario));
 
-            window.location.href = "/src/templates/gestor/equipe.html";
+            window.location.href = "/gestor/equipe/pagina";
 
         } else {
             alert("Tipo de acesso desconhecido. Contate o administrador.");

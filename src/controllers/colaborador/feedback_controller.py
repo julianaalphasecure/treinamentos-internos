@@ -1,9 +1,14 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, render_template, request, jsonify
 from src.services.colaborador.feedback_service import FeedbackService
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from src.models.usuario import Usuario
 
 colab_feedback_bp = Blueprint("colab_feedback_bp", __name__)
+
+
+@colab_feedback_bp.route("/pagina", methods=["GET"])
+def pagina_feedback():
+    return render_template("colaborador/feedback.html")
 
 
 @colab_feedback_bp.route("/", methods=["GET"])

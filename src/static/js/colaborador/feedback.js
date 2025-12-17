@@ -39,17 +39,38 @@ const destinatarioHidden = document.getElementById("destinatario_id");
 const autocompleteBox = document.getElementById("autocomplete-gestores");
 
 
+let currentRequest = 0;
+
 destinatarioInput.addEventListener("input", async () => {
+    const query = destinatarioInput.value.trim();
+    const requestId = ++currentRequest;
+
     autocompleteBox.innerHTML = "";
-    const nome = destinatarioInput.value.trim();
+    autocompleteBox.style.display = "none";
 
-    if (nome.length < 1) return;
+    if (query.length < 1) return;
 
-    const gestores = await loadGestores(nome);
+    const gestores = await loadGestores(query);
 
-    autocompleteBox.style.display = gestores.length > 0 ? "block" : "none";
+    // 🔥 ignora respostas antigas
+    if (requestId !== currentRequest) return;
+
+    // 🔥 remove duplicados por ID
+    const uniqueGestores = [];
+    const ids = new Set();
 
     gestores.forEach(g => {
+        if (!ids.has(g.id)) {
+            ids.add(g.id);
+            uniqueGestores.push(g);
+        }
+    });
+
+    if (uniqueGestores.length === 0) return;
+
+    autocompleteBox.style.display = "block";
+
+    uniqueGestores.forEach(g => {
         const item = document.createElement("div");
         item.classList.add("autocomplete-item");
         item.textContent = g.nome;
@@ -64,6 +85,7 @@ destinatarioInput.addEventListener("input", async () => {
         autocompleteBox.appendChild(item);
     });
 });
+
 
 
 document.addEventListener("click", (e) => {

@@ -3,74 +3,106 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard Gestor </title>
-<link rel="stylesheet" href="/src/static/css/gestor/equipe.css">
+<title>Dashboard Gestor</title>
+
+<!-- CSS -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/gestor/equipe.css') }}">
+
+<!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<link rel="shortcut icon" href="/src/static/img/logo header.png" type="image/x-icon">
+<!-- Favicon -->
+<link rel="shortcut icon" href="{{ url_for('static', filename='img/logo header.png') }}" type="image/x-icon">
 </head>
+
 <body>
 
 <header class="header">
   <div class="logo-box">
-    <img src="/src/static/img/logo header.png" alt="Logo Alpha Secure">
+    <img src="{{ url_for('static', filename='img/logo header.png') }}" alt="Logo Alpha Secure">
   </div>
-  
+
   <div class="user-box">
-    <span id="user-name"></span> <span class="user-role">Gestão</span>
-  </div>  
+    <span id="user-name"></span>
+    <span class="user-role">Gestão</span>
+  </div>
 </header>
 
 <section class="info-cards-container">
   <div class="info-cards">
+
     <div class="card">
       <p>Ser uma empresa referência por sua <br> excelência em segurança e serviços.</p>
-      <img src="/src/static/img/missao_icon.webp" alt="Missão">
+      <img src="{{ url_for('static', filename='img/missao_icon.webp') }}" alt="Missão">
     </div>
-  <div class="card destaque">
-    <p>Disponibilizar ao mercado soluções em serviços agregando tecnologia, atendimentos personalizado e técnicas de trabalho.</p>
-    <img src="/src/static/img/visao_icons.webp" alt="Visão">
-  </div>
-  <div class="card">
-    <p>Transparência, responsabilidade, ética e eficiência, consolidando assim a relação com nossos parceiros comerciais e colaboradores.</p>
-    <img src="/src/static/img/valores_icon.webp" alt="Valores">
-  </div>
+
+    <div class="card destaque">
+      <p>
+        Disponibilizar ao mercado soluções em serviços agregando tecnologia,
+        atendimentos personalizados e técnicas de trabalho.
+      </p>
+      <img src="{{ url_for('static', filename='img/visao_icons.webp') }}" alt="Visão">
+    </div>
+
+    <div class="card">
+      <p>
+        Transparência, responsabilidade, ética e eficiência,
+        consolidando assim a relação com nossos parceiros comerciais e colaboradores.
+      </p>
+      <img src="{{ url_for('static', filename='img/valores_icon.webp') }}" alt="Valores">
+    </div>
+
   </div>
 </section>
 
-  <div class="main-container">
+<div class="main-container">
 
 <aside class="sidebar">
   <nav>
     <ul>
-    <li><a href="#" class="active">Equipe</a></li>
-    <li><a href="/src/templates/gestor/relatorio.html">Feedback</a></li>
-    <li><a href="/src/templates/auth/login.html">Sair</a></li>
+      <!-- Página atual -->
+      <li>
+        <a href="{{ url_for('equipe_bp.pagina_equipe') }}" class="active">
+          Equipe
+        </a>
+      </li>
+
+      <!-- Página de relatório (rota precisa existir) -->
+      <li>
+        <a href="{{ url_for('relatorio_bp.pagina_relatorio') }}">
+          Feedback
+        </a>
+      </li>
+
+      <!-- Volta para login -->
+      <li>
+        <a href="{{ url_for('auth_bp.login_form') }}">
+          Sair
+        </a>
+      </li>
     </ul>
   </nav>
 </aside>
 
 <main class="content">
- 
-        
-<h2>Visualização da Equipe</h2> 
-<div class="search-bar">
-  <i class="fas fa-search"></i>
-  <input type="text" placeholder="Buscar por nome ou RE...">
-</div>
+  <h2>Visualização da Equipe</h2>
 
-<section id="lista-equipe" class="lista-equipe">
-</section>
+  <div class="search-bar">
+    <i class="fas fa-search"></i>
+    <input type="text" placeholder="Buscar por nome ou RE...">
+  </div>
 
-
+  <section id="lista-equipe" class="lista-equipe"></section>
 </main>
 
 </div>
 
 <div id="modal-progresso">
-<div id="detalhes-progresso">
+  <div id="detalhes-progresso"></div>
 </div>
-</div>
-<script src="/src/static/js/gestor/equipe.js"></script>
+
+<!-- JS -->
+<script src="{{ url_for('static', filename='js/gestor/equipe.js') }}"></script>
+
 </body>
 </html>

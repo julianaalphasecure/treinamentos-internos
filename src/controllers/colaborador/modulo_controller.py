@@ -1,7 +1,50 @@
 from flask import Blueprint, request, jsonify
 from src.services.colaborador.modulo_service import ModuloService
+from flask import Blueprint, render_template
 
 modulo_bp = Blueprint("modulo_bp", __name__, url_prefix="/colaborador/modulo")
+
+@modulo_bp.route("/pagina", methods=["GET"])
+def pagina_modulo():
+    return render_template("colaborador/modulo.html")
+
+
+@modulo_bp.route('/modulo01')
+def modulo01():
+    return render_template('colaborador/modulos/modulo01.html')
+
+@modulo_bp.route('/modulo02')
+def modulo02():
+    return render_template('colaborador/modulos/modulo02.html')
+
+@modulo_bp.route('/modulo03')
+def modulo03():
+    return render_template('colaborador/modulos/modulo03.html')
+
+@modulo_bp.route('/modulo04')
+def modulo04():
+    return render_template('colaborador/modulos/modulo04.html')
+
+@modulo_bp.route('/modulo05')
+def modulo05():
+    return render_template('colaborador/modulos/modulo05.html')
+
+@modulo_bp.route('/modulo06')
+def modulo06():
+    return render_template('colaborador/modulos/modulo06.html')
+
+@modulo_bp.route('/modulo07')
+def modulo07():
+    return render_template('colaborador/modulos/modulo07.html')
+
+@modulo_bp.route('/modulo08')
+def modulo08():
+    return render_template('colaborador/modulos/modulo08.html')
+
+@modulo_bp.route('/modulo09')
+def modulo09():
+    
+    return render_template('colaborador/modulos/modulo09.html')
 
 
 @modulo_bp.route("/", methods=["GET", "POST"])

@@ -50,7 +50,7 @@ function renderSearchResults(query) {
 
     filtered.forEach(colab => {
         const item = document.createElement('div');
-        item.textContent = `${colab.nome} (ID: ${colab.id})`;
+        item.textContent = colab.nome;
         item.dataset.id = colab.id;
         item.dataset.nome = colab.nome;
         item.classList.add('search-result-item');
@@ -404,7 +404,11 @@ async function carregarContagemNaoLidos() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-    if (!token) window.location.href = "/src/templates/auth/login.html";
+   if (!token) {
+    window.location.href = "/auth/login";
+    return;
+}
+
 
     await fetchColaboradores();
     carregarFeedbacksRecebidos();

@@ -1,21 +1,34 @@
 import os
-from datetime import timedelta 
-from flask import Flask, jsonify, current_app
+from datetime import timedelta
 import traceback
+
+from flask import Flask, jsonify
+from werkzeug.exceptions import HTTPException
 from flask_migrate import Migrate
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
+
 from src.config.database import db, bcrypt
-from src.config.config import SECRET_KEY, DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT, APP_PORT
+from src.config.config import (
+    SECRET_KEY,
+    DB_HOST,
+    DB_USER,
+    DB_PASSWORD,
+    DB_NAME,
+    DB_PORT,
+    APP_PORT
+)
 
 # --- Controllers Auth ---
 from src.controllers.auth_controller import auth_bp
+
 # --- Controllers Colaborador ---
-from src.controllers.colaborador.colaborador_controller import colaborador_bp 
+from src.controllers.colaborador.colaborador_controller import colaborador_bp
 from src.controllers.colaborador.perfil_controller import perfil_bp as colab_perfil_bp
 from src.controllers.colaborador.feedback_controller import colab_feedback_bp
 from src.controllers.colaborador.progresso_controller import progresso_bp
 from src.controllers.colaborador.modulo_controller import modulo_bp
+
 # --- Controllers Gestor ---
 from src.controllers.gestor.equipe_controller import equipe_bp
 from src.controllers.gestor.gestor_feedback_controller import gestor_feedback_bp
@@ -26,68 +39,92 @@ def create_app():
     base_dir = os.path.dirname(os.path.abspath(__file__))
     template_dir = os.path.join(base_dir, "src/templates")
     static_dir = os.path.join(base_dir, "src/static")
-    
-    # 1. DEFINIÇÃO DO OBJETO 'app'
-    app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
-    
-    CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True, methods=["GET","POST","PUT","DELETE","OPTIONS"])
 
-    # ===== Configurações Flask =====
-    app.config["SECRET_KEY"] = SECRET_KEY.strip() 
+    app = Flask(
+        __name__,
+        template_folder=template_dir,
+        static_folder=static_dir
+    )
+
+   
+    app.url_map.strict_slashes = False
+
+   
+    CORS(
+        app,
+        resources={r"/*": {"origins": "*"}},
+        supports_credentials=True,
+        methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+    )
+
+    
+    app.config["SECRET_KEY"] = SECRET_KEY.strip()
     app.config["SQLALCHEMY_DATABASE_URI"] = (
         f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
     )
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    
 
-    # ===== INICIALIZAÇÃO DE EXTENSÕES =====
+ 
     db.init_app(app)
     bcrypt.init_app(app)
     Migrate(app, db)
 
+
+    @app.route("/", methods=["GET"])
+    def home():
+        return jsonify({
+            "status": "online",
+            "api": "Treinamentos Internos",
+            "mensagem": "API rodando com sucesso"
+        }), 200
+
+    
     @app.errorhandler(Exception)
     def handle_unhandled_exception(e):
+        if isinstance(e, HTTPException):
+            return e
+
         print('==================================================================')
         print('!!! ERRO CRÍTICO NÃO TRATADO (STACK TRACE ABAIXO) !!!')
-        import traceback
         traceback.print_exc()
         print('==================================================================')
-        return jsonify(error="Erro interno do servidor: falha no processamento da rota."), 500
-    
-    # ===== JWT=====
+
+        return "Erro interno do servidor.", 500
+
+
     app.config["JWT_SECRET_KEY"] = SECRET_KEY.strip()
     app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=30)
     jwt = JWTManager(app)
-    
-    # ===== CALLBACKS JWT =====
+
     @jwt.invalid_token_loader
     @jwt.unauthorized_loader
     def handle_auth_error(error):
-        return jsonify(error=str(error)), 401 
-
+        return jsonify(error=str(error)), 401
 
     @jwt.expired_token_loader
     def expired_token_callback(jwt_header, jwt_data):
-    
-        return jsonify(error="O token de acesso expirou. Por favor, refaça o login."), 401 
+        return jsonify(
+            error="O token de acesso expirou. Por favor, refaça o login."
+        ), 401
 
     @jwt.user_identity_loader
     def user_identity_lookup(user):
         return user
-    
-    # ===== Registro de Blueprints =====
+
+ 
     app.register_blueprint(auth_bp, url_prefix="/auth")
+
     app.register_blueprint(colaborador_bp, url_prefix="/colaborador")
     app.register_blueprint(colab_perfil_bp, url_prefix="/colaborador/perfil")
     app.register_blueprint(colab_feedback_bp, url_prefix="/colaborador/feedback")
     app.register_blueprint(progresso_bp, url_prefix="/colaborador/progresso")
     app.register_blueprint(modulo_bp, url_prefix="/colaborador/modulo")
+
     app.register_blueprint(equipe_bp, url_prefix="/gestor/equipe")
     app.register_blueprint(gestor_feedback_bp, url_prefix="/gestor/feedback")
     app.register_blueprint(relatorio_bp, url_prefix="/gestor/relatorio")
 
-
-   
+    
     with app.app_context():
         print("\n=== ROTAS REGISTRADAS ===")
         for rule in app.url_map.iter_rules():

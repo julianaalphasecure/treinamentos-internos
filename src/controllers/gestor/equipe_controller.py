@@ -2,21 +2,32 @@ from flask import Blueprint, request, jsonify
 from src.services.gestor.equipe_service import EquipeService
 from src.services.colaborador.colaborador_service import ColaboradorService 
 from flask_jwt_extended import jwt_required, get_jwt_identity 
+from flask import Blueprint, render_template
+from src.models.colaborador import Colaborador 
 
 equipe_bp = Blueprint("equipe_bp", __name__)
 
+@equipe_bp.route("/pagina", methods=["GET"])
+def pagina_equipe():
+    return render_template("gestor/equipe.html")
+
 
 @equipe_bp.route("/", methods=["GET"])
-@jwt_required() 
+@jwt_required()
 def listar_equipe_colaboradores():
-    
-   
-    dados_mock = [
-        {"id": 999, "nome": "Fulano Teste (Mock)", "email": "fulano.t@empresa.com"},
-        {"id": 998, "nome": "Cicrano (Mock)", "email": "cicrano.m@empresa.com"}
-    ]
-    return jsonify(dados_mock), 200 
-    
+    colaboradores = Colaborador.query.order_by(Colaborador.nome.asc()).all()
+
+    return jsonify([
+        {
+            "id": c.id,
+            "nome": c.nome,
+            "email": c.email,
+            "re": c.re,
+            "status": c.status,
+            "foto": c.foto
+        }
+        for c in colaboradores
+    ]), 200
    
 @equipe_bp.route("/<int:equipe_id>", methods=["GET"])
 def obter_equipe(equipe_id):

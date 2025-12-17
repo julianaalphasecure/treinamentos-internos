@@ -1,11 +1,17 @@
 document.addEventListener("DOMContentLoaded", () => {
     const usuarioGestor = JSON.parse(sessionStorage.getItem("usuario_gestor"));
     const token = sessionStorage.getItem("token_gestor");
-    const baseURL = "http://127.0.0.1:5000/colaborador"; 
+    const API_BASE = "http://127.0.0.1:5000";
+
+    const equipeURL = `${API_BASE}/gestor/equipe`;
+    const progressoURL = `${API_BASE}/colaborador/progresso/gestor/colaborador`;
+
+ 
 
     if (!usuarioGestor || !usuarioGestor.id) {
         alert("Sessão expirada ou usuário não identificado.");
-        window.location.href = "/src/templates/auth/login.html";
+        window.location.href = "/auth/login";
+
         return;
     }
 
@@ -30,7 +36,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         try {
          
-            const url = `${baseURL}/progresso/gestor/colaborador/${colaboradorId}`;
+            const url = `${progressoURL}/${colaboradorId}`;
+
             const res = await fetch(url, {
                 method: "GET",
                 headers: {
@@ -132,7 +139,8 @@ htmlModulos += `
   
     async function carregarEquipe() {
         try {
-            const res = await fetch(`${baseURL}/`, {
+            const res = await fetch(`${equipeURL}/`, {
+
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

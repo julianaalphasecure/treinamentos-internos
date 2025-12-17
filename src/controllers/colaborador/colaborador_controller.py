@@ -5,10 +5,12 @@ from src.models.colaborador import Colaborador
 colaborador_bp = Blueprint("colaborador_bp", __name__)
 
 
+@colaborador_bp.route("", methods=["GET"])
 @colaborador_bp.route("/", methods=["GET"])
 def listar_colaboradores():
     colaboradores = ColaboradorService.get_all_colaboradores()
     return jsonify([c.to_dict() for c in colaboradores]), 200
+
 
 
 @colaborador_bp.route("/status/<int:colaborador_id>", methods=["GET"])
