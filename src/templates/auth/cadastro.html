@@ -4,29 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro - Alpha Secure</title>
-    <link rel="stylesheet" href="/src/static/css/auth/cadastro.css">
-    <link rel="shortcut icon" href="/src/static/img/logo header.png" type="image/x-icon">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth/cadastro.css') }}">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/logo header.png') }}" type="image/x-icon">
 </head>
 <body>
     <header class="header">
         <div class="logo">
-            <img src="/src/static/img/logo header.png" alt="Logo Alpha Secure">
+            <img src="{{ url_for('static', filename='img/logo header.png') }}" alt="Logo Alpha Secure">
         </div>
         <nav class="nav-links">
-            <a href="login.html">Login</a>
+            <a href="{{ url_for('auth_bp.login_form') }}">Login</a>
             <a href="#" class="highlight">Cadastre-se</a>
         </nav>
     </header>
 
     <main class="main-container">
         <div class="image-side">
-            <img src="/src/static/img/cadastro_sidee.png" alt="Imagem Cadastro">
+            <img src="{{ url_for('static', filename='img/cadastro_sidee.png') }}" alt="Imagem Cadastro">
         </div>
+
         <div class="form-side">
             <div class="form-card">
                 <h2>Seja bem-vindo(a)!</h2>
-                <p>Realize seu cadastro aqui para entrar na plataforma de treinamentos internos do setor de monitoramento</p>
-                <img src="/src/static/img/logo_cadastre.png" class="logo_cadastre">
+                <p>
+                    Realize seu cadastro aqui para entrar na plataforma de
+                    treinamentos internos do setor de monitoramento
+                </p>
+
+                <img
+                    src="{{ url_for('static', filename='img/logo_cadastre.png') }}"
+                    class="logo_cadastre"
+                    alt="Logo"
+                >
 
                 <form id="cadastro-form">
                     <label for="re">RE</label>
@@ -42,25 +55,26 @@
                     <input type="password" id="senha" name="senha" required placeholder="Digite sua senha...">
 
                     <label for="tipo_acesso">Tipo de Acesso</label>
-            <select id="tipo_acesso" name="tipo_acesso" required>
-            <option value="">Selecione</option>
-            <option value="colaborador">Colaborador</option>
-            <option value="gestor">Gestor</option>
-            </select>
-
+                    <select id="tipo_acesso" name="tipo_acesso" required>
+                        <option value="">Selecione</option>
+                        <option value="colaborador">Colaborador</option>
+                        <option value="gestor">Gestor</option>
+                    </select>
 
                     <button type="submit">Cadastrar</button>
                 </form>
 
                 <div id="cadastro-feedback" class="form-feedback"></div>
 
-                <p>Já possui conta? <a href="login.html">Faça login</a></p>
+                <p>
+                    Já possui conta?
+                    <a href="{{ url_for('auth_bp.login_form') }}">Faça login</a>
+                </p>
             </div>
         </div>
     </main>
 
-    
-
-    <script src="/src/static/js/auth/cadastro.js"></script>
+    <!-- JS -->
+    <script src="{{ url_for('static', filename='js/auth/cadastro.js') }}"></script>
 </body>
 </html>
