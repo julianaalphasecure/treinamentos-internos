@@ -70,7 +70,7 @@ const allQuestions = [
     },
     // 3
     {
-        enunciado: "Quando ocorre uma queda de energia parcial, qual é a primeira avalização crítica a ser feita?",
+        enunciado: "Quando ocorre uma queda de energia parcial, qual é a primeira avaliação crítica a ser feita?",
         alternativas: {
             a: "Verificar iluminação pública externa",
             b: "Identificar se o sistema de alarme continua operante",

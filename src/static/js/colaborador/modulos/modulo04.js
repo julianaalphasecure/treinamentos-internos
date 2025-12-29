@@ -138,7 +138,7 @@ const allQuestions = [
             correta: "c" },
 
     //11
-    { enunciado: "Em uma situação em que uma área tranacada é aberta e a imagem da câmera correspondente cai simultaneamente, qual é o procedimento mais adequado segundo o protocolo do módulo?", 
+    { enunciado: "Em uma situação em que uma área trancada é aberta e a imagem da câmera correspondente cai simultaneamente, qual é o procedimento mais adequado segundo o protocolo do módulo?", 
         alternativas: { 
             a: "Registrar a queda e aguardar o restabelecimento automático das imagens para confirmar o motivo da abertura", 
             b: "Acionar imediatamente o contato de checagem, registrar a abertura e somente depois acionar suporte técnico", 
