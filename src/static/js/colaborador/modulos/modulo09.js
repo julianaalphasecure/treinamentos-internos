@@ -75,7 +75,7 @@ const allQuestions = [
             a: "Todo o sistema off-line simultaneamente",
             b: "Perda total de comunicação e alarmes",
             c: "Falha apenas de alguns setores ou câmeras específicas",
-            d: "Desarme automátido do sistema para proteção"
+            d: "Desarme automático do sistema para proteção"
         },
         correta: "c"
     },
@@ -175,7 +175,7 @@ const allQuestions = [
         alternativas: {
             a: "Não possuem impacto operacional",
             b: "Substituem alarmes e sensores",
-            c: "São parte essencial da preservação e restreabilidade",
+            c: "São parte essencial da preservação e rastreabilidade",
             d: "Só são usadas em auditorias internas"
         },
         correta: "c"
