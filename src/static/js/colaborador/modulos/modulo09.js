@@ -33,8 +33,8 @@ let isFullScreen = false;
 let darkMode = false;
 const totalSlides = slidesNormal.length;
 
-const USUARIO_ID = JSON.parse(sessionStorage.getItem("usuario_colaborador"))?.id;
-const TOKEN = sessionStorage.getItem("token_colaborador");
+const USUARIO_ID = JSON.parse(localStorage.getItem("usuario_colaborador"))?.id;
+const TOKEN = localStorage.getItem("token_colaborador");
 const REQUISITO_APROVACAO = 80;
 
 // ================== CHAVES LOCAIS POR MÓDULO ==================
@@ -289,13 +289,13 @@ function updateArrows() {
 
 
 function saveModuleSlideProgress(moduleIdLocal, lastSlideIndex) {
-    const progress = JSON.parse(sessionStorage.getItem("moduleProgress") || "{}");
+    const progress = JSON.parse(localStorage.getItem("moduleProgress") || "{}");
     progress[moduleIdLocal] = lastSlideIndex;
-    sessionStorage.setItem("moduleProgress", JSON.stringify(progress));
+    localStorage.setItem("moduleProgress", JSON.stringify(progress));
 }
 
 function loadModuleProgress(moduleIdLocal) {
-    const progress = JSON.parse(sessionStorage.getItem("moduleProgress") || "{}");
+    const progress = JSON.parse(localStorage.getItem("moduleProgress") || "{}");
     return progress[moduleIdLocal] || 0;
 }
 
@@ -385,19 +385,19 @@ document.addEventListener('keydown', (e) => {
 
 // ================== HELPERS DO ANTI-COLA ==================
 function marcarFinalizadoLocal() {
-    sessionStorage.setItem(EX_KEY_FINALIZADO, "true");
-    sessionStorage.removeItem(EX_KEY_ANDAMENTO);
-    sessionStorage.removeItem(EX_KEY_RESET);
+    localStorage.setItem(EX_KEY_FINALIZADO, "true");
+    localStorage.removeItem(EX_KEY_ANDAMENTO);
+    localStorage.removeItem(EX_KEY_RESET);
 }
 
 function marcarAndamentoLocal() {
-    sessionStorage.setItem(EX_KEY_ANDAMENTO, "true");
-    sessionStorage.removeItem(EX_KEY_FINALIZADO);
-    sessionStorage.removeItem(EX_KEY_RESET);
+    localStorage.setItem(EX_KEY_ANDAMENTO, "true");
+    localStorage.removeItem(EX_KEY_FINALIZADO);
+    localStorage.removeItem(EX_KEY_RESET);
 }
 
 function marcarResetLocal() {
-    sessionStorage.setItem(EX_KEY_RESET, "true");
+    localStorage.setItem(EX_KEY_RESET, "true");
 }
 
 // ================== HANDLER DE ENVIO ==================
@@ -440,8 +440,8 @@ document.getElementById('submit-exercises').addEventListener('click', () => {
         btnRefazer.onclick = () => {
             finalizarModuloAPI(moduleId, 0); 
 
-            sessionStorage.removeItem(EX_KEY_ANDAMENTO);
-            sessionStorage.removeItem(EX_KEY_RESET);
+            localStorage.removeItem(EX_KEY_ANDAMENTO);
+            localStorage.removeItem(EX_KEY_RESET);
             
 
             closeResultOverlay();
@@ -521,7 +521,7 @@ btnFinalizar.forEach(btn => {
 
         window.scrollTo({ top: exercisesSection.offsetTop - 20, behavior: 'smooth' });
         startTimer();
-        sessionStorage.removeItem('currentModuleSlide');
+        localStorage.removeItem('currentModuleSlide');
     });
 });
 
@@ -721,8 +721,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
 // 1) visibilitychange (trocar de aba / minimizar em alguns navegadores)
 document.addEventListener("visibilitychange", () => {
-    const andamento = sessionStorage.getItem(EX_KEY_ANDAMENTO);
-    const finalizado = sessionStorage.getItem(EX_KEY_FINALIZADO);
+    const andamento = localStorage.getItem(EX_KEY_ANDAMENTO);
+    const finalizado = localStorage.getItem(EX_KEY_FINALIZADO);
 
     if (document.hidden && andamento === "true" && finalizado !== "true") {
         marcarResetLocal();
@@ -731,8 +731,8 @@ document.addEventListener("visibilitychange", () => {
 
 // 2) blur (perda de foco da janela)
 window.addEventListener("blur", () => {
-    const andamento = sessionStorage.getItem(EX_KEY_ANDAMENTO);
-    const finalizado = sessionStorage.getItem(EX_KEY_FINALIZADO);
+    const andamento = localStorage.getItem(EX_KEY_ANDAMENTO);
+    const finalizado = localStorage.getItem(EX_KEY_FINALIZADO);
 
     if (andamento === "true" && finalizado !== "true") {
         marcarResetLocal();
@@ -741,21 +741,21 @@ window.addEventListener("blur", () => {
 
 // 3) beforeunload — opcional, para casos de fechar/refresh — marca reset
 window.addEventListener("beforeunload", (e) => {
-    const andamento = sessionStorage.getItem(EX_KEY_ANDAMENTO);
-    const finalizado = sessionStorage.getItem(EX_KEY_FINALIZADO);
+    const andamento = localStorage.getItem(EX_KEY_ANDAMENTO);
+    const finalizado = localStorage.getItem(EX_KEY_FINALIZADO);
 
     if (andamento === "true" && finalizado !== "true") {
         
-        sessionStorage.setItem(EX_KEY_RESET, "true");
+        localStorage.setItem(EX_KEY_RESET, "true");
     }
 });
 
 window.addEventListener("focus", () => {
-    const precisaResetar = sessionStorage.getItem(EX_KEY_RESET);
+    const precisaResetar = localStorage.getItem(EX_KEY_RESET);
 
     if (precisaResetar === "true") {
-        sessionStorage.removeItem(EX_KEY_RESET);
-        sessionStorage.removeItem(EX_KEY_ANDAMENTO);
+        localStorage.removeItem(EX_KEY_RESET);
+        localStorage.removeItem(EX_KEY_ANDAMENTO);
 
   
         exIndex = 0;

@@ -1,3 +1,71 @@
+async function carregarConteudoModulo() {
+    const res = await fetch(`/colaborador/modulo/${moduleId}/conteudo`, {
+        headers: {
+            "Authorization": `Bearer ${TOKEN}`
+        }
+    });
+
+    if (!res.ok) {
+        alert("Erro ao carregar módulo");
+        return;
+    }
+
+    const data = await res.json();
+
+    // título
+    const tituloEl = document.getElementById("tituloModulo");
+    if (tituloEl) tituloEl.textContent = data.modulo.titulo;
+
+criarSlides(data.slides);
+carregarExercicios(data.exercicios);
+
+}
+
+function criarSlides(slidesAPI) {
+    slidesNormalData = [];
+    slidesDarkData = [];
+
+    slidesAPI
+        .sort((a, b) => a.ordem - b.ordem)
+        .forEach(slide => {
+            if (!slide.imagem_url) return;
+
+            const modo = (slide.modo || '').toLowerCase().trim();
+
+            if (modo === 'dark') {
+                slidesDarkData.push(slide);
+            }
+
+            if (modo === 'normal' || modo === '') {
+                slidesNormalData.push(slide);
+            }
+        });
+
+    // segurança extra
+    darkMode = false;
+    slidesAtuais = slidesNormalData;
+    renderSlides();
+}
+
+function renderSlides() {
+    wrapper.innerHTML = '';
+
+    slidesAtuais.forEach(slide => {
+        const slideDiv = document.createElement('div');
+        slideDiv.classList.add('modules-slide');
+
+        slideDiv.innerHTML = `
+            <img src="${slide.imagem_url}" alt="Slide">
+        `;
+
+        wrapper.appendChild(slideDiv);
+    });
+
+    currentIndex = 0;
+    createThumbnails(slidesAtuais);
+    updateCarousel();
+}
+
 function detectModuleId() {
    
     const bodyAttr = document.body.getAttribute('data-module-id');
@@ -17,206 +85,41 @@ function detectModuleId() {
     return 1;
 }
 
-const moduleId = detectModuleId(); // agora definido dinamicamente
+const moduleId = detectModuleId(); 
 
 // ================== VARIÁVEIS PRINCIPAIS ==================
 const prevExerciseBtn = document.querySelector('.prev-exercise');
 const nextExerciseBtn = document.querySelector('.next-exercise');
 
+
+const btnFinalizarConteudo = document.createElement('button');
+btnFinalizarConteudo.className = 'btn-finalizar';
+btnFinalizarConteudo.textContent = 'Finalizar conteúdo';
+
+document.querySelector('.modules').appendChild(btnFinalizarConteudo);
+
 // ================== VARIÁVEIS DO CARROSSEL E DO MÓDULO ==================
-let slidesNormal = document.querySelectorAll('.modules-slide:not(.dark-slide)');
-let slidesDark = document.querySelectorAll('.dark-slide');
-const wrapper = document.querySelector('.modules-wrapper');
+
+const wrapper = document.getElementById('slidesContainer');
 let currentIndex = 0;
 let moduleLocked = false;
 let isFullScreen = false;
 let darkMode = false;
-const totalSlides = slidesNormal.length;
 
-const USUARIO_ID = JSON.parse(sessionStorage.getItem("usuario_colaborador"))?.id;
-const TOKEN = sessionStorage.getItem("token_colaborador");
+let slidesAtuais = [];
+let slidesNormalData = [];
+let slidesDarkData = [];
+
+
+
+const USUARIO_ID = JSON.parse(localStorage.getItem("usuario_colaborador"))?.id;
+const TOKEN = localStorage.getItem("token_colaborador");
 const REQUISITO_APROVACAO = 80;
 
 // ================== CHAVES LOCAIS POR MÓDULO (ANTI-COLA) ==================
 const EX_KEY_ANDAMENTO = `mod${moduleId}_ex_andamento`;
 const EX_KEY_FINALIZADO = `mod${moduleId}_ex_finalizado`;
 const EX_KEY_RESET = `mod${moduleId}_ex_reset`;
-
-
-
-// ================== BANCO DE QUESTÕES ==================
-const allQuestions = [
-    // 1
-    {
-        enunciado: "Durante uma inspeção noturna, um alarme dispara, mas a câmera principal está sem visibilidade e as câmeras secundárias também não mostram nada. Qual é a conduta correta do operador?",
-        alternativas: {
-            a: "Silenciar o alarme e registrar como falso disparo no final do turno",
-            b: "Registrar como 'sem visibilidade', solicitar imagens de outras câmeras e, se nada for identificado, encerrar com justificativa",
-            c: "Acionar imediatamente a Polícia Militar por precaução",
-            d: "Ignorar o alarme, pois nenhuma evidência foi capturada"
-        },
-        correta: "b"
-    },
-    // 2
-    {
-        enunciado: "Se um sinistro é confirmado, mas o operador não consegue contato imediato com o supervisor plantonista, qual é a ação correta?",
-        alternativas: {
-            a: "Registrar o evento e aguardar o supervisor retornar",
-            b: "Acionar o CCO do cliente com todos os detalhes, enquanto tenta contato com o supervisor",
-            c: "Ignorar o acionamento da Polícia Militar até falar com o supervisor",
-            d: "Silenciar o alarme temporariamente e relatar posteriormente"
-        },
-        correta: "b"
-    },
-    // 3
-    {
-        enunciado: "Durante uma queda de energia total, o operador identifica que apenas uma subestação local está funcionando. O procedimento correto é:",
-        alternativas: {
-            a: "Priorizar a restauração dessa subestação antes de verificar outras áreas críticas",
-            b: "Confirmar com o CCO, realizar verificação remota e comunicar concessionárias se necessário",
-            c: "Acionar apenas a equipe de campo, ignorando o CCO",
-            d: "Registrar e aguardar a energia voltar automaticamente"
-        },
-        correta: "b"
-    },
-    // 4
-    {
-        enunciado: "Em uma queda total de imagens da usina (todas as câmeras offline), qual é a primeira verificação que o operador deve fazer segundo o procedimento?",
-        alternativas: {
-            a: "Acionar imediatamente a equipe de campo para checar geradores",
-            b: "Confirmar com o CCO se há queda de todas as usinas e verificar se houve desconexão de internet ou faha nos equipamentos locais",
-            c: "Iniciar relatório técnico e aguardar instruções",
-            d: "Reiniciar o sistema local remotamente sem comunicar com o CCO"
-        },
-        correta: "b"
-    },
-    // 5
-    {
-        enunciado: "Se uma câmera específica aparece desconectada isoladamente, a ação correta é:",
-        alternativas: {
-            a: "Ignorar se houve sinal de sinistro",
-            b: "Verificar últimos eventos/imagens e informar o CCO sobre a desconexão",
-            c: "Acionar imediatamente a pronta resposta",
-            d: "Remover a câmera do sistema para evitar falsos positivos"
-        },
-        correta: "b"
-    },
-    // 6
-    {
-        enunciado: "Ao classificar um disparo como 'sem visibilidade', qual é a conduta adequada antes de encerrar o evento?",
-        alternativas: {
-            a: "Encerrar prontamente porque não há evidência visível",
-            b: "Registrar o fato, solicitar imagens de outra câmera e, se nada for identificado, encerrar com justificativa",
-            c: "Considerar como falso disparo e não registrar em checklist",
-            d: "Acionar a polícia por precaução sem mais verificações"
-        },
-        correta: "b"
-    },
-    // 7
-    {
-        enunciado: "Em qual situação é justificável acionar a pronta resposta imediatamente?",
-        alternativas: {
-            a: "Sempre que houver qualquer disparo externo",
-            b: "Somente quando houver falhas de manutenção rotineira programada",
-            c: "Quando há risco evidente à integridade física da usina, falha severa em sistemas ou sinistro confirmado",
-            d: "Quando o operador quer confirmar algo com mais rapidez"
-        },
-        correta: "c"
-    },
-    // 8
-    {
-        enunciado: "Qual é a ordem correta de comunicação típica quando o técnico local não resolve um problema grave?",
-        alternativas: {
-            a: "Operador > Técnico local > Supervisor de operações > Manutenção",
-            b: "Operador > Supervisor > Técnico local > Pronta resposta",
-            c: "Operador > Pronta resposta > CCO > Supervisor",
-            d: "Operador > Policia > Supervisor > Técnico local"
-        },
-        correta: "a"
-    },
-    // 9
-    {
-        enunciado: "Considerando priorização durante queda de energia, qual área deve receber atenção imediata?",
-        alternativas: {
-            a: "Áreas administrativas, pois perdem acesso a arquivos",
-            b: "Áreas com maior impacto em segurança e refrigeração",
-            c: "Visitas programadas de clientes",
-            d: "Apenas as áreas que reportarem primeiro"
-        },
-        correta: "b"
-    },
-    // 10
-    {
-        enunciado: "Após acionar a equipe de pronta resposta e o atendimento ser concluído, qual documento é obrigatório?",
-        alternativas: {
-            a: "Apenas um registro verbal ao supervisor",
-            b: "Um relatório técnico completo com status da ocorrência",
-            c: "Um e-mail opcional para o cliente",
-            d: "Apenas atualização no grupo interno de mensagens"
-        },
-        correta: "b"
-    },
-
-    //11
-    {
-        enunciado: "Se um operador identifica um falso disparo, qual a ação correta imediata?",
-        alternativas: {
-            a: "Silenciar o alarme e não registrar nada",
-            b: "Ignorar o evento se houver muitos falsos positivos naquele dia",
-            c: "Mudar parâmetros dos sensores para reduzir futuros falsos",
-            d: "Registrar o disparo como falso no sistema e no checklist, informando detalhes da verificação"
-        },
-        correta: "d"
-    },
-
-    //12
-    {
-        enunciado: "Ao detectar corte de energia confirmado no local, qual conjunto de ações é esperado?",
-        alternativas: {
-            a: "Aguardar o retorno automático e não notificar ninguém",
-            b: "Acionar equipe de campo, verificar e comunicar concessionária se necessário",
-            c: "Apenas registrar no sistema e aguardar relatórios do CCO",
-            d: "Enviar apenas SMS para supervisor"
-        },
-        correta: "b"
-    },
-
-    //13
-    {
-        enunciado: "O que caracteriza um 'falso disparo' conforme o módulo?",
-        alternativas: {
-            a: "Disparo causado por evento climático extremo que danificou equipamentos",
-            b: "Disparo dos sensores sem alterações visíveis no local após verificação das câmeras",
-            c: "Quando uma câmera fica sem visibilidade",
-            d: "Quando há evidência clara de invasão física"
-        },
-        correta: "b"
-    },
-
-    //14
-    {
-        enunciado: "Qual comportamento de comunicação interno é considerado incorreto durante um sinistro?",
-        alternativas: {
-            a: "Informar o supervisor plantonista e o CCO do cliente com todos os detalhes",
-            b: "Acionar a equipe de pronta resposta quando critérios são atendidos",
-            c: "Utilizar canais informais e não registrar atualizações oficialmente",
-            d: "Registrar todos os eventos no checklist e no sistema"
-        },
-        correta: "c"
-    },
-
-    //15
-    {
-        enunciado: "Em uma situação onde múltiplos alarmes ocorrem na mesma zona, a conduta correta do operador é:",
-        alternativas: {
-            a: "Ignorar todos exceto o primeiro para não sobrecarregar os relatórios",
-            b: "Tratar cada novo disparo como um evento, realizando verificação completa e registro, mesmo que tenha sido falso",
-            c: "Silenciar a zona até o final do turno",
-            d: "Encaminhar somente para supervisor caso seja um segundo disparo"
-        },
-        correta: "b"
-    }
-];
 
 const QUESTION_COUNT = 10;
 function pickNRandom(arr, n) {
@@ -228,43 +131,85 @@ function pickNRandom(arr, n) {
     return a.slice(0, n);
 }
 
-function renderRandomExercises() {
-    const exWrapper = document.querySelector('.exercise-wrapper');
-    if (!exWrapper) return;
+let allQuestions = [];
 
-    const selected = pickNRandom(allQuestions, Math.min(QUESTION_COUNT, allQuestions.length));
-    exWrapper.innerHTML = '';
-    selected.forEach((q, i) => {
-        const div = document.createElement('div');
-        div.classList.add('exercise-slide');
-        div.setAttribute('data-answer', q.correta);
-        const name = `q${i}_${Date.now()}`;
-        div.innerHTML = `
-            <p><strong>${i + 1}.</strong> ${q.enunciado}</p>
-            <div class="options">
-                <input type="radio" id="${name}a" name="${name}" value="a"><label for="${name}a">${q.alternativas.a}</label>
-                <input type="radio" id="${name}b" name="${name}" value="b"><label for="${name}b">${q.alternativas.b}</label>
-                <input type="radio" id="${name}c" name="${name}" value="c"><label for="${name}c">${q.alternativas.c}</label>
-                <input type="radio" id="${name}d" name="${name}" value="d"><label for="${name}d">${q.alternativas.d}</label>
-            </div>`;
-        exWrapper.appendChild(div);
-    });
+function carregarExercicios(exerciciosAPI) {
+    if (!Array.isArray(exerciciosAPI) || exerciciosAPI.length === 0) {
+        console.warn("Nenhum exercício encontrado para este módulo");
+        return;
+    }
+
+    allQuestions = exerciciosAPI.map(ex => ({
+        enunciado: ex.pergunta,
+        alternativas: {
+            a: ex.alternativa_a,
+            b: ex.alternativa_b,
+            c: ex.alternativa_c,
+            d: ex.alternativa_d
+        },
+        correta: ex.resposta_correta
+    }));
+
+    renderRandomExercises();
 }
-renderRandomExercises();
 
 
 // ================== FUNÇÃO ATUALIZA CARROSSEL ==================
 function updateCarousel() {
+    if (!slidesAtuais.length) return;
+
+    if (currentIndex < 0) currentIndex = 0;
+    if (currentIndex >= slidesAtuais.length) {
+        currentIndex = slidesAtuais.length - 1;
+    }
+
     wrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
+
     updateProgressBar();
-    updateThumbnails();
     updateProgressText();
+    updateThumbnails();
     updateArrows();
     saveModuleSlideProgress(moduleId, currentIndex);
+
+    
+    if (currentIndex === slidesAtuais.length - 1) {
+        btnFinalizarConteudo.style.display = 'block';
+    } else {
+        btnFinalizarConteudo.style.display = 'none';
+    }
 }
 
+btnFinalizarConteudo.addEventListener('click', () => {
+    marcarAndamentoLocal(); // anti-cola
+
+    moduleLocked = true;
+    exercisesSection.style.display = 'block';
+
+    nextBtn.style.opacity = '0.4';
+    prevBtn.style.opacity = '0.4';
+    nextBtn.style.pointerEvents = 'none';
+    prevBtn.style.pointerEvents = 'none';
+
+    document.querySelectorAll('.thumbnails img').forEach(img => {
+        img.style.pointerEvents = 'none';
+        img.style.opacity = '0.4';
+        img.style.filter = 'blur(1px) grayscale(0.8)';
+    });
+
+    document.addEventListener('keydown', lockArrows);
+
+    window.scrollTo({
+        top: exercisesSection.offsetTop - 20,
+        behavior: 'smooth'
+    });
+
+    startTimer();
+});
+
+
 function updateArrows() {
-    const slides = darkMode ? slidesDark : slidesNormal;
+    const slides = darkMode ? slidesDarkData : slidesNormalData;
+
 
     if (currentIndex === 0) {
         prevBtn.style.opacity = "0.4";
@@ -289,13 +234,13 @@ function updateArrows() {
 
 
 function saveModuleSlideProgress(moduleIdLocal, lastSlideIndex) {
-    const progress = JSON.parse(sessionStorage.getItem("moduleProgress") || "{}");
+    const progress = JSON.parse(localStorage.getItem("moduleProgress") || "{}");
     progress[moduleIdLocal] = lastSlideIndex;
-    sessionStorage.setItem("moduleProgress", JSON.stringify(progress));
+    localStorage.setItem("moduleProgress", JSON.stringify(progress));
 }
 
 function loadModuleProgress(moduleIdLocal) {
-    const progress = JSON.parse(sessionStorage.getItem("moduleProgress") || "{}");
+    const progress = JSON.parse(localStorage.getItem("moduleProgress") || "{}");
     return progress[moduleIdLocal] || 0;
 }
 
@@ -360,6 +305,7 @@ const scoreText = overlay.querySelector('#overlay-score');
 const btnRefazer = overlay.querySelector('.btn-refazer');
 const btnProximo = overlay.querySelector('.btn-proximo');
 
+
 function openResultOverlay() {
     overlay.style.display = 'flex';
     overlay.setAttribute('aria-hidden', 'false');
@@ -385,19 +331,19 @@ document.addEventListener('keydown', (e) => {
 
 // ================== HELPERS DO ANTI-COLA ==================
 function marcarFinalizadoLocal() {
-    sessionStorage.setItem(EX_KEY_FINALIZADO, "true");
-    sessionStorage.removeItem(EX_KEY_ANDAMENTO);
-    sessionStorage.removeItem(EX_KEY_RESET);
+    localStorage.setItem(EX_KEY_FINALIZADO, "true");
+    localStorage.removeItem(EX_KEY_ANDAMENTO);
+    localStorage.removeItem(EX_KEY_RESET);
 }
 
 function marcarAndamentoLocal() {
-    sessionStorage.setItem(EX_KEY_ANDAMENTO, "true");
-    sessionStorage.removeItem(EX_KEY_FINALIZADO);
-    sessionStorage.removeItem(EX_KEY_RESET);
+    localStorage.setItem(EX_KEY_ANDAMENTO, "true");
+    localStorage.removeItem(EX_KEY_FINALIZADO);
+    localStorage.removeItem(EX_KEY_RESET);
 }
 
 function marcarResetLocal() {
-    sessionStorage.setItem(EX_KEY_RESET, "true");
+    localStorage.setItem(EX_KEY_RESET, "true");
 }
 
 // ================== HANDLER DE ENVIO ==================
@@ -442,8 +388,8 @@ document.getElementById('submit-exercises').addEventListener('click', () => {
             finalizarModuloAPI(moduleId, 0); // Envia nota 0 para contar tentativa
 
             // Limpa o estado local do exercício atual (usuário vai refazer)
-            sessionStorage.removeItem(EX_KEY_ANDAMENTO);
-            sessionStorage.removeItem(EX_KEY_RESET);
+            localStorage.removeItem(EX_KEY_ANDAMENTO);
+            localStorage.removeItem(EX_KEY_RESET);
             // NÃO removemos EX_KEY_FINALIZADO aqui pois não estava finalizado
 
             closeResultOverlay();
@@ -480,20 +426,23 @@ document.getElementById('submit-exercises').addEventListener('click', () => {
 
 // ================== CONTROLES DO CARROSSEL PRINCIPAL ==================
 document.querySelector('.next').addEventListener('click', () => {
-    const slides = darkMode ? slidesDark : slidesNormal;
-    if (!moduleLocked || isFullScreen) {
-        if (currentIndex < slides.length - 1) currentIndex++;
+    if (moduleLocked && !isFullScreen) return;
+
+    if (currentIndex < slidesAtuais.length - 1) {
+        currentIndex++;
         updateCarousel();
     }
 });
 
 document.querySelector('.prev').addEventListener('click', () => {
-    const slides = darkMode ? slidesDark : slidesNormal;
-    if (!moduleLocked || isFullScreen) {
-        if (currentIndex > 0) currentIndex--;
+    if (moduleLocked && !isFullScreen) return;
+
+    if (currentIndex > 0) {
+        currentIndex--;
         updateCarousel();
     }
 });
+
 
 // ================== BOTÃO FINALIZAR MÓDULO ==================
 const btnFinalizar = document.querySelectorAll('.btn-finalizar');
@@ -524,7 +473,7 @@ btnFinalizar.forEach(btn => {
 
         window.scrollTo({ top: exercisesSection.offsetTop - 20, behavior: 'smooth' });
         startTimer();
-        sessionStorage.removeItem('currentModuleSlide');
+        localStorage.removeItem('currentModuleSlide');
     });
 });
 
@@ -620,14 +569,15 @@ document.getElementById('download-btn').addEventListener('click', () => {
 
 // ================== MINIATURAS ==================
 const thumbnailsContainer = document.querySelector('.thumbnails');
+
 function createThumbnails(slides) {
     thumbnailsContainer.innerHTML = '';
+
     slides.forEach((slide, idx) => {
         const thumb = document.createElement('img');
-        // proteja caso slide não tenha img
-        const imgEl = slide.querySelector('img');
-        thumb.src = imgEl ? imgEl.src : '';
-        if (idx === 0) thumb.classList.add('active');
+        thumb.src = slide.imagem_url;
+
+        if (idx === currentIndex) thumb.classList.add('active');
 
         thumb.addEventListener('click', () => {
             if (moduleLocked) return;
@@ -645,19 +595,23 @@ function createThumbnails(slides) {
     });
 }
 
+
 function updateThumbnails() {
     const thumbs = document.querySelectorAll('.thumbnails img');
     thumbs.forEach((t, i) => t.classList.toggle('active', i === currentIndex));
 }
 
-createThumbnails(slidesNormal);
+
 
 // ================== PROGRESSO ==================
 const progressText = document.getElementById('progress-text');
 function updateProgressText() {
-    const slides = darkMode ? slidesDark : slidesNormal;
-    if (progressText) progressText.textContent = `Slide ${currentIndex + 1} de ${slides.length}`;
+    const slides = darkMode ? slidesDarkData : slidesNormalData;
+    if (progressText) {
+        progressText.textContent = `Slide ${currentIndex + 1} de ${slides.length}`;
+    }
 }
+
 
 const progressBarContainer = document.createElement('div');
 progressBarContainer.classList.add('progress-bar');
@@ -671,28 +625,32 @@ if (modulesEl && modulesCarouselEl) {
 }
 
 function updateProgressBar() {
-    const slides = darkMode ? slidesDark : slidesNormal;
+    const slides = darkMode ? slidesDarkData : slidesNormalData;
     const percent = ((currentIndex + 1) / slides.length) * 100;
-    if (progressBarFill) progressBarFill.style.width = `${percent}%`;
+    progressBarFill.style.width = `${percent}%`;
 }
+
 updateProgressBar();
 
 // ================== DARK MODE ==================
 function toggleDarkMode() {
+    const destino = darkMode ? slidesNormalData : slidesDarkData;
+
+    if (!destino.length) {
+        alert("Este módulo não possui slides neste modo.");
+        return;
+    }
+
     darkMode = !darkMode;
-    document.body.classList.toggle('dark-mode');
+    document.body.classList.toggle('dark-mode', darkMode);
 
-    const currentSlides = darkMode ? slidesDark : slidesNormal;
-    const previousSlides = darkMode ? slidesNormal : slidesDark;
-
-    previousSlides.forEach(slide => slide.style.display = 'none');
-    currentSlides.forEach(slide => slide.style.display = 'flex');
-
-    if (currentIndex >= currentSlides.length) currentIndex = currentSlides.length - 1;
-
-    createThumbnails(currentSlides);
-    updateCarousel();
+    slidesAtuais = destino;
+    currentIndex = 0;
+    renderSlides();
 }
+
+
+
 
 const darkModeBtn = document.getElementById('dark-mode-btn');
 if (darkModeBtn) {
@@ -716,19 +674,18 @@ document.addEventListener('keydown', e => {
     }
 });
 
-// ================== CARREGA PROGRESSO AO ABRIR ==================
-window.addEventListener('DOMContentLoaded', () => {
-    currentIndex = loadModuleProgress(moduleId);
-    updateCarousel();
+window.addEventListener('DOMContentLoaded', async () => {
+    await carregarConteudoModulo();
     updateExerciseCarousel();
 });
+
 
 // ================== ANTI-COLA: DETECTA SAÍDA E VOLTA ==================
 
 // 1) visibilitychange (trocar de aba / minimizar em alguns navegadores)
 document.addEventListener("visibilitychange", () => {
-    const andamento = sessionStorage.getItem(EX_KEY_ANDAMENTO);
-    const finalizado = sessionStorage.getItem(EX_KEY_FINALIZADO);
+    const andamento = localStorage.getItem(EX_KEY_ANDAMENTO);
+    const finalizado = localStorage.getItem(EX_KEY_FINALIZADO);
 
     if (document.hidden && andamento === "true" && finalizado !== "true") {
         // marca para reset quando voltar
@@ -738,8 +695,8 @@ document.addEventListener("visibilitychange", () => {
 
 // 2) blur (perda de foco da janela)
 window.addEventListener("blur", () => {
-    const andamento = sessionStorage.getItem(EX_KEY_ANDAMENTO);
-    const finalizado = sessionStorage.getItem(EX_KEY_FINALIZADO);
+    const andamento = localStorage.getItem(EX_KEY_ANDAMENTO);
+    const finalizado = localStorage.getItem(EX_KEY_FINALIZADO);
 
     if (andamento === "true" && finalizado !== "true") {
         marcarResetLocal();
@@ -748,21 +705,21 @@ window.addEventListener("blur", () => {
 
 // 3) beforeunload — opcional, para casos de fechar/refresh — marca reset
 window.addEventListener("beforeunload", (e) => {
-    const andamento = sessionStorage.getItem(EX_KEY_ANDAMENTO);
-    const finalizado = sessionStorage.getItem(EX_KEY_FINALIZADO);
+    const andamento = localStorage.getItem(EX_KEY_ANDAMENTO);
+    const finalizado = localStorage.getItem(EX_KEY_FINALIZADO);
 
     if (andamento === "true" && finalizado !== "true") {
         
-        sessionStorage.setItem(EX_KEY_RESET, "true");
+        localStorage.setItem(EX_KEY_RESET, "true");
     }
 });
 
 window.addEventListener("focus", () => {
-    const precisaResetar = sessionStorage.getItem(EX_KEY_RESET);
+    const precisaResetar = localStorage.getItem(EX_KEY_RESET);
 
     if (precisaResetar === "true") {
-        sessionStorage.removeItem(EX_KEY_RESET);
-        sessionStorage.removeItem(EX_KEY_ANDAMENTO);
+        localStorage.removeItem(EX_KEY_RESET);
+        localStorage.removeItem(EX_KEY_ANDAMENTO);
 
   
         exIndex = 0;
