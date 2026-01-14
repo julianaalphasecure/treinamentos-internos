@@ -1,0 +1,787 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'poppins', sans-serif;
+}
+
+body {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    background: #f3f4f6;
+    color: #1f2937;
+}
+
+/* =====================
+   CONTAINER
+===================== */
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 32px 24px;
+}
+
+/* =====================
+   TOPO / TÍTULO
+===================== */
+.topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.titulo-modulo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.titulo-modulo h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #111827;
+}
+
+#btnEditarTitulo {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 20px;
+    color: #14659b;
+    transition: opacity 0.3s, transform 0.2s;
+}
+
+#btnEditarTitulo:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.acoes-topo button {
+    padding: 10px 20px;
+    background: #1e3c72;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.acoes-topo button:hover {
+    background: #4363a0;
+    transform: translateY(-2px);
+}
+
+/* =====================
+   EDITAR TÍTULO
+===================== */
+.editar-titulo {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.editar-titulo input {
+    flex: 1;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.editar-titulo input:focus {
+    border-color: #1e3c72;
+    box-shadow: 0 0 8px rgba(37, 99, 235, 0.3);
+    outline: none;
+}
+
+.editar-titulo button {
+    padding: 10px 16px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    transition: transform 0.2s;
+}
+
+#btnConfirmarTitulo {
+    background: #10b981;
+    color: #fff;
+}
+
+#btnConfirmarTitulo:hover {
+    transform: translateY(-2px);
+}
+
+#btnCancelarTitulo {
+    background: #ef4444;
+    color: #fff;
+}
+
+#btnCancelarTitulo:hover {
+    transform: translateY(-2px);
+}
+
+.hidden {
+    display: none;
+}
+
+/* =====================
+   BOX / SEÇÕES
+===================== */
+.box {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 28px;
+    margin-top: 24px;
+    box-shadow: 0 12px 25px rgba(0,0,0,0.06);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.box:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 30px rgba(0,0,0,0.08);
+}
+
+.box-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.box-header h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.box-header button {
+    padding: 8px 14px;
+    background: #e5e7eb;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.box-header button:hover {
+    background: #d1d5db;
+    transform: translateY(-1px);
+}
+
+
+#btnEditarTitulo {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: #d1d5db; 
+    transition: transform 0.2s, color 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+}
+
+#btnEditarTitulo:hover {
+    color: #d1d5db; /* verde mais escuro no hover */
+    transform: scale(1.2);
+}
+
+/* =====================
+   SLIDES - CARROSSEL
+===================== */
+.slides-carousel {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding: 12px 4px 16px;
+    scroll-snap-type: x mandatory;
+}
+
+.slides-carousel::-webkit-scrollbar {
+    height: 10px;
+}
+
+.slides-carousel::-webkit-scrollbar-thumb {
+    background: #c7c7c7;
+    border-radius: 10px;
+}
+
+.slide-card {
+    min-width: 220px;
+    height: 140px;
+    position: relative;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+}
+
+.slide-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* overlay inferior */
+.slide-info {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 8px 10px;
+    background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+}
+
+/* badge modo */
+.slide-badge {
+    font-size: 12px;
+    background: rgba(0,0,0,0.6);
+    padding: 4px 8px;
+    border-radius: 20px;
+}
+
+/* botão excluir */
+.slide-delete {
+    border: none;
+    background: rgba(239,68,68,0.9);
+    color: #fff;
+    border-radius: 50%;
+    width: 26px;
+    height: 26px;
+    cursor: pointer;
+}
+
+/* CARD + */
+.add-slide {
+    min-width: 220px;
+    height: 140px;
+    border: 2px dashed #9ca3af;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #6b7280;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.add-slide span {
+    font-size: 32px;
+    font-weight: bold;
+}
+#btnSalvar.salvo {
+    background-color: #eafaf1;
+    color: #2e7d32;
+    border: 1px solid #2ecc71;
+}
+.feedback {
+    display: none; /* começa escondido */
+    padding: 10px 20px;
+    margin: 10px 0;
+    border-radius: 5px;
+    color: #fff;
+    font-weight: bold;
+}
+
+.feedback.success {
+    background-color: #4caf50; /* verde */
+}
+
+.feedback.error {
+    background-color: #f44336; /* vermelho */
+}
+.enunciado-wrapper {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+}
+
+.alternativas div {
+    margin-bottom: 6px;
+}
+
+.correta-wrapper {
+    margin-top: 8px;
+}
+
+.feedback-exercicio {
+    margin-top: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 6px 10px;
+    border-radius: 8px;
+    display: none;
+}
+
+.feedback-exercicio.sucesso {
+    display: block;
+    color: #2e7d32;
+    background-color: #e8f5e9;
+}
+
+.feedback-exercicio.erro {
+    display: block;
+    color: #c62828;
+    background-color: #ffebee;
+}
+
+.btn-voltar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 10px 16px;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    color: #ffffff;
+
+    border: none;
+    border-radius: 12px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+    white-space: nowrap;
+
+    box-shadow: 0 6px 16px rgba(30, 60, 114, 0.35);
+    transition: all 0.25s ease;
+}
+
+.btn-voltar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(30, 60, 114, 0.45);
+    filter: brightness(1.05);
+}
+
+.btn-voltar:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 10px rgba(30, 60, 114, 0.3);
+}
+
+
+
+/* Exer
+/* =========================
+   CONTAINER GERAL
+========================= */
+#exerciciosContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* =========================
+   CARD BASE
+========================= */
+.exercicio-view,
+.exercicio-form {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 18px 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    border: 1px solid #eee;
+}
+
+/* =========================
+   CABEÇALHO / ENUNCIADO
+========================= */
+.exercicio-header {
+    display: flex;
+    gap: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 12px;
+}
+
+.exercicio-header .numero {
+    font-weight: 600;
+    color: #4f46e5;
+}
+
+.enunciado-texto {
+    color: #111827;
+}
+
+/* textarea enunciado */
+.exercicio-form textarea.enunciado {
+    width: 100%;
+    min-height: 80px;
+    resize: vertical;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    font-size: 14px;
+    margin-bottom: 16px;
+}
+
+.exercicio-form textarea.enunciado:focus {
+    outline: none;
+    border-color: #4f46e5;
+}
+
+/* =========================
+   ALTERNATIVAS - FORM
+========================= */
+.alternativas-form {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 10px 12px;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.alternativas-form label {
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.alternativas-form input[type="text"] {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    font-size: 14px;
+}
+
+.alternativas-form input[type="text"]:focus {
+    outline: none;
+    border-color: #4f46e5;
+}
+
+/* radio */
+.alternativas-form input[type="radio"] {
+    accent-color: #4f46e5;
+}
+
+/* =========================
+   ALTERNATIVAS - VIEW
+========================= */
+.alternativas-view {
+    list-style: none;
+    padding-left: 0;
+    margin: 10px 0 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.alternativas-view li {
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: #f9fafb;
+    font-size: 14px;
+    color: #374151;
+}
+
+.alternativas-view li.correta {
+    background: #ecfdf5;
+    border: 1px solid #10b981;
+    color: #065f46;
+    font-weight: 500;
+}
+
+/* =========================
+   AÇÕES (BOTÕES)
+========================= */
+.acoes-exercicio {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.acoes-exercicio button {
+    border: none;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background .2s, transform .1s;
+}
+
+/* botão salvar */
+.acoes-exercicio .btn-salvar {
+    background: #4f46e5;
+    color: #fff;
+}
+
+.acoes-exercicio .btn-salvar:hover {
+    background: #4338ca;
+}
+
+/* botão cancelar */
+.acoes-exercicio .btn-cancelar {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+.acoes-exercicio .btn-cancelar:hover {
+    background: #d1d5db;
+}
+
+/* botão remover */
+.acoes-exercicio button:not(.btn-salvar):not(.btn-cancelar) {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.acoes-exercicio button:not(.btn-salvar):not(.btn-cancelar):hover {
+    background: #fecaca;
+}
+
+/* clique */
+.acoes-exercicio button:active {
+    transform: scale(0.96);
+}
+
+/* =========================
+   FEEDBACK
+========================= */
+.feedback-exercicio {
+    margin-top: 10px;
+    font-size: 13px;
+}
+
+.feedback-exercicio.erro {
+    color: #dc2626;
+}
+
+.feedback-exercicio.sucesso {
+    color: #16a34a;
+}
+
+/* =========================
+   MOBILE
+========================= */
+@media (max-width: 600px) {
+    .alternativas-form {
+        grid-template-columns: 1fr;
+    }
+
+    .acoes-exercicio {
+        justify-content: stretch;
+    }
+
+    .acoes-exercicio button {
+        flex: 1;
+    }
+}
+
+/* modal
+/* =========================
+   PREVIEW SLIDE (MODAL)
+========================= */
+#slidePreviewModal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+}
+
+#slidePreviewModal.open {
+    display: block;
+}
+
+.slide-preview-backdrop {
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.slide-preview-content {
+    position: relative;
+    max-width: 90%;
+    max-height: 90%;
+    background: transparent;
+}
+
+.slide-preview-content img {
+    max-width: 100%;
+    max-height: 90vh;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+/* botão fechar */
+.slide-preview-close {
+    position: absolute;
+    top: -16px;
+    right: -16px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: #111;
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.slide-preview-close:hover {
+    background: #000;
+}
+
+/* cursor de zoom */
+.slide-img {
+    cursor: zoom-in;
+}
+
+
+/* Feedback */
+.feedback-exercicio {
+    margin-top: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 6px 10px;
+    border-radius: 8px;
+    display: none; /* só aparece quando necessário */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.feedback-exercicio.sucesso {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    display: block;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.feedback-exercicio.erro {
+    background-color: #ffebee;
+    color: #c62828;
+    display: block;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Animação */
+@keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(-5px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+/* =====================
+   OPTION / SELECT MODO
+===================== */
+.mode-select {
+    position: relative;
+    display: inline-block;
+    width: 180px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 15px solid #d1d5db;
+    background: #fff;
+    margin-bottom: 16px;
+}
+
+.mode-select select {
+    width: 100%;
+    padding: 10px 12px;
+    border: none;
+    appearance: none;
+    background: transparent;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.mode-select select:focus {
+    outline: none;
+    border-color: #1e3c72;
+    box-shadow: 0 0 8px rgba(37, 99, 235, 0.2);
+}
+
+.mode-select::after {
+    content: '▼';
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    font-size: 12px;
+    color: #6b7280;
+    pointer-events: none;
+}
+#modoSlide{
+    border-radius: 15px;
+    padding: 8px;
+    background-color: rgba(230, 230, 250, 0.411);
+
+}
+/* =====================
+   EXERCÍCIOS
+===================== */
+.exercicio {
+    margin-top: 20px;
+}
+
+.exercicio textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid #d1d5db;
+    resize: vertical;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.exercicio textarea:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 10px rgba(37,99,235,0.2);
+    outline: none;
+}
+
+/* =====================
+   ESTILO DO UPLOAD SLIDE
+===================== */
+.upload-slide h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 12px;
+}
+
+.upload-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+}
+
+.upload-form input[type="file"] {
+    padding: 10px 10px;
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
+    cursor: pointer;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.upload-form input[type="file"]:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 8px rgba(37,99,235,0.2);
+    outline: none;
+}
+
+#btnAdicionarSlide {
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: none;
+    background: #1e3c72;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+#btnAdicionarSlide:hover {
+    background: #1e3b72d7;
+    transform: translateY(-2px);
+}

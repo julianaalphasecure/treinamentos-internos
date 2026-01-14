@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Módulo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/gestor/editar_modulo.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/logo header.png') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+
+
+<div class="container">
+<header class="topo">
+<button id="btnVoltar" class="btn-voltar">
+    ← Voltar
+</button>
+
+
+    <div class="titulo-modulo">
+        <h1 id="tituloModulo">
+    <!-- título vem do JS -->
+</h1>
+
+
+<button id="btnEditarTitulo" title="Editar título">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+      <path d="M15.502 1.94a.5.5 0 0 1 0 .706l-1.793 1.793-2.121-2.121L13.38.525a.5.5 0 0 1 .706 0l1.416 1.415zM1 13.5V16h2.5l9.147-9.146-2.121-2.121L1 13.5z"/>
+    </svg>
+</button>
+    </div>
+
+  
+
+
+    <div class="acoes-topo">
+        <button id="btnSalvar">Salvar alterações</button>
+    </div>
+</header>
+
+
+<div class="editar-titulo hidden" id="editarTituloBox">
+    <input type="text" id="inputTitulo">
+    <button id="btnConfirmarTitulo">Confirmar</button>
+    <button id="btnCancelarTitulo">Cancelar</button>
+</div>
+
+<section class="box">
+    <div class="box-header">
+        <h2>Slides do módulo</h2>
+
+        <!-- modo do slide (usado no upload) -->
+        <select id="modoSlide">
+            <option value="normal">Normal</option>
+            <option value="dark">Dark</option>
+        </select>
+    </div>
+
+    <div
+        id="slidesContainer"
+        class="slides-carousel"
+    >
+        <!-- slides + card "+" vêm do JS -->
+    </div>
+
+    <!-- input invisível (acionado pelo card "+") -->
+    <input
+        type="file"
+        id="imagemSlide"
+        accept="image/*"
+        hidden
+    >
+</section>
+
+<div id="feedback" class="feedback"></div>
+
+
+    <!-- EXERCÍCIOS -->
+    <section class="box">
+        <div class="box-header">
+            <h2>Exercícios</h2>
+            <button id="btnAdicionarExercicio">+ Novo Exercício</button>
+        </div>
+
+        <div id="exerciciosContainer">
+            <!-- exercícios aqui -->
+        </div>
+    </section>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/gestor/editar_modulo.js') }}"></script>
+</body>
+</html>

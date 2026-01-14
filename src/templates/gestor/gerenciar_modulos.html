@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerenciar Módulos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/gestor/gerenciar_modulos.css') }}">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/logo header.png') }}">
+</head>
+<body>
+
+<div class="main-container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <nav>
+            <ul>
+                <li>
+                    <a href="{{ url_for('equipe_bp.pagina_equipe') }}">
+                        Equipe
+                    </a>
+                </li>
+
+                <li>
+        <a href="{{ url_for('relatorio_bp.pagina_relatorio') }}">
+          Feedback
+        </a>
+      </li>
+
+                <li>
+                    <a href="#" class="active">
+                        Gerenciar Módulos
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ url_for('auth_bp.logout') }}">
+                        Sair
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- CONTEÚDO -->
+    <main class="conteudo">
+
+<div class="header-pagina">
+    <div class="header-texto">
+        <h2>Módulos de Treinamento</h2>
+        <p>Gerencie conteúdos e exercícios de cada módulo.</p>
+    </div>
+
+    <button id="btnNovoModulo" class="btn-primary">
+        + Novo Módulo
+    </button>
+</div>
+
+<!-- MODAL NOVO MÓDULO -->
+<div id="modalNovoModulo" class="modal">
+    <div class="modal-content">
+        <span class="modal-close" id="closeModal">&times;</span>
+        <h3>Criar Novo Módulo</h3>
+        <input type="text" id="inputTituloModulo" placeholder="Digite o título do módulo">
+        <textarea id="inputDescricaoModulo" placeholder="Descrição (opcional)"></textarea>
+        <button id="btnCriarModulo" class="btn-primary">Criar Módulo</button>
+    </div>
+</div>
+
+        <div id="modulosContainer" class="modulos-grid">
+            <p class="loading">Carregando módulos...</p>
+        </div>
+
+    </main>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/gestor/gerenciar_modulos.js') }}"></script>
+</body>
+</html>

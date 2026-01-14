@@ -1,0 +1,330 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'poppins', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #f5f7fa, #f0f4f8);
+    color: #333;
+}
+
+.main-container {
+    display: flex;
+    margin: 30px 20px;
+    gap: 25px;
+}
+
+
+.sidebar {
+    width: 220px;
+    position: sticky;
+    top: 20px;
+    background: #fff;
+    border-radius: 20px;
+    padding: 50px 15px;
+    min-height: 700px;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+}
+
+.sidebar ul li {
+    margin-bottom: 20px;
+}
+
+.sidebar ul li a {
+    display: block;
+    padding: 15px 20px;
+    border-radius: 15px;
+    text-decoration: none;
+    color: #333;
+    font-weight: 600;
+    transition: all 0.3s;
+    background: #f5f7fa;
+}
+
+.sidebar ul li a:hover {
+    background: #f88a15;
+    color: black;
+    box-shadow: 0 5px 12px rgba(0,0,0,0.18);
+}
+
+.sidebar ul li a.active {
+    background: #f88a15;
+    color: black;
+    font-weight: bold;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    transform: translateX(15px);
+}
+
+
+
+
+/* CONTEÚDO */
+.conteudo {
+    flex: 1;
+    padding: 32px;
+}
+
+.header-pagina h2 {
+    margin-bottom: 6px;
+}
+
+.header-pagina p {
+    color: #6b7280;
+    margin-bottom: 28px;
+}
+
+/* GRID DE MÓDULOS */
+.modulos-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+@media (max-width: 1200px) {
+    .modulos-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 700px) {
+    .modulos-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+
+.modulo-card {
+    background: linear-gradient(180deg, #ffffff, #f9fafb);
+    border-radius: 18px;
+    padding: 22px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.3s ease;
+    border: 1px solid #e5e7eb;
+}
+
+.modulo-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 45px rgba(0,0,0,0.12);
+}
+
+.modulo-card h3 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #111827;
+}
+
+.modulo-card p {
+    font-size: 0.9rem;
+    color: #6b7280;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+
+.modulo-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.badge {
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.badge.ativo {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.badge.inativo {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.btn-editar {
+    background: linear-gradient(135deg, #0d476e, #136fa3);
+    color: #fff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.25s ease;
+}
+
+.btn-editar:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(13,71,110,0.35);
+}
+
+
+.loading {
+    color: #6b7280;
+}
+
+/* ===== BOTÃO ADICIONAR ===== */
+.btn-adicionar {
+    background: linear-gradient(135deg, #22c55e, #16a34a); /* verde */
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 6px 18px rgba(22, 163, 74, 0.35);
+}
+
+.btn-adicionar:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 10px 28px rgba(22, 163, 74, 0.45);
+}
+
+
+.btn-remover {
+    background: white;
+    color: black;
+    border: red;
+    padding: 10px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 6px 18px rgba(239, 68, 68, 0.35);
+}
+
+.btn-remover:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 10px 28px rgba(239, 68, 68, 0.45);
+}
+
+
+.header-pagina {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;            
+    margin-bottom: 28px;
+}
+
+.header-pagina .header-texto h2 {
+    margin-bottom: 6px;
+}
+
+.header-pagina .header-texto p {
+    color: #6b7280;
+    margin-bottom: 0; 
+}
+
+
+#btnNovoModulo {
+    background: linear-gradient(135deg, #22c55e, #16a34a); /* verde */
+    color: #ffffff;
+    border: none;
+    padding: 10px 10px;
+    border-radius: 12px;
+    font-size: 0.80rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 6px 18px rgba(22, 163, 74, 0.35);
+
+   
+    margin-top: -2px;
+}
+
+#btnNovoModulo:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 10px 28px rgba(22, 163, 74, 0.45);
+}
+.modulo-footer {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    gap: 1px; 
+
+}
+/* MODAL */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
+    transition: all 0.3s ease;
+}
+
+.modal-content {
+    background: #fff;
+    margin: 10% auto;
+    padding: 25px 30px;
+    border-radius: 18px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.modal h3 {
+    margin-bottom: 10px;
+    color: #111827;
+}
+
+.modal input,
+.modal textarea {
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
+    font-size: 0.9rem;
+    width: 100%;
+    resize: none;
+}
+
+.modal textarea {
+    min-height: 80px;
+}
+
+.modal-close {
+    align-self: flex-end;
+    cursor: pointer;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #6b7280;
+}
+
+.modal-close:hover {
+    color: #111827;
+}
+
+#btnCriarModulo {
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+#btnCriarModulo:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 10px 28px rgba(22, 163, 74, 0.45);
+}
