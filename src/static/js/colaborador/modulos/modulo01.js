@@ -20,7 +20,6 @@ criarSlides(data.slides);
 carregarExercicios(data.exercicios);
 
 }
-
 function criarSlides(slidesAPI) {
     slidesNormalData = [];
     slidesDarkData = [];
@@ -95,8 +94,7 @@ const nextExerciseBtn = document.querySelector('.next-exercise');
 const btnFinalizarConteudo = document.createElement('button');
 btnFinalizarConteudo.className = 'btn-finalizar';
 btnFinalizarConteudo.textContent = 'Finalizar conteúdo';
-
-document.querySelector('.modules').appendChild(btnFinalizarConteudo);
+btnFinalizarConteudo.style.display = 'none';
 
 // ================== VARIÁVEIS DO CARROSSEL E DO MÓDULO ==================
 
@@ -109,8 +107,6 @@ let darkMode = false;
 let slidesAtuais = [];
 let slidesNormalData = [];
 let slidesDarkData = [];
-
-
 
 const USUARIO_ID = JSON.parse(localStorage.getItem("usuario_colaborador"))?.id;
 const TOKEN = localStorage.getItem("token_colaborador");
@@ -140,20 +136,52 @@ function carregarExercicios(exerciciosAPI) {
     }
 
     allQuestions = exerciciosAPI.map(ex => ({
-        enunciado: ex.pergunta,
+        id: ex.id,
+        enunciado: ex.enunciado,
         alternativas: {
             a: ex.alternativa_a,
             b: ex.alternativa_b,
             c: ex.alternativa_c,
             d: ex.alternativa_d
         },
-        correta: ex.resposta_correta
+        correta: ex.correta
     }));
 
     renderRandomExercises();
 }
+function renderRandomExercises() {
+    const questions = pickNRandom(allQuestions, QUESTION_COUNT);
 
+    const exWrapper = document.querySelector('.exercise-wrapper');
+    exWrapper.innerHTML = '';
 
+    questions.forEach((q, index) => {
+        const slide = document.createElement('div');
+        slide.className = 'exercise-slide';
+        slide.dataset.answer = q.correta;
+
+        slide.innerHTML = `
+            <h3>${index + 1}. ${q.enunciado}</h3>
+            <div class="options">
+                ${['a','b','c','d'].map(letter => `
+                    <label for="q${index}_${letter}">
+                        <input type="radio"
+                               id="q${index}_${letter}"
+                               name="q${index}"
+                               value="${letter.toUpperCase()}">
+                        ${q.alternativas[letter]}
+                    </label>
+                `).join('')}
+            </div>
+        `;
+
+        exWrapper.appendChild(slide);
+    });
+
+    exSlides = document.querySelectorAll('.exercise-slide');
+    exIndex = 0;
+    updateExerciseCarousel();
+}
 // ================== FUNÇÃO ATUALIZA CARROSSEL ==================
 function updateCarousel() {
     if (!slidesAtuais.length) return;
@@ -172,11 +200,17 @@ function updateCarousel() {
     saveModuleSlideProgress(moduleId, currentIndex);
 
     
-    if (currentIndex === slidesAtuais.length - 1) {
-        btnFinalizarConteudo.style.display = 'block';
-    } else {
-        btnFinalizarConteudo.style.display = 'none';
+const slideAtual = document.querySelectorAll('.modules-slide')[currentIndex];
+
+if (currentIndex === slidesAtuais.length - 1 && slideAtual) {
+    if (!slideAtual.contains(btnFinalizarConteudo)) {
+        slideAtual.appendChild(btnFinalizarConteudo);
     }
+    btnFinalizarConteudo.style.display = 'block';
+} else {
+    btnFinalizarConteudo.style.display = 'none';
+}
+
 }
 
 btnFinalizarConteudo.addEventListener('click', () => {
@@ -231,8 +265,6 @@ function updateArrows() {
         nextBtn.style.cursor = "pointer";
     }
 }
-
-
 function saveModuleSlideProgress(moduleIdLocal, lastSlideIndex) {
     const progress = JSON.parse(localStorage.getItem("moduleProgress") || "{}");
     progress[moduleIdLocal] = lastSlideIndex;
@@ -261,9 +293,10 @@ async function finalizarModuloAPI(moduloIdLocal, notaFinal) {
         }
 
         console.log(`Módulo ${moduloIdLocal} finalizado com nota ${notaFinal}%. Redirecionando...`);
-        setTimeout(() => {
-            window.location.href = '/src/templates/colaborador/modulo.html';
-        }, 1500);
+        window.location.href = `/colaborador/modulo/${moduleId}`;
+
+
+
 
     } catch (error) {
         console.error("Erro na API de finalização:", error);
@@ -384,14 +417,9 @@ document.getElementById('submit-exercises').addEventListener('click', () => {
         title.textContent = `❌ Nota insuficiente. Você precisa de ${REQUISITO_APROVACAO}%.`;
         btnRefazer.style.display = 'inline-block';
         btnRefazer.onclick = () => {
-            // REGISTRA A TENTATIVA NO BACKEND
-            finalizarModuloAPI(moduleId, 0); // Envia nota 0 para contar tentativa
-
-            // Limpa o estado local do exercício atual (usuário vai refazer)
+            
             localStorage.removeItem(EX_KEY_ANDAMENTO);
             localStorage.removeItem(EX_KEY_RESET);
-            // NÃO removemos EX_KEY_FINALIZADO aqui pois não estava finalizado
-
             closeResultOverlay();
             currentIndex = 0;
             updateCarousel();
@@ -486,7 +514,7 @@ function lockArrows(e) {
 
 // ================== CARROSSEL DE EXERCÍCIOS ==================
 const exWrapper = document.querySelector('.exercise-wrapper');
-const exSlides = document.querySelectorAll('.exercise-slide');
+let exSlides = [];
 let exIndex = 0;
 
 function updateExerciseCarousel() {
@@ -502,14 +530,19 @@ function updateExerciseCarousel() {
 }
 
 document.querySelector('.next-exercise').addEventListener('click', () => {
-    if (exIndex < exSlides.length - 1) exIndex++;
-    updateExerciseCarousel();
+    if (exIndex < exSlides.length - 1) {
+        exIndex++;
+        updateExerciseCarousel();
+    }
 });
 
 document.querySelector('.prev-exercise').addEventListener('click', () => {
-    if (exIndex > 0) exIndex--;
-    updateExerciseCarousel();
+    if (exIndex > 0) {
+        exIndex--;
+        updateExerciseCarousel();
+    }
 });
+
 
 function updateExerciseArrows() {
     const total = exSlides.length;
@@ -552,11 +585,11 @@ function startTimer() {
         if (totalTime < 0) {
             clearInterval(timerInterval);
             alert('Tempo esgotado! Você precisa refazer o módulo.');
-            location.reload();
+           window.location.href = `/colaborador/modulo/${moduleId}`;
+
         }
     }, 1000);
 }
-
 // ================== DOWNLOAD ==================
 document.getElementById('download-btn').addEventListener('click', () => {
     // Se ainda não finalizou, marcar reset quando perder foco/abrir PDF
@@ -601,8 +634,6 @@ function updateThumbnails() {
     thumbs.forEach((t, i) => t.classList.toggle('active', i === currentIndex));
 }
 
-
-
 // ================== PROGRESSO ==================
 const progressText = document.getElementById('progress-text');
 function updateProgressText() {
@@ -611,8 +642,6 @@ function updateProgressText() {
         progressText.textContent = `Slide ${currentIndex + 1} de ${slides.length}`;
     }
 }
-
-
 const progressBarContainer = document.createElement('div');
 progressBarContainer.classList.add('progress-bar');
 const progressBarFill = document.createElement('div');
@@ -648,9 +677,6 @@ function toggleDarkMode() {
     currentIndex = 0;
     renderSlides();
 }
-
-
-
 
 const darkModeBtn = document.getElementById('dark-mode-btn');
 if (darkModeBtn) {

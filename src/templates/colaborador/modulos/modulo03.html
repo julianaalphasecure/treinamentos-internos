@@ -1,80 +1,57 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Inner Energia - Módulo 03</title>
+<title>Módulo</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-<!-- CSS -->
-<link rel="stylesheet" href="{{ url_for('static', filename='css/colaborador/modulos/modulo03.css') }}">
-
-<!-- Favicon -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/colaborador/modulos/modulo01.css') }}">
 <link rel="shortcut icon" href="{{ url_for('static', filename='img/logo header.png') }}" type="image/x-icon">
 </head>
-<body data-module-id="4">
+
+<body data-module-id="{{ modulo_id }}">
+
 
 <header class="header">
   <div class="logo-box">
-    <img src="{{ url_for('static', filename='img/logo_cadastre.png') }}" alt="Logo Alpha Secure">
+    <img src="{{ url_for('static', filename='img/logo_cadastre.png') }}" alt="Logo">
   </div>
   <div class="voltar_home">
-    <a href="{{ url_for('modulo_bp.pagina_modulo') }}"><p>Home</p></a>
+   <a href="{{ url_for('modulo_bp.pagina_modulo') }}"><p>Home</p></a>
   </div>
 </header>
 
 <section class="modules">
-  <h2>Bem-vindo(a) ao módulo 03 - Inner Energia </h2>
-  <p>Complete esse módulo para avançar para os exercícios</p>
+  <h2 id="tituloModulo"></h2>
+  <p id="descricaoModulo"></p>
 
-  <div class="modules-carousel">
-    <div class="modules-wrapper">
-      <!-- Slides normais -->
-      <div class="modules-slide"><div class="module-card"><img src="{{ url_for('static', filename='img/modulo03/mod03 pag01.png') }}" alt="página 01"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="{{ url_for('static', filename='img/modulo03/mod03 pag02.png') }}" alt="página 02"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="{{ url_for('static', filename='img/modulo03/mod03 pag03.png') }}" alt="página 03"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="{{ url_for('static', filename='img/modulo03/mod03 pag04.png') }}" alt="página 04"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="{{ url_for('static', filename='img/modulo03/mod03 pag05.png') }}" alt="página 05"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="{{ url_for('static', filename='img/modulo03/mod03 pag06.png') }}" alt="página 06"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="{{ url_for('static', filename='img/modulo03/mod03 pag07.png') }}" alt="página 07"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="{{ url_for('static', filename='img/modulo03/mod03 pag08.png') }}" alt="página 08"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="{{ url_for('static', filename='img/modulo03/mod03 pag09.png') }}" alt="página 09"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="{{ url_for('static', filename='img/modulo03/mod03 pag10.png') }}" alt="página 10"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="{{ url_for('static', filename='img/modulo03/mod03 pag11.png') }}" alt="página 11"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="{{ url_for('static', filename='img/modulo03/mod03 pag12.png') }}" alt="página 12"></div></div>
-      <div class="modules-slide"><div class="module-card"><img src="{{ url_for('static', filename='img/modulo03/mod03 pag13.png') }}" alt="Última página"><button class="btn-finalizar">Finalizar</button></div></div>
+  <div id="progress-text" style="text-align:center; margin-bottom:8px; font-weight:bold;"></div>
 
-      <!-- Slides dark -->
-      <div class="modules-slide dark-slide"><div class="module-card"><img src="{{ url_for('static', filename='img/modulo03dark/mod03 pag01 dark.png') }}" alt="página 01 dark"></div></div>
-      <div class="modules-slide dark-slide"><div class="module-card"><img src="{{ url_for('static', filename='img/modulo03dark/mod03 pag02 dark.png') }}" alt="página 02 dark"></div></div>
-      <div class="modules-slide dark-slide"><div class="module-card"><img src="{{ url_for('static', filename='img/modulo03dark/mod03 pag03 dark.png') }}" alt="página 03 dark"></div></div>
-      <div class="modules-slide dark-slide"><div class="module-card"><img src="{{ url_for('static', filename='img/modulo03dark/mod03 pag04 dark.png') }}" alt="página 04 dark"></div></div>
-      <div class="modules-slide dark-slide"><div class="module-card"><img src="{{ url_for('static', filename='img/modulo03dark/mod03 pag05 dark.png') }}" alt="página 05 dark"></div></div>
-      <div class="modules-slide dark-slide"><div class="module-card"><img src="{{ url_for('static', filename='img/modulo03dark/mod03 pag06 dark.png') }}" alt="página 06 dark"></div></div>
-      <div class="modules-slide dark-slide"><div class="module-card"><img src="{{ url_for('static', filename='img/modulo03dark/mod03 pag07 dark.png') }}" alt="página 07 dark"></div></div>
-      <div class="modules-slide dark-slide"><div class="module-card"><img src="{{ url_for('static', filename='img/modulo03dark/mod03 pag08 dark.png') }}" alt="página 08 dark"></div></div>
-      <div class="modules-slide dark-slide"><div class="module-card"><img src="{{ url_for('static', filename='img/modulo03dark/mod03 pag09 dark.png') }}" alt="página 09 dark"></div></div>
-      <div class="modules-slide dark-slide"><div class="module-card"><img src="{{ url_for('static', filename='img/modulo03dark/mod03 pag10 dark.png') }}" alt="página 10 dark"></div></div>
-      <div class="modules-slide dark-slide"><div class="module-card"><img src="{{ url_for('static', filename='img/modulo03dark/mod03 pag11 dark.png') }}" alt="página 11 dark"></div></div>
-      <div class="modules-slide dark-slide"><div class="module-card"><img src="{{ url_for('static', filename='img/modulo03dark/mod03 pag12 dark.png') }}" alt="página 12 dark"></div></div>
-      <div class="modules-slide dark-slide"><div class="module-card"><img src="{{ url_for('static', filename='img/modulo03dark/mod03 pag13 dark.png') }}" alt="Última página dark"><button class="btn-finalizar">Finalizar</button></div></div>
-    </div>
-  </div>
+<div class="thumbnails"></div>
 
-  <div id="progress-text" style="text-align:center; margin-bottom:8px; font-weight:bold;">Slide 1 de 12</div>
-  <div class="thumbnails" style="display:flex; justify-content:center; gap:5px; margin-bottom:15px; overflow-x:auto; padding:5px 0;"></div>
+<!-- CARROSSEL -->
+<div class="modules-carousel">
+    <div id="slidesContainer"></div>
+</div>
 
   <div class="carousel-controls">
     <button class="carousel-btn prev">&#10094;</button>
     <button class="carousel-btn next">&#10095;</button>
-    <button id="download-btn"><img src="{{ url_for('static', filename='img/baixar_modulo.webp') }}" alt="Baixar PDF"></button>
-    <button id="dark-mode-btn" title="Modo Noturno"><img src="{{ url_for('static', filename='img/botão_modoescuro.webp') }}" alt=""></button>
+
+    <button id="download-btn">
+      <img src="{{ url_for('static', filename='img/baixar_modulo.webp') }}" alt="Baixar PDF">
+    </button>
+
+    <button id="dark-mode-btn" title="Modo Noturno">
+      <img src="{{ url_for('static', filename='img/botão_modoescuro.webp') }}" alt="">
+    </button>
   </div>
 </section>
 
 <section class="exercises">
-  <div id="timer">Tempo restante: 30:00</div>
+  <div id="timer"></div>
 
   <div class="exercise-progress">
     <div class="exercise-progress-fill"></div>
@@ -88,10 +65,11 @@
   </div>
 
   <button id="submit-exercises" class="btn-submit">Enviar Exercícios</button>
+
   <div id="score"></div>
   <div id="result-message"></div>
 </section>
 
-<script src="{{ url_for('static', filename='js/colaborador/modulos/modulo03.js') }}"></script>
+<script src="{{ url_for('static', filename='js/colaborador/modulos/modulo01.js') }}"></script>
 </body>
 </html>

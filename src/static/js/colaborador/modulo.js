@@ -9,8 +9,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         btnLogout.addEventListener("click", (e) => {
             e.preventDefault();
 
-            sessionStorage.removeItem("token_colaborador");
-            sessionStorage.removeItem("usuario_colaborador");
+           // localStorage.removeItem("token_colaborador");
+           // localStorage.removeItem("usuario_colaborador");
 
             window.location.replace("/src/templates/auth/login.html");
         });
@@ -18,8 +18,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
     const userNameElement = document.getElementById("user-name");
-    const usuarioColaborador = JSON.parse(sessionStorage.getItem("usuario_colaborador"));
-    const token = sessionStorage.getItem("token_colaborador");
+    const usuarioColaborador = JSON.parse(localStorage.getItem("usuario_colaborador"));
+    const token = localStorage.getItem("token_colaborador");
     const usuarioId = usuarioColaborador?.id;
 
     if (!usuarioColaborador || !usuarioId) {
@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // ================== CARREGAR PROGRESSO ==================
     window.carregarProgresso = async function carregarProgresso() {
-        const TOKEN = sessionStorage.getItem("token_colaborador");
+        const TOKEN = localStorage.getItem("token_colaborador");
 
         if (!TOKEN) {
             console.error("Token ausente.");
@@ -168,8 +168,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             console.error("Erro ao carregar progresso:", error);
 
             if (error.message.includes("Não autorizado")) {
-                sessionStorage.removeItem("token_colaborador");
-                sessionStorage.removeItem("usuario_colaborador");
+               // localStorage.removeItem("token_colaborador");
+                //localStorage.removeItem("usuario_colaborador");
                 window.location.replace("/src/templates/auth/login.html");
             }
         }
