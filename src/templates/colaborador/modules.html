@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- CSS genérico do módulo -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/colaborador/modulos/modulo01.css') }}">
+<link rel="shortcut icon" href="{{ url_for('static', filename='img/logo header.png') }}" type="image/x-icon">
+</head>
+
+<body data-module-id="{{ modulo_id }}">
+
+<header class="header">
+  <div class="logo-box">
+    <img src="{{ url_for('static', filename='img/logo_cadastre.png') }}" alt="Logo">
+  </div>
+  <div class="voltar_home">
+   <a href="{{ url_for('modulo_bp.pagina_modulo') }}"><p>Home</p></a>
+  </div>
+</header>
+
+<section class="modules">
+  <h2 id="tituloModulo">Título do Módulo</h2>
+  <p id="descricaoModulo">Descrição do módulo...</p>
+
+  <div id="progress-text" style="text-align:center; margin-bottom:8px; font-weight:bold;"></div>
+
+  <div class="thumbnails"></div>
+
+
+  <div class="modules-carousel">
+      <div id="slidesContainer"></div>
+  </div>
+
+  <div class="carousel-controls">
+    <button class="carousel-btn prev">&#10094;</button>
+    <button class="carousel-btn next">&#10095;</button>
+
+
+
+    <button id="dark-mode-btn" title="Modo Noturno">
+      <img src="{{ url_for('static', filename='img/botão_modoescuro.webp') }}" alt="Modo Noturno">
+    </button>
+  </div>
+</section>
+
+<section class="exercises">
+  <div id="timer"></div>
+
+  <div class="exercise-progress">
+    <div class="exercise-progress-fill"></div>
+  </div>
+
+  <div class="exercise-wrapper" id="exercise-container"></div>
+
+  <div class="exercise-controls">
+    <button class="carousel-btn prev-exercise">&#10094;</button>
+    <button class="carousel-btn next-exercise">&#10095;</button>
+  </div>
+
+  <button id="submit-exercises" class="btn-submit">Enviar Exercícios</button>
+
+  <div id="score"></div>
+  <div id="result-message"></div>
+</section>
+
+
+<script src="{{ url_for('static', filename='js/colaborador/modulos/modulo01.js') }}"></script>
+</body>
+</html>
