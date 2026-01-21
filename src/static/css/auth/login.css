@@ -2,14 +2,12 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-}
-body {
-    position: relative;
-    background: white;
-    overflow-x: hidden;
+    font-family: 'poppins', sans-serif;
 }
 
+html, body {
+    overflow-x: hidden;
+}
 
 
 /* HEADER */
@@ -59,12 +57,17 @@ body {
     margin-top: 50px; /* adiciona espaço entre header e form */
 }
 
-.image-side img {
-    position: relative;
-    max-width: 400px;
-    transform: translateX(80px); 
-    z-index: 3;
+.image-side {
+    margin-left: 40px;
 }
+
+.image-side img {
+    max-width: 400px;
+    width: 100%;
+    height: auto;
+}
+
+
 
 .form-side .form-card {
     background-color: white;
@@ -78,6 +81,9 @@ body {
 .form-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+.highlight{
+    font-size: 1em;
 }
 
 .form-card h2 {
@@ -124,6 +130,22 @@ body {
     background-color: #E28E44;
     color: black;
 }
+.form-card .input-wrapper {
+    position: relative;
+    width: 100%;
+    margin-top: 15px; /* <— espaço entre email e senha */
+}
+
+.form-card .input-wrapper input {
+    width: 100%;
+    padding-right: 40px; /* espaço pro olho */
+    height: 40px;
+    font-size: 14px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
 
 .form-card p {
     margin-top: 12px;

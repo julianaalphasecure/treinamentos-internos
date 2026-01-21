@@ -1,12 +1,15 @@
 import os
+from pathlib import Path
 from datetime import timedelta
 import traceback
+  
 
 from flask import Flask, jsonify
 from werkzeug.exceptions import HTTPException
 from flask_migrate import Migrate
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
+from flask import request
 
 from src.config.database import db, bcrypt
 from src.config.config import (
@@ -28,11 +31,18 @@ from src.controllers.colaborador.perfil_controller import perfil_bp as colab_per
 from src.controllers.colaborador.feedback_controller import colab_feedback_bp
 from src.controllers.colaborador.progresso_controller import progresso_bp
 from src.controllers.colaborador.modulo_controller import modulo_bp
+from src.controllers.colaborador.exercicio_controller import exercicio_bp
 
 # --- Controllers Gestor ---
 from src.controllers.gestor.equipe_controller import equipe_bp
 from src.controllers.gestor.gestor_feedback_controller import gestor_feedback_bp
 from src.controllers.gestor.relatorio_controller import relatorio_bp
+from src.controllers.gestor.gerenciar_controller import gerenciar_bp
+from src.controllers.gestor.exercicio_controller import exercicio_bp
+
+
+
+
 
 
 def create_app():
@@ -46,16 +56,31 @@ def create_app():
         static_folder=static_dir
     )
 
+    
+
+    BASE_DIR = Path(base_dir)
+
+    UPLOAD_FOLDER = BASE_DIR / "src" / "static" / "uploads" / "modulos"
+
+    app.config["UPLOAD_FOLDER"] = str(UPLOAD_FOLDER)
+    app.config["ALLOWED_EXTENSIONS"] = {"png", "jpg", "jpeg", "webp"}
+
+    # Garante que a pasta exista
+    UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
+
+
    
     app.url_map.strict_slashes = False
 
    
     CORS(
-        app,
-        resources={r"/*": {"origins": "*"}},
-        supports_credentials=True,
-        methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"]
-    )
+    app,
+    resources={r"/*": {"origins": "*"}},
+    allow_headers=["Content-Type", "Authorization", "X-Requested-With"],
+    expose_headers=["Authorization"],
+    methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+)
+
 
     
     app.config["SECRET_KEY"] = SECRET_KEY.strip()
@@ -68,6 +93,7 @@ def create_app():
     db.init_app(app)
     bcrypt.init_app(app)
     Migrate(app, db)
+
 
 
     @app.route("/", methods=["GET"])
@@ -94,7 +120,20 @@ def create_app():
 
     app.config["JWT_SECRET_KEY"] = SECRET_KEY.strip()
     app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=30)
+    app.config["JWT_TOKEN_LOCATION"] = ["headers"]
+    app.config["JWT_HEADER_NAME"] = "Authorization"
+    app.config["JWT_HEADER_TYPE"] = "Bearer"
+
     jwt = JWTManager(app)
+
+    
+
+    @app.before_request
+    def handle_options():
+        if request.method == "OPTIONS":
+            return "", 200
+
+
 
     @jwt.invalid_token_loader
     @jwt.unauthorized_loader
@@ -107,9 +146,6 @@ def create_app():
             error="O token de acesso expirou. Por favor, refaça o login."
         ), 401
 
-    @jwt.user_identity_loader
-    def user_identity_lookup(user):
-        return user
 
  
     app.register_blueprint(auth_bp, url_prefix="/auth")
@@ -119,10 +155,13 @@ def create_app():
     app.register_blueprint(colab_feedback_bp, url_prefix="/colaborador/feedback")
     app.register_blueprint(progresso_bp, url_prefix="/colaborador/progresso")
     app.register_blueprint(modulo_bp, url_prefix="/colaborador/modulo")
+    app.register_blueprint(exercicio_bp)
 
     app.register_blueprint(equipe_bp, url_prefix="/gestor/equipe")
     app.register_blueprint(gestor_feedback_bp, url_prefix="/gestor/feedback")
     app.register_blueprint(relatorio_bp, url_prefix="/gestor/relatorio")
+    app.register_blueprint(gerenciar_bp)
+
 
     
     with app.app_context():

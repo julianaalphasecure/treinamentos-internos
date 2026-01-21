@@ -11,7 +11,6 @@ const recebidosContainer = document.getElementById("historico-feedbacks");
 const recebidosStatus = document.getElementById("recebidos-status");
 const badgeNaoLidos = document.getElementById("badge-nao-lidos");
 
-
 const BASE = "http://127.0.0.1:5000";
 const baseURLColaborador = `${BASE}/colaborador`;
 const baseURLFeedback = `${BASE}/gestor/relatorio`;
@@ -19,7 +18,7 @@ const recebidosURL = `${BASE}/gestor/relatorio/recebidos`;
 const marcarLidoURL = `${BASE}/gestor/relatorio/marcar-lido`;
 const naoLidosURL = `${BASE}/gestor/relatorio/nao-lidos/contagem`;
 
-const token = sessionStorage.getItem("token_gestor");
+const token = localStorage.getItem("token_gestor");
 function authHeaders() { return { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" }; }
 
 let todosColaboradores = [];
@@ -179,10 +178,9 @@ function formatarData(dt) {
     const d = new Date(dt);
     return ("0" + d.getDate()).slice(-2) + "/" +
            ("0" + (d.getMonth() + 1)).slice(-2) + "/" +
-           d.getFullYear() + " às " +
-           ("0" + d.getHours()).slice(-2) + ":" +
-           ("0" + d.getMinutes()).slice(-2);
+           d.getFullYear();
 }
+
 
 
 
@@ -193,7 +191,9 @@ function renderCardDuvida(fb) {
 
     const d = new Date(fb.data_feedback);
     const dateStr =
-        `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth()+1).padStart(2, "0")}/${d.getFullYear()}`;
+        `${String(d.getDate()).padStart(2, "0")}/` +
+        `${String(d.getMonth() + 1).padStart(2, "0")}/` +
+        `${d.getFullYear()}`;
 
     const rawMsg = fb.mensagem || "";
     const cleanMsg = rawMsg.replace(/\[[^\]]*\]/g, "").trim();
@@ -203,7 +203,6 @@ function renderCardDuvida(fb) {
         <p>${cleanMsg}</p>
         <div class="meta-info" style="display:flex; justify-content:space-between;">
             <small style="color:#888">De: ${fb.colaborador_nome} • ${dateStr}</small>
-
             <button class="btn-mark-read" ${fb.lido ? "disabled" : ""}>
                 ${fb.lido ? "Lida" : "Marcar como lida"}
             </button>
@@ -218,7 +217,6 @@ function renderCardDuvida(fb) {
     const markBtn = card.querySelector(".btn-mark-read");
     markBtn.addEventListener("click", async (e) => {
         e.stopPropagation();
-
         if (fb.lido) return;
 
         const r = await fetch(`${marcarLidoURL}/${fb.id}`, {
@@ -230,13 +228,13 @@ function renderCardDuvida(fb) {
             fb.lido = true;
             markBtn.disabled = true;
             markBtn.textContent = "Lida";
-
             carregarContagemNaoLidos();
         }
     });
 
     recebidosContainer.appendChild(card);
 }
+
 
 
 const modal = document.getElementById("modal-duvida");
@@ -255,7 +253,7 @@ function abrirModalDuvida(fb) {
     modalFeedbackId = fb.id;
 
     modalTitulo.textContent = "Dúvida";
-    modalInfo.textContent = `De: ${fb.colaborador_nome} • ${fb.data_feedback}`;
+  
     modalMensagem.textContent = fb.mensagem.replace(/\[[^\]]*\]/g, "").trim();
 
     const box = document.getElementById("modal-resposta-enviada");
@@ -288,10 +286,14 @@ function abrirModalDuvida(fb) {
                 ("0" + d.getMinutes()).slice(-2);
         }
 
-        box.innerHTML =
-            '<div style="background:#e8ffe8; padding:12px; border-radius:6px; border-left:5px solid #2ecc71;">' +
-                '<p style="margin-top:6px;"><strong>Resposta:</strong><br>' + fb.resposta + '</p>' +
-            '</div>';
+        box.innerHTML = `
+    <div class="chat-header">
+        <strong>Gestor</strong>
+        <span>${dataResp}</span>
+    </div>
+    <p>${fb.resposta}</p>
+`;
+
 
         box.style.display = "block";
     }
@@ -355,6 +357,7 @@ const dataFormatada = formatarData(agora);
 box.innerHTML =
     "<p><strong>Resposta enviada em:</strong> " + dataFormatada + "</p>" +
     "<p><strong>Resposta:</strong> " + resposta + "</p>";
+
 
 box.style.display = "block";
 

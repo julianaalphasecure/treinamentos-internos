@@ -9,6 +9,7 @@ from src.controllers.colaborador.progresso_controller import *
 from src.controllers.gestor.equipe_controller import *
 from src.controllers.gestor.gestor_feedback_controller import *
 from src.controllers.gestor.relatorio_controller import *
+from src.controllers.gestor.exercicio_controller import *
 
 __all__ = [
     "auth_controller",

@@ -3,7 +3,6 @@ const exerciciosContainer = document.getElementById("exerciciosContainer");
 
 const tituloTexto = document.getElementById("tituloModulo");
 const inputTitulo = document.getElementById("inputTitulo");
-const btnEditarTitulo = document.getElementById("btnEditarTitulo");
 const editarTituloBox = document.getElementById("editarTituloBox");
 const btnConfirmarTitulo = document.getElementById("btnConfirmarTitulo");
 const btnCancelarTitulo = document.getElementById("btnCancelarTitulo");
@@ -47,7 +46,7 @@ async function carregarModulo() {
         if (!res.ok) {
             throw new Error("Erro ao carregar módulo");
         }
-
+        
         const modulo = await res.json();
 
         tituloTexto.textContent = modulo.titulo;

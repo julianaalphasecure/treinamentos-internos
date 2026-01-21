@@ -1,6 +1,11 @@
 from flask import Blueprint, request, jsonify
 from src.services.colaborador.modulo_service import ModuloService
 from flask import Blueprint, render_template
+from flask_jwt_extended import jwt_required, get_jwt_identity
+from src.services.gestor.slide_service import SlideService
+from src.services.gestor.exercicio_service import ExercicioService
+from src.models.modulos import Modulo
+from src.models.progresso import Progresso
 
 modulo_bp = Blueprint("modulo_bp", __name__, url_prefix="/colaborador/modulo")
 
@@ -9,42 +14,29 @@ def pagina_modulo():
     return render_template("colaborador/modulo.html")
 
 
-@modulo_bp.route('/modulo01')
-def modulo01():
-    return render_template('colaborador/modulos/modulo01.html')
+@modulo_bp.route("/api/modulos", methods=["GET"])
+@jwt_required()
+def listar_modulos_colaborador():
+    modulos = ModuloService.get_all_modulos()
 
-@modulo_bp.route('/modulo02')
-def modulo02():
-    return render_template('colaborador/modulos/modulo02.html')
+    return jsonify([
+    {
+        "id": m.id,
+        "titulo": m.titulo,
+        "descricao": m.descricao,
+        "imagem_capa": m.imagem_capa,
+        "carga_horaria": m.carga_horaria
+    }
+    for m in modulos
+]), 200
 
-@modulo_bp.route('/modulo03')
-def modulo03():
-    return render_template('colaborador/modulos/modulo03.html')
 
-@modulo_bp.route('/modulo04')
-def modulo04():
-    return render_template('colaborador/modulos/modulo04.html')
-
-@modulo_bp.route('/modulo05')
-def modulo05():
-    return render_template('colaborador/modulos/modulo05.html')
-
-@modulo_bp.route('/modulo06')
-def modulo06():
-    return render_template('colaborador/modulos/modulo06.html')
-
-@modulo_bp.route('/modulo07')
-def modulo07():
-    return render_template('colaborador/modulos/modulo07.html')
-
-@modulo_bp.route('/modulo08')
-def modulo08():
-    return render_template('colaborador/modulos/modulo08.html')
-
-@modulo_bp.route('/modulo09')
-def modulo09():
-    
-    return render_template('colaborador/modulos/modulo09.html')
+@modulo_bp.route("/<int:modulo_id>")
+def visualizar_modulo(modulo_id):
+    return render_template(
+        "colaborador/modules.html",
+        modulo_id=modulo_id
+    )
 
 
 @modulo_bp.route("/", methods=["GET", "POST"])
@@ -60,28 +52,60 @@ def gerenciar_modulos():
     return jsonify([m.to_dict() for m in modulos]), 200
 
 
-@modulo_bp.route("/<int:modulo_id>", methods=["GET", "PUT", "DELETE"])
+@modulo_bp.route("/api/modulos/<int:modulo_id>", methods=["GET", "PUT", "DELETE"])
 def gerenciar_modulo_por_id(modulo_id):
     if request.method == "GET":
-        
         modulo = ModuloService.get_modulo_by_id(modulo_id)
         if modulo:
             return jsonify(modulo.to_dict()), 200
         return jsonify({"error": "Módulo não encontrado"}), 404
 
     elif request.method == "PUT":
-       
         data = request.get_json()
         modulo = ModuloService.update_modulo(modulo_id, data)
         if modulo:
-            return jsonify({"message": "Módulo atualizado com sucesso", "modulo": modulo.to_dict()}), 200
+            return jsonify(modulo.to_dict()), 200
         return jsonify({"error": "Módulo não encontrado"}), 404
 
     elif request.method == "DELETE":
-        
         modulo = ModuloService.delete_modulo(modulo_id)
         if modulo:
             return jsonify({"message": "Módulo deletado com sucesso"}), 200
         return jsonify({"error": "Módulo não encontrado"}), 404
-        
+
     return jsonify({"error": "Método não permitido"}), 405
+
+@modulo_bp.route("/<int:modulo_id>/conteudo", methods=["GET"])
+@jwt_required()
+def conteudo_modulo_colaborador(modulo_id):
+    """
+    Entrega ao colaborador todo o conteúdo criado pelo gestor:
+    - dados do módulo
+    - slides
+    - exercícios
+    """
+
+    usuario_id = int(get_jwt_identity())
+
+    modulo = ModuloService.get_modulo_by_id(modulo_id)
+    if not modulo:
+        return jsonify({"error": "Módulo não encontrado"}), 404
+
+    slides = SlideService.listar_por_modulo(modulo_id)
+    exercicios = ExercicioService.listar_por_modulo(modulo_id)
+
+
+    return jsonify({
+    "modulo": {
+        "id": modulo.id,
+        "nome": modulo.nome,
+        "titulo": modulo.titulo,
+        "descricao": modulo.descricao,
+        "carga_horaria": modulo.carga_horaria,
+        "imagem_capa": modulo.imagem_capa,
+        "ativo": modulo.ativo,
+        "ultimo_acesso": Progresso.ultimo_acesso.isoformat() if Progresso and Progresso.ultimo_acesso else None
+    },
+    "slides": [s.to_dict() for s in slides],
+    "exercicios": [e.to_dict() for e in exercicios]
+}), 200

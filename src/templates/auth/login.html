@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Alpha Secure</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/auth/login.css') }}">
@@ -41,8 +43,46 @@
                     <label for="email">Email</label>
                     <input type="email" id="email" name="email" required placeholder="Digite seu email...">
 
-                    <label for="senha">Senha</label>
-                    <input type="password" id="senha" name="senha" required placeholder="Digite sua senha...">
+<div style="position: relative; width: 100%;">
+  <input 
+    type="password" 
+    id="senha" 
+    placeholder="Digite sua senha" 
+    style="
+      width: 100%; 
+      padding-right: 40px; /* espaço pro olho */
+      height: 40px; /* mesma altura do botão entrar */
+      font-size: 14px; /* tamanho do placeholder igual ao do input */
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    "
+  />
+  
+  <!-- Ícone dentro do input -->
+  <svg 
+    id="toggleSenha" 
+    xmlns="http://www.w3.org/2000/svg" 
+    width="28" 
+    height="20" 
+    fill="none" 
+    stroke="#333" 
+    stroke-width="2" 
+    stroke-linecap="round" 
+    stroke-linejoin="round"
+    style="
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      pointer-events: all;
+    "
+  >
+    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+    <circle cx="12" cy="12" r="3"/>
+  </svg>
+</div>
 
                     <button type="submit">Entrar</button>
                 </form>

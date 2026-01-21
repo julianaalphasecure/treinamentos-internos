@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Feedback</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 <!-- CSS -->
 <link rel="stylesheet" href="{{ url_for('static', filename='css/colaborador/feedback.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
@@ -47,11 +49,11 @@
         <h3>Enviar Mensagem</h3>
 
         <form id="sendFeedbackForm">
-          <label for="destinatario">Enviar para</label>
-          <input type="text" id="destinatario" placeholder="Digite o nome do gestor..." autocomplete="off" required>
-          <input type="hidden" id="destinatario_id" value=""> 
+         <label for="destinatario_select">Enviar para</label>
+      <select id="destinatarioSelect" required>
+      <option value="">Selecione um gestor</option>
+      </select>
 
-          <div id="autocomplete-gestores" class="autocomplete-list"></div>
 
           <label for="assunto">Assunto</label>
           <select id="assunto" required>

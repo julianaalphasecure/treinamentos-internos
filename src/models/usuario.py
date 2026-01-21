@@ -1,5 +1,6 @@
 from src.config.database import db, bcrypt
 
+
 class Usuario(db.Model):
     __tablename__ = "usuario"
 

@@ -6,6 +6,9 @@ from src.models.modulos import Modulo
 from src.services.gestor.slide_service import SlideService
 from src.utils.upload import allowed_file
 from src.config.database import db
+from src.models.modulos import Modulo
+from src.models.progresso import Progresso
+from src.models.usuario import Usuario
 
 
 gerenciar_bp = Blueprint(
@@ -37,7 +40,9 @@ def listar_modulos():
         {
             "id": m.id,
             "titulo": m.titulo,
-            "ativo": m.ativo
+            "descricao": m.descricao,
+            "ativo": m.ativo,
+            "imagem_capa": m.imagem_capa
         }
         for m in modulos
     ]), 200
@@ -45,10 +50,9 @@ def listar_modulos():
 @gerenciar_bp.route("/api/modulos", methods=["POST"])
 @jwt_required()
 def criar_modulo():
-    data = request.get_json()
-    titulo = data.get("titulo")
-    nome = data.get("nome", titulo)
-    descricao = data.get("descricao", "")
+    titulo = request.form.get("titulo")
+    nome = request.form.get("nome", titulo)
+    descricao = request.form.get("descricao", "")
 
     if not titulo:
         return jsonify({"error": "Título obrigatório"}), 400
@@ -59,8 +63,51 @@ def criar_modulo():
         descricao=descricao
     )
 
-   
     db.session.add(novo_modulo)
+    db.session.commit() 
+
+
+    file = request.files.get("imagem_capa")
+
+    if file and file.filename != "":
+        if not allowed_file(file.filename, {"png", "jpg", "jpeg", "webp"}):
+            return jsonify({"error": "Formato de imagem inválido"}), 400
+
+        filename = secure_filename(file.filename)
+        ext = filename.rsplit(".", 1)[1].lower()
+
+        nome_arquivo = f"modulo_{novo_modulo.id}.{ext}"
+
+        pasta_capas = os.path.join(
+            current_app.static_folder,
+            "uploads",
+            "modulos",
+            "capas"
+        )
+        os.makedirs(pasta_capas, exist_ok=True)
+
+        caminho_fisico = os.path.join(pasta_capas, nome_arquivo)
+        file.save(caminho_fisico)
+
+        novo_modulo.imagem_capa = f"/static/uploads/modulos/capas/{nome_arquivo}"
+        db.session.commit()
+
+
+    colaboradores = Usuario.query.filter_by(tipo_acesso="colaborador").all()
+    for colab in colaboradores:
+        progresso_existente = Progresso.query.filter_by(
+            usuario_id=colab.id,
+            modulo_id=novo_modulo.id
+        ).first()
+
+        if not progresso_existente:
+            db.session.add(Progresso(
+                usuario_id=colab.id,
+                modulo_id=novo_modulo.id,
+                status="nao_iniciado",
+                tentativas=0
+            ))
+
     db.session.commit()
 
     return jsonify(novo_modulo.to_dict()), 201
@@ -71,13 +118,13 @@ def criar_modulo():
 def remover_modulo(modulo_id):
     modulo = Modulo.query.get_or_404(modulo_id)
 
+    # 🔹 Remove progresso associado ao módulo
+    Progresso.query.filter_by(modulo_id=modulo.id).delete()
 
     db.session.delete(modulo)
     db.session.commit()
 
     return jsonify({"message": "Módulo removido com sucesso"}), 200
-
-
 
 @gerenciar_bp.route("/api/modulo/<int:modulo_id>", methods=["GET"])
 @jwt_required()
@@ -89,6 +136,47 @@ def detalhes_modulo(modulo_id):
         "titulo": modulo.titulo,
         "slides": [s.to_dict() for s in modulo.slides],
         "exercicios": [e.to_dict() for e in modulo.exercicios]
+    }), 200
+@gerenciar_bp.route("/api/modulos/<int:modulo_id>/capa", methods=["PUT"])
+@jwt_required()
+def atualizar_capa_modulo(modulo_id):
+    modulo = Modulo.query.get_or_404(modulo_id)
+
+    if "imagem" not in request.files:
+        return jsonify({"error": "Imagem não enviada"}), 400
+
+    file = request.files["imagem"]
+
+    if file.filename == "":
+        return jsonify({"error": "Arquivo inválido"}), 400
+
+    if not allowed_file(file.filename, {"png", "jpg", "jpeg", "webp"}):
+        return jsonify({"error": "Formato de imagem inválido"}), 400
+
+    filename = secure_filename(file.filename)
+    ext = filename.rsplit(".", 1)[1].lower()
+
+    # nome padronizado (substitui automaticamente se já existir)
+    nome_arquivo = f"modulo_{modulo.id}.{ext}"
+
+    pasta_capas = os.path.join(
+        current_app.static_folder,
+        "uploads",
+        "modulos",
+        "capas"
+    )
+    os.makedirs(pasta_capas, exist_ok=True)
+
+    caminho_fisico = os.path.join(pasta_capas, nome_arquivo)
+    file.save(caminho_fisico)
+
+    # salva caminho público
+    modulo.imagem_capa = f"/static/uploads/modulos/capas/{nome_arquivo}"
+    db.session.commit()
+
+    return jsonify({
+        "message": "Imagem de capa atualizada com sucesso",
+        "imagem_capa": modulo.imagem_capa
     }), 200
 
 

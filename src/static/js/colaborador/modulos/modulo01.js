@@ -213,8 +213,13 @@ if (currentIndex === slidesAtuais.length - 1 && slideAtual) {
 
 }
 
-btnFinalizarConteudo.addEventListener('click', () => {
-    marcarAndamentoLocal(); // anti-cola
+btnFinalizarConteudo.addEventListener('click', async () => {
+
+    // 🔥 BACKEND: marca como em_andamento
+    await iniciarModuloAPI(moduleId);
+
+    // 🛡️ FRONT (anti-cola)
+    marcarAndamentoLocal();
 
     moduleLocked = true;
     exercisesSection.style.display = 'block';
@@ -239,6 +244,7 @@ btnFinalizarConteudo.addEventListener('click', () => {
 
     startTimer();
 });
+
 
 
 function updateArrows() {
@@ -276,6 +282,20 @@ function loadModuleProgress(moduleIdLocal) {
     return progress[moduleIdLocal] || 0;
 }
 
+async function iniciarModuloAPI(moduloIdLocal) {
+    try {
+        await fetch(`/colaborador/progresso/iniciar/${moduloIdLocal}`, {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${TOKEN}`
+            }
+        });
+    } catch (err) {
+        console.error("Erro ao iniciar módulo:", err);
+    }
+}
+
+
 async function finalizarModuloAPI(moduloIdLocal, notaFinal) {
     try {
         const response = await fetch(`http://127.0.0.1:5000/colaborador/progresso/finalizar/${moduloIdLocal}`, {
@@ -305,15 +325,26 @@ async function finalizarModuloAPI(moduloIdLocal, notaFinal) {
 }
 
 // ================== CONTROLES DE EXERCÍCIOS (UI) ==================
-document.querySelectorAll('.options label').forEach(label => {
-    label.addEventListener('click', () => {
-        const group = label.parentElement.querySelectorAll('label');
-        group.forEach(l => l.classList.remove('selected'));
-        label.classList.add('selected');
-        const radio = document.getElementById(label.getAttribute('for'));
-        if (radio) radio.checked = true;
-    });
+document.addEventListener('click', (e) => {
+    const label = e.target.closest('.options label');
+    if (!label) return;
+
+    const options = label.closest('.options');
+    if (!options) return;
+
+    // remove seleção do grupo
+    options.querySelectorAll('label').forEach(l =>
+        l.classList.remove('selected')
+    );
+
+    // marca o selecionado
+    label.classList.add('selected');
+
+    const radioId = label.getAttribute('for');
+    const radio = document.getElementById(radioId);
+    if (radio) radio.checked = true;
 });
+
 
 // ----------------- OVERLAY RESULTADO -----------------
 const overlay = document.createElement('div');
@@ -473,37 +504,11 @@ document.querySelector('.prev').addEventListener('click', () => {
 
 
 // ================== BOTÃO FINALIZAR MÓDULO ==================
-const btnFinalizar = document.querySelectorAll('.btn-finalizar');
 const exercisesSection = document.querySelector('.exercises');
 const nextBtn = document.querySelector('.next');
 const prevBtn = document.querySelector('.prev');
 
-btnFinalizar.forEach(btn => {
-    btn.addEventListener('click', () => {
-        // marca que o usuário iniciou o exercício (ANTI-COLA)
-        marcarAndamentoLocal();
 
-        exercisesSection.style.display = 'block';
-        moduleLocked = true;
-
-        nextBtn.style.opacity = '0.4';
-        prevBtn.style.opacity = '0.4';
-        nextBtn.style.cursor = 'not-allowed';
-        prevBtn.style.cursor = 'not-allowed';
-
-        document.querySelectorAll('.thumbnails img').forEach(img => {
-            img.style.pointerEvents = 'none';
-            img.style.opacity = '0.4';
-            img.style.filter = 'blur(1px) grayscale(0.8)';
-        });
-
-        document.addEventListener('keydown', lockArrows);
-
-        window.scrollTo({ top: exercisesSection.offsetTop - 20, behavior: 'smooth' });
-        startTimer();
-        localStorage.removeItem('currentModuleSlide');
-    });
-});
 
 function lockArrows(e) {
     if (moduleLocked && (e.key === 'ArrowRight' || e.key === 'ArrowLeft')) {
@@ -590,15 +595,8 @@ function startTimer() {
         }
     }, 1000);
 }
-// ================== DOWNLOAD ==================
-document.getElementById('download-btn').addEventListener('click', () => {
-    // Se ainda não finalizou, marcar reset quando perder foco/abrir PDF
-    // (marcação já é feita por visibilitychange/blur)
-    const link = document.createElement('a');
-    link.href = `/src/static/pdf/modulo${String(moduleId).padStart(2,'0')}.pdf`;
-    link.download = `Modulo${String(moduleId).padStart(2,'0')}_Conteudo.pdf`;
-    link.click();
-});
+
+
 
 // ================== MINIATURAS ==================
 const thumbnailsContainer = document.querySelector('.thumbnails');
@@ -694,10 +692,7 @@ document.addEventListener('keydown', e => {
         const fsBtn = document.getElementById('fullscreen-btn');
         if (fsBtn) fsBtn.click();
     }
-    if (e.key.toLowerCase() === 'd') {
-        const dlBtn = document.getElementById('download-btn');
-        if (dlBtn) dlBtn.click();
-    }
+ 
 });
 
 window.addEventListener('DOMContentLoaded', async () => {

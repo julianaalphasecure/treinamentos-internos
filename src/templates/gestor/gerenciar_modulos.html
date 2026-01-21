@@ -68,6 +68,15 @@
         <h3>Criar Novo Módulo</h3>
         <input type="text" id="inputTituloModulo" placeholder="Digite o título do módulo">
         <textarea id="inputDescricaoModulo" placeholder="Descrição (opcional)"></textarea>
+        <label class="label-upload">Imagem de capa (opcional)</label>
+
+<input type="file"
+       id="inputImagemCapa"
+       accept="image/png, image/jpeg, image/webp">
+
+<img id="previewCapa"
+     style="display:none; width:100%; margin-top:10px; border-radius:12px;" />
+
         <button id="btnCriarModulo" class="btn-primary">Criar Módulo</button>
     </div>
 </div>

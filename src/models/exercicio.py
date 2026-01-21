@@ -10,7 +10,10 @@ class Exercicio(db.Model):
     tipo = db.Column(db.Enum("multipla_escolha", "dissertativo", "pratico", name="exercicio_tipo_enum"), nullable=True)
     resposta_correta = db.Column(db.Text, nullable=True)
 
-    modulo = db.relationship("Modulo", backref=db.backref("exercicios", cascade="all, delete-orphan"))
+    modulo = db.relationship(
+        "Modulo",
+        back_populates="exercicios_colaborador"
+    )
 
     def to_dict(self):
         return {

@@ -4,8 +4,8 @@ from src.models.modulos import Modulo
 class ModuloService:
     @staticmethod
     def get_all_modulos():
-        return Modulo.query.all()
-    
+        return Modulo.query.filter_by(ativo=True).order_by(Modulo.id.asc()).all()
+
     @staticmethod
     def get_modulo_by_id(modulo_id):
         return Modulo.query.get(modulo_id)

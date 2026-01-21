@@ -1,5 +1,6 @@
 const feedbackList = document.getElementById('feedbackList');
 const viewAllBtn = document.getElementById('viewAllBtn');
+const destinatarioSelect = document.getElementById("destinatarioSelect");
 
 
 const baseURL = "http://127.0.0.1:5000/colaborador/feedback/meus-feedbacks";
@@ -9,90 +10,44 @@ const enviarURL = "http://127.0.0.1:5000/colaborador/feedback/enviar";
 const gestoresURL = "http://127.0.0.1:5000/colaborador/feedback/gestores";
 
 
-// ==================Buscar Gestores ==================
-async function loadGestores(query) {
-    if (!query || query.length < 1) return [];
+async function carregarGestoresSelect() {
+    const TOKEN = localStorage.getItem("token_colaborador");
 
-    const TOKEN = sessionStorage.getItem("token_colaborador");
+    if (!destinatarioSelect) {
+        console.error("Select de gestores não encontrado no DOM.");
+        return;
+    }
 
     try {
-        const response = await fetch(`${gestoresURL}?nome=${query}`, {
+        const response = await fetch(gestoresURL, {
             method: "GET",
             headers: {
-                "Authorization": `Bearer ${TOKEN}`,
-                "Content-Type": "application/json"
+                "Authorization": `Bearer ${TOKEN}`
             }
         });
 
-        if (!response.ok) return [];
+        if (!response.ok) {
+            throw new Error("Falha na requisição");
+        }
 
-        return await response.json();
+        const gestores = await response.json();
+
+        destinatarioSelect.innerHTML = '<option value="">Selecione um gestor</option>';
+
+        gestores.forEach(g => {
+            const option = document.createElement("option");
+            option.value = g.id;
+            option.textContent = g.nome;
+            destinatarioSelect.appendChild(option);
+        });
+
     } catch (err) {
-        console.error("Erro ao buscar gestores:", err);
-        return [];
+        console.error("Erro ao carregar gestores:", err);
+        showToast("Erro ao carregar gestores.");
     }
 }
 
 
-const destinatarioInput = document.getElementById("destinatario");
-const destinatarioHidden = document.getElementById("destinatario_id");
-const autocompleteBox = document.getElementById("autocomplete-gestores");
-
-
-let currentRequest = 0;
-
-destinatarioInput.addEventListener("input", async () => {
-    const query = destinatarioInput.value.trim();
-    const requestId = ++currentRequest;
-
-    autocompleteBox.innerHTML = "";
-    autocompleteBox.style.display = "none";
-
-    if (query.length < 1) return;
-
-    const gestores = await loadGestores(query);
-
-    // 🔥 ignora respostas antigas
-    if (requestId !== currentRequest) return;
-
-    // 🔥 remove duplicados por ID
-    const uniqueGestores = [];
-    const ids = new Set();
-
-    gestores.forEach(g => {
-        if (!ids.has(g.id)) {
-            ids.add(g.id);
-            uniqueGestores.push(g);
-        }
-    });
-
-    if (uniqueGestores.length === 0) return;
-
-    autocompleteBox.style.display = "block";
-
-    uniqueGestores.forEach(g => {
-        const item = document.createElement("div");
-        item.classList.add("autocomplete-item");
-        item.textContent = g.nome;
-
-        item.addEventListener("click", () => {
-            destinatarioInput.value = g.nome;
-            destinatarioHidden.value = g.id;
-            autocompleteBox.innerHTML = "";
-            autocompleteBox.style.display = "none";
-        });
-
-        autocompleteBox.appendChild(item);
-    });
-});
-
-
-
-document.addEventListener("click", (e) => {
-    if (!destinatarioInput.contains(e.target) && !autocompleteBox.contains(e.target)) {
-        autocompleteBox.style.display = "none";
-    }
-});
 
 function formatDate(datetime) {
     const date = new Date(datetime);
@@ -105,7 +60,7 @@ function formatDate(datetime) {
 }
 // ================== Carregar Feedbacks ==================
 async function loadFeedbacks() {
-    const TOKEN = sessionStorage.getItem("token_colaborador"); 
+    const TOKEN = localStorage.getItem("token_colaborador"); 
 
     if (!TOKEN) {
         feedbackList.innerHTML = '<p>Erro de autenticação. Faça login novamente.</p>';
@@ -123,7 +78,7 @@ async function loadFeedbacks() {
 
         if (!response.ok) {
             if (response.status === 401 || response.status === 403) {
-                sessionStorage.removeItem("token_colaborador");
+                localStorage.removeItem("token_colaborador");
                 window.location.href = "/src/templates/auth/login.html";
                 return;
             }
@@ -175,12 +130,12 @@ data = data.filter(fb => fb.mensagem.startsWith("[FEEDBACK]"));
         feedbackList.innerHTML = `<p>Falha ao carregar feedbacks: ${err.message}</p>`;
     }
 }
-loadDuvidas();
+
 
 
 
 async function loadDuvidas() {
-    const TOKEN = sessionStorage.getItem("token_colaborador");
+    const TOKEN = localStorage.getItem("token_colaborador");
     const duvidasBox = document.getElementById("duvidasList");
 
 
@@ -237,7 +192,8 @@ async function loadDuvidas() {
             const perguntaOriginal = fb.mensagem ? fb.mensagem.replace(/\[.*?\]/g, "").trim() : "";
 
             const dataEnvio = formatDateToSaoPaulo(fb.data_feedback) || "—";
-            const dataResposta = formatDateToSaoPaulo(fb.data_resposta) || "—";
+            const dataResposta = formatDateToSaoPaulo(fb.respondido_em) || "—";
+
 
             const bloco = document.createElement("div");
             bloco.classList.add("chat-item");
@@ -276,7 +232,7 @@ feedbackList.addEventListener('click', async (e) => {
     if (e.target.classList.contains('mark-read-btn') && !e.target.disabled) {
         const card = e.target.closest('.feedback-card');
         const feedbackId = card.dataset.id;
-        const TOKEN = sessionStorage.getItem("token_colaborador");
+        const TOKEN = localStorage.getItem("token_colaborador");
 
         try {
             const response = await fetch(`http://127.0.0.1:5000/colaborador/feedback/marcar-lido/${feedbackId}`,
@@ -305,14 +261,14 @@ const form = document.getElementById("sendFeedbackForm");
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const TOKEN = sessionStorage.getItem("token_colaborador");
-    const colaborador = JSON.parse(sessionStorage.getItem("usuario_colaborador"));
+    const TOKEN = localStorage.getItem("token_colaborador");
+    const colaborador = JSON.parse(localStorage.getItem("usuario_colaborador"));
 
     const mensagemInput = document.getElementById("mensagem");
     const assuntoInput = document.getElementById("assunto");
 
     const data = {
-        gestor_id: destinatarioHidden.value,
+        gestor_id: destinatarioSelect.value,
         assunto: assuntoInput.value.trim(),
         mensagem: "[duvida-modulo] " + mensagemInput.value.trim()
     };
@@ -349,10 +305,8 @@ form.addEventListener("submit", async (e) => {
         setTimeout(() => {
             mensagemInput.value = "";
             assuntoInput.value = "";
-            destinatarioInput.value = "";
-            destinatarioHidden.value = "";
-            autocompleteBox.innerHTML = "";
-            autocompleteBox.style.display = "none";
+            destinatarioSelect.value = "";
+
         }, 50);
 
     } catch (err) {
@@ -368,13 +322,15 @@ if (viewAllBtn) {
 }
 
 
-// ================== Carrega ao iniciar ==================
-loadFeedbacks();
 
 
 document.addEventListener("DOMContentLoaded", () => {
-    const savedTheme = sessionStorage.getItem("theme") || "claro";
-    const savedFont = sessionStorage.getItem("font-size") || "padrao";
+    carregarGestoresSelect();
+    loadFeedbacks();
+    loadDuvidas();
+
+    const savedTheme = localStorage.getItem("theme") || "claro";
+    const savedFont = localStorage.getItem("font-size") || "padrao";
 
     document.body.setAttribute("data-theme", savedTheme);
     document.body.setAttribute("data-font", savedFont);

@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const usuarioGestor = JSON.parse(sessionStorage.getItem("usuario_gestor"));
-    const token = sessionStorage.getItem("token_gestor");
+    const usuarioGestor = JSON.parse(localStorage.getItem("usuario_gestor"));
+    const token = localStorage.getItem("token_gestor");
     const API_BASE = "http://127.0.0.1:5000";
 
     const equipeURL = `${API_BASE}/gestor/equipe`;
@@ -69,33 +69,31 @@ document.addEventListener("DOMContentLoaded", () => {
                 
              
             
-let tentativasTexto = "";
 let tentativas = modulo.tentativas ?? 0;
-let statusReal = "nao-iniciado";
-if (modulo.percent === 0) {
-    statusReal = "nao-iniciado";
-    tentativas = 0;
-} else if (modulo.percent < 50) {
-    statusReal = "em-andamento";
-} else {
-    statusReal = "concluido";
-}
+let statusReal = modulo.status;
 
 
-if (tentativas === 0) {
+
+let tentativasTexto = "";
+
+if (statusReal === "nao_iniciado") {
     tentativasTexto = `<span class="status-nao-iniciado">Não iniciado</span>`;
-} else {
+} else if (statusReal === "em_andamento") {
     tentativasTexto = `
         <div class="linha-tentativas">
-            <span class="status-final ${
-                statusReal === 'concluido' ? 'status-concluido' : 'status-andamento'
-            }">
-                ${statusReal === 'concluido' ? 'Concluído' : 'Em andamento'}
-            </span><br>
+            <span class="status-andamento">Em andamento</span><br>
+            <span class="tentativas">Tentativas: ${tentativas}</span>
+        </div>
+    `;
+} else if (statusReal === "concluido") {
+    tentativasTexto = `
+        <div class="linha-tentativas">
+            <span class="status-concluido">Concluído</span><br>
             <span class="tentativas">Tentativas: ${tentativas}</span>
         </div>
     `;
 }
+
 
 
 htmlModulos += `
@@ -106,9 +104,15 @@ htmlModulos += `
         <div class="preenchimento" style="width:${modulo.percent}%"></div>
     </div>
 
-    <span class="nota">
-        Nota: ${modulo.nota_final ? (modulo.nota_final / 10) : 0} (${modulo.percent}%)
-    </span>
+<span class="nota">
+    ${
+        statusReal === "concluido"
+            ? `Nota: ${(modulo.nota_final / 10).toFixed(1)} (${modulo.percent}%)`
+            : `Progresso: ${modulo.percent}%`
+    }
+</span>
+
+
 
     ${tentativasTexto}
 </div>

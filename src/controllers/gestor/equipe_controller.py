@@ -56,3 +56,4 @@ def deletar_equipe(equipe_id):
     if equipe:
         return jsonify({"message": "Equipe deletada com sucesso"}), 200
     return jsonify({"error": "Equipe não encontrada"}), 404
+
