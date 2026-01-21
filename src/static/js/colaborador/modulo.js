@@ -1,207 +1,203 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    history.pushState(null, null, location.href);
-    window.onpopstate = function () {
-        history.go(1);
-    };
 
+
+    const MODULE_ID = Number(document.body.dataset.moduleId);
+
+    if (MODULE_ID && token) {
+        await iniciarModulo(MODULE_ID);
+    }
+
+    /* ================== AUTH ================== */
     const btnLogout = document.getElementById("btn-logout");
     if (btnLogout) {
         btnLogout.addEventListener("click", (e) => {
             e.preventDefault();
-
-           // localStorage.removeItem("token_colaborador");
-           // localStorage.removeItem("usuario_colaborador");
-
             window.location.replace("/src/templates/auth/login.html");
         });
     }
 
-
     const userNameElement = document.getElementById("user-name");
     const usuarioColaborador = JSON.parse(localStorage.getItem("usuario_colaborador"));
     const token = localStorage.getItem("token_colaborador");
-    const usuarioId = usuarioColaborador?.id;
 
-    if (!usuarioColaborador || !usuarioId) {
-        userNameElement.textContent = "Olá, Usuário";
-        console.warn("Colaborador não identificado, redirecionando para login.");
-        setTimeout(() => {
-            window.location.replace("/src/templates/auth/login.html");
-        }, 1500);
+    if (!usuarioColaborador || !usuarioColaborador.id) {
+        if (userNameElement) userNameElement.textContent = "Olá, Usuário";
+        window.location.replace("/src/templates/auth/login.html");
         return;
     }
 
-    userNameElement.textContent = `Olá, ${usuarioColaborador.nome}`;
+    if (userNameElement) {
+        userNameElement.textContent = `Olá, ${usuarioColaborador.nome}`;
+    }
 
+    /* ================== CONTAINER ================== */
     const wrapper = document.querySelector(".modules-wrapper");
-    const prevBtn = document.querySelector(".carousel-btn.prev");
-    const nextBtn = document.querySelector(".carousel-btn.next");
-    const searchInput = document.querySelector(".search-bar input");
-
-    const allModules = Array.from(document.querySelectorAll(".module-card")).map(card => ({
-        id: parseInt(card.dataset.id),
-        html: card.outerHTML
-    }));
-
-    let filteredModules = [...allModules];
-    let currentSlide = 0;
-
-    function renderModules() {
-        wrapper.innerHTML = "";
-        for (let i = 0; i < filteredModules.length; i += 4) {
-            const slideModules = filteredModules.slice(i, i + 4);
-            const slide = document.createElement("div");
-            slide.classList.add("modules-slide");
-            slide.style.justifyContent = slideModules.length < 4 ? "center" : "flex-start";
-            slideModules.forEach(mod => slide.insertAdjacentHTML("beforeend", mod.html));
-            wrapper.appendChild(slide);
-        }
-        currentSlide = 0;
-        updateCarousel();
-        carregarProgresso();
+    if (!wrapper) {
+        console.error("❌ .modules-wrapper não encontrado");
+        return;
     }
 
-    function updateCarousel() {
-        const slides = document.querySelectorAll(".modules-slide");
-        const offset = -currentSlide * 100;
-        wrapper.style.transform = `translateX(${offset}%)`;
-        prevBtn.style.display = slides.length <= 1 ? "none" : "block";
-        nextBtn.style.display = slides.length <= 1 ? "none" : "block";
-    }
-
-    nextBtn.addEventListener("click", () => {
-        const slides = document.querySelectorAll(".modules-slide");
-        if (currentSlide < slides.length - 1) {
-            currentSlide++;
-            updateCarousel();
-        }
-    });
-
-    prevBtn.addEventListener("click", () => {
-        if (currentSlide > 0) {
-            currentSlide--;
-            updateCarousel();
-        }
-    });
-
-    searchInput.addEventListener("input", () => {
-        const query = searchInput.value.toLowerCase();
-        filteredModules = allModules.filter(mod => mod.html.toLowerCase().includes(query));
-        renderModules();
-    });
-
-    // ================== CARREGAR PROGRESSO ==================
-    window.carregarProgresso = async function carregarProgresso() {
-        const TOKEN = localStorage.getItem("token_colaborador");
-
-        if (!TOKEN) {
-            console.error("Token ausente.");
-            return;
-        }
-
+    /* ================== FETCH MÓDULOS ================== */
+    async function carregarModulos() {
         try {
-            const response = await fetch(`http://127.0.0.1:5000/colaborador/progresso/frontend`, {
-                method: "GET",
-                headers: {
-                    "Authorization": `Bearer ${TOKEN}`,
-                    "Content-Type": "application/json"
-                }
+            const res = await fetch("/colaborador/modulo/api/modulos", {
+                headers: { Authorization: `Bearer ${token}` }
             });
 
-            if (response.status === 401 || response.status === 403) {
-                alert("Sessão expirada. Faça login novamente.");
-                throw new Error("Não autorizado.");
-            }
+            if (!res.ok) throw new Error("Erro ao buscar módulos");
 
-            if (!response.ok) throw new Error(`Erro ${response.status}`);
+            const modulos = await res.json();
+            console.log("✅ Módulos recebidos:", modulos);
+
+            renderizarModulos(modulos);
+            carregarProgresso();
+
+        } catch (err) {
+            console.error("Erro ao carregar módulos:", err);
+        }
+    }
+
+async function atualizarImagensModulos() {
+    try {
+        const res = await fetch("/colaborador/modulo/api/modulos", {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (!res.ok) throw new Error("Erro ao buscar módulos para atualizar imagens");
+
+        const modulosAtualizados = await res.json();
+
+        document.querySelectorAll(".module-card").forEach(card => {
+            const id = Number(card.dataset.id);
+            const moduloAtual = modulosAtualizados.find(m => Number(m.id) === id);
+
+            if (moduloAtual && moduloAtual.imagem_capa) {
+                const img = card.querySelector("img");
+                if (img) {
+                    img.src = moduloAtual.imagem_capa;
+                }
+            }
+        });
+
+    } catch (err) {
+        console.error("Erro ao atualizar imagens dos módulos:", err);
+    }
+}
+
+
+    /* ================== RENDER GRID ================== */
+function renderizarModulos(modulos) {
+    wrapper.innerHTML = "";
+
+    if (!modulos || !modulos.length) {
+        wrapper.innerHTML = "<p>Nenhum módulo disponível.</p>";
+        return;
+    }
+
+    modulos.forEach(modulo => {
+        const imagemCapa = modulo.imagem_capa 
+            ? modulo.imagem_capa 
+            : "/static/img/modulo_placeholder.webp";
+
+        wrapper.insertAdjacentHTML("beforeend", `
+            <div class="module-card" data-id="${modulo.id}">
+                
+                <div class="module-cover">
+                    <img src="${imagemCapa}" alt="Capa do módulo ${modulo.titulo}">
+                </div>
+
+                <div class="module-body">
+                    <h3>${modulo.titulo}</h3>
+
+                   <div class="progress-wrapper">
+    <div class="progress-bar">
+        <div class="progress-bar-inner"></div>
+    </div>
+    <span class="progress-percent">0%</span>
+    </div>
+
+
+                    <a href="/colaborador/modulo/${modulo.id}">
+                        <button>Acessar</button>
+                    </a>
+                </div>
+            </div>
+        `);
+    });
+}
+
+
+    /* ================== PROGRESSO ================== */
+    async function carregarProgresso() {
+        try {
+            const response = await fetch("/colaborador/progresso/frontend", {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            if (!response.ok) return;
 
             const data = await response.json();
             const modulosAPI = data.modulos || [];
-            const statsAPI = data.stats || { concluidos: 0, nao_iniciados: 9 };
 
-            const statCards = document.querySelectorAll(".stat-card p.stat-value");
-            if (statCards.length >= 2) {
-                statCards[0].textContent = statsAPI.concluidos;
-                statCards[1].textContent = statsAPI.nao_iniciados;
-            }
+            const stats = data.stats || {};
 
-            const cards = document.querySelectorAll(".module-card");
-            cards.forEach((card) => {
+const statValues = document.querySelectorAll(".stat-value");
+
+if (data.stats && statValues.length >= 3) {
+    statValues[0].textContent = data.stats.concluidos;
+    statValues[1].textContent = data.stats.em_andamento;
+    statValues[2].textContent = data.stats.nao_iniciados;
+}
+
+
+            document.querySelectorAll(".module-card").forEach(card => {
                 const bar = card.querySelector(".progress-bar-inner");
-                const button = card.querySelector("button") || card.querySelector("a");
-                if (!bar || !button) return;
+                if (!bar) return;
 
-                const moduloId = parseInt(card.dataset.id);
-                const moduloAPI = modulosAPI.find(m => String(m.modulo_id) === String(moduloId));
+                const id = Number(card.dataset.id);
+                const info = modulosAPI.find(m => Number(m.modulo_id) === id);
 
-                if (moduloAPI) {
-                    let percent = moduloAPI.percent || 0;
-                    
-                    let status = moduloAPI.status;
-                    if (status === "concluido" && percent === 0) {
-                        status = "nao_iniciado"; 
-                    }
+                const percent = info ? (info.percent || 0) : 0;
 
-                    if (status === "concluido") {
-                        percent = 100;
-                        card.classList.add("concluido");
+bar.style.width = `${percent}%`;
 
-                        button.textContent = "Refazer";
-                        button.classList.add("btn-refazer");
-                        button.classList.remove("btn-acessar");
+const percentLabel = card.querySelector(".progress-percent");
+if (percentLabel) {
+    percentLabel.textContent = `${percent}%`;
+}
 
-                    } else {
-                        card.classList.remove("concluido");
-
-                        button.textContent = "Acessar";
-                        button.classList.remove("btn-refazer");
-                        button.classList.add("btn-acessar");
-                    }
-
-                    bar.style.width = `${percent}%`;
-                } else {
-                    bar.style.width = "0%";
-                }
             });
-
-        } catch (error) {
-            console.error("Erro ao carregar progresso:", error);
-
-            if (error.message.includes("Não autorizado")) {
-               // localStorage.removeItem("token_colaborador");
-                //localStorage.removeItem("usuario_colaborador");
-                window.location.replace("/src/templates/auth/login.html");
-            }
-        }
-    };
-
-    // ================== FINALIZAR MÓDULO ==================
-    async function finalizarModulo(moduloId, nota = 100) {
-        try {
-            const response = await fetch(`http://127.0.0.1:5000/colaborador/progresso/finalizar/${moduloId}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`
-                },
-                body: JSON.stringify({ nota_final: nota })
-            });
-
-            if (!response.ok) throw new Error("Erro ao finalizar módulo");
-            await carregarProgresso();
-
-            if (window.showToast) {
-                window.showToast(`Módulo ${moduloId} finalizado com sucesso!`);
-            }
 
         } catch (err) {
-            console.error("Erro ao finalizar módulo:", err);
-            if (window.showToast) {
-                window.showToast("Erro ao finalizar módulo.");
-            }
+            console.error("Erro ao carregar progresso:", err);
         }
     }
 
-    // ================== INICIALIZA ==================
-    renderModules();
+async function iniciarModulo(moduloId) {
+    try {
+        const token = localStorage.getItem("token_colaborador");
+        if (!token || !moduloId) return;
+
+        const res = await fetch(`/colaborador/progresso/iniciar/${moduloId}`, {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        if (res.ok) {
+            // 🔄 atualiza painel depois de iniciar
+            carregarProgresso();
+        }
+
+    } catch (err) {
+        console.error("Erro ao iniciar módulo:", err);
+    }
+}
+
+
+    /* ================== INIT ================== */
+    await carregarModulos();
+    await atualizarImagensModulos();
+
 });
