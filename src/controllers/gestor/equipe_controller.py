@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from src.config.database import db
 from src.services.gestor.equipe_service import EquipeService
 from src.services.colaborador.colaborador_service import ColaboradorService 
 from flask_jwt_extended import jwt_required, get_jwt_identity 
@@ -15,7 +16,12 @@ def pagina_equipe():
 @equipe_bp.route("/", methods=["GET"])
 @jwt_required()
 def listar_equipe_colaboradores():
-    colaboradores = Colaborador.query.order_by(Colaborador.nome.asc()).all()
+    colaboradores = (
+        Colaborador.query
+        .filter(Colaborador.status != "inativo")
+        .order_by(Colaborador.nome.asc())
+        .all()
+    )
 
     return jsonify([
         {
@@ -28,6 +34,8 @@ def listar_equipe_colaboradores():
         }
         for c in colaboradores
     ]), 200
+
+
    
 @equipe_bp.route("/<int:equipe_id>", methods=["GET"])
 def obter_equipe(equipe_id):
@@ -57,3 +65,18 @@ def deletar_equipe(equipe_id):
         return jsonify({"message": "Equipe deletada com sucesso"}), 200
     return jsonify({"error": "Equipe não encontrada"}), 404
 
+@equipe_bp.route("/colaborador/<int:colaborador_id>", methods=["DELETE"])
+@jwt_required()
+def remover_colaborador(colaborador_id):
+    colaborador = Colaborador.query.get(colaborador_id)
+
+    if not colaborador:
+        return jsonify({"error": "Colaborador não encontrado"}), 404
+
+   
+    colaborador.status = "inativo"
+
+
+    db.session.commit()
+
+    return jsonify({"message": "Colaborador removido com sucesso"}), 200

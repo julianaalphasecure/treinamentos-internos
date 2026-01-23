@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const equipeURL = `${API_BASE}/gestor/equipe`;
     const progressoURL = `${API_BASE}/colaborador/progresso/gestor/colaborador`;
 
- 
+
 
     if (!usuarioGestor || !usuarioGestor.id) {
         alert("Sessão expirada ou usuário não identificado.");
@@ -124,16 +124,72 @@ htmlModulos += `
 
           
             detalhes.innerHTML = `
-                <h3>Progresso de ${colaboradorNome}</h3>
-                <div class="estatisticas">
-                    <p>Módulos Concluídos: <strong>${dadosProgresso.stats.concluidos}</strong></p>
-                    <p>Módulos Não Iniciados: <strong>${dadosProgresso.stats.nao_iniciados}</strong></p>
-                </div>
-                <div class="progresso-modulos">
-                    ${htmlModulos}
-                </div>
-                <button onclick="document.getElementById('modal-progresso').style.display = 'none'" class="btn-fechar-modal">Fechar</button>
-            `;
+    <h3>Progresso de ${colaboradorNome}</h3>
+
+    <div class="estatisticas">
+        <p>Módulos Concluídos: <strong>${dadosProgresso.stats.concluidos}</strong></p>
+        <p>Módulos Não Iniciados: <strong>${dadosProgresso.stats.nao_iniciados}</strong></p>
+    </div>
+
+    <div class="progresso-modulos">
+        ${htmlModulos}
+    </div>
+
+    <div class="acoes-modal">
+        <button class="btn-remover" data-id="${colaboradorId}">
+            Remover colaborador
+        </button>
+
+        <button class="btn-fechar-modal">
+            Fechar
+        </button>
+    </div>
+`;
+const btnFechar = detalhes.querySelector(".btn-fechar-modal");
+
+if (btnFechar) {
+    btnFechar.addEventListener("click", () => {
+        document.getElementById("modal-progresso").style.display = "none";
+    });
+}
+
+const btnRemover = detalhes.querySelector(".btn-remover");
+
+if (btnRemover) {
+    btnRemover.addEventListener("click", async () => {
+        const confirmar = confirm(
+            `Tem certeza que deseja remover ${colaboradorNome} da plataforma?`
+        );
+
+        if (!confirmar) return;
+
+        try {
+            const res = await fetch(
+    `${API_BASE}/gestor/equipe/colaborador/${colaboradorId}`,
+    {
+        method: "DELETE",
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }
+);
+
+            if (!res.ok) {
+                alert("Erro ao remover colaborador.");
+                return;
+            }
+
+            alert("Colaborador removido com sucesso.");
+
+            document.getElementById("modal-progresso").style.display = "none";
+            carregarEquipe(); // atualiza lista
+        } catch (err) {
+            console.error(err);
+            alert("Erro de conexão.");
+        }
+    });
+}
+
 
         } catch (err) {
             console.error("Erro ao buscar progresso do colaborador:", err);
