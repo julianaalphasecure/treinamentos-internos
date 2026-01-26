@@ -78,12 +78,6 @@ def gerenciar_modulo_por_id(modulo_id):
 @modulo_bp.route("/<int:modulo_id>/conteudo", methods=["GET"])
 @jwt_required()
 def conteudo_modulo_colaborador(modulo_id):
-    """
-    Entrega ao colaborador todo o conteúdo criado pelo gestor:
-    - dados do módulo
-    - slides
-    - exercícios
-    """
 
     usuario_id = int(get_jwt_identity())
 
@@ -94,18 +88,27 @@ def conteudo_modulo_colaborador(modulo_id):
     slides = SlideService.listar_por_modulo(modulo_id)
     exercicios = ExercicioService.listar_por_modulo(modulo_id)
 
+    # 🔹 BUSCA REAL DO PROGRESSO
+    progresso = Progresso.query.filter_by(
+        usuario_id=usuario_id,
+        modulo_id=modulo_id
+    ).first()
 
     return jsonify({
-    "modulo": {
-        "id": modulo.id,
-        "nome": modulo.nome,
-        "titulo": modulo.titulo,
-        "descricao": modulo.descricao,
-        "carga_horaria": modulo.carga_horaria,
-        "imagem_capa": modulo.imagem_capa,
-        "ativo": modulo.ativo,
-        "ultimo_acesso": Progresso.ultimo_acesso.isoformat() if Progresso and Progresso.ultimo_acesso else None
-    },
-    "slides": [s.to_dict() for s in slides],
-    "exercicios": [e.to_dict() for e in exercicios]
-}), 200
+        "modulo": {
+            "id": modulo.id,
+            "nome": modulo.nome,
+            "titulo": modulo.titulo,
+            "descricao": modulo.descricao,
+            "carga_horaria": modulo.carga_horaria,
+            "imagem_capa": modulo.imagem_capa,
+            "ativo": modulo.ativo,
+            "ultimo_acesso": (
+                progresso.ultimo_acesso.isoformat()
+                if progresso and progresso.ultimo_acesso
+                else None
+            )
+        },
+        "slides": [s.to_dict() for s in slides],
+        "exercicios": [e.to_dict() for e in exercicios]
+    }), 200
