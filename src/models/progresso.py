@@ -20,11 +20,12 @@ class Progresso(db.Model):
     data_inicio = db.Column(db.DateTime, nullable=True)
     data_conclusao = db.Column(db.DateTime, nullable=True)
 
-    # 🔥 NOVO
+    
     ultimo_acesso = db.Column(db.DateTime, nullable=True, default=datetime.utcnow)
 
     usuario = db.relationship("Usuario", backref=db.backref("progresso", cascade="all, delete-orphan"))
     modulo = db.relationship("Modulo", backref=db.backref("progresso", cascade="all, delete-orphan"))
+
 
     __table_args__ = (
         db.UniqueConstraint('usuario_id', 'modulo_id', name='uix_progresso_usuario_modulo'),

@@ -1,8 +1,7 @@
-// ======== ELEMENTOS ========
 const modulosContainer = document.getElementById("modulosContainer");
 const btnNovoModulo = document.getElementById("btnNovoModulo");
 
-// Modal para criar módulo
+
 const modal = document.getElementById("modalNovoModulo");
 const closeModal = document.getElementById("closeModal");
 const btnCriarModulo = document.getElementById("btnCriarModulo");
@@ -11,7 +10,7 @@ const inputDescricaoModulo = document.getElementById("inputDescricaoModulo");
 const inputImagemCapa = document.getElementById("inputImagemCapa");
 const previewCapa = document.getElementById("previewCapa");
 
-// ======== CONSTANTES ========
+
 const BASE_URL = "http://127.0.0.1:5000";
 const MODULOS_API = `${BASE_URL}/gestor/api/modulos`;
 
@@ -39,32 +38,48 @@ async function carregarModulos() {
         modulos.forEach(m => {
             const card = document.createElement("div");
             card.classList.add("modulo-card");
+            if (!m.ativo) {
+    card.classList.add("oculto");
+}
+
 
 card.innerHTML = `
     <div class="modulo-capa">
-        <img 
-            src="${m.imagem_capa ? m.imagem_capa : '/static/img/placeholder_modulo.png'}"
-            alt="Capa do módulo"
-        />
+    ${
+        m.imagem_capa
+        ? `<img src="${m.imagem_capa}" alt="Capa do módulo" />`
+        : `<div class="sem-imagem">Sem imagem</div>`
+    }
 
-        <label class="btn-capa">
-            Alterar capa
-            <input 
-                type="file"
-                accept="image/png, image/jpeg, image/webp"
-                hidden
-                onchange="alterarCapaModulo(${m.id}, this.files[0])"
-            />
-        </label>
-    </div>
+    <label class="btn-capa">
+        Alterar capa
+        <input 
+            type="file"
+            accept="image/png, image/jpeg, image/webp"
+            hidden
+            onchange="alterarCapaModulo(${m.id}, this.files[0])"
+        />
+    </label>
+</div>
+
 
     <h3>${m.titulo}</h3>
     <p>${m.descricao || "Sem descrição."}</p>
 
     <div class="modulo-footer">
-        <button class="btn-editar" onclick="editarModulo(${m.id})">Gerenciar</button>
-        <button class="btn-remover" onclick="removerModulo(${m.id})">Remover</button>
-    </div>
+    <button class="btn-editar" onclick="editarModulo(${m.id})">Gerenciar</button>
+
+    <button 
+        class="btn-ocultar"
+        onclick="toggleVisibilidade(${m.id})"
+        style="background: ${m.ativo ? '#f39c12' : '#27ae60'}"
+    >
+        ${m.ativo ? "Ocultar" : "Mostrar"}
+    </button>
+
+    <button class="btn-remover" onclick="removerModulo(${m.id})">Remover</button>
+</div>
+
 `;
 
 
@@ -87,6 +102,24 @@ inputImagemCapa.addEventListener("change", () => {
     };
     reader.readAsDataURL(file);
 });
+async function toggleVisibilidade(id) {
+    try {
+        const res = await fetch(`${MODULOS_API}/${id}/toggle-visibilidade`, {
+            method: "PATCH",
+            headers: {
+                "Authorization": `Bearer ${getToken()}`
+            }
+        });
+
+        if (!res.ok) throw new Error("Erro ao alterar visibilidade");
+
+        await carregarModulos(); 
+
+    } catch (err) {
+        console.error(err);
+        alert("Erro ao ocultar/mostrar módulo.");
+    }
+}
 
 // ======== FUNÇÃO EDITAR ========
 function editarModulo(id) {
@@ -112,7 +145,7 @@ async function removerModulo(id) {
     }
 }
 
-// ======== MODAL - ABRIR E FECHAR ========
+
 btnNovoModulo.addEventListener("click", () => {
     modal.style.display = "block";
     inputTituloModulo.value = "";
@@ -185,7 +218,7 @@ async function alterarCapaModulo(moduloId, file) {
 
         const data = await res.json();
 
-        // 🔥 atualiza só a imagem, sem reload geral
+
         const img = document.querySelector(
             `.modulo-card img[src*="modulo_${moduloId}"]`
         );
@@ -199,7 +232,6 @@ async function alterarCapaModulo(moduloId, file) {
         alert("Erro ao atualizar imagem de capa.");
     }
 }
-
 
 
 // ======== INICIALIZAÇÃO ========

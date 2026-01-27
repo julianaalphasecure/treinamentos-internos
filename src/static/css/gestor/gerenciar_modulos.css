@@ -14,14 +14,14 @@ body {
     display: flex;
     margin: 30px 20px;
     gap: 25px;
-    align-items: flex-start; /* garante que sidebar e conteúdo não se distorçam */
+    align-items: flex-start; 
 }
 
 .sidebar {
-    width: 220px;           /* largura fixa */
-    min-width: 220px;       /* evita encolhimento */
-    max-width: 220px;       /* impede expansão indesejada */
-    flex-shrink: 0;         /* não deixa encolher em flex */
+    width: 220px;           
+    min-width: 220px;       
+    max-width: 220px;      
+    flex-shrink: 0;        
     position: sticky;
     top: 20px;
     background: #fff;
@@ -62,7 +62,7 @@ body {
 
 
 
-/* CONTEÚDO */
+
 .conteudo {
     flex: 1;
     padding: 32px;
@@ -77,7 +77,7 @@ body {
     margin-bottom: 28px;
 }
 
-/* GRID DE MÓDULOS */
+
 .modulos-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -207,7 +207,7 @@ body {
     color: #6b7280;
 }
 
-/* ===== BOTÃO ADICIONAR ===== */
+
 .btn-adicionar {
     background: linear-gradient(135deg, #22c55e, #16a34a); /* verde */
     color: #ffffff;
@@ -362,4 +362,67 @@ body {
 #btnCriarModulo:hover {
     transform: translateY(-2px) scale(1.03);
     box-shadow: 0 10px 28px rgba(22, 163, 74, 0.45);
+}
+.btn-ocultar {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #fff;
+}
+
+.btn-ocultar.ocultar {
+    background-color: #f39c12;
+}
+
+.btn-ocultar.ocultar:hover {
+    background-color: #e67e22;
+}
+
+
+.btn-ocultar.mostrar {
+    background-color: #27ae60;
+}
+
+.btn-ocultar.mostrar:hover {
+    background-color: #219150;
+}
+.modulo-card.oculto {
+    opacity: 0.75;             
+    filter: grayscale(40%);    
+    border: 1px dashed #e0e0e0; 
+}
+
+.modulo-card.oculto h3,
+.modulo-card.oculto p {
+    color: #555;
+}
+.modulo-capa {
+    position: relative;
+    width: 100%;
+    height: 160px;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.modulo-capa img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.sem-imagem {
+    width: 100%;
+    height: 100%;
+    background: #f2f2f2;
+    color: #999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 12px;
 }

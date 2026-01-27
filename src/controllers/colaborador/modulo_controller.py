@@ -32,7 +32,14 @@ def listar_modulos_colaborador():
 
 
 @modulo_bp.route("/<int:modulo_id>")
+@jwt_required()
 def visualizar_modulo(modulo_id):
+    modulo = ModuloService.get_modulo_ativo_by_id(modulo_id)
+
+    if not modulo:
+        return render_template("errors/403.html"), 403
+      
+
     return render_template(
         "colaborador/modules.html",
         modulo_id=modulo_id
@@ -55,7 +62,7 @@ def gerenciar_modulos():
 @modulo_bp.route("/api/modulos/<int:modulo_id>", methods=["GET", "PUT", "DELETE"])
 def gerenciar_modulo_por_id(modulo_id):
     if request.method == "GET":
-        modulo = ModuloService.get_modulo_by_id(modulo_id)
+        modulo = ModuloService.get_modulo_ativo_by_id(modulo_id)
         if modulo:
             return jsonify(modulo.to_dict()), 200
         return jsonify({"error": "Módulo não encontrado"}), 404
@@ -81,9 +88,9 @@ def conteudo_modulo_colaborador(modulo_id):
 
     usuario_id = int(get_jwt_identity())
 
-    modulo = ModuloService.get_modulo_by_id(modulo_id)
+    modulo = ModuloService.get_modulo_ativo_by_id(modulo_id)
     if not modulo:
-        return jsonify({"error": "Módulo não encontrado"}), 404
+        return jsonify({"error": "Módulo indisponível"}), 403
 
     slides = SlideService.listar_por_modulo(modulo_id)
     exercicios = ExercicioService.listar_por_modulo(modulo_id)

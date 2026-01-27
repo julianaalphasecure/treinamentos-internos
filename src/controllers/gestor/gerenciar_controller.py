@@ -243,3 +243,16 @@ def upload_slide(modulo_id):
     )
 
     return jsonify(slide.to_dict()), 201
+@gerenciar_bp.route("/api/modulos/<int:modulo_id>/toggle-visibilidade", methods=["PATCH"])
+@jwt_required()
+def toggle_visibilidade_modulo(modulo_id):
+    modulo = Modulo.query.get_or_404(modulo_id)
+
+    # alterna o status
+    modulo.ativo = not modulo.ativo
+    db.session.commit()
+
+    return jsonify({
+        "message": "Visibilidade atualizada",
+        "ativo": modulo.ativo
+    }), 200

@@ -30,20 +30,20 @@ class Modulo(db.Model):
         cascade="all, delete-orphan"
     )
 
-def to_dict(self):
-    if self.imagem_capa:
-        imagem_url = f"/static/uploads/modulos/capas/{self.imagem_capa}"
-    else:
-        imagem_url = None
 
-    return {
-        "id": self.id,
-        "nome": self.nome,
-        "titulo": self.titulo,
-        "descricao": self.descricao,
-        "carga_horaria": self.carga_horaria,
-        "ativo": self.ativo,
-        "imagem_capa": imagem_url
-    }
+    def to_dict(self):
+        if self.imagem_capa:
+            imagem_url = f"/static/uploads/modulos/capas/{self.imagem_capa}"
+        else:
+            imagem_url = None
 
+        return {
+            "id": self.id,
+            "nome": self.nome,
+            "titulo": self.titulo,
+            "descricao": self.descricao,
+            "carga_horaria": self.carga_horaria,
+            "ativo": self.ativo,
+            "imagem_capa": imagem_url
+        }
 

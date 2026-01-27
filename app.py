@@ -42,9 +42,6 @@ from src.controllers.gestor.exercicio_controller import exercicio_bp
 
 
 
-
-
-
 def create_app():
     base_dir = os.path.dirname(os.path.abspath(__file__))
     template_dir = os.path.join(base_dir, "src/templates")
@@ -65,7 +62,7 @@ def create_app():
     app.config["UPLOAD_FOLDER"] = str(UPLOAD_FOLDER)
     app.config["ALLOWED_EXTENSIONS"] = {"png", "jpg", "jpeg", "webp"}
 
-    # Garante que a pasta exista
+    
     UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
 
 

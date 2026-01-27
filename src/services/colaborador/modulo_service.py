@@ -5,6 +5,10 @@ class ModuloService:
     @staticmethod
     def get_all_modulos():
         return Modulo.query.filter_by(ativo=True).order_by(Modulo.id.asc()).all()
+    
+    @staticmethod
+    def get_modulo_ativo_by_id(modulo_id):
+        return Modulo.query.filter_by(id=modulo_id, ativo=True).first()
 
     @staticmethod
     def get_modulo_by_id(modulo_id):

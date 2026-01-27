@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         await iniciarModulo(MODULE_ID);
     }
 
-    /* ================== AUTH ================== */
+   
     const btnLogout = document.getElementById("btn-logout");
     if (btnLogout) {
         btnLogout.addEventListener("click", (e) => {
@@ -30,14 +30,16 @@ document.addEventListener("DOMContentLoaded", async () => {
         userNameElement.textContent = `Olá, ${usuarioColaborador.nome}`;
     }
 
-    /* ================== CONTAINER ================== */
+   
     const wrapper = document.querySelector(".modules-wrapper");
     if (!wrapper) {
         console.error("❌ .modules-wrapper não encontrado");
         return;
     }
 
-    /* ================== FETCH MÓDULOS ================== */
+    
+
+   
     async function carregarModulos() {
         try {
             const res = await fetch("/colaborador/modulo/api/modulos", {
@@ -85,7 +87,7 @@ async function atualizarImagensModulos() {
 }
 
 
-    /* ================== RENDER GRID ================== */
+   
 function renderizarModulos(modulos) {
     wrapper.innerHTML = "";
 
@@ -95,27 +97,40 @@ function renderizarModulos(modulos) {
     }
 
     modulos.forEach(modulo => {
-        const imagemCapa = modulo.imagem_capa 
-            ? modulo.imagem_capa 
-            : "/static/img/modulo_placeholder.webp";
+
+        const capaHTML = modulo.imagem_capa
+            ? `
+                <div class="module-cover">
+                    <img src="${modulo.imagem_capa}" alt="Capa do módulo ${modulo.titulo}">
+                </div>
+              `
+            : `
+                <div class="module-cover sem-imagem">
+                    <span>Sem imagem</span>
+                </div>
+              `;
+
+        const descricaoHTML = modulo.descricao
+    ? `<p class="module-descricao">${modulo.descricao}</p>`
+    : "";
+
 
         wrapper.insertAdjacentHTML("beforeend", `
             <div class="module-card" data-id="${modulo.id}">
                 
-                <div class="module-cover">
-                    <img src="${imagemCapa}" alt="Capa do módulo ${modulo.titulo}">
-                </div>
+                ${capaHTML}
 
                 <div class="module-body">
                     <h3>${modulo.titulo}</h3>
 
-                   <div class="progress-wrapper">
-    <div class="progress-bar">
-        <div class="progress-bar-inner"></div>
-    </div>
-    <span class="progress-percent">0%</span>
-    </div>
+                    ${descricaoHTML}
 
+                    <div class="progress-wrapper">
+                        <div class="progress-bar">
+                            <div class="progress-bar-inner"></div>
+                        </div>
+                        <span class="progress-percent">0%</span>
+                    </div>
 
                     <a href="/colaborador/modulo/${modulo.id}">
                         <button>Acessar</button>
@@ -125,6 +140,7 @@ function renderizarModulos(modulos) {
         `);
     });
 }
+
 
 
     /* ================== PROGRESSO ================== */
@@ -186,7 +202,7 @@ async function iniciarModulo(moduloId) {
         });
 
         if (res.ok) {
-            // 🔄 atualiza painel depois de iniciar
+           
             carregarProgresso();
         }
 

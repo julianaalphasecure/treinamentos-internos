@@ -12,7 +12,15 @@ class ProgressoService:
 
     @staticmethod
     def get_all_progresso_usuario(usuario_id):
-        return Progresso.query.filter_by(usuario_id=usuario_id).all()
+        return (
+            Progresso.query
+            .join(Modulo)
+            .filter(
+                Progresso.usuario_id == usuario_id,
+                Modulo.ativo == True
+            )
+            .all()
+        )
 
     @staticmethod
     def get_progresso_by_id(progresso_id):
@@ -48,10 +56,9 @@ class ProgressoService:
         db.session.commit()
         return progresso
 
-    # ✅ AGORA DENTRO DA CLASSE
     @staticmethod
     def inicializar_progresso_usuario(usuario_id):
-        modulos = Modulo.query.all()
+        modulos = Modulo.query.filter_by(ativo=True).all()
 
         for modulo in modulos:
             existe = Progresso.query.filter_by(
@@ -70,7 +77,6 @@ class ProgressoService:
 
         db.session.commit()
 
- 
     @staticmethod
     def finalizar_modulo(usuario_id, modulo_id, nota_final):
         progresso = Progresso.query.filter_by(

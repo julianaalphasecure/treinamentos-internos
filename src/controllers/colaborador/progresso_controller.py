@@ -161,7 +161,7 @@ def iniciar_modulo(modulo_id):
     if not progresso:
         return jsonify({"error": "Progresso não encontrado"}), 404
 
-# Sempre atualiza último acesso
+
     progresso.ultimo_acesso = datetime.utcnow()
 
     if progresso.status == "nao_iniciado":
