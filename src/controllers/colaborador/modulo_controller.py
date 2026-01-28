@@ -32,7 +32,6 @@ def listar_modulos_colaborador():
 
 
 @modulo_bp.route("/<int:modulo_id>")
-@jwt_required()
 def visualizar_modulo(modulo_id):
     modulo = ModuloService.get_modulo_ativo_by_id(modulo_id)
 

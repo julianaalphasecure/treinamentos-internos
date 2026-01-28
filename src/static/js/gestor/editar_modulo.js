@@ -21,50 +21,7 @@ let TOKEN = null;
 let TODOS_SLIDES = []; 
 
 
-async function carregarModulo() {
-    const token = localStorage.getItem("token_gestor");
 
-    if (!token || token === "undefined" || token === "null") {
-        window.location.href = "/auth/login";
-        return;
-    }
-
-    try {
-        const res = await fetch(`${BASE_URL}/api/modulo/${moduloId}`, {
-            headers: {
-                "Authorization": `Bearer ${token}`
-            }
-        });
-
-        if (res.status === 401) {
-            alert("Sessão expirada. Faça login novamente.");
-            localStorage.clear();
-            window.location.href = "/auth/login";
-            return;
-        }
-
-        if (!res.ok) {
-            throw new Error("Erro ao carregar módulo");
-        }
-        
-        const modulo = await res.json();
-
-        tituloTexto.textContent = modulo.titulo;
-        inputTitulo.value = modulo.titulo;
-
-        TODOS_SLIDES = modulo.slides || []; 
-        filtrarEShowSlides();    
-        
-        TODOS_EXERCICIOS = modulo.exercicios || [];
-        renderExercicios(TODOS_EXERCICIOS);
-
-        renderExercicios(modulo.exercicios || []);
-
-    } catch (err) {
-        console.error(err);
-        alert("Erro ao carregar dados do módulo");
-    }
-}
 
 // ==============================
 // FILTRO DE SLIDES POR MODO
@@ -148,13 +105,69 @@ function renderExercicios(exercicios) {
             </ul>
 
             <div class="acoes-exercicio">
-                <button onclick="removerExercicio(${ex.id})">🗑️ Remover</button>
-            </div>
+    <button onclick="editarExercicio(${ex.id}, this)">✏️ Editar</button>
+    <button onclick="removerExercicio(${ex.id})">🗑️ Remover</button>
+</div>
+
         `;
 
         exerciciosContainer.appendChild(div);
     });
 }
+function editarExercicio(exercicioId, btn) {
+    const exercicio = TODOS_EXERCICIOS.find(e => e.id === exercicioId);
+    if (!exercicio) return;
+
+    // evita abrir mais de um editor
+    if (document.querySelector(".exercicio-form")) return;
+
+    const cardExercicio = btn.closest(".exercicio-view");
+
+    const form = document.createElement("div");
+    form.className = "exercicio-form";
+
+    form.innerHTML = `
+        <textarea class="enunciado">${exercicio.enunciado}</textarea>
+
+        <div class="alternativas-form">
+            <label><input type="radio" name="correta" value="A" ${exercicio.correta === "A" ? "checked" : ""}> A</label>
+            <input type="text" class="alt-a" value="${exercicio.alternativa_a}">
+
+            <label><input type="radio" name="correta" value="B" ${exercicio.correta === "B" ? "checked" : ""}> B</label>
+            <input type="text" class="alt-b" value="${exercicio.alternativa_b}">
+
+            <label><input type="radio" name="correta" value="C" ${exercicio.correta === "C" ? "checked" : ""}> C</label>
+            <input type="text" class="alt-c" value="${exercicio.alternativa_c}">
+
+            <label><input type="radio" name="correta" value="D" ${exercicio.correta === "D" ? "checked" : ""}> D</label>
+            <input type="text" class="alt-d" value="${exercicio.alternativa_d}">
+        </div>
+
+        <div class="acoes-exercicio">
+            <button class="btn-salvar">Salvar</button>
+            <button class="btn-cancelar">Cancelar</button>
+        </div>
+
+        <div class="feedback-exercicio"></div>
+    `;
+
+    // esconde o card original
+    cardExercicio.style.display = "none";
+
+    // insere o editor exatamente no lugar
+    cardExercicio.after(form);
+
+    form.querySelector(".btn-cancelar").onclick = () => {
+        form.remove();
+        cardExercicio.style.display = "block";
+    };
+
+    form.querySelector(".btn-salvar").onclick = () => {
+        salvarExercicio(exercicioId, form, cardExercicio);
+    };
+}
+
+
 
 function renderAlternativa(letra, texto, correta) {
     const marcada = letra === correta ? "correta" : "";
@@ -243,22 +256,23 @@ btnAdicionarExercicio.addEventListener("click", () => {
 
 
 
-async function salvarExercicio(exercicioId, div) {
+async function salvarExercicio(exercicioId, div, cardExercicio) {
     const enunciado = div.querySelector(".enunciado").value.trim();
     const altA = div.querySelector(".alt-a").value.trim();
     const altB = div.querySelector(".alt-b").value.trim();
     const altC = div.querySelector(".alt-c").value.trim();
     const altD = div.querySelector(".alt-d").value.trim();
-    const correta = div.querySelector(".correta").value;
+    const correta = div.querySelector("input[name='correta']:checked")?.value;
 
     const feedbackDiv = div.querySelector(".feedback-exercicio");
     feedbackDiv.className = "feedback-exercicio"; // reset
 
-    if (!enunciado) {
-        feedbackDiv.textContent = "O enunciado não pode ficar vazio.";
-        feedbackDiv.classList.add("erro");
-        return;
-    }
+    if (!enunciado || !altA || !altB || !altC || !altD || !correta) {
+    feedbackDiv.textContent = "Preencha tudo e marque a alternativa correta.";
+    feedbackDiv.classList.add("erro");
+    return;
+}
+
 
     try {
         const res = await fetch(`${BASE_URL}/api/exercicios/${exercicioId}`, {
@@ -288,12 +302,20 @@ async function salvarExercicio(exercicioId, div) {
             TODOS_EXERCICIOS[index] = { id: exercicioId, enunciado, alternativa_a: altA, alternativa_b: altB, alternativa_c: altC, alternativa_d: altD, correta };
         }
 
+       div.remove();
+cardExercicio.style.display = "block";
+renderExercicios(TODOS_EXERCICIOS);
+
+
+
     } catch (err) {
         console.error(err);
         feedbackDiv.textContent = "Erro ao salvar exercício!";
         feedbackDiv.classList.add("erro");
     }
+    
 }
+
 
 
 async function removerExercicio(exercicioId) {

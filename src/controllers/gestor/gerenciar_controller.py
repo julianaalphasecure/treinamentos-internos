@@ -9,6 +9,8 @@ from src.config.database import db
 from src.models.modulos import Modulo
 from src.models.progresso import Progresso
 from src.models.usuario import Usuario
+from src.models.modulo_exercicio import ModuloExercicio
+
 
 
 gerenciar_bp = Blueprint(
@@ -256,3 +258,24 @@ def toggle_visibilidade_modulo(modulo_id):
         "message": "Visibilidade atualizada",
         "ativo": modulo.ativo
     }), 200
+@gerenciar_bp.route("/api/exercicios/<int:exercicio_id>", methods=["GET"])
+@jwt_required()
+def buscar_exercicio(exercicio_id):
+    exercicio = ModuloExercicio.query.get_or_404(exercicio_id)
+    return jsonify(exercicio.to_dict()), 200
+@gerenciar_bp.route("/api/exercicios/<int:exercicio_id>", methods=["PUT"])
+@jwt_required()
+def atualizar_exercicio(exercicio_id):
+    exercicio = ModuloExercicio.query.get_or_404(exercicio_id)
+    data = request.json
+
+    exercicio.enunciado = data.get("enunciado", exercicio.enunciado)
+    exercicio.alternativa_a = data.get("alternativa_a", exercicio.alternativa_a)
+    exercicio.alternativa_b = data.get("alternativa_b", exercicio.alternativa_b)
+    exercicio.alternativa_c = data.get("alternativa_c", exercicio.alternativa_c)
+    exercicio.alternativa_d = data.get("alternativa_d", exercicio.alternativa_d)
+    exercicio.correta = data.get("correta", exercicio.correta)
+
+    db.session.commit()
+
+    return jsonify({"message": "Exercício atualizado com sucesso"}), 200
